@@ -1,0 +1,25 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    height: 100vh;
+    background-color: #FFCCFF;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: #7b2cbf;
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #333;
+    font-style: italic;
+    max-width: 600px;
+}
+
