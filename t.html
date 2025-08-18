@@ -5,52 +5,61 @@
   <title>Encuesta Restaurante</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* Fondo degradado animado */
     body {
-      font-family: 'Arial', sans-serif;
+      margin: 0;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(270deg, #ffecd2, #fcb69f, #ff9a9e, #fad0c4);
+      background-size: 800% 800%;
+      animation: fondo 15s ease infinite;
+    }
+
+    @keyframes fondo {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
     h2 {
-      font-size: 1.6em;
+      font-size: 1.8em;
       color: #333;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
       padding: 0 15px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
     }
 
     .buttons {
       display: flex;
-      gap: 20px;
+      gap: 40px;
       flex-wrap: wrap;
       justify-content: center;
-      width: 100%;
-      max-width: 400px;
     }
 
     .btn {
-      flex: 1 1 45%;
-      padding: 20px;
-      font-size: 1.3em;
-      font-weight: bold;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-decoration: none;
-      text-align: center;
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+      font-size: 1.1em;
+      font-weight: bold;
       color: white;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
     }
 
     .btn-si {
@@ -62,9 +71,15 @@
     }
 
     .emoji {
-      font-size: 1.5em;
-      display: block;
-      margin-top: 8px;
+      font-size: 2em;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 0.9em;
+      color: rgba(0,0,0,0.6);
     }
   </style>
 </head>
@@ -75,14 +90,18 @@
   <div class="buttons">
     <!-- Botón Sí -->
     <a class="btn btn-si" href="https://www.google.com/maps/place/TU_RESTAURANTE/reviews" target="_blank">
-      Sí <span class="emoji">👍</span>
+      <span class="emoji">👍</span>
+      Sí
     </a>
 
     <!-- Botón No -->
     <a class="btn btn-no" href="https://forms.gle/TU_FORMULARIO" target="_blank">
-      No <span class="emoji">👎</span>
+      <span class="emoji">👎</span>
+      No
     </a>
   </div>
+
+  <footer>© 2025 Tu Restaurante – Gracias por tu opinión 🍽️</footer>
 
 </body>
 </html>
