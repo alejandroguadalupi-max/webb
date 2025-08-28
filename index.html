@@ -64,7 +64,7 @@
     .nav-links{display:flex;gap:22px;align-items:center}
     .ghost{padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:var(--txt)}
     .menu{display:none}
-    /* === MENÚ MÓVIL ARREGLADO (oscuro, legible, full width) === */
+    /* === MENÚ MÓVIL OSCURO Y LEGIBLE === */
     .mobile-menu{
       position:absolute; left:0; right:0; top:100%;
       display:none; padding:14px; background:#0b0f1a; border-top:1px solid rgba(255,255,255,.08);
@@ -109,10 +109,11 @@
     .card h3{margin:.2rem 0 .6rem}
     .card p{color:var(--muted);margin:0}
 
-    /* Opiniones */
+    /* Opiniones — NUEVO ESTILO */
     .reviews{position:relative;margin:36px 0}
     .reviews h2{margin:0 0 14px}
     .reviews-window{position:relative;overflow:hidden}
+    /* “Barrera” invisible (no se acercan a las flechas) */
     .reviews-window::before,
     .reviews-window::after{
       content:""; position:absolute; top:0; bottom:0; width:calc(var(--edgePad) - 8px);
@@ -121,29 +122,46 @@
     }
     .reviews-window::before{ left:0 }
     .reviews-window::after{ right:0; transform:scaleX(-1) }
+
     .reviews-track{
       display:flex; gap:22px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
       padding:0 var(--edgePad); scroll-padding:0 var(--edgePad); scrollbar-width:none;
       overscroll-behavior-x: contain; touch-action: pan-y;
     }
     .reviews-track::-webkit-scrollbar{display:none}
+
+    /* Escritorio: 2 tarjetas visibles / “peek” limpio */
     .review-card{
-      flex:0 0 clamp(320px, 46vw, 520px);
+      flex:0 0 clamp(360px, 40vw, 480px);
       max-width:520px;
-      background:var(--bg-2); border:1px solid rgba(255,255,255,.08);
-      border-radius:16px; padding:20px; scroll-snap-align:center; text-align:left;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:16px; padding:20px; scroll-snap-align:center; scroll-snap-stop:normal;
+      text-align:left;
+      box-shadow:0 20px 50px rgba(0,0,0,.35);
+      transition:transform .2s ease, border-color .2s ease;
     }
+    .review-card:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.16) }
+
+    /* Móvil: 1 tarjeta centrada por vista y flechas fuera de la tarjeta */
     @media (max-width: 768px){
-      :root{ --arrowSize:48px; --edgePad:72px; }
-      section{padding:48px 0}
-      header{background:#0a0f16}
-      .grid-3{grid-template-columns:1fr}
-      .nav-links{display:none}
-      .menu{display:block}
-      .mobile-menu{position:absolute}
-      .review-card{flex:0 0 calc(100% - (2 * var(--edgePad))); max-width:none; margin-inline:auto}
-      .cookiebar{flex-direction:column;align-items:flex-start;gap:10px}
+      .review-card{
+        flex:0 0 calc(100% - (2 * var(--edgePad)));
+        max-width:none;
+        margin-inline:auto;
+        scroll-snap-stop:always;
+      }
     }
+
+    .review-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+    .review-avatar{width:54px;height:54px;border-radius:999px;overflow:hidden;flex:0 0 54px;border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 22px rgba(124,58,237,.25)}
+    .review-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .review-name{font-weight:700}
+    .review-stars{color:#fbbf24;font-size:18px;letter-spacing:2px}
+    .review-text{color:#c9d3e6;margin:6px 0 12px}
+    .review-link{display:inline-block;margin-top:6px;color:#cfe6ff;font-weight:600}
+
+    /* Flechas: en la zona de padding, nunca encima de la tarjeta */
     .reviews-nav{
       position:absolute; top:0; bottom:0; left:0; right:0; pointer-events:none;
       display:flex; align-items:center; justify-content:space-between;
@@ -191,6 +209,25 @@
     .cookiebar p{margin:0;font-size:.95rem;text-align:left}
     .cookiebar .btn-accept{background:#6366f1;border:0;color:#fff;border-radius:8px;padding:8px 16px;cursor:pointer}
 
+    /* Móvil */
+    @media (max-width: 768px){
+      :root{ --arrowSize:48px; --edgePad:72px; }
+      section{padding:48px 0}
+      header{background:#0a0f16}
+      .grid-3{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .menu{
+        display:block;
+        background:#0f172a; color:#e9eefc;
+        border:1px solid rgba(255,255,255,.28);
+        box-shadow:0 8px 24px rgba(0,0,0,.45);
+        padding:10px 14px; border-radius:999px;
+      }
+      .menu:hover{filter:brightness(1.08)}
+      .menu:active{transform:translateY(1px)}
+      .cookiebar{flex-direction:column;align-items:flex-start;gap:10px}
+    }
+
     @media (prefers-reduced-motion: reduce){
       *{animation:none !important; transition:none !important}
     }
@@ -211,7 +248,7 @@
         <a class="ghost" href="#beneficios">Beneficios</a>
         <a class="ghost" href="#como-funciona">Cómo funciona</a>
         <a class="ghost" href="#reviews">Opiniones</a>
-        <!-- NUEVO: enlace directo a suscripciones -->
+        <!-- Enlace a suscripciones -->
         <a class="ghost" href="suscripciones.html#planes">Suscripciones</a>
         <a class="btn" href="suscripciones.html#planes">¡Comenzar ahora!</a>
       </nav>
@@ -224,7 +261,6 @@
         <a class="ghost" href="#beneficios" role="menuitem">Beneficios</a>
         <a class="ghost" href="#como-funciona" role="menuitem">Cómo funciona</a>
         <a class="ghost" href="#reviews" role="menuitem">Opiniones</a>
-        <!-- NUEVO: enlaces claros a suscripciones/suscripciones -->
         <a class="ghost" href="suscripciones.html#planes" role="menuitem">Suscripciones</a>
         <a class="btn" href="suscripciones.html#planes" role="menuitem">¡Comenzar ahora!</a>
       </div>
@@ -239,7 +275,7 @@
           <h1>¿Imaginas subir la valoración de tu negocio <em>SIN HACER NADA</em>?</h1>
           <p class="lead">
             Sé un imán de clientes y gana más dinero gracias a la tecnología de <strong>Taply</strong>.
-            Con Taply conseguirás más clientes gracias a nuestro <strong>sistema NFC</strong>. Las opiniones positivas van directas a Google; las negativas se guardan en un panel privado para que veas dónde fallas y qué puntos mejorar.
+            Las opiniones positivas van directas a Google; las negativas se guardan en un panel privado para que veas dónde fallas y qué puntos mejorar.
           </p>
           <div class="pills" aria-label="Resultados clave">
             <div class="pill">Mejores reseñas en internet</div><div class="pill">Más clientes</div><div class="pill">Más dinero</div>
@@ -276,6 +312,7 @@
                 <div><div class="review-name">Sara Cordero</div><div class="review-stars">★★★★★</div></div>
               </div>
               <p class="review-text">Instalación en 5 minutos. Los avisos de reseñas negativas nos han permitido corregir fallos de atención al cliente en días.</p>
+              <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
 
             <article class="review-card">
@@ -284,6 +321,7 @@
                 <div><div class="review-name">Marlon Melara</div><div class="review-stars">★★★★★</div></div>
               </div>
               <p class="review-text">Una herramienta genial para ahorrar tiempo en reseñas y reputación online. Muy fácil de usar por el cliente.</p>
+              <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
 
             <article class="review-card">
@@ -292,6 +330,7 @@
                 <div><div class="review-name">Joan Blanch</div><div class="review-stars">★★★★★</div></div>
               </div>
               <p class="review-text">Excelente herramienta. Llevamos semanas subiendo reseñas sin tener que pedirlo. El panel de negativas nos ha ayudado a mejorar procesos internos.</p>
+              <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
 
             <article class="review-card">
@@ -300,6 +339,7 @@
                 <div><div class="review-name">Eco Abraham</div><div class="review-stars">★★★★★</div></div>
               </div>
               <p class="review-text">Soy bloguero desde 2009 y nunca había conseguido tantas reseñas reales tan rápido. El flujo NFC es comodísimo para el cliente.</p>
+              <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
           </div>
 
@@ -393,7 +433,7 @@
       </div>
       <div>
         <p><a href="#beneficios">Beneficios</a></p>
-        <p><a href="suscripciones.html#planes">suscripciones / Suscripciones</a></p>
+        <p><a href="suscripciones.html#planes">Suscripciones</a></p>
       </div>
       <div>
         <p><a href="#como-funciona">Cómo funciona</a></p>
@@ -424,12 +464,10 @@
       mobileMenu.style.display = open ? 'none' : 'block';
       menuBtn.setAttribute('aria-expanded', String(!open));
     });
-    // Cerrar al pulsar un enlace del menú móvil
     mobileMenu?.addEventListener('click', (e)=>{
       const a = e.target.closest('a');
       if(a){ mobileMenu.style.display='none'; menuBtn.setAttribute('aria-expanded','false'); }
     });
-    // Cerrar si se cambia a desktop
     window.addEventListener('resize', ()=>{
       if(window.innerWidth > 768){ mobileMenu.style.display='none'; menuBtn.setAttribute('aria-expanded','false'); }
     });
@@ -448,7 +486,7 @@
       });
     });
 
-    // Carrusel opiniones
+    // Carrusel opiniones — step robusto y flechas fuera de tarjetas
     (function(){
       const track=document.getElementById('reviewsTrack');
       const prev=document.getElementById('revPrev');
@@ -456,17 +494,20 @@
       if(!track||!prev||!next) return;
 
       const step=()=>{
-        const card=track.querySelector('.review-card');
+        // Usa el ancho real de la primera tarjeta + gap
+        const first=track.querySelector('.review-card');
         const gap=parseInt(getComputedStyle(track).gap||'22',10);
-        const width=card ? card.getBoundingClientRect().width : 320;
+        const width=first ? Math.round(first.getBoundingClientRect().width) : 360;
         return width + gap;
       };
       const atStart=()=>track.scrollLeft<=2;
       const atEnd =()=>track.scrollLeft+track.clientWidth>=track.scrollWidth-2;
 
       function update(){ prev.classList.toggle('disabled',atStart()); next.classList.toggle('disabled',atEnd()); }
+
       prev.addEventListener('click',()=>{ if(!prev.classList.contains('disabled')) track.scrollBy({left:-step(),behavior:'smooth'}); });
       next.addEventListener('click',()=>{ if(!next.classList.contains('disabled')) track.scrollBy({left: step(),behavior:'smooth'}); });
+      track.addEventListener('keydown',(e)=>{ if(e.key==='ArrowRight') next.click(); if(e.key==='ArrowLeft') prev.click(); });
       track.addEventListener('scroll',update,{passive:true});
       window.addEventListener('resize',update);
       update();
