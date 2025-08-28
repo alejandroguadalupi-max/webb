@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f1a" />
   <title>Taply — Sube la valoración de tu negocio sin esfuerzo</title>
   <meta name="description" content="Sé un imán de clientes con Taply: más y mejores reseñas online con tecnología NFC. Convierte opiniones positivas en reseñas de Google y aprende de las negativas." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +57,7 @@
     .nav-links{display:flex;gap:22px;align-items:center}
     .ghost{padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:var(--txt)}
 
-    /* Botón con micro-interacciones */
+    /* Botón */
     .btn{
       --p:14px 18px;
       background:linear-gradient(135deg,var(--brand-1),var(--brand-2));
@@ -94,13 +95,13 @@
     @keyframes floatY{0%,100%{transform:translateY(-4px)}50%{transform:translateY(4px)}}
 
     /* Secciones / Cards */
-    section{padding:64px 0}
+    section{padding:64px 0; content-visibility:auto; contain-intrinsic-size: 1px 800px;}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
     .card{background:var(--bg-2);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
     .card h3{margin:.2rem 0 .6rem}
     .card p{color:var(--muted);margin:0}
 
-    /* Beneficios a la izquierda */
+    /* Beneficios (desktop a la izquierda) */
     #beneficios h2{text-align:left}
     #beneficios .benefit-lead{text-align:left;margin:0 0 18px 0;max-width:900px}
     #beneficios .cta-row{justify-content:flex-start;margin-top:22px}
@@ -109,7 +110,6 @@
     .reviews{position:relative;margin:48px 0}
     .reviews h2{margin:0 0 18px}
     .reviews-window{position:relative;overflow:hidden}
-    /* Barrera invisible (fades) */
     .reviews-window::before,
     .reviews-window::after{
       content:""; position:absolute; top:0; bottom:0; width:calc(var(--edgePad) - 8px);
@@ -122,9 +122,10 @@
     .reviews-track{
       display:flex; gap:22px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
       padding:0 var(--edgePad); scroll-padding:0 var(--edgePad); scrollbar-width:none;
+      overscroll-behavior-x: contain; touch-action: pan-y;
+      will-change: scroll-position;
     }
     .reviews-track::-webkit-scrollbar{display:none}
-    /* 1 tarjeta centrada por desliz */
     .review-card{
       flex:0 0 clamp(320px, calc(100% - (2 * var(--edgePad))), 680px);
       margin-inline:auto;
@@ -183,17 +184,28 @@
     .will-reveal{opacity:0; transform:translateY(14px)}
     .will-reveal.show{opacity:1; transform:none; transition:opacity .6s ease, transform .6s ease}
 
-    /* Estrellas de fondo */
+    /* Estrellas */
     #twinkles{position:fixed; inset:0; z-index:-1; pointer-events:none}
     #twinkles .star{position:absolute; border-radius:50%; width:2px; height:2px; background:radial-gradient(circle, #ffffff, rgba(255,255,255,0) 62%); filter:drop-shadow(0 0 6px rgba(176,230,255,.75)); opacity:.85; animation:twinkle 3.8s ease-in-out infinite}
     @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:.95;transform:scale(1.5)}}
 
-    @media (max-width: 900px){
-      .grid-3{grid-template-columns:1fr}
-      footer .cols{grid-template-columns:1fr}
+    /* MÓVIL */
+    @media (max-width: 768px){
+      :root{ --arrowSize:48px; --edgePad:72px; }
+      h1,.hero .lead,.reviews h2,#beneficios h2,#faq h2{ text-align:center }
+      #beneficios .benefit-lead{ text-align:center; margin:0 auto 18px auto }
+      #beneficios .cta-row{ justify-content:center }
+      .sparks{ display:none }
+      body::before{ animation:none; filter:blur(12px) }
+      body::after{ opacity:.04 }
+      .card{ box-shadow:0 8px 18px rgba(0,0,0,.35) }
+      .cookiebar{flex-direction:column;align-items:flex-start;gap:10px}
       .nav-links{display:none}
       .menu{display:block}
-      .cookiebar{flex-direction:column;align-items:flex-start;gap:10px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important; transition:none !important}
+      body::before, body::after{animation:none !important}
     }
   </style>
 </head>
@@ -236,7 +248,7 @@
           </p>
           <br>
           <div class="pills" aria-label="Resultados clave">
-            <div class="pill">Mejores reseñas en internet</div><div class="pill">Más clientes</div><div class="pill">Más dinero</div><div class="pill">Más satisfacción</div><div class="pill">Soluciona problemas</div>
+            <div class="pill">Mejores reseñas en internet</div><div class="pill">Más clientes</div><div class="pill">Más dinero</div>
           </div>
           <div class="cta-row"><a class="btn" href="precios.html#planes">Ver precios</a></div>
         </div>
@@ -266,25 +278,45 @@
         <div class="reviews-window">
           <div class="reviews-track" id="reviewsTrack" tabindex="0" aria-label="Opiniones de clientes">
             <article class="review-card">
-              <div class="review-header"><div class="review-avatar"><img src="https://i.pravatar.cc/110?img=26" alt="Foto de Sara Cordero"></div><div><div class="review-name">Sara Cordero</div><div class="review-stars">★★★★★</div></div></div>
+              <div class="review-header">
+                <div class="review-avatar">
+                  <img loading="lazy" decoding="async" fetchpriority="low" src="https://i.pravatar.cc/110?img=26" alt="Foto de Sara Cordero" width="54" height="54">
+                </div>
+                <div><div class="review-name">Sara Cordero</div><div class="review-stars">★★★★★</div></div>
+              </div>
               <p class="review-text">Instalación en 5 minutos. Los avisos de reseñas negativas nos han permitido corregir fallos de atención al cliente en días.</p>
               <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
 
             <article class="review-card">
-              <div class="review-header"><div class="review-avatar"><img src="https://i.pravatar.cc/110?img=33" alt="Foto de Marlon Melara"></div><div><div class="review-name">Marlon Melara</div><div class="review-stars">★★★★★</div></div></div>
+              <div class="review-header">
+                <div class="review-avatar">
+                  <img loading="lazy" decoding="async" fetchpriority="low" src="https://i.pravatar.cc/110?img=33" alt="Foto de Marlon Melara" width="54" height="54">
+                </div>
+                <div><div class="review-name">Marlon Melara</div><div class="review-stars">★★★★★</div></div>
+              </div>
               <p class="review-text">Una herramienta genial para ahorrar tiempo en reseñas y reputación online. Muy fácil de usar por el cliente.</p>
               <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
 
             <article class="review-card">
-              <div class="review-header"><div class="review-avatar"><img src="https://i.pravatar.cc/110?img=12" alt="Foto de Joan Blanch"></div><div><div class="review-name">Joan Blanch</div><div class="review-stars">★★★★★</div></div></div>
+              <div class="review-header">
+                <div class="review-avatar">
+                  <img loading="lazy" decoding="async" fetchpriority="low" src="https://i.pravatar.cc/110?img=12" alt="Foto de Joan Blanch" width="54" height="54">
+                </div>
+                <div><div class="review-name">Joan Blanch</div><div class="review-stars">★★★★★</div></div>
+              </div>
               <p class="review-text">Excelente herramienta. Llevamos semanas subiendo reseñas sin tener que pedirlo. El panel de negativas nos ha ayudado a mejorar procesos internos.</p>
               <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
 
             <article class="review-card">
-              <div class="review-header"><div class="review-avatar"><img src="https://i.pravatar.cc/110?img=5" alt="Foto de Eco Abraham"></div><div><div class="review-name">Eco Abraham</div><div class="review-stars">★★★★★</div></div></div>
+              <div class="review-header">
+                <div class="review-avatar">
+                  <img loading="lazy" decoding="async" fetchpriority="low" src="https://i.pravatar.cc/110?img=5" alt="Foto de Eco Abraham" width="54" height="54">
+                </div>
+                <div><div class="review-name">Eco Abraham</div><div class="review-stars">★★★★★</div></div>
+              </div>
               <p class="review-text">Soy bloguero desde 2009 y nunca había conseguido tantas reseñas reales tan rápido. El flujo NFC es comodísimo para el cliente.</p>
               <a class="review-link" href="#">Leer la valoración completa →</a>
             </article>
@@ -308,7 +340,7 @@
       </div>
     </section>
 
-    <!-- FAQ (RESTABLECIDO) -->
+    <!-- FAQ -->
     <section id="faq" class="will-reveal">
       <div class="container faq">
         <h2>Preguntas frecuentes</h2>
@@ -342,7 +374,7 @@
       </div>
     </section>
 
-    <!-- SOCIALES (RESTABLECIDO) -->
+    <!-- SOCIALES -->
     <section class="socials will-reveal">
       <div class="container">
         <div class="row">
@@ -437,7 +469,7 @@
       });
     });
 
-    // Carrusel opiniones con flechas que se apagan y "barrera" visual
+    // Carrusel opiniones con flechas que se apagan
     (function(){
       const track=document.getElementById('reviewsTrack');
       const prev=document.getElementById('revPrev');
@@ -499,3 +531,5 @@
   </script>
 </body>
 </html>
+
+
