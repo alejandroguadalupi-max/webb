@@ -4,366 +4,214 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0b0f1a" />
-  <title>Planes y precios – taply</title>
-  <meta name="description" content="Elige tu plan mensual o anual. Añade dispositivos NFC una sola vez y activa tu suscripción de mantenimiento."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <title>Taply — NFC + Suscripción</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      /* === Tokens iguales a la principal === */
-      --bg:#0b0f1a; --bg-2:#0e1424; --txt:#e9eefc; --muted:#94a3b8;
-      --brand-1:#00d4ff; --brand-2:#7c3aed;
-      --radius:20px; --shadow:0 10px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
-      --card-border: rgba(255,255,255,.08);
-
-      /* Móvil */
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --bg:#0b0f1a; --bg-2:#0e1424; --txt:#e9eefc; --muted:#9fb0c6;
+      --brand-1:#00d4ff; --brand-2:#7c3aed; --ok:#22c55e;
+      --border:rgba(255,255,255,.08); --radius:18px;
+      --shadow:0 12px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
     }
-    *,*::before,*::after{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      background:var(--bg); color:var(--txt);
-      opacity:0; transform:translateY(4px); transition:opacity .35s ease, transform .35s ease;
-      -webkit-text-size-adjust:100%;
-    }
-    body.is-loaded{opacity:1;transform:none}
-    a{color:inherit; text-decoration:none}
-    .container{max-width:1200px; width:92%; margin-inline:auto}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--txt);opacity:0;transition:.35s}
+    body.is-loaded{opacity:1}
+    a{text-decoration:none;color:inherit}
+    .container{max-width:1100px;width:92%;margin-inline:auto}
 
-    /* Puntitos + estrellitas sutiles */
-    body::before{
-      content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-      background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1.6px);
-      background-size:26px 26px; opacity:.12;
-    }
-    body::after{
-      content:""; position:fixed; inset:-10% -10% -10% -10%; z-index:-1; pointer-events:none;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(255,255,255,.9) 1.2px, transparent 1.6px),
-        radial-gradient(circle at 28% 72%, rgba(255,255,255,.9) 1.2px, transparent 1.6px),
-        radial-gradient(circle at 45% 25%, rgba(255,255,255,.9) 1.4px, transparent 1.8px),
-        radial-gradient(circle at 63% 66%, rgba(255,255,255,.9) 1.2px, transparent 1.6px),
-        radial-gradient(circle at 80% 30%, rgba(255,255,255,.9) 1.3px, transparent 1.7px),
-        radial-gradient(circle at 14% 88%, rgba(255,255,255,.9) 1.1px, transparent 1.5px),
-        radial-gradient(circle at 88% 84%, rgba(255,255,255,.9) 1.2px, transparent 1.6px),
-        radial-gradient(circle at 6% 52%,  rgba(255,255,255,.9) 1.3px, transparent 1.7px);
-      background-repeat:no-repeat; filter:drop-shadow(0 0 6px rgba(255,255,255,.22)); opacity:.28;
-    }
+    header{padding:14px 0;border-bottom:1px solid var(--border);background:#0a0f16cc;backdrop-filter:blur(10px)}
+    .brand{font-weight:800;display:flex;align-items:center;gap:8px}
+    .logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand-1),var(--brand-2))}
 
-    /* === Header === */
-    header{position:sticky; top:0; z-index:50; background:#0a0f16cc; border-bottom:1px solid rgba(255,255,255,.06); backdrop-filter:blur(10px)}
-    .nav{display:flex; align-items:center; justify-content:space-between; padding:10px 0}
-    .brand{display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.3px}
-    .brand-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand-1),var(--brand-2));display:grid;place-items:center;box-shadow:0 8px 22px rgba(124,58,237,.35)}
-    .brand-logo svg{width:20px;height:20px}
-    .nav-links{display:flex;gap:14px;align-items:center}
-    .ghost{padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:var(--txt)}
-    .btn{
-      --p:12px 16px;
-      background:linear-gradient(135deg,var(--brand-1),var(--brand-2));
-      color:#061017;font-weight:800;border:0;border-radius:999px;cursor:pointer;
-      padding:var(--p);display:inline-flex;align-items:center;gap:8px;
-      box-shadow:0 10px 30px rgba(124,58,237,.35), 0 4px 14px rgba(0,212,255,.25);
-      transition:transform .15s ease, box-shadow .2s ease;
-      touch-action:manipulation;
-    }
-    .btn:active{transform:translateY(0)}
-    .btn:hover{ transform:translateY(-2px) }
-    .menu{display:none}
-    .mobile-menu{display:none}
-    .mobile-links{display:flex;flex-direction:column;gap:10px}
+    .hero{text-align:center;padding:40px 0 24px}
+    .h1{font-size:clamp(2rem,5.5vw,3.2rem);margin:0;font-weight:800}
+    .lead{color:var(--muted);max-width:860px;margin:12px auto 0}
 
-    /* === Hero === */
-    .hero{padding:28px 0 6px; text-align:center}
-    .h1{font-size:clamp(1.6rem,6vw,3rem); line-height:1.15; font-weight:900; margin:6px 0 10px}
-    .sub{color:var(--muted); max-width:900px; margin:0 auto}
+    .steps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+    .step-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.04);font-weight:600}
+    .n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand-1),var(--brand-2));color:#061017;font-size:12px}
 
-    /* === Controles === */
-    .controls{max-width:980px; margin:18px auto 76px; padding:0 0; display:grid; gap:14px; justify-items:center}
-    .seg{display:flex; background:rgba(255,255,255,.06); padding:6px; border-radius:999px; border:1px solid var(--card-border); width:max-content}
-    .seg button{background:transparent; border:0; color:var(--muted); padding:10px 16px; border-radius:999px; cursor:pointer; font-weight:800}
-    .seg button.active{color:var(--txt); background:linear-gradient(120deg, rgba(0,212,255,.22), rgba(124,58,237,.22))}
-    .qty{display:flex; align-items:center; gap:12px; justify-content:center; color:var(--muted); flex-wrap:wrap}
-    .qty .counter{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.04); border:1px solid var(--card-border); border-radius:999px; padding:6px}
-    .btn-icon{width:40px; height:40px; border-radius:999px; display:grid; place-items:center; background:transparent; border:1px solid var(--card-border); color:var(--txt); cursor:pointer; font-size:20px; line-height:1}
-    .btn-icon:hover{background:rgba(255,255,255,.06)}
-    .num{min-width:36px; text-align:center; font-weight:900; font-size:16px}
-    .help{font-size:13px; color:var(--muted); text-align:center; margin-top:6px}
+    .chooser{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px auto}
+    .card{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+    .card h3{margin:0 0 6px;font-size:1.2rem}
+    .card p{margin:0;color:var(--muted)}
+    .badge{font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.04);color:#cfe3ff;display:inline-block;margin-bottom:8px}
+    .actions{display:flex;gap:10px;margin-top:14px}
+    .btn{padding:12px 16px;border:0;border-radius:999px;font-weight:800;cursor:pointer;display:inline-flex;justify-content:center;
+      background:linear-gradient(135deg,var(--brand-1),var(--brand-2));color:#061017;box-shadow:0 10px 28px rgba(124,58,237,.35),0 4px 14px rgba(0,212,255,.25)}
+    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--txt);box-shadow:none}
 
-    /* Barra total fija (móvil) */
-    .bottom-bar{position:fixed; left:0; right:0; bottom:0; z-index:60; background:#0a0f16f2; border-top:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px); padding:10px 14px calc(10px + var(--safe-bottom));}
-    .bottom-wrap{display:flex; gap:12px; align-items:center}
-    .summary{flex:1}
-    .summary strong{display:block; font-size:14px}
-    .summary span{display:block; color:var(--muted); font-size:12px}
-    .cta-bottom{white-space:nowrap}
+    /* selector mensual/anual */
+    .seg{display:flex;justify-content:center;gap:10px;margin:22px auto}
+    .seg button{border:0;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.06);color:var(--muted)}
+    .seg button.active{background:linear-gradient(135deg,var(--brand-1),var(--brand-2));color:#061017}
 
-    /* === Planes === */
-    .planswrap{max-width:1100px; margin:16px auto 110px}
-    .plans{display:grid; grid-template-columns: repeat(3, 1fr); gap:22px}
-    .card{background:var(--bg-2); border:1px solid var(--card-border); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; position:relative}
-    .badge{position:absolute; top:14px; left:14px; font-size:12px; font-weight:900; padding:6px 10px; border-radius:999px; border:1px solid var(--card-border); color:#c8d3e6; background:rgba(255,255,255,.04)}
-    .badge.rec{background:linear-gradient(120deg, rgba(0,212,255,.15), rgba(124,58,237,.15)); color:#eafffb}
-    .price{font-size:34px; font-weight:900; margin-top:8px}
-    .per{font-size:16px; color:var(--muted); font-weight:700}
-    .desc{color:var(--muted); margin:6px 0 12px}
-    ul.features{list-style:none; padding:0; margin:0; display:grid; gap:10px}
-    ul.features li{display:flex; gap:10px; align-items:flex-start; color:#cfe3ff}
-    .tick{color:#22c55e; font-weight:900}
-    .actions{display:flex; gap:10px; margin-top:16px}
-    .btn.plan{flex:1; justify-content:center}
-    .btn.ghost{flex:1; justify-content:center; background:transparent; border:1px solid var(--card-border); color:var(--txt); box-shadow:none}
+    /* grid planes */
+    .plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:stretch}
+    .plan{display:flex;flex-direction:column;justify-content:space-between}
+    .price-lg{font-size:32px;font-weight:800;margin:8px 0}
+    .per{color:var(--muted);font-size:14px;font-weight:600}
+    .desc{color:var(--muted);flex:1;margin:8px 0 12px}
+    .plan.rec{outline:2px solid rgba(0,212,255,.25);box-shadow:0 0 0 5px rgba(124,58,237,.08),var(--shadow)}
 
-    .fine{max-width:980px; margin:16px auto 28px; color:var(--muted); font-size:12px; text-align:center}
+    footer{text-align:center;padding:28px 0 36px;color:#b7c3d2;border-top:1px solid var(--border)}
+    @media(max-width:700px){.btn,.btn.ghost{width:100%}}
 
-    /* Responsive */
-    @media (max-width: 980px){
-      .plans{grid-template-columns:1fr}
-      .nav-links{display:none}
-      .menu{display:block}
-      header{background:#0a0f16}
-      .actions{flex-direction:column}
-      .btn.plan,.btn.ghost{width:100%}
-      .price{font-size:30px}
-    }
-
-    /* Menú móvil desplegable con animación suave */
-    @media (max-width: 980px){
-      .mobile-menu{display:block; overflow:hidden; max-height:0; transition:max-height .25s ease}
-      .mobile-menu.open{max-height:300px}
-      .mobile-links a{display:block}
-    }
-
-    /* Mejor foco accesible */
-    :is(button,a):focus-visible{outline:2px solid var(--brand-1); outline-offset:2px; border-radius:12px}
-
-    /* Enlaces activos opcional (marcar “Precios”) */
-    .active-link{border-color:rgba(255,255,255,.25)}
+    /* Ocultar paneles por defecto */
+    .panel{display:none;margin-bottom:40px}
+    .panel.show{display:block}
   </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <header>
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="brand-logo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12a7 7 0 1114 0v6.5a2.5 2.5 0 01-5 0V9.75a2.25 2.25 0 10-4.5 0V18.5a2.5 2.5 0 01-5 0V12z" stroke="#061017" stroke-width="1.7"/></svg>
-        </span>
-        <span>taply</span>
-      </a>
-      <nav class="nav-links">
-        <a class="ghost" href="index.html#beneficios">Beneficios</a>
-        <a class="ghost" href="index.html#como-funciona">Cómo funciona</a>
-        <a class="ghost" href="index.html#reviews">Opiniones</a>
-        <a class="ghost active-link" href="precios.html">Precios</a>
-        <a class="btn" href="#planes">¡Comenzar ahora!</a>
-      </nav>
-      <button class="menu ghost" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menú</button>
-    </div>
-    <div class="container mobile-menu" id="mobileMenu" aria-hidden="true">
-      <div class="mobile-links">
-        <a class="ghost" href="index.html#beneficios">Beneficios</a>
-        <a class="ghost" href="index.html#como-funciona">Cómo funciona</a>
-        <a class="ghost" href="index.html#reviews">Opiniones</a>
-        <a class="ghost active-link" href="precios.html">Precios</a>
-        <a class="btn" href="#planes">¡Comenzar ahora!</a>
-      </div>
-    </div>
-  </header>
+<header>
+  <div class="container brand">
+    <span class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12a7 7 0 1114 0v6.5a2.5 2.5 0 01-5 0V9.75a2.25 2.25 0 10-4.5 0V18.5a2.5 2.5 0 01-5 0V12z" stroke="#061017" stroke-width="1.7"/></svg></span>
+    <span>taply</span>
+  </div>
+</header>
 
-  <!-- HERO -->
-  <section class="hero" id="planes">
-    <div class="container">
-      <h1 class="h1">Planes y precios</h1>
-      <p class="sub">Elige pago <strong>mensual</strong> o <strong>anual</strong> con descuento. Puedes cambiar de plan cuando quieras.</p>
-    </div>
-  </section>
-
-  <!-- CONTROLES -->
-  <section class="controls" aria-label="Controles de compra">
-    <div class="seg" role="tablist" aria-label="Frecuencia de pago">
-      <button id="btn-month" class="active" aria-pressed="true">Mensual</button>
-      <button id="btn-year" aria-pressed="false">Anual <span style="opacity:.8">· ahorra más</span></button>
+<section class="hero">
+  <div class="container">
+    <h1 class="h1">Empieza en dos pasos</h1>
+    <p class="lead">Primero compra los NFC para tus mesas, después activa la suscripción que más te convenga. Son pagos independientes y tras cada compra recibirás un WhatsApp con instrucciones y contacto directo.</p>
+    <div class="steps">
+      <span class="step-pill"><span class="n">1</span> Comprar NFC</span>
+      <span class="step-pill"><span class="n">2</span> Elegir suscripción</span>
     </div>
 
-    <div class="qty" aria-label="Número de NFC para tu negocio">
-      <span style="font-weight:800; color:var(--txt)">Número de NFC para tu negocio</span>
-      <div class="counter" role="group" aria-label="Selector de cantidad">
-        <button class="btn-icon" id="minus" aria-label="Quitar uno" aria-controls="qty" aria-live="polite">−</button>
-        <span class="num" id="qty" role="status" aria-live="polite">1</span>
-        <button class="btn-icon" id="plus" aria-label="Añadir uno" aria-controls="qty" aria-live="polite">＋</button>
-      </div>
-    </div>
-    <div class="help">El coste de los NFC se cobra <strong>una sola vez ahora</strong>. Luego empieza la suscripción.</div>
-  </section>
-
-  <!-- PLANES -->
-  <main class="planswrap">
-    <div class="container">
-      <div class="plans" id="plans">
-        <!-- BASIC -->
-        <article class="card">
-          <div class="badge">Basic</div>
-          <div class="price"><span id="p-basic">25€</span> <span class="per">/mes</span></div>
-          <p class="desc">Ideal para empezar a captar reseñas positivas de forma sencilla.</p>
-          <ul class="features">
-            <li><span class="tick">✔</span> Dispositivo y flujo NFC sin fricción</li>
-            <li><span class="tick">✔</span> Excel avanzado para exportar y analizar</li>
-          </ul>
-          <div class="actions">
-            <button class="btn plan" data-tier="basic">Empezar con Basic</button>
-            <button class="btn ghost">Ver detalles</button>
-          </div>
-        </article>
-
-        <!-- MEDIO -->
-        <article class="card" style="outline:2px solid rgba(0,212,255,.18); box-shadow:0 0 0 5px rgba(124,58,237,.06), var(--shadow)">
-          <div class="badge rec">Medio · Recomendado</div>
-          <div class="price"><span id="p-medio">35€</span> <span class="per">/mes</span></div>
-          <p class="desc">Para negocios que quieren mejorar y gestionar su reputación online.</p>
-          <ul class="features">
-            <li><span class="tick">✔</span> Todo lo de <strong>Basic</strong></li>
-            <li><span class="tick">✔</span> Gestión de reseñas (panel privado + filtros por periodos)</li>
-          </ul>
-          <div class="actions">
-            <button class="btn plan" data-tier="medio">Elegir Medio</button>
-            <button class="btn ghost">Ver detalles</button>
-          </div>
-        </article>
-
-        <!-- PRO -->
-        <article class="card">
-          <div class="badge">Pro</div>
-          <div class="price"><span id="p-pro">45€</span> <span class="per">/mes</span></div>
-          <p class="desc">Máxima automatización y soporte para crecer rápido.</p>
-          <ul class="features">
-            <li><span class="tick">✔</span> Todo lo de <strong>Medio</strong></li>
-            <li><span class="tick">✔</span> Integración con Telegram (avisos y acciones)</li>
-            <li><span class="tick">✔</span> Todos los <strong>cambios que necesites*</strong></li>
-          </ul>
-          <div class="actions">
-            <button class="btn plan" data-tier="pro">Ir con Pro</button>
-            <button class="btn ghost">Ver detalles</button>
-          </div>
-        </article>
-      </div>
-    </div>
-  </main>
-
-  <p class="fine">* Ajustes bajo petición dentro de un uso razonable.</p>
-
-  <!-- Barra inferior fija (móvil) -->
-  <div class="bottom-bar" role="region" aria-label="Resumen y acción">
-    <div class="container bottom-wrap">
-      <div class="summary">
-        <strong>Total NFC: <span id="total">—</span></strong>
-        <span id="freqLabel">Suscripción: mensual (a elegir en el plan)</span>
-      </div>
-      <button class="btn cta-bottom" id="continueBtn" disabled>Continuar</button>
+    <div class="chooser">
+      <article class="card">
+        <span class="badge">Paso 1</span>
+        <h3>Comprar NFC</h3>
+        <p>Dispositivos que colocas en las mesas o mostradores. Pago único, necesarios para empezar.</p>
+        <div class="actions">
+          <a href="#" id="showNfc" class="btn">Comprar NFC</a>
+        </div>
+      </article>
+      <article class="card">
+        <span class="badge">Paso 2</span>
+        <h3>Activar Suscripción</h3>
+        <p>Elige plan mensual o anual para gestionar reseñas, panel privado y más. Una vez tengas NFC.</p>
+        <div class="actions">
+          <a href="#" id="showSub" class="btn">Ver planes</a>
+        </div>
+      </article>
     </div>
   </div>
+</section>
 
-  <script>
-    // Carga suave
-    window.addEventListener('load', () => document.body.classList.add('is-loaded'));
+<!-- Panel NFC -->
+<section id="panel-nfc" class="panel container">
+  <article class="card">
+    <h3>Compra tus NFC</h3>
+    <p class="desc">Selecciona cuántos necesitas. Tras pagar recibirás WhatsApp automático con la guía.</p>
+    <div class="actions" style="justify-content:center;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--border);padding:6px;border-radius:999px">
+        <button id="minus" class="btn ghost" style="padding:6px 12px">−</button>
+        <span id="qty">1</span>
+        <button id="plus" class="btn ghost" style="padding:6px 12px">＋</button>
+      </div>
+      <div class="price">Total: <span id="totalNfc">—</span></div>
+      <a class="btn" id="buyNfcBtn">Comprar ahora</a>
+    </div>
+    <p style="font-size:14px;text-align:center;margin-top:10px">Precio unitario: <strong id="unitPrice">—</strong></p>
+  </article>
+</section>
 
-    // Menú móvil con animación y a11y
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    menuBtn?.addEventListener('click', ()=>{
-      const open = mobileMenu.classList.toggle('open');
-      mobileMenu.style.display = 'block';
-      mobileMenu.setAttribute('aria-hidden', !open);
-      menuBtn.setAttribute('aria-expanded', open);
-    });
+<!-- Panel Suscripción -->
+<section id="panel-sub" class="panel container">
+  <div class="seg">
+    <button id="btn-month" class="active">Mensual</button>
+    <button id="btn-year">Anual · ahorra</button>
+  </div>
 
-    // ======= CONFIG DE PRECIOS =======
-    const PRICE = {
-      nfcUnit: 20,                      // pago único por NFC
-      monthly: { basic: 25, medio: 35, pro: 45 },
-      annualDiscount: 0.20              // 20% dto anual
-    };
+  <div class="plan-grid">
+    <article class="card plan">
+      <span class="badge">Basic</span>
+      <div class="price-lg"><span id="p-basic">25€</span> <span class="per">/mes</span></div>
+      <p class="desc">Empieza a captar reseñas con tu NFC listo y acceso a tus datos exportables.</p>
+      <div class="actions"><a class="btn plan" data-tier="basic">Elegir Basic</a></div>
+    </article>
 
-    let yearly = false;
-    let qty = 1;
-    let selectedTier = null;
+    <article class="card plan rec">
+      <span class="badge">Medio · Recomendado</span>
+      <div class="price-lg"><span id="p-medio">35€</span> <span class="per">/mes</span></div>
+      <p class="desc">Todo lo de Basic más un panel privado con filtros para controlar mejor tu reputación.</p>
+      <div class="actions"><a class="btn plan" data-tier="medio">Elegir Medio</a></div>
+    </article>
 
-    const fmt = (v) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(v);
-    const $pBasic = document.getElementById('p-basic');
-    const $pMedio = document.getElementById('p-medio');
-    const $pPro   = document.getElementById('p-pro');
-    const $per    = document.querySelectorAll('.per');
-    const $total  = document.getElementById('total');
-    const $freqLabel = document.getElementById('freqLabel');
-    const $continue = document.getElementById('continueBtn');
+    <article class="card plan">
+      <span class="badge">Pro</span>
+      <div class="price-lg"><span id="p-pro">45€</span> <span class="per">/mes</span></div>
+      <p class="desc">Todo lo de Medio con integración en Telegram, cambios bajo demanda y opción de incentivo para clientes.</p>
+      <div class="actions"><a class="btn plan" data-tier="pro">Elegir Pro</a></div>
+    </article>
+  </div>
+</section>
 
-    function planAmount(tier){
-      const m = PRICE.monthly[tier];
-      if(!yearly) return m;
-      return Math.round(m * 12 * (1 - PRICE.annualDiscount));
-    }
-    function paintPrices(){
-      $pBasic.textContent = yearly ? fmt(planAmount('basic')) : PRICE.monthly.basic + '€';
-      $pMedio.textContent = yearly ? fmt(planAmount('medio')) : PRICE.monthly.medio + '€';
-      $pPro.textContent   = yearly ? fmt(planAmount('pro'))   : PRICE.monthly.pro   + '€';
-      $per.forEach(el => el.textContent = yearly ? '/año' : '/mes');
-      $freqLabel.textContent = `Suscripción: ${yearly ? 'anual (descuento aplicado)' : 'mensual'}`;
-      updateTotal();
-    }
-    function updateTotal(){
-      const nfcCost = qty * PRICE.nfcUnit;
-      $total.textContent = `${fmt(nfcCost)} (hoy por NFC)`;
-    }
-    paintPrices();
+<footer>
+  <div class="container">
+    <p>Primero los dispositivos NFC, después la suscripción. Tras cada compra recibirás WhatsApp con instrucciones.</p>
+  </div>
+</footer>
 
-    // Toggle mensual/anual
-    document.getElementById('btn-month').addEventListener('click', (e)=>{
-      yearly = false; e.currentTarget.classList.add('active');
-      document.getElementById('btn-year').classList.remove('active');
-      paintPrices();
-    });
-    document.getElementById('btn-year').addEventListener('click', (e)=>{
-      yearly = true; e.currentTarget.classList.add('active');
-      document.getElementById('btn-month').classList.remove('active');
-      paintPrices();
-    });
+<script>
+  const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+  const fmt=v=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(v);
+  window.addEventListener('load',()=>document.body.classList.add('is-loaded'));
 
-    // Cantidad NFC (con límites y feedback accesible)
-    const qtyEl = document.getElementById('qty');
-    const setQty = (v)=>{ qty = Math.min(99, Math.max(0, v)); qtyEl.textContent = qty; updateTotal(); };
-    document.getElementById('minus').addEventListener('click', ()=> setQty(qty - 1));
-    document.getElementById('plus').addEventListener('click', ()=> setQty(qty + 1));
+  const PRICE={nfcUnit:5,monthly:{basic:25,medio:35,pro:45},annualDiscount:.20};
+  let qty=1,yearly=false;
 
-    // Selección de plan
-    document.querySelectorAll('[data-tier]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        selectedTier = btn.dataset.tier;
-        $continue.disabled = false;
-        $continue.textContent = `Continuar con ${selectedTier.charAt(0).toUpperCase()+selectedTier.slice(1)}`;
-        // Feedback visual breve en tarjeta
-        document.querySelectorAll('.card').forEach(c=>c.style.outline='');
-        btn.closest('.card').style.outline = '2px solid rgba(0,212,255,.35)';
-      });
-    });
+  function paintNfc(){
+    $('#qty').textContent=qty;
+    $('#totalNfc').textContent=fmt(qty*PRICE.nfcUnit)+' (pago único)';
+    $('#unitPrice').textContent=fmt(PRICE.nfcUnit)+' por dispositivo';
+  }
+  $('#minus').addEventListener('click',()=>{qty=Math.max(1,qty-1);paintNfc()});
+  $('#plus').addEventListener('click',()=>{qty=Math.min(99,qty+1);paintNfc()});
+  paintNfc();
 
-    // CTA de compra inferior
-    $continue.addEventListener('click', async ()=>{
-      if(!selectedTier) return;
-      const freq = yearly ? 'annual' : 'monthly';
-      const payload = { tier: selectedTier, frequency: freq, nfcQty: qty };
+  $('#buyNfcBtn').addEventListener('click',async()=>{
+    const payload={quantity:qty};
+    try{
+      const res=await fetch('/api/buy-nfc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const data=await res.json();
+      if(data.url)location.href=data.url;else alert('No se pudo iniciar la compra de NFC.');
+    }catch{alert('Error de red');}
+  });
 
-      try{
-        const res = await fetch('/api/create-checkout-session',{
-          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if(data.url) location.href = data.url;
-        else alert('No se pudo iniciar el pago.');
-      }catch(e){ alert('Error de red'); }
-    });
-  </script>
+  function planAmount(tier){const m=PRICE.monthly[tier];return yearly?Math.round(m*12*(1-PRICE.annualDiscount)):m}
+  function paintPrices(){
+    $('#p-basic').textContent=yearly?fmt(planAmount('basic')):PRICE.monthly.basic+'€';
+    $('#p-medio').textContent=yearly?fmt(planAmount('medio')):PRICE.monthly.medio+'€';
+    $('#p-pro').textContent=yearly?fmt(planAmount('pro')):PRICE.monthly.pro+'€';
+    $$('.per').forEach(el=>el.textContent=yearly?'/año':'/mes');
+  }
+  $('#btn-month').addEventListener('click',()=>{yearly=false;$('#btn-month').classList.add('active');$('#btn-year').classList.remove('active');paintPrices()});
+  $('#btn-year').addEventListener('click',()=>{yearly=true;$('#btn-year').classList.add('active');$('#btn-month').classList.remove('active');paintPrices()});
+  paintPrices();
+
+  $$('.btn.plan').forEach(btn=>btn.addEventListener('click',async()=>{
+    const tier=btn.dataset.tier,payload={tier,frequency:yearly?'annual':'monthly'};
+    try{
+      const res=await fetch('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const data=await res.json();
+      if(data.url)location.href=data.url;else alert('No se pudo iniciar la suscripción.');
+    }catch{alert('Error de red');}
+  }));
+
+  // Mostrar paneles al clickar
+  $('#showNfc').addEventListener('click',e=>{
+    e.preventDefault();
+    $('#panel-nfc').classList.add('show');
+    $('#panel-nfc').scrollIntoView({behavior:'smooth'});
+  });
+  $('#showSub').addEventListener('click',e=>{
+    e.preventDefault();
+    $('#panel-sub').classList.add('show');
+    $('#panel-sub').scrollIntoView({behavior:'smooth'});
+  });
+</script>
 </body>
 </html>
