@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>¿Cómo fue tu experiencia?</title>
+<style>
+  :root{
+    --text:#0b1220; --muted:#475569;
+    --google:#2563eb; --private:#16a34a;
+    --card:#ffffff; --border:#e2e8f0;
+  }
+  /* Fondo pastel animado */
+  body{
+    margin:0; color:var(--text);
+    font-family: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    background: linear-gradient(-45deg, #ffecd2, #fcb69f, #d9a7c7, #fbc2eb);
+    background-size: 400% 400%; animation: bg 12s ease infinite;
+  }
+  @keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  *{box-sizing:border-box} html,body{height:100%}
+  .wrap{min-height:100%; display:flex; align-items:center; justify-content:center; padding:22px}
+  .card{width:min(560px,100%); background:var(--card); border:2px solid var(--border);
+        border-radius:24px; padding:26px 22px; box-shadow:0 25px 70px rgba(0,0,0,.12)}
+  h1{margin:0 0 8px; font-size:28px; text-align:center; color:#0b0f18}
+  p{margin:0 0 16px; color:var(--muted); font-size:16px; text-align:center}
+
+  .grid{display:grid; grid-template-columns:1fr; gap:14px; margin-top:8px}
+  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
+
+  .tile{border:2px dashed var(--border); border-radius:18px; padding:16px; background:#ffffffee}
+  .tile h2{margin:0 0 6px; font-size:18px; text-align:center}
+  .tile p{margin:0 0 12px; font-size:14px; text-align:center}
+
+  .btn{display:inline-block; width:100%; text-align:center; text-decoration:none;
+       padding:16px; border-radius:14px; font-weight:900; font-size:17px; color:#fff;
+       box-shadow:0 10px 25px rgba(0,0,0,.12); transition:transform .06s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn-google{background:linear-gradient(180deg,#60a5fa,var(--google))}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--private))}
+  .note{font-size:12px; color:var(--muted); margin-top:6px; text-align:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="t">
+      <h1 id="t">¿Cómo fue tu experiencia?</h1>
+      <p>Elige libremente cómo compartirla. Ambos caminos están siempre disponibles.</p>
+
+      <div class="grid">
+        <!-- Opción Google (pública) -->
+        <section class="tile" aria-label="Reseña pública en Google">
+          <h2>⭐ Reseña pública en Google</h2>
+          <p>Si te fue bien, tu reseña <strong>ayuda a otras personas a elegirnos</strong> y apoya al negocio con visibilidad.</p>
+          <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
+          <div class="note">Visible para todos en Google.</div>
+        </section>
+
+        <!-- Opción Privada -->
+        <section class="tile" aria-label="Comentario privado">
+          <h2>📝 Comentario privado</h2>
+          <p>Si hubo algo mejorable, tu comentario <strong>nos llega directo</strong> y <strong>nos permite resolverlo contigo y mejorar</strong>.</p>
+          <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
+          <div class="note">No se publica; lo gestionamos internamente.</div>
+        </section>
+      </div>
+
+      <p class="note" style="margin-top:12px">
+        Gracias por tu ayuda. Tu elección es libre y bienvenida en cualquier caso.
+      </p>
+    </main>
+  </div>
+
+<script>
+  // === CONFIG ===
+  const PLACE_ID = "REEMPLAZA_CON_PLACE_ID";                 // Place ID de Google
+  const PRIVATE_FORM_URL = "REEMPLAZA_CON_URL_FORM_PRIVADO"; // Google Form o propio
+
+  // (Opcional) parámetros que añadimos solo al privado
+  const qs = new URLSearchParams(location.search);
+  const tenant = qs.get("tenant") || "";
+  const token  = qs.get("token")  || "";
+
+  function googleReviewURL(id){
+    return `https://search.google.com/local/writereview?placeid=${encodeURIComponent(id)}`;
+  }
+  function privateURL(){
+    const extra = [];
+    if (tenant) extra.push(`tenant=${encodeURIComponent(tenant)}`);
+    if (token)  extra.push(`sig=${encodeURIComponent(token)}`);
+    const sep = PRIVATE_FORM_URL.includes("?") ? "&" : "?";
+    return PRIVATE_FORM_URL + (extra.length ? sep + extra.join("&") : "");
+  }
+
+  document.getElementById("btnGoogle").href  = googleReviewURL(PLACE_ID);
+  document.getElementById("btnPrivate").href = privateURL();
+</script>
+</body>
+</html>
