@@ -7,9 +7,9 @@
   <style>
     :root {
       --accent: #1e88e5;
+      --accent-light: #bbdefb;
       --text: #1f2937;
       --text-sec: #4b5563;
-      --bg: #f9fafb; /* un blanco ligeramente grisáceo para suavizar */
       --stroke: #e5e7eb;
     }
 
@@ -21,27 +21,11 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background: #f5f6fa;
       color: var(--text);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       display: flex;
       flex-direction: column;
-      position: relative;
-    }
-
-    /* Fondo con patrón sutil */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, 0.015) 0px,
-        rgba(0, 0, 0, 0.015) 1px,
-        transparent 1px,
-        transparent 10px
-      );
-      pointer-events: none;
     }
 
     main {
@@ -50,19 +34,17 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      position: relative;
-      z-index: 1;
     }
 
     .container {
       max-width: 600px;
       width: 100%;
       text-align: center;
-      border: 2px solid var(--stroke);
-      border-radius: 14px;
-      padding: 24px 20px;
-      background: #fff;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      border-radius: 16px;
+      padding: 28px 22px;
+      background: linear-gradient(180deg, var(--accent-light) 0%, #ffffff 70%);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      border: 1px solid var(--stroke);
       animation: popIn 0.8s ease-out;
     }
 
@@ -100,9 +82,8 @@
       color: var(--text-sec);
       border-top: 1px solid var(--stroke);
       padding: 12px 16px 22px;
-      z-index: 1;
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(3px);
     }
 
     .brand {
@@ -114,7 +95,7 @@
 <body>
   <main>
     <div class="container">
-      <h1>¡Gracias por tu ayuda!</h1>
+      <h1>¡Gracias por tu ayuda! </h1>
       <p>Tu opinión nos ayuda a mejorar y ofrecerte un mejor servicio.</p>
     </div>
   </main>
