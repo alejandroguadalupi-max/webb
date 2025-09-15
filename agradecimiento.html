@@ -62,6 +62,12 @@
       }
     }
 
+    .logo {
+      max-width: 160px;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
     h1 {
       margin: 0 0 16px;
       font-size: clamp(2rem, 7vw, 2.4rem);
@@ -95,13 +101,18 @@
 <body>
   <main>
     <div class="container">
-      <h1>¡Gracias por tu ayuda! </h1>
+      <!-- Si tienen logo, mostramos la imagen -->
+      <img src="img/logo.png" alt="Logo de El Abollado Guachinche" class="logo" onerror="this.style.display='none';document.getElementById('fallback-name').style.display='block';">
+      <!-- Si no hay logo, mostramos solo el nombre -->
+      <h2 id="fallback-name" style="display:none; margin:0 0 16px;">El Abollado Guachinche</h2>
+
+      <h1>¡Gracias por tu ayuda! 🌟</h1>
       <p>Tu opinión nos ayuda a mejorar y ofrecerte un mejor servicio.</p>
     </div>
   </main>
 
   <footer>
-    © <span id="year"></span> <span class="brand">Restaurante Tu Marca</span>
+    © <span id="year"></span> <span class="brand">El Abollado Guachinche</span>
   </footer>
 
   <script>
