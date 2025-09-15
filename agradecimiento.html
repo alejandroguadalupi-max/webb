@@ -1,86 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>¡Muchas gracias!</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Roboto:wght@300;400;700&display=swap"
-    rel="stylesheet">
   <style>
-    body {
+    :root{
+      --accent: #1e88e5;   /* azul simple y agradable */
+      --text: #1f2937;     /* gris oscuro legible */
+      --text-sec: #4b5563; /* gris secundario */
+      --bg: #f7f8fa;       /* fondo claro */
+      --card: #ffffff;     /* tarjeta blanca */
+      --stroke:#e5e7eb;    /* borde sutil */
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
       margin: 0;
       padding: 0;
-      font-family: "Roboto", sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      width: min(680px, 92vw);
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      padding: clamp(20px, 5vw, 36px);
       text-align: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #a18cd1, #fbc2eb); /* Morado suave → Rosa pastel */
-      padding: 1rem;
     }
 
     h1 {
-      font-family: "Edu NSW ACT Cursive", cursive;
-      color: #4a148c;
-      font-size: clamp(2rem, 6vw, 3rem);
-      margin-bottom: 1rem;
-      animation: fadeInDown 0.8s ease-out forwards;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: .2px;
     }
 
-    h2 {
-      font-size: clamp(1.1rem, 4vw, 1.5rem);
-      color: #311b92;
-      line-height: 1.5;
-      max-width: 90%;
-      animation: fadeInUp 1s ease-out forwards;
+    p {
+      margin: 0 auto;
+      font-size: clamp(1rem, 4vw, 1.125rem);
+      line-height: 1.55;
+      color: var(--text-sec);
+      max-width: 48ch;
     }
 
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .accent {
+      width: 72px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 999px;
+      margin: 14px auto 0;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    footer {
+      border-top: 1px solid var(--stroke);
+      color: var(--text-sec);
+      font-size: 0.95rem;
+      padding: 14px 16px 18px;
+      text-align: center;
     }
 
-    @media (max-width: 400px) {
-      h1 {
-        font-size: 1.8rem;
-      }
+    .brand { color: var(--text); font-weight: 600; }
 
-      h2 {
-        font-size: 1rem;
+    /* Modo oscuro del sistema (opcional pero sobrio) */
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg:#0f1115;
+        --card:#13161b;
+        --stroke:#22262d;
+        --text:#e5e7eb;
+        --text-sec:#b6bdc6;
+        --accent:#4ea3ff;
       }
     }
   </style>
 </head>
-
 <body>
-  <h1>¡MUCHAS GRACIAS POR RELLENAR LA ENCUESTA!</h1>
-  <h2>Agradecemos enormemente que haya dedicado su tiempo en ayudarnos a mejorar</h2>
-</body>
+  <main class="wrap">
+    <section class="card" aria-labelledby="t">
+      <h1 id="t">¡MUCHAS GRACIAS POR RELLENAR LA ENCUESTA!</h1>
+      <div class="accent" aria-hidden="true"></div>
+      <p>Agradecemos enormemente que haya dedicado su tiempo en ayudarnos a mejorar.</p>
+    </section>
+  </main>
 
+  <footer>
+    © <span id="y"></span> <span class="brand">Restaurante Tu Marca</span>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>
