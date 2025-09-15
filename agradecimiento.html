@@ -11,11 +11,10 @@
       --text: #1f2937;
       --text-sec: #4b5563;
       --stroke: #e5e7eb;
+      --badge-bg: #ffffff;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -38,63 +37,59 @@
       gap: 20px;
     }
 
+    /* ===== Nombre del restaurante ===== */
+    .brand-name-main {
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      font-weight: 800;
+      text-align: center;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    /* ===== Logo ===== */
     .logo {
-      max-width: 180px;
+      display: block;
+      width: clamp(140px, 40vw, 220px);
+      max-height: 140px;
+      object-fit: contain;
+      margin-bottom: 20px;
       animation: fadeZoom 1s ease-out;
     }
 
     @keyframes fadeZoom {
-      0% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
+    /* ===== Cuadro de mensaje ===== */
     .container {
-      max-width: 600px;
+      max-width: 640px;
       width: 100%;
       text-align: center;
       border-radius: 16px;
-      padding: 28px 22px;
+      padding: clamp(24px, 5vw, 32px);
       background: linear-gradient(180deg, var(--accent-light) 0%, #ffffff 70%);
       box-shadow: 0 6px 20px rgba(0,0,0,0.06);
       border: 1px solid var(--stroke);
-      animation: popIn 0.8s ease-out;
+      animation: slideUp 0.7s ease-out;
     }
 
-    @keyframes popIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    h2#fallback-name {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
-      margin: 0 0 16px;
-      font-size: clamp(2rem, 7vw, 2.4rem);
+      margin: 0 0 14px;
+      font-size: clamp(1.9rem, 7vw, 2.4rem);
       font-weight: 700;
       color: var(--accent);
     }
 
     p {
       margin: 0;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      line-height: 1.5;
+      font-size: clamp(1rem, 4vw, 1.15rem);
+      line-height: 1.55;
       color: var(--text-sec);
     }
 
@@ -108,7 +103,7 @@
       backdrop-filter: blur(3px);
     }
 
-    .brand {
+    .brand-footer {
       font-weight: 600;
       color: var(--text);
     }
@@ -116,20 +111,22 @@
 </head>
 <body>
   <main>
-    <!-- Logo fuera del cuadro -->
-    <img src="img/logo.png" alt="Logo de El Abollado Guachinche" class="logo"
-         onerror="this.style.display='none';document.getElementById('fallback-name').style.display='block';">
-    <h2 id="fallback-name" style="display:none;">El Abollado Guachinche</h2>
+    <!-- Nombre arriba -->
+    <div class="brand-name-main">Guachinche El Abollado</div>
 
-    <!-- Cuadro con los textos -->
-    <div class="container">
-      <h1>¡Gracias por tu ayuda! 🌟</h1>
+    <!-- Logo debajo del nombre -->
+    <img src="img/logo.png" alt="Logo Guachinche El Abollado" class="logo"
+         onerror="this.style.display='none';">
+
+    <!-- Cuadro con mensaje -->
+    <section class="container" aria-labelledby="t">
+      <h1 id="t">¡Gracias por tu ayuda! 🌟</h1>
       <p>Tu opinión nos ayuda a mejorar y ofrecerte un mejor servicio.</p>
-    </div>
+    </section>
   </main>
 
   <footer>
-    © <span id="year"></span> <span class="brand">El Abollado Guachinche</span>
+    © <span id="year"></span> <span class="brand-footer">Guachinche El Abollado</span>
   </footer>
 
   <script>
@@ -137,8 +134,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
