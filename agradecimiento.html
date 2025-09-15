@@ -5,105 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>¡Muchas gracias!</title>
   <style>
-    :root{
-      --accent: #1e88e5;   /* azul simple y agradable */
-      --text: #1f2937;     /* gris oscuro legible */
-      --text-sec: #4b5563; /* gris secundario */
-      --bg: #f7f8fa;       /* fondo claro */
-      --card: #ffffff;     /* tarjeta blanca */
-      --stroke:#e5e7eb;    /* borde sutil */
+    :root {
+      --accent: #1e88e5; /* Azul agradable */
+      --text: #1f2937;
+      --text-sec: #4b5563;
+      --bg: #ffffff;
+      --stroke: #e5e7eb;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
-    .wrap {
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: 24px 16px;
-    }
-
-    .card {
-      width: min(680px, 92vw);
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: 14px;
-      padding: clamp(20px, 5vw, 36px);
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
       text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 28px 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 6vw, 2.2rem);
       font-weight: 700;
-      letter-spacing: .2px;
-    }
-
-    p {
-      margin: 0 auto;
-      font-size: clamp(1rem, 4vw, 1.125rem);
-      line-height: 1.55;
-      color: var(--text-sec);
-      max-width: 48ch;
+      color: var(--text);
     }
 
     .accent {
-      width: 72px;
+      width: 70px;
       height: 3px;
       background: var(--accent);
       border-radius: 999px;
-      margin: 14px auto 0;
+      margin: 0 auto 16px;
+    }
+
+    p {
+      margin: 0;
+      font-size: clamp(1rem, 4vw, 1.1rem);
+      line-height: 1.5;
+      color: var(--text-sec);
     }
 
     footer {
-      border-top: 1px solid var(--stroke);
-      color: var(--text-sec);
-      font-size: 0.95rem;
-      padding: 14px 16px 18px;
       text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-sec);
+      border-top: 1px solid var(--stroke);
+      padding: 14px 16px 28px; /* lo subimos un poco con padding extra */
     }
 
-    .brand { color: var(--text); font-weight: 600; }
-
-    /* Modo oscuro del sistema (opcional pero sobrio) */
-    @media (prefers-color-scheme: dark) {
-      :root{
-        --bg:#0f1115;
-        --card:#13161b;
-        --stroke:#22262d;
-        --text:#e5e7eb;
-        --text-sec:#b6bdc6;
-        --accent:#4ea3ff;
-      }
+    .brand {
+      font-weight: 600;
+      color: var(--text);
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card" aria-labelledby="t">
-      <h1 id="t">¡MUCHAS GRACIAS POR RELLENAR LA ENCUESTA!</h1>
-      <div class="accent" aria-hidden="true"></div>
+  <main>
+    <div class="container">
+      <h1>¡MUCHAS GRACIAS POR RELLENAR LA ENCUESTA!</h1>
+      <div class="accent"></div>
       <p>Agradecemos enormemente que haya dedicado su tiempo en ayudarnos a mejorar.</p>
-    </section>
+    </div>
   </main>
 
   <footer>
-    © <span id="y"></span> <span class="brand">Restaurante Tu Marca</span>
+    © <span id="year"></span> <span class="brand">Restaurante Tu Marca</span>
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
