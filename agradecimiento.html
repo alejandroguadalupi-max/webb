@@ -3,112 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gracias</title>
+  <title>Guachinche El Abollado — Gracias</title>
 
-  <!-- Tipografía elegante y legible -->
+  <!-- Tipografías: título elegante + texto legible -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      /* Paleta clara y suave */
-      --title: #2b5db7;          /* Azul medio (puedes aclararlo más si quieres) */
-      --bg1: #ffffff;            /* Blanco */
-      --bg2: #f4f7ff;            /* Azul muy claro */
-      --blob1: rgba(99, 163, 255, 0.18);
-      --blob2: rgba(180, 200, 255, 0.15);
+      /* Cambia estos dos para adaptar a tu color corporativo */
+      --brand: #7e1f2b;          /* Color del título/cabecera */
+      --brandTint: #f6e9ec;      /* Degradado sutil del bloque */
+      /* Neutros */
+      --bgTop: #ffffff;
+      --bgBottom: #f5f7fb;
+      --text: #1f2937;
+      --textSec: #4b5563;
+      --stroke: #e5e7eb;
+      --shadow: 0 10px 28px rgba(0,0,0,.07);
     }
 
     * { box-sizing: border-box; }
 
     html, body {
-      margin: 0;
-      padding: 0;
       height: 100%;
+      margin: 0;
     }
 
     body{
-      /* Altura segura en móviles (evita que “desaparezca” bajo las barras) */
-      min-height: 100dvh;
+      min-height: 100dvh; /* asegura visión completa en móviles */
       display: grid;
       place-items: center;
-      background:
-        linear-gradient(180deg, var(--bg1), var(--bg2));
+      padding: 24px;
+      background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color: #111827;
-      position: relative;
-      overflow: hidden;
+      color: var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      padding: 24px; /* margen para no pegarse a los bordes en móviles */
     }
 
-    /* Fondos decorativos muy sutiles (compatibles y ligeros) */
-    .bg-deco, .bg-deco::after {
-      content: "";
-      position: absolute;
-      inset: -20% -10%;
-      pointer-events: none;
-      background:
-        radial-gradient(30vmax 22vmax at 15% 20%, var(--blob1), transparent 60%),
-        radial-gradient(28vmax 20vmax at 85% 15%, var(--blob2), transparent 60%),
-        radial-gradient(35vmax 25vmax at 50% 85%, rgba(120, 180, 255, .10), transparent 60%);
-      filter: blur(2px);
-      z-index: 0;
-      animation: floatBg 28s linear infinite;
-    }
-    .bg-deco::after{
-      transform: rotate(8deg) scale(1.05);
-      opacity: .85;
-      animation-duration: 40s;
-      animation-direction: reverse;
-    }
-    @keyframes floatBg {
-      0%   { transform: translate3d(0,0,0); }
-      100% { transform: translate3d(-2.5%, -2%, 0); }
-    }
-
-    main{
-      position: relative;
-      z-index: 1;
-      width: 100%;
+    .stack{
+      width: min(720px, 96vw);
       display: grid;
-      place-items: center;
+      gap: 18px;
       text-align: center;
     }
 
-    h1{
-      margin: 0;
+    /* Cabecera con nombre del restaurante */
+    .brand{
       font-family: "Playfair Display", serif;
       font-weight: 700;
-      font-size: clamp(2rem, 8.5vw, 3.2rem);
-      line-height: 1.08;
-      color: var(--title);
+      font-size: clamp(2rem, 7.5vw, 2.8rem);
+      line-height: 1.1;
+      color: var(--brand);
+      margin: 0;
       letter-spacing: .5px;
-      /* Efecto de entrada simple y compatible */
-      opacity: 0;
-      transform: translateY(14px) scale(.985);
-      animation: showUp .8s cubic-bezier(.2,.7,.2,1) .05s forwards;
-      text-wrap: balance;
-      text-shadow: 0 1px 0 rgba(255,255,255,.6);
     }
 
-    @keyframes showUp {
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    .brand-underline{
+      width: 140px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brand), rgba(126,31,43,.25));
+      margin: 8px auto 6px;
     }
 
-    /* Respeto a usuarios con reduce motion */
+    /* Bloque del mensaje */
+    .card{
+      justify-self: center;
+      width: min(720px, 96vw);
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--brandTint) 0%, #ffffff 70%);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 5vw, 36px);
+      animation: cardIn .7s cubic-bezier(.2,.8,.2,1) .05s both;
+    }
+
+    .card h1{
+      margin: 0 0 10px;
+      font-size: clamp(1.9rem, 6.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .2px;
+    }
+
+    .card p{
+      margin: 0;
+      font-size: clamp(1rem, 4vw, 1.125rem);
+      line-height: 1.6;
+      color: var(--textSec);
+      max-width: 60ch;
+      margin-inline: auto;
+    }
+
+    @keyframes cardIn{
+      from { opacity: 0; transform: translateY(14px) scale(.985); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Respeto a reduce motion */
     @media (prefers-reduced-motion: reduce){
-      .bg-deco, .bg-deco::after { animation: none; }
-      h1 { animation: none; opacity: 1; transform: none; }
+      .card{ animation: none; }
     }
   </style>
 </head>
 <body>
-  <div class="bg-deco"></div>
-  <main role="main" aria-label="Mensaje de agradecimiento">
-    <h1>Gracias por tu ayuda</h1>
+  <main class="stack" role="main" aria-label="Página de agradecimiento">
+    <!-- Nombre del sitio -->
+    <h2 class="brand">Guachinche El Abollado</h2>
+    <div class="brand-underline" aria-hidden="true"></div>
+
+    <!-- Bloque con efecto de entrada -->
+    <section class="card" aria-labelledby="titulo-gracias">
+      <h1 id="titulo-gracias">Gracias por tu ayuda</h1>
+      <p>Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
+    </section>
   </main>
 </body>
 </html>
+
