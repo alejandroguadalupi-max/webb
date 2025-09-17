@@ -12,8 +12,8 @@
 
   <style>
     :root {
-      --brand: #0ea5a4; /* Color principal */
-      --brand2: #7c3aed; /* Color secundario para borde */
+      --brand: #0ea5a4;
+      --brand2: #7c3aed;
       --tint: #e6fbfa;
       --bgTop: #ffffff;
       --bgBottom: #f5f7fb;
@@ -44,6 +44,7 @@
       text-align: center;
     }
 
+    /* ==== Animación nombre del restaurante ==== */
     .brand {
       font-family: "Playfair Display", serif;
       font-weight: 700;
@@ -52,38 +53,30 @@
       margin: 0;
       opacity: 0;
       transform: translateY(-14px);
-      animation: brandIn 1s ease-out forwards;
+      animation: brandIn 1s ease-out forwards,
+                 brandMove 1s ease-in-out 6.5s forwards; /* baja al centro después */
     }
 
     @keyframes brandIn {
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .underline {
-      width: 0;
-      height: 6px;
-      margin: 6px auto;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--brand), var(--brand2));
-      animation: lineGrow 1s ease-out 0.3s forwards;
+    @keyframes brandMove {
+      to { transform: translateY(40px); } /* lo empuja hacia abajo */
     }
 
-    @keyframes lineGrow {
-      to { width: min(60%, 220px); }
-    }
-
-    /* ==== CARD con borde animado fluido ==== */
+    /* ==== CARD ==== */
     .card-wrap {
       position: relative;
       border-radius: 18px;
-      padding: 3px; /* grosor del borde */
+      padding: 3px;
       background: linear-gradient(90deg, var(--brand), var(--brand2), var(--brand)) no-repeat;
       background-size: 300% 300%;
-      animation: borderFlow 6s linear infinite;
+      animation: borderFlow 6s linear infinite,
+                 cardEnter 5.5s cubic-bezier(.25,1.25,.4,1) .7s forwards;
       opacity: 0;
       transform: translateY(20px) scale(0.98);
       filter: blur(8px);
-      animation: borderFlow 6s linear infinite, cardEnter 5.5s cubic-bezier(.25,1.25,.4,1) .7s forwards;
     }
 
     @keyframes borderFlow {
@@ -117,14 +110,12 @@
       color: var(--textSec);
     }
 
-    /* Respeto a reduce motion */
     @media (prefers-reduced-motion: reduce) {
-      .card-wrap, .brand, .underline {
+      .card-wrap, .brand {
         animation: none;
         opacity: 1;
         transform: none;
         filter: none;
-        width: min(60%, 220px);
       }
     }
   </style>
@@ -132,7 +123,6 @@
 <body>
   <main>
     <h2 class="brand">Guachinche El Abollado</h2>
-    <div class="underline"></div>
 
     <div class="card-wrap">
       <section class="card" aria-labelledby="t">
@@ -143,5 +133,3 @@
   </main>
 </body>
 </html>
-
-
