@@ -11,131 +11,137 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      /* Cambia estos si quieres otro color principal */
-      --brand: #0ea5a4;        /* color del nombre del restaurante (turquesa) */
-      --brandTint: #e6fbfa;    /* degradado clarito para el bloque */
+    :root {
+      --brand: #0ea5a4; /* Color principal */
+      --brand2: #7c3aed; /* Color secundario para borde */
+      --tint: #e6fbfa;
       --bgTop: #ffffff;
       --bgBottom: #f5f7fb;
-      --text: #1f2937;
+      --text: #111827;
       --textSec: #4b5563;
       --stroke: #e5e7eb;
-      --shadow: 0 10px 28px rgba(0,0,0,.06);
     }
 
     * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-
-    body{
-      min-height: 100dvh;               /* altura real en móviles */
-      background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color: var(--text);
+    body {
+      min-height: 100dvh;
       display: grid;
       place-items: center;
-      padding: 16px;                    /* margen interno seguro en móvil */
-      overflow-x: hidden;               /* evita cualquier corte lateral */
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      padding: 16px;
+      background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow-x: hidden;
     }
 
-    .stack{
+    main {
+      z-index: 1;
       width: 100%;
-      max-width: 560px;                 /* límite cómodo para móvil/tablet */
+      max-width: 580px;
       display: grid;
       gap: 14px;
       text-align: center;
     }
 
-    /* ===== Nombre del restaurante ===== */
-    .brand{
+    .brand {
       font-family: "Playfair Display", serif;
       font-weight: 700;
-      font-size: clamp(1.9rem, 8vw, 2.6rem);
-      line-height: 1.12;
+      font-size: clamp(2rem, 8vw, 2.7rem);
       color: var(--brand);
       margin: 0;
-      letter-spacing: .3px;
-      text-wrap: balance;
       opacity: 0;
-      transform: translateY(10px);
-      filter: blur(6px);
-      animation: fadeRise .7s cubic-bezier(.2,.8,.2,1) .05s forwards;
+      transform: translateY(-14px);
+      animation: brandIn 1s ease-out forwards;
     }
 
-    .brand-underline{
-      width: min(38%, 140px);           /* adaptativa para no desbordar */
-      height: 4px;
+    @keyframes brandIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .underline {
+      width: 0;
+      height: 6px;
+      margin: 6px auto;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--brand), rgba(14,165,164,.2));
-      margin: 6px auto 2px;
-      opacity: 0;
-      transform: translateY(6px);
-      animation: fadeRise .6s ease-out .15s forwards;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      animation: lineGrow 1s ease-out 0.3s forwards;
     }
 
-    /* ===== Bloque (card) del mensaje ===== */
-    .card{
-      width: 100%;
-      max-width: 560px;
-      border: 1px solid var(--stroke);
-      border-radius: 16px;
-      background: linear-gradient(180deg, var(--brandTint) 0%, #ffffff 70%);
-      box-shadow: var(--shadow);
-      padding: clamp(20px, 5vw, 28px);
-      margin-inline: auto;              /* asegura centrado sin desborde */
+    @keyframes lineGrow {
+      to { width: min(60%, 220px); }
+    }
+
+    /* ==== CARD con borde animado fluido ==== */
+    .card-wrap {
+      position: relative;
+      border-radius: 18px;
+      padding: 3px; /* grosor del borde */
+      background: linear-gradient(90deg, var(--brand), var(--brand2), var(--brand)) no-repeat;
+      background-size: 300% 300%;
+      animation: borderFlow 6s linear infinite;
       opacity: 0;
-      transform: translateY(14px) scale(.985);
+      transform: translateY(20px) scale(0.98);
       filter: blur(8px);
-      animation: cardIn .75s cubic-bezier(.2,.8,.2,1) .15s forwards;
+      animation: borderFlow 6s linear infinite, cardEnter 5.5s cubic-bezier(.25,1.25,.4,1) .7s forwards;
     }
 
-    .card h1{
+    @keyframes borderFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    @keyframes cardEnter {
+      60% { opacity: 1; transform: translateY(-6px) scale(1.02); filter: blur(0); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .card {
+      border-radius: 15px;
+      background: linear-gradient(180deg, var(--tint) 0%, #ffffff 70%);
+      border: 1px solid var(--stroke);
+      padding: clamp(20px, 5vw, 28px);
+    }
+
+    .card h1 {
       margin: 0 0 10px;
       font-size: clamp(1.7rem, 7vw, 2.2rem);
       font-weight: 700;
       color: var(--text);
-      letter-spacing: .2px;
-      text-wrap: balance;
     }
 
-    .card p{
+    .card p {
       margin: 0;
-      font-size: clamp(1rem, 4.2vw, 1.12rem);
+      font-size: clamp(1rem, 4vw, 1.12rem);
       line-height: 1.6;
       color: var(--textSec);
     }
 
-    /* ===== Animaciones ===== */
-    @keyframes fadeRise{
-      to{ opacity:1; transform: translateY(0); filter: blur(0); }
-    }
-    @keyframes cardIn{
-      to{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); }
-    }
-
-    /* Respeta reduce motion */
-    @media (prefers-reduced-motion: reduce){
-      .brand, .brand-underline, .card{ animation: none; opacity: 1; transform: none; filter: none; }
+    /* Respeto a reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .card-wrap, .brand, .underline {
+        animation: none;
+        opacity: 1;
+        transform: none;
+        filter: none;
+        width: min(60%, 220px);
+      }
     }
   </style>
 </head>
 <body>
-  <main class="stack" role="main" aria-label="Página de agradecimiento">
-    <!-- Nombre del restaurante (nuevo color) -->
+  <main>
     <h2 class="brand">Guachinche El Abollado</h2>
-    <div class="brand-underline" aria-hidden="true"></div>
+    <div class="underline"></div>
 
-    <!-- Bloque con mejor efecto de entrada -->
-    <section class="card" aria-labelledby="titulo-gracias">
-      <h1 id="titulo-gracias">Gracias por tu ayuda</h1>
-      <p>Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
-    </section>
+    <div class="card-wrap">
+      <section class="card" aria-labelledby="t">
+        <h1 id="t">Gracias por tu ayuda</h1>
+        <p>Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
+      </section>
+    </div>
   </main>
 </body>
 </html>
+
+
