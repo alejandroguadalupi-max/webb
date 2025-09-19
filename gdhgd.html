@@ -11,7 +11,6 @@
     --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
-  /* Fondo muy ligero, sin animaciones */
   html,body{height:100%}
   body{
     margin:0; color:var(--text);
@@ -32,26 +31,23 @@
     box-shadow:0 18px 45px rgba(12,20,33,.08);
   }
 
-  /* Header */
-  .brand{
-    display:flex; flex-direction:column; align-items:center; gap:6px;
-    margin-bottom:12px;
-  }
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px; margin-bottom:12px;}
   .logo{
-    width:64px; height:64px; border-radius:999px; background:#0b0f18;
-    display:grid; place-items:center; color:#fff; font-weight:800; letter-spacing:.5px;
-    font-size:14px;
+    width:70px; height:70px; border-radius:50%; overflow:hidden;
+    display:grid; place-items:center; background:#fff;
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
+  }
+  .logo img{
+    width:100%; height:100%; object-fit:cover;
+    display:block;
   }
   .brand h1{margin:4px 0 0; font-size:22px; line-height:1.2; text-align:center}
   .brand p{margin:4px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
-  /* Opciones */
   .grid{display:grid; gap:12px; margin-top:14px}
   @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
-  .tile{
-    border:1px solid var(--border); border-radius:16px; padding:14px; background:#fff;
-  }
+  .tile{border:1px solid var(--border); border-radius:16px; padding:14px; background:#fff}
   .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
   .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
 
@@ -65,10 +61,9 @@
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
   .note{font-size:12px; color:var(--muted); margin-top:6px; text-align:center}
 
-  /* Móvil */
   @media(max-width:480px){
     .card{padding:16px; border-radius:16px}
-    .logo{width:56px; height:56px; font-size:13px}
+    .logo{width:62px; height:62px}
     .brand h1{font-size:20px}
   }
 </style>
@@ -77,14 +72,14 @@
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="t">
       <header class="brand" aria-label="Encabezado del restaurante">
-        <!-- Si tienes logo circular, reemplaza el contenido de .logo por una <img> -->
-        <div class="logo" aria-hidden="true">TJ</div>
+        <div class="logo">
+          <img src="img/logo-tres.png" alt="Logo Trés Jolie">
+        </div>
         <h1 id="t"><span id="brandName">Trés Jolie · Las Palmas</span></h1>
         <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
       </header>
 
       <div class="grid">
-        <!-- Opción Google -->
         <section class="tile" aria-label="Reseña pública en Google">
           <h2>⭐ Reseña pública</h2>
           <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
@@ -92,7 +87,6 @@
           <div class="note">Queda visible para todos.</div>
         </section>
 
-        <!-- Opción Privada -->
         <section class="tile" aria-label="Comentario privado">
           <h2>📝 Comentario privado</h2>
           <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
@@ -106,22 +100,18 @@
   </div>
 
 <script>
-  // === CONFIG editable ===
-  const RESTAURANT_NAME   = "Trés Jolie · Las Palmas"; // Pon aquí el nombre
-  // Puedes pegar un Place ID (recomendado) o una URL de Google ya preparada (funciona como fallback)
+  const RESTAURANT_NAME   = "Trés Jolie · Las Palmas";
   const PLACE_ID_OR_URL   = "https://www.google.com/search?q=Restaurante%20Bentayga%20Rese%C3%B1as&rflfq=1&...#lkt=LocalPoiReviews";
   const PRIVATE_FORM_URL  = "https://tally.so/r/w2WB5L";
 
-  // (Opcional) parámetros que añadimos solo al privado
   const qs = new URLSearchParams(location.search);
   const tenant = qs.get("tenant") || "";
   const token  = qs.get("token")  || "";
 
-  // === Helpers ===
   const isURL = v => /^https?:\/\//i.test(String(v));
   const googleReviewURL = v =>
     isURL(v)
-      ? v // si pegaste una URL de Google completa, se usa tal cual
+      ? v
       : `https://search.google.com/local/writereview?placeid=${encodeURIComponent(v)}`;
 
   const privateURL = () => {
@@ -132,14 +122,12 @@
     return PRIVATE_FORM_URL + (extra.length ? sep + extra.join("&") : "");
   };
 
-  // === Apply ===
   document.getElementById("brandName").textContent = RESTAURANT_NAME;
   document.getElementById("btnGoogle").href  = googleReviewURL(PLACE_ID_OR_URL);
   document.getElementById("btnPrivate").href = privateURL();
 </script>
 </body>
 </html>
-
 
 
 
