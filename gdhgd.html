@@ -6,45 +6,51 @@
 <meta name="theme-color" content="#0b0f18">
 <title>¿Cómo fue tu experiencia?</title>
 <style>
-  :root {
+  :root{
     --text:#0b0f18; --muted:#566073;
     --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
 
-  html,body{margin:0; min-height:100vh;}
+  /* Reset básico */
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0; height:100%}
+
+  /* Layout: todo visible sin cortes (svh = small viewport height en móviles) */
   body{
-    display:flex; justify-content:center; align-items:center;
-    background:radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,var(--bg);
+    min-height:100svh; /* asegura altura real útil en móvil */
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
     font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     color:var(--text);
-    padding:12px;
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
+      var(--bg);
   }
 
   .card{
-    display:flex; flex-direction:column; gap:16px;
+    width:min(580px, 100%);
+    max-height:100svh;              /* nunca excede la pantalla */
+    display:flex; flex-direction:column; gap:14px;
     background:var(--card);
     border:1px solid var(--border);
     border-radius:20px;
-    padding:20px;
+    padding:18px;                   /* padding compacto para evitar desbordes */
     box-shadow:0 18px 45px rgba(12,20,33,.08);
-    width:min(580px,100%);
-    max-height:100vh;
-    overflow:auto; /* scroll solo si es necesario */
   }
 
-  .brand{display:flex; flex-direction:column; align-items:center; gap:6px;}
-  .logo{width:72px; height:72px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08);}
-  .logo img{width:100%; height:100%; object-fit:cover;}
-  .brand h1{margin:6px 0 0; font-size:22px; text-align:center}
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
+  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
+  .logo img{width:100%; height:100%; object-fit:cover}
+  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
   .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
-  .grid{display:grid; gap:12px; margin-top:8px;}
+  .grid{display:grid; gap:12px}
   @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
   .tile{
-    border:1px solid var(--border); border-radius:16px;
-    background:#fff; padding:14px; display:flex; flex-direction:column; align-items:center;
+    border:1px solid var(--border); border-radius:16px; background:#fff;
+    padding:12px; display:flex; flex-direction:column; align-items:center;
   }
   .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
   .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
@@ -53,80 +59,90 @@
     display:block; width:100%; text-align:center; text-decoration:none;
     padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
     box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
+    will-change:transform;
   }
   .btn:active{transform:translateY(1px)}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-  .note{font-size:12px; color:var(--muted); margin-top:4px; text-align:center}
+  .note{font-size:12px; color:var(--muted); text-align:center}
 
-  /* Redes sociales oficiales */
-  .social{display:flex; justify-content:center; gap:28px; margin-top:4px;}
-  .social svg{width:44px; height:44px; cursor:pointer; transition:transform .15s ease;}
-  .social svg:hover{transform:scale(1.12);}
+  /* Redes: usa tus JPG y que se vean SIEMPRE */
+  .social{
+    display:flex; justify-content:center; align-items:center; gap:24px;
+    margin-top:4px;
+  }
+  .social a{display:inline-flex; align-items:center; justify-content:center}
+  .social img{
+    width:44px; height:44px; object-fit:contain; display:block;
+    border-radius:8px; /* por si el jpg tiene fondo */
+    user-select:none;
+    -webkit-user-drag:none;
+    transition:transform .15s ease;
+  }
+  .social img:hover{transform:scale(1.1)}
+
+  /* Seguridad anti-desbordes en móviles muy pequeños */
+  @media(max-width:360px){
+    .brand h1{font-size:20px}
+    .btn{font-size:14px; padding:12px 14px}
+    .tile p{font-size:12px}
+    .social img{width:40px; height:40px}
+  }
 </style>
 </head>
 <body>
-<main class="card" role="main" aria-labelledby="t">
-  <header class="brand">
-    <div class="logo">
-      <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
+  <main class="card" role="main" aria-labelledby="t">
+    <header class="brand">
+      <div class="logo">
+        <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
+      </div>
+      <h1 id="t"><span id="brandName">Casablanca · Las Canteras</span></h1>
+      <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
+    </header>
+
+    <div class="grid">
+      <section class="tile" aria-label="Reseña pública en Google">
+        <h2>⭐ Reseña pública</h2>
+        <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
+        <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
+        <div class="note">Queda visible para todos.</div>
+      </section>
+
+      <section class="tile" aria-label="Comentario privado">
+        <h2>📝 Comentario privado</h2>
+        <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+        <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
+        <div class="note">Solo lo vemos nosotros.</div>
+      </section>
     </div>
-    <h1 id="t"><span id="brandName">Casablanca · Las Canteras</span></h1>
-    <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
-  </header>
 
-  <div class="grid">
-    <section class="tile">
-      <h2>⭐ Reseña pública</h2>
-      <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
-      <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
-      <div class="note">Queda visible para todos.</div>
-    </section>
+    <!-- Logos reales: rutas a tus JPG -->
+    <div class="social" aria-label="Redes sociales">
+      <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
+        <img src="img/ig.jpg" alt="Instagram" width="44" height="44" loading="lazy">
+      </a>
+      <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
+        <img src="img/tiktok.jpg" alt="TikTok" width="44" height="44" loading="lazy">
+      </a>
+    </div>
 
-    <section class="tile">
-      <h2>📝 Comentario privado</h2>
-      <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-      <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
-      <div class="note">Solo lo vemos nosotros.</div>
-    </section>
-  </div>
-
-  <div class="social">
-    <!-- Logo Instagram oficial -->
-    <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
-      <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path fill="#E4405F" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.8 224.1 370.8 339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.2 0-74.7-33.4-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.4 74.7 74.7-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.9-26.9 26.9-14.9 0-26.9-12-26.9-26.9s12-26.9 26.9-26.9c14.9 0 26.9 12 26.9 26.9zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.3-26.3-58-34.5-93.9-36.2-37-2.1-148-2.1-185 0-35.8 1.7-67.6 9.9-93.9 36.2S12 127.6 10.3 163.5c-2.1 37-2.1 148 0 185 1.7 35.9 9.9 67.7 36.2 93.9 26.3 26.3 58 34.5 93.9 36.2 37 2.1 148 2.1 185 0 35.9-1.7 67.7-9.9 93.9-36.2 26.3-26.3 34.5-58 36.2-93.9 2.1-37 2.1-148 0-185z"/></svg>
-    </a>
-
-    <!-- Logo TikTok oficial -->
-    <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
-      <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path fill="#000" d="M448,209.6v125.6a176.57,176.57,0,0,1-176,176c-97.2,0-176-78.8-176-176,0-93.5,73.3-170.1,165.5-175.6V384a48,48,0,1,1-48-48V192a176.57,176.57,0,0,1,176,176c0,73.8-47.4,136.2-112,158.5V209.6Z"/></svg>
-    </a>
-  </div>
-
-  <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
-</main>
+    <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
+  </main>
 
 <script>
-  const RESTAURANT_NAME = "Casablanca · Las Canteras";
-  const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
+  /* Config editable */
+  const RESTAURANT_NAME  = "Casablanca · Las Canteras";
+  const PLACE_ID_OR_URL  = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&..."; // o placeid
   const PRIVATE_FORM_URL = "https://tally.so/r/w2WB5L";
-  const IG_URL = "https://instagram.com/tu_usuario";
-  const TIKTOK_URL = "https://tiktok.com/@tu_usuario";
+  const IG_URL           = "https://instagram.com/tu_usuario";
+  const TIKTOK_URL       = "https://tiktok.com/@tu_usuario";
 
+  /* Pintar enlaces */
   document.getElementById("brandName").textContent = RESTAURANT_NAME;
   document.getElementById("btnGoogle").href  = PLACE_ID_OR_URL;
   document.getElementById("btnPrivate").href = PRIVATE_FORM_URL;
-  document.getElementById("btnIG").href = IG_URL;
-  document.getElementById("btnTT").href = TIKTOK_URL;
+  document.getElementById("btnIG").href      = IG_URL;
+  document.getElementById("btnTT").href      = TIKTOK_URL;
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
