@@ -12,13 +12,11 @@
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
 
-  /* Reset básico */
   *,*::before,*::after{box-sizing:border-box}
   html,body{margin:0; height:100%}
 
-  /* Layout: todo visible sin cortes (svh = small viewport height en móviles) */
   body{
-    min-height:100svh; /* asegura altura real útil en móvil */
+    min-height:100svh;
     display:flex; align-items:center; justify-content:center;
     padding:12px;
     font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
@@ -30,12 +28,12 @@
 
   .card{
     width:min(580px, 100%);
-    max-height:100svh;              /* nunca excede la pantalla */
+    max-height:100svh;
     display:flex; flex-direction:column; gap:14px;
     background:var(--card);
     border:1px solid var(--border);
     border-radius:20px;
-    padding:18px;                   /* padding compacto para evitar desbordes */
+    padding:18px;
     box-shadow:0 18px 45px rgba(12,20,33,.08);
   }
 
@@ -66,22 +64,24 @@
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
   .note{font-size:12px; color:var(--muted); text-align:center}
 
-  /* Redes: usa tus JPG y que se vean SIEMPRE */
+  /* Redes: mismo tamaño y proporción */
   .social{
     display:flex; justify-content:center; align-items:center; gap:24px;
     margin-top:4px;
   }
   .social a{display:inline-flex; align-items:center; justify-content:center}
   .social img{
-    width:44px; height:44px; object-fit:contain; display:block;
-    border-radius:8px; /* por si el jpg tiene fondo */
+    width:44px; height:44px;
+    aspect-ratio:1/1;            /* fuerza forma cuadrada */
+    object-fit:cover;            /* recorta para llenar el cuadro */
+    display:block;
+    border-radius:8px;
     user-select:none;
     -webkit-user-drag:none;
     transition:transform .15s ease;
   }
   .social img:hover{transform:scale(1.1)}
 
-  /* Seguridad anti-desbordes en móviles muy pequeños */
   @media(max-width:360px){
     .brand h1{font-size:20px}
     .btn{font-size:14px; padding:12px 14px}
@@ -116,13 +116,12 @@
       </section>
     </div>
 
-    <!-- Logos reales: rutas a tus JPG -->
     <div class="social" aria-label="Redes sociales">
       <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
-        <img src="img/ig.jpg" alt="Instagram" width="44" height="44" loading="lazy">
+        <img src="img/ig.jpg" alt="Instagram" loading="lazy">
       </a>
       <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
-        <img src="img/tiktok.jpg" alt="TikTok" width="44" height="44" loading="lazy">
+        <img src="img/tiktok.jpg" alt="TikTok" loading="lazy">
       </a>
     </div>
 
@@ -130,14 +129,12 @@
   </main>
 
 <script>
-  /* Config editable */
   const RESTAURANT_NAME  = "Casablanca · Las Canteras";
-  const PLACE_ID_OR_URL  = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&..."; // o placeid
+  const PLACE_ID_OR_URL  = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
   const PRIVATE_FORM_URL = "https://tally.so/r/w2WB5L";
   const IG_URL           = "https://instagram.com/tu_usuario";
   const TIKTOK_URL       = "https://tiktok.com/@tu_usuario";
 
-  /* Pintar enlaces */
   document.getElementById("brandName").textContent = RESTAURANT_NAME;
   document.getElementById("btnGoogle").href  = PLACE_ID_OR_URL;
   document.getElementById("btnPrivate").href = PRIVATE_FORM_URL;
