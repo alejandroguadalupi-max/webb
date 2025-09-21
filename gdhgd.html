@@ -10,132 +10,104 @@
     --text:#0b0f18; --muted:#566073;
     --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
-    --ig:#e1306c; --tt:#000000;
   }
 
-  html,body{height:100%}
+  html,body{height:100%; margin:0;}
   body{
-    margin:0; color:var(--text);
+    color:var(--text);
     font-family: ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-    font-size:18px; /* + tamaño base */
     background:
       radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
       var(--bg);
+    display:flex; justify-content:center; align-items:center;
+    padding:0 12px;
   }
-  *{box-sizing:border-box}
-  .wrap{min-height:100%; display:grid; place-items:center; padding:28px}
-
   .card{
-    width:min(640px,100%); /* + ancho */
+    width:min(600px,100%);
     background:var(--card);
     border:1px solid var(--border);
-    border-radius:22px;
-    padding:26px; /* + padding */
+    border-radius:20px;
+    padding:22px;
     box-shadow:0 18px 45px rgba(12,20,33,.08);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:95vh; /* ocupa casi toda la pantalla, sin scroll */
   }
 
-  .brand{display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:16px;}
-  .logo{
-    width:84px; height:84px; border-radius:50%; overflow:hidden;
-    display:grid; place-items:center; background:#fff;
-    box-shadow:0 4px 10px rgba(0,0,0,.08);
-  }
-  .logo img{width:100%; height:100%; object-fit:cover; display:block;}
-  .brand h1{margin:6px 0 0; font-size:26px; line-height:1.2; text-align:center}
-  .brand p{margin:2px 0 0; color:var(--muted); font-size:16px; text-align:center}
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .logo{width:70px; height:70px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08);}
+  .logo img{width:100%; height:100%; object-fit:cover;}
+  .brand h1{margin:6px 0 0; font-size:22px; text-align:center}
+  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
-  .grid{display:grid; gap:14px; margin-top:16px}
+  .grid{display:grid; gap:12px; margin-top:10px}
   @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
-  .tile{
-    border:1px solid var(--border); border-radius:18px;
-    padding:16px; background:#fff
-  }
-  .tile h2{margin:0 0 8px; font-size:18px; text-align:center}
-  .tile p{margin:0 0 12px; font-size:15px; color:var(--muted); text-align:center}
+  .tile{border:1px solid var(--border); border-radius:16px; padding:14px; background:#fff}
+  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
+  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
 
-  .btn{
-    display:inline-block; width:100%; text-align:center; text-decoration:none;
-    padding:16px 18px; border-radius:14px; font-weight:800; font-size:16px; color:#fff;
-    box-shadow:0 10px 22px rgba(0,0,0,.08); transition:transform .06s ease;
-  }
+  .btn{display:inline-block; width:100%; text-align:center; text-decoration:none; padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.08); transition:transform .06s ease;}
   .btn:active{transform:translateY(1px)}
-  .btn-google{background:linear-gradient(180deg,#6ab1ff,var(--google))}
+  .btn-google{background:linear-gradient(180deg,#5ea3ff,var(--google))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-  .note{font-size:13px; color:var(--muted); margin-top:8px; text-align:center}
+  .note{font-size:12px; color:var(--muted); margin-top:6px; text-align:center}
 
-  /* RRSS */
-  .social{margin-top:18px}
-  .social .row{display:grid; gap:10px; grid-template-columns:1fr 1fr}
-  .btn-ig{background:linear-gradient(180deg,#ff7aa0,var(--ig))}
-  .btn-tt{background:linear-gradient(180deg,#444,var(--tt))}
-  .social .hint{margin-top:8px; font-size:12px; color:var(--muted); text-align:center}
-
-  @media(max-width:480px){
-    body{font-size:17px}
-    .card{padding:18px; border-radius:18px}
-    .logo{width:72px; height:72px}
-    .brand h1{font-size:24px}
-  }
+  /* Redes sociales solo logos */
+  .social{display:flex; justify-content:center; gap:26px; margin-top:6px;}
+  .social img{width:42px; height:42px; display:block; transition:transform .15s ease;}
+  .social img:hover{transform:scale(1.1);}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="t">
-      <header class="brand" aria-label="Encabezado del restaurante">
-        <div class="logo">
-          <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
-        </div>
-        <h1 id="t"><span id="brandName">Casablanca · Las Canteras</span></h1>
-        <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
-      </header>
-
-      <div class="grid">
-        <section class="tile" aria-label="Reseña pública en Google">
-          <h2>⭐ Reseña pública</h2>
-          <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
-          <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
-          <div class="note">Queda visible para todos.</div>
-        </section>
-
-        <section class="tile" aria-label="Comentario privado">
-          <h2>📝 Comentario privado</h2>
-          <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-          <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
-          <div class="note">Solo lo vemos nosotros.</div>
-        </section>
+  <main class="card" role="main" aria-labelledby="t">
+    <header class="brand" aria-label="Encabezado del restaurante">
+      <div class="logo">
+        <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
       </div>
+      <h1 id="t"><span id="brandName">Casablanca · Las Canteras</span></h1>
+      <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
+    </header>
 
-      <!-- RRSS -->
-      <div class="social" aria-label="Redes sociales del restaurante">
-        <div class="row">
-          <a id="btnIG" class="btn btn-ig" target="_blank" rel="noopener">📸 Instagram</a>
-          <a id="btnTT" class="btn btn-tt" target="_blank" rel="noopener">🎵 TikTok</a>
-        </div>
-        <p class="hint">Antes de ver nuestras redes, te agradecemos dejar tu reseña 🙌</p>
-      </div>
+    <div class="grid">
+      <section class="tile" aria-label="Reseña pública en Google">
+        <h2>⭐ Reseña pública</h2>
+        <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
+        <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
+        <div class="note">Queda visible para todos.</div>
+      </section>
 
-      <p class="note" style="margin-top:16px"><strong>¡Gracias por tu tiempo!</strong></p>
-    </main>
-  </div>
+      <section class="tile" aria-label="Comentario privado">
+        <h2>📝 Comentario privado</h2>
+        <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+        <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
+        <div class="note">Solo lo vemos nosotros.</div>
+      </section>
+    </div>
+
+    <!-- logos de redes -->
+    <div class="social">
+      <a id="btnIG" target="_blank" rel="noopener"><img src="img/ig.svg" alt="Instagram"></a>
+      <a id="btnTT" target="_blank" rel="noopener"><img src="img/tiktok.svg" alt="TikTok"></a>
+    </div>
+
+    <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
+  </main>
 
 <script>
-  /* === Config === */
   const RESTAURANT_NAME = "Casablanca · Las Canteras";
-  const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&sxsrf=AE3TifO7W7wIsEjMM_EX0se2j0JCwiiz6w:1758474438177&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E7kwbPUEH1lExTItOzltFcURPS3ruWHZIALU7dQ1ocH3DZWNEWdA8eTWTxF6NM7--nhstS6mA233Zsk16i3H4FTrR_ebQn7k-aUJeYIlEe-MXDkMYmX3iwGhHha-BJ8hXbf4Z0g%3D&q=Terraza+Casa+Blanca+Las+Canteras+Rese%C3%B1as&sa=X&ved=2ahUKEwiauu_hq-qPAxVXTaQEHdErKG4Q0bkNegQIVRAD&biw=1278&bih=944&dpr=1";
+  const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
   const PRIVATE_FORM_URL = "https://tally.so/r/w2WB5L";
-  const IG_URL = "https://instagram.com/tu_usuario";   // ← pon aquí el IG real
-  const TIKTOK_URL = "https://tiktok.com/@tu_usuario"; // ← pon aquí el TikTok real
+  const IG_URL = "https://instagram.com/tu_usuario";
+  const TIKTOK_URL = "https://tiktok.com/@tu_usuario";
 
-  /* === Query params opcionales === */
   const qs = new URLSearchParams(location.search);
   const tenant = qs.get("tenant") || "";
   const token  = qs.get("token")  || "";
 
   const isURL = v => /^https?:\/\//i.test(String(v));
-  const googleReviewURL = v =>
-    isURL(v) ? v : `https://search.google.com/local/writereview?placeid=${encodeURIComponent(v)}`;
-
+  const googleReviewURL = v => isURL(v) ? v : `https://search.google.com/local/writereview?placeid=${encodeURIComponent(v)}`;
   const privateURL = () => {
     const extra = [];
     if (tenant) extra.push(`tenant=${encodeURIComponent(tenant)}`);
@@ -144,7 +116,6 @@
     return PRIVATE_FORM_URL + (extra.length ? sep + extra.join("&") : "");
   };
 
-  /* === Pintar === */
   document.getElementById("brandName").textContent = RESTAURANT_NAME;
   document.getElementById("btnGoogle").href  = googleReviewURL(PLACE_ID_OR_URL);
   document.getElementById("btnPrivate").href = privateURL();
@@ -153,6 +124,7 @@
 </script>
 </body>
 </html>
+
 
 
 
