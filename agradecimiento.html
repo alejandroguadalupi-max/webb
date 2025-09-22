@@ -53,17 +53,15 @@
       margin: 0;
       opacity: 0;
       transform: translateY(-14px);
-      /* ⬇️ Bajará 2s antes que antes (de 6.5s → 4.5s) */
       animation: brandIn 1s ease-out forwards,
-                 brandMove 1s ease-in-out 4.5s forwards;
+                 brandMove 1s ease-in-out 4.5s forwards; /* entra y baja */
     }
 
     @keyframes brandIn {
       to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes brandMove {
-      to { transform: translateY(40px); } /* lo empuja hacia abajo */
+      to { transform: translateY(40px); }
     }
 
     /* ==== CARD ==== */
@@ -79,12 +77,10 @@
       transform: translateY(20px) scale(0.98);
       filter: blur(8px);
     }
-
     @keyframes borderFlow {
       0% { background-position: 0% 50%; }
       100% { background-position: 300% 50%; }
     }
-
     @keyframes cardEnter {
       60% { opacity: 1; transform: translateY(-6px) scale(1.02); filter: blur(0); }
       100% { transform: translateY(0) scale(1); }
@@ -123,16 +119,67 @@
 </head>
 <body>
   <main>
-    <h2 class="brand">Coctelería Casablanca</h2>
+    <h2 class="brand" id="brand">Coctelería Casablanca</h2>
 
     <div class="card-wrap">
       <section class="card" aria-labelledby="t">
         <h1 id="t">Gracias por tu ayuda</h1>
-        <p>Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
+        <p id="desc">Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
       </section>
     </div>
   </main>
+
+  <script>
+    // ===== Config =====
+    const BRAND_NAME = "Coctelería Casablanca";
+
+    // Títulos por idioma (ES/EN)
+    const COPY = {
+      es: {
+        title: "Guachinche El Abollado — Gracias",
+        heading: "Gracias por tu ayuda",
+        desc: "Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio."
+      },
+      en: {
+        title: "Guachinche El Abollado — Thanks",
+        heading: "Thanks for your help",
+        desc: "Your feedback helps us improve and offer you a better service."
+      }
+    };
+
+    function isSpanish() {
+      const list = navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || ""];
+      return list.some(l => (l || "").toLowerCase().startsWith("es"));
+    }
+
+    function setLang(lang) {
+      const dict = COPY[lang] || COPY.en;
+      document.documentElement.lang = lang;
+      document.title = dict.title;
+
+      // Contenidos
+      document.getElementById("brand").textContent = BRAND_NAME; // nombre del local
+      document.getElementById("t").textContent = dict.heading;
+      document.getElementById("desc").textContent = dict.desc;
+
+      // A11y
+      const section = document.querySelector("section.card");
+      section && section.setAttribute(
+        "aria-labelledby",
+        "t"
+      );
+    }
+
+    // Init
+    (function () {
+      const lang = isSpanish() ? "es" : "en";
+      setLang(lang);
+    })();
+  </script>
 </body>
 </html>
+
 
 
