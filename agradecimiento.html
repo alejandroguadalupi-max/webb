@@ -25,10 +25,11 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; }
 
+    /* Hacemos el body un grid con dos filas: contenido + redes al final */
     body {
       min-height: 100dvh;
       display: grid;
-      place-items: center;
+      grid-template-rows: 1fr auto; /* main ocupa todo, footer se queda abajo */
       padding: 16px;
       background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -36,12 +37,13 @@
     }
 
     main {
-      z-index: 1;
       width: 100%;
       max-width: 580px;
+      margin-inline: auto;
       display: grid;
       gap: 14px;
       text-align: center;
+      align-self: center; /* centra el contenido verticalmente */
     }
 
     /* ==== Animación nombre del restaurante ==== */
@@ -107,15 +109,16 @@
       color: var(--textSec);
     }
 
-    /* ==== Redes sociales ==== */
-    .social {
+    /* ==== Redes sociales (footer) ==== */
+    footer.social {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 20px;
       margin-top: 18px;
+      padding: 12px 0;
     }
-    .social a {
+    footer.social a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -123,7 +126,7 @@
       overflow: hidden;
       transition: transform .15s ease;
     }
-    .social img {
+    footer.social img {
       width: 44px;
       height: 44px;
       object-fit: cover;
@@ -132,7 +135,7 @@
       user-select: none;
       -webkit-user-drag: none;
     }
-    .social a:hover { transform: scale(1.08); }
+    footer.social a:hover { transform: scale(1.08); }
 
     @media (prefers-reduced-motion: reduce) {
       .card-wrap, .brand {
@@ -154,27 +157,25 @@
         <p id="desc">Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
       </section>
     </div>
-
-    <!-- Redes sociales -->
-    <div class="social">
-      <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
-        <img src="img/ig.jpg" alt="Instagram">
-      </a>
-      <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
-        <img src="img/tiktok.jpg" alt="TikTok">
-      </a>
-    </div>
   </main>
+
+  <!-- Redes sociales en el "footer" -->
+  <footer class="social">
+    <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
+      <img src="img/ig.jpg" alt="Instagram">
+    </a>
+    <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
+      <img src="img/tiktok.jpg" alt="TikTok">
+    </a>
+  </footer>
 
   <script>
     // ===== Config =====
     const BRAND_NAME = "Coctelería Casablanca";
 
-    // Links redes
     const IG_URL = "https://instagram.com/tu_usuario";
     const TIKTOK_URL = "https://tiktok.com/@tu_usuario";
 
-    // Títulos por idioma (ES/EN)
     const COPY = {
       es: {
         title: "Guachinche El Abollado — Gracias",
@@ -199,26 +200,17 @@
       const dict = COPY[lang] || COPY.en;
       document.documentElement.lang = lang;
       document.title = dict.title;
-
       document.getElementById("brand").textContent = BRAND_NAME;
       document.getElementById("t").textContent = dict.heading;
       document.getElementById("desc").textContent = dict.desc;
     }
 
-    // Init
     (function () {
       const lang = isSpanish() ? "es" : "en";
       setLang(lang);
-
-      // Enlaces de redes
       document.getElementById("btnIG").href = IG_URL;
       document.getElementById("btnTT").href = TIKTOK_URL;
     })();
   </script>
 </body>
 </html>
-
-
-
-
-
