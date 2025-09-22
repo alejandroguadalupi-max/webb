@@ -64,29 +64,10 @@
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
   .note{font-size:12px; color:var(--muted); text-align:center}
 
-  /* Redes: mismo tamaño y proporción */
-  .social{
-    display:flex; justify-content:center; align-items:center; gap:24px;
-    margin-top:4px;
-  }
-  .social a{display:inline-flex; align-items:center; justify-content:center}
-  .social img{
-    width:44px; height:44px;
-    aspect-ratio:1/1;            /* fuerza forma cuadrada */
-    object-fit:cover;            /* recorta para llenar el cuadro */
-    display:block;
-    border-radius:8px;
-    user-select:none;
-    -webkit-user-drag:none;
-    transition:transform .15s ease;
-  }
-  .social img:hover{transform:scale(1.1)}
-
   @media(max-width:360px){
     .brand h1{font-size:20px}
     .btn{font-size:14px; padding:12px 14px}
     .tile p{font-size:12px}
-    .social img{width:40px; height:40px}
   }
 </style>
 </head>
@@ -97,51 +78,113 @@
         <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
       </div>
       <h1 id="t"><span id="brandName">Casablanca · Las Canteras</span></h1>
-      <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
+      <p id="subtitle">Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
     </header>
 
     <div class="grid">
       <section class="tile" aria-label="Reseña pública en Google">
-        <h2>⭐ Reseña pública</h2>
-        <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
+        <h2 id="publicTitle">⭐ Reseña pública</h2>
+        <p id="publicText">Si te fue bien, tu reseña nos da visibilidad en Google.</p>
         <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
-        <div class="note">Queda visible para todos.</div>
+        <div class="note" id="publicNote">Queda visible para todos.</div>
       </section>
 
       <section class="tile" aria-label="Comentario privado">
-        <h2>📝 Comentario privado</h2>
-        <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+        <h2 id="privateTitle">📝 Comentario privado</h2>
+        <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
         <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
-        <div class="note">Solo lo vemos nosotros.</div>
+        <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
       </section>
     </div>
 
-    <div class="social" aria-label="Redes sociales">
-      <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
-        <img src="img/ig.jpg" alt="Instagram" loading="lazy">
-      </a>
-      <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
-        <img src="img/tiktok.jpg" alt="TikTok" loading="lazy">
-      </a>
-    </div>
-
-    <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
+    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
   </main>
 
 <script>
-  const RESTAURANT_NAME  = "Casablanca · Las Canteras";
-  const PLACE_ID_OR_URL  = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
-  const PRIVATE_FORM_URL = "https://tally.so/r/w2WB5L";
-  const IG_URL           = "https://instagram.com/tu_usuario";
-  const TIKTOK_URL       = "https://tiktok.com/@tu_usuario";
+  // ===== Configurable =====
+  const RESTAURANT_NAME = "Casablanca · Las Canteras";
+  const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
 
-  document.getElementById("brandName").textContent = RESTAURANT_NAME;
-  document.getElementById("btnGoogle").href  = PLACE_ID_OR_URL;
-  document.getElementById("btnPrivate").href = PRIVATE_FORM_URL;
-  document.getElementById("btnIG").href      = IG_URL;
-  document.getElementById("btnTT").href      = TIKTOK_URL;
+  // Formularios (según tu indicación):
+  // - Español -> mBN1q1
+  // - Inglés u otro -> w20k9D
+  const TALLY_ES_TO_EN = "https://tally.so/r/mBN1q1";
+  const TALLY_EN_OR_OTHER = "https://tally.so/r/w20k9D";
+
+  // ===== i18n copy =====
+  const COPY = {
+    es: {
+      pageTitle: "¿Cómo fue tu experiencia?",
+      subtitle: "Cuéntanos en 10\u00a0segundos cómo fue todo.",
+      publicTitle: "⭐ Reseña pública",
+      publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
+      publicBtn: "Dejar reseña en Google",
+      publicNote: "Queda visible para todos.",
+      privateTitle: "📝 Comentario privado",
+      privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
+      privateBtn: "Enviar comentario privado",
+      privateNote: "Solo lo vemos nosotros.",
+      thanks: "¡Gracias por tu tiempo!"
+    },
+    en: {
+      pageTitle: "How was your experience?",
+      subtitle: "Tell us in 10\u00a0seconds how everything went.",
+      publicTitle: "⭐ Public review",
+      publicText: "If things went well, your review helps us on Google.",
+      publicBtn: "Leave a Google review",
+      publicNote: "Visible to everyone.",
+      privateTitle: "📝 Private feedback",
+      privateText: "If something went wrong, tell us and we’ll fix it with you.",
+      privateBtn: "Send private feedback",
+      privateNote: "Only we can see it.",
+      thanks: "Thanks for your time!"
+    }
+  };
+
+  // ===== Helpers =====
+  function detectIsSpanish() {
+    const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+    return langs.some(l => (l || '').toLowerCase().startsWith('es'));
+  }
+
+  function setLang(lang) {
+    const dict = COPY[lang] || COPY.en;
+    document.title = dict.pageTitle;
+    document.documentElement.lang = lang;
+
+    // Text nodes
+    document.getElementById("subtitle").textContent = dict.subtitle;
+    document.getElementById("publicTitle").textContent = dict.publicTitle;
+    document.getElementById("publicText").textContent = dict.publicText;
+    document.getElementById("btnGoogle").textContent = dict.publicBtn;
+    document.getElementById("publicNote").textContent = dict.publicNote;
+    document.getElementById("privateTitle").textContent = dict.privateTitle;
+    document.getElementById("privateText").textContent = dict.privateText;
+    document.getElementById("btnPrivate").textContent = dict.privateBtn;
+    document.getElementById("privateNote").textContent = dict.privateNote;
+    document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
+  }
+
+  // ===== Init =====
+  (function init() {
+    // Marca y enlaces base
+    document.getElementById("brandName").textContent = RESTAURANT_NAME;
+    document.getElementById("btnGoogle").href = PLACE_ID_OR_URL;
+
+    // Detección de idioma y copia
+    const isSpanish = detectIsSpanish();
+    setLang(isSpanish ? 'es' : 'en');
+
+    // Destino del formulario privado según idioma
+    const privateUrl = isSpanish ? TALLY_ES_TO_EN : TALLY_EN_OR_OTHER;
+    document.getElementById("btnPrivate").href = privateUrl;
+
+    // Accesibilidad: actualizar aria-labels con el idioma activo
+    const ariaPublic = isSpanish ? "Reseña pública en Google" : "Public review on Google";
+    const ariaPrivate = isSpanish ? "Comentario privado" : "Private feedback";
+    document.querySelector('section[aria-label]').setAttribute('aria-label', ariaPublic);
+    document.querySelectorAll('section[aria-label]')[1].setAttribute('aria-label', ariaPrivate);
+  })();
 </script>
 </body>
 </html>
-
-
