@@ -147,9 +147,9 @@
 
   // Enlaces de formularios Tally por idioma
   const TALLY_LINKS = {
-    es: "https://tally.so/r/mBN1q1",
+    es: "https://tally.so/r/w2Qla9",
     en: "https://tally.so/r/w20k9D",
-    de: "https://tally.so/r/mBN1q1", // Según tu indicación
+    de: "https://tally.so/r/mBN1q1",
     fr: "https://tally.so/r/mek0Dk"
   };
 
@@ -248,7 +248,7 @@
     document.getElementById("privateNote").textContent = dict.privateNote;
     document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
 
-    // Actualizar URL del formulario privado
+    // **Actualizar URL del formulario privado dinámicamente**
     document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS.en;
 
     // Actualizar selector de idioma
