@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Guachinche El Abollado — Gracias</title>
+  <title>Coctelería Casablanca — Gracias</title>
 
-  <!-- Tipografías -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -159,7 +158,6 @@
     </div>
   </main>
 
-  <!-- Redes sociales en el "footer" -->
   <footer class="social">
     <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
       <img src="img/ig.jpg" alt="Instagram">
@@ -176,28 +174,56 @@
     const IG_URL = "https://instagram.com/tu_usuario";
     const TIKTOK_URL = "https://tiktok.com/@tu_usuario";
 
+    // Textos para cada idioma
     const COPY = {
       es: {
-        title: "Guachinche El Abollado — Gracias",
+        title: `${BRAND_NAME} — Gracias`,
         heading: "Gracias por tu ayuda",
         desc: "Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio."
       },
       en: {
-        title: "Guachinche El Abollado — Thanks",
+        title: `${BRAND_NAME} — Thanks`,
         heading: "Thanks for your help",
         desc: "Your feedback helps us improve and offer you a better service."
+      },
+      de: {
+        title: `${BRAND_NAME} — Danke`,
+        heading: "Vielen Dank für Ihre Hilfe",
+        desc: "Ihr Feedback hilft uns, uns zu verbessern und Ihnen einen besseren Service zu bieten."
+      },
+      fr: {
+        title: `${BRAND_NAME} — Merci`,
+        heading: "Merci pour votre aide",
+        desc: "Vos commentaires nous aident à nous améliorer et à vous offrir un meilleur service."
       }
     };
 
-    function isSpanish() {
-      const list = navigator.languages && navigator.languages.length
-        ? navigator.languages
-        : [navigator.language || ""];
-      return list.some(l => (l || "").toLowerCase().startsWith("es"));
-    }
+    // 1. Nueva función para obtener el idioma
+    // Prioridad: Parámetro en URL > Idioma del navegador > Inglés por defecto
+    function getLanguage() {
+      // Lee el parámetro 'lang' de la URL (ej: ?lang=es)
+      const urlParams = new URLSearchParams(window.location.search);
+      const langFromUrl = urlParams.get('lang');
 
+      if (langFromUrl && COPY[langFromUrl]) {
+        return langFromUrl; // Usa el idioma de la URL si es válido
+      }
+
+      // Si no hay parámetro, detecta el idioma del navegador
+      const browserLangs = navigator.languages || [navigator.language || 'en'];
+      for (const lang of browserLangs) {
+        const langCode = lang.slice(0, 2);
+        if (COPY[langCode]) {
+          return langCode; // Usa el primer idioma compatible del navegador
+        }
+      }
+
+      return 'en'; // Plan C: usa inglés por defecto
+    }
+    
+    // 2. Función para establecer los textos en la página
     function setLang(lang) {
-      const dict = COPY[lang] || COPY.en;
+      const dict = COPY[lang] || COPY.en; // Seguridad por si el idioma no existe
       document.documentElement.lang = lang;
       document.title = dict.title;
       document.getElementById("brand").textContent = BRAND_NAME;
@@ -205,12 +231,16 @@
       document.getElementById("desc").textContent = dict.desc;
     }
 
+    // 3. Script de inicialización
     (function () {
-      const lang = isSpanish() ? "es" : "en";
-      setLang(lang);
+      const lang = getLanguage(); // Obtiene el idioma con la nueva lógica
+      setLang(lang); // Aplica los textos
+
+      // Configura las URLs de redes sociales
       document.getElementById("btnIG").href = IG_URL;
       document.getElementById("btnTT").href = TIKTOK_URL;
     })();
   </script>
 </body>
 </html>
+
