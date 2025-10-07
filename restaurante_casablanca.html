@@ -35,7 +35,47 @@
     border-radius:20px;
     padding:18px;
     box-shadow:0 18px 45px rgba(12,20,33,.08);
+    position:relative; /* Para el selector de idioma */
   }
+
+  /* --- Estilos para el Selector de Idioma --- */
+  #lang-selector{
+    position:absolute; top:12px; right:12px;
+    z-index:10;
+  }
+  #current-lang{
+    cursor:pointer;
+    font-size:24px;
+    padding:4px;
+    border-radius:8px;
+    background:rgba(0,0,0,.04);
+    display:grid; place-items:center;
+    transition:background .2s ease;
+  }
+  #current-lang:hover{ background:rgba(0,0,0,.08); }
+  #lang-options{
+    display:none; /* Se muestra con JS */
+    position:absolute;
+    top:calc(100% + 4px);
+    right:0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(12,20,33,.1);
+    padding:6px;
+    overflow:hidden;
+  }
+  .lang-option{
+    display:flex; align-items:center; gap:8px;
+    padding:8px 12px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background-color .2s ease;
+  }
+  .lang-option:hover{ background-color:var(--bg); }
+  /* ------------------------------------------- */
 
   .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
   .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
@@ -69,66 +109,9 @@
     .btn{font-size:14px; padding:12px 14px}
     .tile p{font-size:12px}
   }
-
-  /* Selector de idioma */
-  .lang-selector {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .lang-selector img {
-    width: 24px;
-    height: 24px;
-    margin-left: 6px;
-  }
-
-  .dropdown {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 12px;
-    background-color: white;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-  }
-
-  .dropdown a {
-    display: block;
-    padding: 10px;
-    text-decoration: none;
-    color: #333;
-    text-align: left;
-  }
-
-  .dropdown a:hover {
-    background-color: #f1f1f1;
-  }
 </style>
 </head>
 <body>
-  <div class="lang-selector" onclick="toggleLangSelector()">
-    <span id="selected-lang">ES</span>
-    <img id="selected-flag" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="Spanish Flag"/>
-  </div>
-
-  <div class="dropdown" id="langDropdown">
-    <a href="#" onclick="changeLanguage('es', 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg')">Español</a>
-    <a href="#" onclick="changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg')">English</a>
-    <a href="#" onclick="changeLanguage('fr', 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg')">Français</a>
-    <a href="#" onclick="changeLanguage('de', 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg')">Deutsch</a>
-  </div>
-
   <main class="card" role="main" aria-labelledby="t">
     <header class="brand">
       <div class="logo">
@@ -139,14 +122,14 @@
     </header>
 
     <div class="grid">
-      <section class="tile" aria-label="Reseña pública en Google">
+      <section class="tile" aria-labelledby="publicTitle">
         <h2 id="publicTitle">⭐ Reseña pública</h2>
         <p id="publicText">Si te fue bien, tu reseña nos da visibilidad en Google.</p>
         <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
         <div class="note" id="publicNote">Queda visible para todos.</div>
       </section>
 
-      <section class="tile" aria-label="Comentario privado">
+      <section class="tile" aria-labelledby="privateTitle">
         <h2 id="privateTitle">📝 Comentario privado</h2>
         <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
         <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
@@ -162,8 +145,175 @@
   const RESTAURANT_NAME = "Casablanca · Las Canteras";
   const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
 
-  // Formularios (según tu indicación):
-  // - Español -> mBN1q1
-  // - Inglés u otro -> w20k9D
-  const TALLY_ES_TO_EN = "https://tally.so/r/mBN1q1";
-  const TALLY_EN
+  // Enlaces de formularios Tally por idioma
+  const TALLY_LINKS = {
+    es: "https://tally.so/r/mBN1q1",
+    en: "https://tally.so/r/w20k9D",
+    de: "https://tally.so/r/mBN1q1", // Según tu indicación
+    fr: "https://tally.so/r/mek0Dk"
+  };
+
+  const FLAGS = { es: '🇪🇸', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷' };
+
+  // ===== i18n copy =====
+  const COPY = {
+    es: {
+      pageTitle: "¿Cómo fue tu experiencia?",
+      subtitle: "Cuéntanos en 10\u00a0segundos cómo fue todo.",
+      publicTitle: "⭐ Reseña pública",
+      publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
+      publicBtn: "Dejar reseña en Google",
+      publicNote: "Queda visible para todos.",
+      privateTitle: "📝 Comentario privado",
+      privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
+      privateBtn: "Enviar comentario privado",
+      privateNote: "Solo lo vemos nosotros.",
+      thanks: "¡Gracias por tu tiempo!",
+      langSelectorTitle: "Cambiar idioma"
+    },
+    en: {
+      pageTitle: "How was your experience?",
+      subtitle: "Tell us in 10\u00a0seconds how everything went.",
+      publicTitle: "⭐ Public review",
+      publicText: "If things went well, your review helps us on Google.",
+      publicBtn: "Leave a Google review",
+      publicNote: "Visible to everyone.",
+      privateTitle: "📝 Private feedback",
+      privateText: "If something went wrong, tell us and we’ll fix it.",
+      privateBtn: "Send private feedback",
+      privateNote: "Only we can see it.",
+      thanks: "Thanks for your time!",
+      langSelectorTitle: "Change language"
+    },
+    de: {
+      pageTitle: "Wie war Ihre Erfahrung?",
+      subtitle: "Erzählen Sie uns in 10\u00a0Sekunden, wie alles war.",
+      publicTitle: "⭐ Öffentliche Bewertung",
+      publicText: "Wenn es Ihnen gefallen hat, hilft uns Ihre Bewertung bei Google.",
+      publicBtn: "Google-Bewertung abgeben",
+      publicNote: "Für alle sichtbar.",
+      privateTitle: "📝 Privater Kommentar",
+      privateText: "Wenn etwas schief gelaufen ist, sagen Sie es uns und wir klären es.",
+      privateBtn: "Privaten Kommentar senden",
+      privateNote: "Nur wir sehen es.",
+      thanks: "Vielen Dank für Ihre Zeit!",
+      langSelectorTitle: "Sprache ändern"
+    },
+    fr: {
+      pageTitle: "Comment était votre expérience ?",
+      subtitle: "Racontez-nous en 10\u00a0secondes comment tout s'est passé.",
+      publicTitle: "⭐ Avis public",
+      publicText: "Si tout s'est bien passé, votre avis nous aide sur Google.",
+      publicBtn: "Laisser un avis Google",
+      publicNote: "Visible par tout le monde.",
+      privateTitle: "📝 Commentaire privé",
+      privateText: "Si quelque chose n'allait pas, dites-le nous et nous le corrigerons.",
+      privateBtn: "Envoyer un commentaire privé",
+      privateNote: "Seulement nous le voyons.",
+      thanks: "Merci pour votre temps !",
+      langSelectorTitle: "Changer de langue"
+    }
+  };
+
+  // ===== Helpers =====
+  function getInitialLang() {
+    const savedLang = localStorage.getItem('userLang');
+    if (savedLang && COPY[savedLang]) {
+      return savedLang;
+    }
+    const browserLangs = navigator.languages || [navigator.language || 'en'];
+    for (const lang of browserLangs) {
+      const langCode = lang.slice(0, 2);
+      if (COPY[langCode]) {
+        return langCode;
+      }
+    }
+    return 'en'; // Default
+  }
+
+  function setLang(lang) {
+    const dict = COPY[lang] || COPY.en;
+    document.title = dict.pageTitle;
+    document.documentElement.lang = lang;
+
+    // Actualizar textos
+    document.getElementById("subtitle").textContent = dict.subtitle;
+    document.getElementById("publicTitle").textContent = dict.publicTitle;
+    document.getElementById("publicText").textContent = dict.publicText;
+    document.getElementById("btnGoogle").textContent = dict.publicBtn;
+    document.getElementById("publicNote").textContent = dict.publicNote;
+    document.getElementById("privateTitle").textContent = dict.privateTitle;
+    document.getElementById("privateText").textContent = dict.privateText;
+    document.getElementById("btnPrivate").textContent = dict.privateBtn;
+    document.getElementById("privateNote").textContent = dict.privateNote;
+    document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
+
+    // Actualizar URL del formulario privado
+    document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS.en;
+
+    // Actualizar selector de idioma
+    if (document.getElementById("current-lang-flag")) {
+      document.getElementById("current-lang-flag").textContent = FLAGS[lang];
+      document.getElementById("current-lang").title = dict.langSelectorTitle;
+    }
+    
+    // Guardar preferencia
+    localStorage.setItem('userLang', lang);
+
+    // Ocultar opciones
+    const options = document.getElementById("lang-options");
+    if(options) options.style.display = 'none';
+  }
+
+  function createLangSelector() {
+    const card = document.querySelector('.card');
+    const selector = document.createElement('div');
+    selector.id = 'lang-selector';
+    
+    selector.innerHTML = `
+      <div id="current-lang">
+        <span id="current-lang-flag"></span>
+      </div>
+      <div id="lang-options"></div>
+    `;
+    card.prepend(selector); // Añade el selector al principio del .card
+
+    const optionsContainer = document.getElementById('lang-options');
+    Object.keys(COPY).forEach(langCode => {
+      const option = document.createElement('div');
+      option.className = 'lang-option';
+      option.dataset.lang = langCode;
+      option.innerHTML = `<span>${FLAGS[langCode]}</span> <span>${langCode.toUpperCase()}</span>`;
+      option.addEventListener('click', () => setLang(langCode));
+      optionsContainer.appendChild(option);
+    });
+
+    document.getElementById('current-lang').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const options = document.getElementById('lang-options');
+      options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!selector.contains(e.target)) {
+        document.getElementById('lang-options').style.display = 'none';
+      }
+    });
+  }
+
+  // ===== Init =====
+  (function init() {
+    // Marca y enlace de Google
+    document.getElementById("brandName").textContent = RESTAURANT_NAME;
+    document.getElementById("btnGoogle").href = PLACE_ID_OR_URL;
+
+    // Crear y configurar el selector de idioma
+    createLangSelector();
+
+    // Detección de idioma y aplicación de textos
+    const initialLang = getInitialLang();
+    setLang(initialLang);
+  })();
+</script>
+</body>
+</html>
