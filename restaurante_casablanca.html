@@ -38,7 +38,6 @@
     position:relative;
   }
 
-  /* Selector de idioma */
   #lang-selector{
     position:absolute; top:12px; right:12px;
     z-index:10;
@@ -63,7 +62,6 @@
     border-radius:12px;
     box-shadow:0 8px 20px rgba(12,20,33,.1);
     padding:6px;
-    overflow:hidden;
   }
   .lang-option{
     display:flex; align-items:center; gap:8px;
@@ -101,6 +99,7 @@
   .btn:active{transform:translateY(1px)}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
+  .btn-share{background:linear-gradient(180deg,#f59e0b,#d97706)}
   .note{font-size:12px; color:var(--muted); text-align:center}
 
   @media(max-width:360px){
@@ -138,21 +137,17 @@
 
     <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 
-    <!-- Nueva sección: compartir experiencia -->
+    <!-- NUEVA SECCIÓN DE COMPARTIR -->
     <div class="note" id="shareOption">
-      📸 <strong>Comparte tu experiencia</strong><br>
-      Cuéntales a tus amigos que estuviste en <strong>Casablanca</strong>.<br>
-      <a id="btnShare" href="#" style="display:inline-block;margin-top:6px;
-        font-weight:600;text-decoration:none;color:var(--google);">
-        Compartir con amigos
-      </a>
+      📸 <strong id="shareTitle">Comparte tu experiencia</strong><br>
+      <span id="shareText">Cuéntales a tus amigos que estuviste disfrutando en Casablanca, con cócteles, vistas y buena vibra.</span><br>
+      <a id="btnShare" href="#" class="btn btn-share" style="margin-top:10px;">Compartir con amigos</a>
     </div>
   </main>
 
 <script>
-  // ===== Configurable =====
   const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
-  const PLACE_ID_OR_URL = "https://maps.app.goo.gl/xxxxx"; // Enlace real a tu restaurante
+  const GOOGLE_MAPS_LINK = "https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu&g_ep=EgoyMDI1MTAwOC4wIKXMDSoASAFQAw%3D%3D";
 
   const TALLY_LINKS = {
     es: "https://tally.so/r/w2Qla9",
@@ -166,7 +161,7 @@
   const COPY = {
     es: {
       pageTitle: "¿Cómo fue tu experiencia?",
-      subtitle: "Cuéntanos en 10\u00a0segundos cómo fue todo.",
+      subtitle: "Cuéntanos en 10 segundos cómo fue todo.",
       publicTitle: "⭐ Reseña pública",
       publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
       publicBtn: "Dejar reseña en Google",
@@ -176,11 +171,15 @@
       privateBtn: "Enviar comentario privado",
       privateNote: "Solo lo vemos nosotros.",
       thanks: "¡Gracias por tu tiempo!",
+      shareTitle: "📸 Comparte tu experiencia",
+      shareText: "Cuéntales a tus amigos que estuviste disfrutando en Casablanca, con cócteles, vistas y buena vibra.",
+      shareBtn: "Compartir con amigos",
+      shareMsg: "Acabo de disfrutar en Terraza Casablanca Las Canteras 🍸✨ ¡Tienes que venir!",
       langSelectorTitle: "Cambiar idioma"
     },
     en: {
       pageTitle: "How was your experience?",
-      subtitle: "Tell us in 10\u00a0seconds how everything went.",
+      subtitle: "Tell us in 10 seconds how everything went.",
       publicTitle: "⭐ Public review",
       publicText: "If things went well, your review helps us on Google.",
       publicBtn: "Leave a Google review",
@@ -190,11 +189,15 @@
       privateBtn: "Send private feedback",
       privateNote: "Only we can see it.",
       thanks: "Thanks for your time!",
+      shareTitle: "📸 Share your experience",
+      shareText: "Tell your friends you enjoyed cocktails, views and great vibes at Casablanca!",
+      shareBtn: "Share with friends",
+      shareMsg: "Just had a great time at Terraza Casablanca Las Canteras 🍸✨ Highly recommended!",
       langSelectorTitle: "Change language"
     },
     de: {
       pageTitle: "Wie war Ihre Erfahrung?",
-      subtitle: "Erzählen Sie uns in 10\u00a0Sekunden, wie alles war.",
+      subtitle: "Erzählen Sie uns in 10 Sekunden, wie alles war.",
       publicTitle: "⭐ Öffentliche Bewertung",
       publicText: "Wenn es Ihnen gefallen hat, hilft uns Ihre Bewertung bei Google.",
       publicBtn: "Google-Bewertung abgeben",
@@ -204,11 +207,15 @@
       privateBtn: "Privaten Kommentar senden",
       privateNote: "Nur wir sehen es.",
       thanks: "Vielen Dank für Ihre Zeit!",
+      shareTitle: "📸 Teilen Sie Ihre Erfahrung",
+      shareText: "Erzählen Sie Ihren Freunden von Ihren Drinks und der tollen Atmosphäre bei Casablanca!",
+      shareBtn: "Mit Freunden teilen",
+      shareMsg: "Ich habe gerade die Aussicht und Drinks bei Terraza Casablanca Las Canteras genossen 🍸✨ Sehr empfehlenswert!",
       langSelectorTitle: "Sprache ändern"
     },
     fr: {
       pageTitle: "Comment était votre expérience ?",
-      subtitle: "Racontez-nous en 10\u00a0secondes comment tout s'est passé.",
+      subtitle: "Racontez-nous en 10 secondes comment tout s'est passé.",
       publicTitle: "⭐ Avis public",
       publicText: "Si tout s'est bien passé, votre avis nous aide sur Google.",
       publicBtn: "Laisser un avis Google",
@@ -218,6 +225,10 @@
       privateBtn: "Envoyer un commentaire privé",
       privateNote: "Seulement nous le voyons.",
       thanks: "Merci pour votre temps !",
+      shareTitle: "📸 Partage ton expérience",
+      shareText: "Dis à tes amis que tu as profité de la vue et des cocktails chez Casablanca 🍸✨",
+      shareBtn: "Partager avec des amis",
+      shareMsg: "Je viens de passer un super moment à la Terraza Casablanca Las Canteras 🍸✨ À ne pas manquer !",
       langSelectorTitle: "Changer de langue"
     }
   };
@@ -247,26 +258,22 @@
     document.getElementById("btnPrivate").textContent = dict.privateBtn;
     document.getElementById("privateNote").textContent = dict.privateNote;
     document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
-    document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS.en;
-    if (document.getElementById("current-lang-flag")) {
-      document.getElementById("current-lang-flag").textContent = FLAGS[lang];
-      document.getElementById("current-lang").title = dict.langSelectorTitle;
-    }
+    document.getElementById("shareTitle").textContent = dict.shareTitle;
+    document.getElementById("shareText").textContent = dict.shareText;
+    document.getElementById("btnShare").textContent = dict.shareBtn;
+    document.getElementById("btnPrivate").href = TALLY_LINKS[lang];
+    document.getElementById("current-lang-flag").textContent = FLAGS[lang];
+    document.getElementById("current-lang").title = dict.langSelectorTitle;
     localStorage.setItem('userLang', lang);
-    const options = document.getElementById("lang-options");
-    if(options) options.style.display = 'none';
+    document.getElementById("btnShare").onclick = (e) => shareExperience(e, dict.shareMsg);
+    document.getElementById("lang-options").style.display = 'none';
   }
 
   function createLangSelector() {
     const card = document.querySelector('.card');
     const selector = document.createElement('div');
     selector.id = 'lang-selector';
-    selector.innerHTML = `
-      <div id="current-lang">
-        <span id="current-lang-flag"></span>
-      </div>
-      <div id="lang-options"></div>
-    `;
+    selector.innerHTML = `<div id="current-lang"><span id="current-lang-flag"></span></div><div id="lang-options"></div>`;
     card.prepend(selector);
     const optionsContainer = document.getElementById('lang-options');
     Object.keys(COPY).forEach(langCode => {
@@ -277,53 +284,44 @@
       option.addEventListener('click', () => setLang(langCode));
       optionsContainer.appendChild(option);
     });
-    document.getElementById('current-lang').addEventListener('click', (e) => {
+    document.getElementById('current-lang').addEventListener('click', e => {
       e.stopPropagation();
       const options = document.getElementById('lang-options');
       options.style.display = options.style.display === 'block' ? 'none' : 'block';
     });
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
       if (!selector.contains(e.target)) document.getElementById('lang-options').style.display = 'none';
     });
   }
 
-  // ===== Compartir experiencia =====
-  function initShareButton() {
-    const shareBtn = document.getElementById('btnShare');
-    if (!shareBtn) return;
-    if (navigator.share) {
-      shareBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        try {
-          await navigator.share({
-            title: 'Restaurante Casablanca',
-            text: 'Acabo de disfrutar en Restaurante Casablanca 🍸✨ ¡Tienes que venir!',
-            url: PLACE_ID_OR_URL
-          });
-        } catch (err) {
-          console.log('Compartir cancelado o no soportado:', err);
-        }
-      });
-    } else {
-      shareBtn.textContent = 'Copiar enlace';
-      shareBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        navigator.clipboard.writeText(PLACE_ID_OR_URL);
-        shareBtn.textContent = '¡Enlace copiado!';
-        setTimeout(() => shareBtn.textContent = 'Copiar enlace', 2000);
-      });
+  async function shareExperience(e, msg) {
+    e.preventDefault();
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Terraza Casablanca Las Canteras",
+          text: msg,
+          url: GOOGLE_MAPS_LINK
+        });
+      } else {
+        await navigator.clipboard.writeText(GOOGLE_MAPS_LINK);
+        const btn = document.getElementById("btnShare");
+        const oldText = btn.textContent;
+        btn.textContent = "✅ Enlace copiado";
+        setTimeout(() => btn.textContent = oldText, 2000);
+      }
+    } catch (err) {
+      console.log("Compartir cancelado o no soportado:", err);
     }
   }
 
   (function init() {
     document.getElementById("brandName").textContent = RESTAURANT_NAME;
-    document.getElementById("btnGoogle").href = PLACE_ID_OR_URL;
+    document.getElementById("btnGoogle").href = GOOGLE_MAPS_LINK;
     createLangSelector();
     const initialLang = getInitialLang();
     setLang(initialLang);
-    initShareButton();
   })();
 </script>
 </body>
 </html>
-
