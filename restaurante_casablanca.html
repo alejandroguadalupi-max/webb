@@ -38,35 +38,39 @@
     position:relative;
   }
 
-  /* Selector de idioma */
+  /* Selector de idioma moderno */
   #lang-selector{
     position:absolute; top:12px; right:12px; z-index:10;
+    font-size:0;
   }
   #current-lang{
     cursor:pointer;
-    font-size:24px;
-    padding:4px;
-    border-radius:8px;
+    font-size:22px;
+    padding:6px 10px;
+    border-radius:10px;
     background:rgba(0,0,0,.04);
-    display:grid; place-items:center;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
     transition:background .2s ease;
   }
   #current-lang:hover{ background:rgba(0,0,0,.08); }
   #lang-options{
     display:none;
     position:absolute;
-    top:calc(100% + 4px);
+    top:calc(100% + 6px);
     right:0;
     background:var(--card);
     border:1px solid var(--border);
     border-radius:12px;
-    box-shadow:0 8px 20px rgba(12,20,33,.1);
-    padding:6px;
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
+    padding:4px;
     overflow:hidden;
+    min-width:120px;
   }
   .lang-option{
     display:flex; align-items:center; gap:8px;
-    padding:8px 12px;
+    padding:6px 10px;
     font-size:14px;
     font-weight:600;
     border-radius:8px;
@@ -101,11 +105,26 @@
   .btn:active{transform:translateY(1px)}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
+
+  /* Botón compartir discreto */
   .btn-share{
-    background:linear-gradient(180deg,#facc15,#fbbf24); color:#000;
-    font-size:13px; font-weight:600; margin-top:6px;
+    display:block;
+    width:100%;
+    text-align:center;
     padding:10px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    border:1px solid var(--accent);
+    background:transparent;
+    transition:background .2s,color .2s;
   }
+  .btn-share:hover{
+    background:var(--accent);
+    color:#fff;
+  }
+
   .note{font-size:12px; color:var(--muted); text-align:center}
 
   @media(max-width:360px){
@@ -154,17 +173,10 @@
 </main>
 
 <script>
-/* Config */
 const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
-
-/* Formularios Tally */
 const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1", fr:"https://tally.so/r/mek0Dk" };
-
-/* Banderas */
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
-
-/* Textos */
 const COPY = {
   es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", shareBtn:"Compartir experiencia con amigos", thanks:"¡Gracias por tu tiempo!"},
   en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", shareBtn:"Share experience with friends", thanks:"Thanks for your time!"},
@@ -172,7 +184,6 @@ const COPY = {
   fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", shareBtn:"Partager avec des amis", thanks:"Merci pour votre temps !"}
 };
 
-/* --- Funciones de idioma --- */
 const LANGS = Object.keys(COPY);
 
 function getInitialLang(){
@@ -192,46 +203,4 @@ function setLang(lang){
   document.getElementById('publicTitle').textContent = d.publicTitle;
   document.getElementById('publicText').textContent = d.publicText;
   document.getElementById('btnGoogle').textContent = d.publicBtn;
-  document.getElementById('privateTitle').textContent = d.privateTitle;
-  document.getElementById('privateText').textContent = d.privateText;
-  document.getElementById('btnPrivate').textContent = d.privateBtn;
-  document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
-  document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
-  document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
-  document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
-  document.getElementById('current-lang').textContent = FLAGS[lang] || '🇪🇸';
-  localStorage.setItem('userLang', lang);
-  document.getElementById('lang-options').style.display = 'none';
-}
-
-function createLangSelector(){
-  const options = document.getElementById('lang-options');
-  options.innerHTML = '';
-  LANGS.forEach(code=>{
-    const o = document.createElement('div');
-    o.className = 'lang-option';
-    o.textContent = `${FLAGS[code]} ${code.toUpperCase()}`;
-    o.addEventListener('click', ()=> setLang(code));
-    options.appendChild(o);
-  });
-  document.getElementById('current-lang').addEventListener('click', (e)=>{
-    e.stopPropagation();
-    options.style.display = options.style.display === 'block' ? 'none' : 'block';
-  });
-  document.addEventListener('click', (e)=>{
-    if(!document.getElementById('lang-selector').contains(e.target)){
-      options.style.display = 'none';
-    }
-  });
-}
-
-/* Inicializar */
-(function init(){
-  createLangSelector();
-  setLang(getInitialLang());
-})();
-</script>
-</body>
-</html>
-
-
+  document.getElementById('privateTitle').textContent = d.private
