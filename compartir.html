@@ -15,35 +15,49 @@
     margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;
     background:var(--bg);color:var(--text);
     display:flex;align-items:center;justify-content:center;
-    min-height:100svh;padding:20px;
+    min-height:100svh;padding:16px;
   }
-  .wrap{width:100%;max-width:420px;}
-  header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-  .back{background:rgba(0,0,0,.05);padding:8px 10px;
+  .wrap{
+    width:100%;max-width:420px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  header{
+    width:100%;display:flex;align-items:center;
+    justify-content:space-between;margin-bottom:12px;
+  }
+  .back{
+    background:rgba(0,0,0,.05);padding:8px 10px;
     border-radius:10px;text-decoration:none;color:var(--text);
-    font-weight:700;}
-  .title{flex:1;text-align:center;}
-  .logo{width:44px;height:44px;border-radius:10px;overflow:hidden;margin:0 auto;}
-  .logo img{width:100%;height:100%;object-fit:cover;}
+    font-weight:700;font-size:15px;
+  }
   .share-card{
-    background:#fff;border-radius:14px;padding:16px;
+    background:#fff;border-radius:14px;padding:20px;
     border:1px solid var(--border);
     box-shadow:0 8px 20px rgba(0,0,0,.06);
+    width:100%;
+    display:flex;flex-direction:column;
+    justify-content:center;
+    min-height:60svh; /* ocupa más espacio cuando vacío */
   }
+  h2{margin:0 0 8px;font-size:18px;text-align:center;}
+  p{margin:0 0 10px;font-size:14px;text-align:center;}
   .photo-preview{
     width:100%;aspect-ratio:4/3;border-radius:10px;
     object-fit:cover;display:none;margin-bottom:10px;
     border:1px solid var(--border);
   }
-  .row{display:flex;gap:8px;}
+  .row{display:flex;gap:8px;justify-content:center;}
   .btn{
-    flex:1;padding:12px;border-radius:10px;border:0;
-    font-weight:800;cursor:pointer;
+    flex:1;padding:12px 10px;border-radius:10px;border:0;
+    font-weight:700;cursor:pointer;font-size:15px;
   }
   .btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
   .btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;}
   .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
-  .note{text-align:center;color:var(--muted);font-size:13px;margin-top:8px;line-height:1.3;}
+  .note{
+    text-align:center;color:var(--muted);
+    font-size:13px;margin-top:8px;line-height:1.3;
+  }
   #lang-selector{position:absolute; top:14px; right:14px;}
   #current-lang{cursor:pointer;background:rgba(0,0,0,.05);padding:6px 8px;border-radius:8px;}
   #lang-options{
@@ -62,6 +76,11 @@
     text-align:center;font-weight:600;color:var(--text);
     box-shadow:0 8px 20px rgba(0,0,0,.15);
   }
+
+  /* Ajuste para pantallas muy altas: centra mejor el contenido */
+  @media (min-height:700px) {
+    .share-card { min-height:65svh; justify-content:flex-start; padding-top:40px; }
+  }
 </style>
 </head>
 <body>
@@ -73,16 +92,11 @@
   <div class="wrap" role="main">
     <header>
       <a id="backBtn" class="back" href="restaurante_casablanca.html" aria-label="Volver">⬅ Volver</a>
-      <div class="title">
-        <div class="logo"><img src="img/imagen_circular_recortada.png" alt="Logo"></div>
-      </div>
     </header>
 
     <div class="share-card" aria-labelledby="shareTitle">
-      <h2 id="shareTitle" style="margin:0 0 8px;font-size:16px;">📸 Comparte tu momento</h2>
-      <p id="shareSub" style="margin:0 0 10px;color:var(--muted);font-size:14px;">
-        Elige o toma una foto, prévisualízala y compártela con tus amigos.
-      </p>
+      <h2 id="shareTitle">📸 Comparte tu momento</h2>
+      <p id="shareSub">Elige o toma una foto, prévisualízala y compártela con tus amigos.</p>
 
       <img id="photoPreview" class="photo-preview" alt="Vista previa">
 
@@ -236,4 +250,5 @@ btnShare.addEventListener('click', shareExperience);
 </script>
 </body>
 </html>
+
 
