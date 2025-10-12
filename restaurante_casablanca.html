@@ -195,7 +195,7 @@ function getInitialLang(){
 }
 
 function setLang(lang){
-  if(!COPY[lang]) lang = 'es';
+  if(!COPY[lang]) lang='es';
   const d = COPY[lang];
   document.documentElement.lang = lang;
   document.title = d.pageTitle;
@@ -203,4 +203,47 @@ function setLang(lang){
   document.getElementById('publicTitle').textContent = d.publicTitle;
   document.getElementById('publicText').textContent = d.publicText;
   document.getElementById('btnGoogle').textContent = d.publicBtn;
-  document.getElementById('privateTitle').textContent = d.private
+  document.getElementById('btnPrivate').textContent = d.privateBtn;
+  document.getElementById('privateTitle').textContent = d.privateTitle;
+  document.getElementById('privateText').textContent = d.privateText;
+  document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
+  document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
+
+  document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
+  document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
+
+  document.getElementById('current-lang').textContent = FLAGS[lang];
+  localStorage.setItem('userLang', lang);
+  document.getElementById('lang-options').style.display='none';
+}
+
+function initLangSelector(){
+  const currentLangDiv = document.getElementById('current-lang');
+  const optionsDiv = document.getElementById('lang-options');
+  const initialLang = getInitialLang();
+  setLang(initialLang);
+
+  LANGS.forEach(code=>{
+    const opt = document.createElement('div');
+    opt.className='lang-option';
+    opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
+    opt.addEventListener('click',()=>setLang(code));
+    optionsDiv.appendChild(opt);
+  });
+
+  currentLangDiv.addEventListener('click', e=>{
+    e.stopPropagation();
+    optionsDiv.style.display = optionsDiv.style.display==='block'?'none':'block';
+  });
+
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('lang-selector').contains(e.target)){
+      optionsDiv.style.display='none';
+    }
+  });
+}
+
+initLangSelector();
+</script>
+</body>
+</html>
