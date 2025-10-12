@@ -114,14 +114,16 @@
 
     <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 
-    <!-- Bloque compartir (versión discreta) -->
-    <p class="note" id="shareOption">
-      <span id="shareTitle">📸 Comparte tu experiencia</span><br>
-      <span id="shareText">Cuéntales a tus amigos que estuviste en Casablanca, disfrutando de cócteles, vistas y buena vibra.</span><br>
-      <a id="btnShare" href="#" style="display:inline-block;margin-top:6px;font-weight:600;text-decoration:none;color:var(--google);">
-        Compartir con amigos →
-      </a>
-    </p>
+    <!-- Bloque compartir experiencia -->
+    <section class="tile" aria-labelledby="shareTitle">
+      <h2 id="shareTitle">📸 Comparte tu experiencia</h2>
+      <p id="shareText">
+        Saca una foto o elige una de tu galería y cuéntales a tus amigos que estuviste en Casablanca 🍸✨
+      </p>
+      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
+      <a id="btnShare" href="#" class="btn btn-google">Compartir experiencia</a>
+      <div class="note" id="shareNote">Puedes añadir tu foto antes de compartir 💬</div>
+    </section>
   </main>
 
 <script>
@@ -151,9 +153,9 @@
       privateNote: "Solo lo vemos nosotros.",
       thanks: "¡Gracias por tu tiempo!",
       shareTitle: "📸 Comparte tu experiencia",
-      shareText: "Cuéntales a tus amigos que estuviste en Casablanca, disfrutando de cócteles, vistas y buena vibra.",
-      shareBtn: "Compartir con amigos →",
-      shareMsg: "Acabo de disfrutar en Terraza Casablanca Las Canteras 🍸✨ ¡Tienes que venir!",
+      shareText: "Saca una foto o elige una de tu galería y cuéntales a tus amigos que estuviste en Casablanca 🍸✨",
+      shareBtn: "Compartir experiencia",
+      shareMsg: "Acabo de disfrutar en Terraza Casablanca Las Canteras 🍹✨ ¡Tienes que venir! 📍 Las Palmas de G.C.",
       langSelectorTitle: "Cambiar idioma"
     },
     en: {
@@ -169,9 +171,9 @@
       privateNote: "Only we can see it.",
       thanks: "Thanks for your time!",
       shareTitle: "📸 Share your experience",
-      shareText: "Tell your friends you enjoyed cocktails, sea views and good vibes at Casablanca.",
-      shareBtn: "Share with friends →",
-      shareMsg: "Just had a great time at Terraza Casablanca Las Canteras 🍸✨ Highly recommended!",
+      shareText: "Take or choose a photo and tell your friends you were at Casablanca 🍸✨",
+      shareBtn: "Share experience",
+      shareMsg: "Just had a great time at Terraza Casablanca Las Canteras 🍹✨ Highly recommended! 📍 Las Palmas de G.C.",
       langSelectorTitle: "Change language"
     },
     de: {
@@ -187,9 +189,9 @@
       privateNote: "Nur wir sehen es.",
       thanks: "Vielen Dank für Ihre Zeit!",
       shareTitle: "📸 Teilen Sie Ihre Erfahrung",
-      shareText: "Erzählen Sie Ihren Freunden von Ihren Drinks und der tollen Atmosphäre bei Casablanca!",
-      shareBtn: "Mit Freunden teilen →",
-      shareMsg: "Ich habe gerade die Aussicht und Drinks bei Terraza Casablanca Las Canteras genossen 🍸✨ Sehr empfehlenswert!",
+      shareText: "Machen Sie ein Foto und erzählen Sie Ihren Freunden von Casablanca 🍸✨",
+      shareBtn: "Erfahrung teilen",
+      shareMsg: "Ich habe gerade Drinks und Aussicht bei Terraza Casablanca Las Canteras genossen 🍹✨ Sehr empfehlenswert! 📍 Las Palmas de G.C.",
       langSelectorTitle: "Sprache ändern"
     },
     fr: {
@@ -205,9 +207,9 @@
       privateNote: "Seulement nous le voyons.",
       thanks: "Merci pour votre temps !",
       shareTitle: "📸 Partage ton expérience",
-      shareText: "Dis à tes amis que tu as profité de la vue et des cocktails chez Casablanca 🍸✨",
-      shareBtn: "Partager avec des amis →",
-      shareMsg: "Je viens de passer un super moment à la Terraza Casablanca Las Canteras 🍸✨ À ne pas manquer !",
+      shareText: "Prends ou choisis une photo et dis à tes amis que tu étais chez Casablanca 🍸✨",
+      shareBtn: "Partager l’expérience",
+      shareMsg: "Je viens de passer un super moment à la Terraza Casablanca Las Canteras 🍹✨ À ne pas manquer ! 📍 Las Palmas de G.C.",
       langSelectorTitle: "Changer de langue"
     }
   };
@@ -272,48 +274,34 @@
     });
   }
 
+  // --- Compartir experiencia con foto + link corto ---
   async function shareExperience(e, msg) {
-  e.preventDefault();
+    e.preventDefault();
 
-  // Foto del restaurante (debe estar alojada online y con CORS abierto)
-  const imageURL = "https://tucarpeta.com/casablanca-share.jpg"; // cámbiala por tu imagen real
-  let files = [];
+    const photoInput = document.getElementById("photoInput");
 
-  try {
-    const res = await fetch(imageURL);
-    const blob = await res.blob();
-    files = [new File([blob], "casablanca.jpg", { type: blob.type })];
-  } catch (err) {
-    console.log("No se pudo cargar la imagen:", err);
-  }
-
-  const shareData = {
-    text: `${msg}\n📍 Terraza Casablanca Las Canteras (Las Palmas de G.C.)`,
-  };
-
-  // Si el navegador soporta imágenes, las añade
-  if (navigator.canShare && navigator.canShare({ files })) {
-    shareData.files = files;
-  }
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      // Fallback: copiar ubicación en texto
-      const b = document.getElementById("btnShare");
-      await navigator.clipboard.writeText(
-        `${msg} — Terraza Casablanca Las Canteras (Las Palmas de G.C.)`
-      );
-      const old = b.textContent;
-      b.textContent = "✅ Copiado al portapapeles";
-      setTimeout(() => (b.textContent = old), 2000);
+    // Si el usuario aún no ha seleccionado foto, pedírsela
+    if (!photoInput.files.length) {
+      photoInput.click();
+      return;
     }
-  } catch (err) {
-    console.log("Compartir cancelado o fallido:", err);
-  }
-}
 
+    const selectedPhoto = photoInput.files[0];
+    const shareText = `${msg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
+
+    const shareData = { text: shareText };
+
+    // Si el navegador soporta imágenes, las añade
+    if (navigator.canShare && navigator.canShare({ files: [selectedPhoto] })) {
+      shareData.files = [selectedPhoto];
+    }
+
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.log("Compartir cancelado o fallido:", err);
+    }
+  }
 
   (function init() {
     document.getElementById("brandName").textContent = RESTAURANT_NAME;
@@ -324,3 +312,4 @@
 </script>
 </body>
 </html>
+
