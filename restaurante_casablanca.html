@@ -1,4 +1,4 @@
-<!doctype html>
+
 <html lang="es">
 <head>
 <meta charset="utf-8" />
@@ -9,7 +9,6 @@
   :root{
     --text:#0b0f18; --muted:#566073;
     --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
-    --share:#94a3b8; /* Nuevo color para el botón de compartir */
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
 
@@ -39,7 +38,7 @@
     position:relative; /* Para el selector de idioma */
   }
 
-  /* --- Estilos para el Selector de Idioma (Sin cambios) --- */
+  /* --- Estilos para el Selector de Idioma --- */
   #lang-selector{
     position:absolute; top:12px; right:12px;
     z-index:10;
@@ -93,12 +92,6 @@
   }
   .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
   .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
-  
-  /* Estilo específico para el tile de compartir para que ocupe todo el ancho en mobile */
-  .shareTile {
-    grid-column: 1 / -1; /* Ocupa las 2 columnas */
-    padding: 18px 12px; /* Un poco más de padding vertical */
-  }
 
   .btn{
     display:block; width:100%; text-align:center; text-decoration:none;
@@ -109,9 +102,6 @@
   .btn:active{transform:translateY(1px)}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-  /* NUEVO ESTILO: Botón de compartir */
-  .btn-share{background:linear-gradient(180deg,#c9d2de,var(--share))}
-
   .note{font-size:12px; color:var(--muted); text-align:center}
 
   @media(max-width:360px){
@@ -145,14 +135,7 @@
         <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
         <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
       </section>
-
-      <section class="tile shareTile" aria-labelledby="shareTitle">
-        <h2 id="shareTitle">✨ ¡Comparte tu momento!</h2>
-        <p id="shareText">Crea una tarjeta personalizada para compartir tu visita.</p>
-        <a id="btnShare" class="btn btn-share" href="share.html">Compartir Experiencia</a>
-        <div class="note" id="shareNote">Ideal para tus redes sociales.</div>
-      </section>
-          </div>
+    </div>
 
     <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
   </main>
@@ -172,7 +155,7 @@
 
   const FLAGS = { es: '🇪🇸', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷' };
 
-  // ===== i18n copy (Añadido texto para la nueva sección) =====
+  // ===== i18n copy =====
   const COPY = {
     es: {
       pageTitle: "¿Cómo fue tu experiencia?",
@@ -185,10 +168,6 @@
       privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
       privateBtn: "Enviar comentario privado",
       privateNote: "Solo lo vemos nosotros.",
-      shareTitle: "✨ ¡Comparte tu momento!",
-      shareText: "Crea una tarjeta personalizada para compartir tu visita.",
-      shareBtn: "Compartir Experiencia",
-      shareNote: "Ideal para tus redes sociales.",
       thanks: "¡Gracias por tu tiempo!",
       langSelectorTitle: "Cambiar idioma"
     },
@@ -203,10 +182,6 @@
       privateText: "If something went wrong, tell us and we’ll fix it.",
       privateBtn: "Send private feedback",
       privateNote: "Only we can see it.",
-      shareTitle: "✨ Share your moment!",
-      shareText: "Create a personalized card to share your visit.",
-      shareBtn: "Share Experience",
-      shareNote: "Great for your social media.",
       thanks: "Thanks for your time!",
       langSelectorTitle: "Change language"
     },
@@ -221,10 +196,6 @@
       privateText: "Wenn etwas schief gelaufen ist, sagen Sie es uns und wir klären es.",
       privateBtn: "Privaten Kommentar senden",
       privateNote: "Nur wir sehen es.",
-      shareTitle: "✨ Teilen Sie Ihren Moment!",
-      shareText: "Erstellen Sie eine personalisierte Karte, um Ihren Besuch zu teilen.",
-      shareBtn: "Erfahrung teilen",
-      shareNote: "Ideal für Ihre sozialen Medien.",
       thanks: "Vielen Dank für Ihre Zeit!",
       langSelectorTitle: "Sprache ändern"
     },
@@ -239,16 +210,12 @@
       privateText: "Si quelque chose n'allait pas, dites-le nous et nous le corrigerons.",
       privateBtn: "Envoyer un commentaire privé",
       privateNote: "Seulement nous le voyons.",
-      shareTitle: "✨ Partagez votre moment !",
-      shareText: "Créez une carte personnalisée pour partager votre visite.",
-      shareBtn: "Partager l'Expérience",
-      shareNote: "Idéal pour vos réseaux sociaux.",
       thanks: "Merci pour votre temps !",
       langSelectorTitle: "Changer de langue"
     }
   };
 
-  // ===== Helpers (Modificado `setLang` para incluir los nuevos textos) =====
+  // ===== Helpers =====
   function getInitialLang() {
     const savedLang = localStorage.getItem('userLang');
     if (savedLang && COPY[savedLang]) {
@@ -279,12 +246,6 @@
     document.getElementById("privateText").textContent = dict.privateText;
     document.getElementById("btnPrivate").textContent = dict.privateBtn;
     document.getElementById("privateNote").textContent = dict.privateNote;
-    // NUEVOS TEXTOS
-    document.getElementById("shareTitle").textContent = dict.shareTitle;
-    document.getElementById("shareText").textContent = dict.shareText;
-    document.getElementById("btnShare").textContent = dict.shareBtn;
-    document.getElementById("shareNote").textContent = dict.shareNote;
-
     document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
 
     // **Actualizar URL del formulario privado dinámicamente**
@@ -355,4 +316,4 @@
   })();
 </script>
 </body>
-</html>
+</html> 
