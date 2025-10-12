@@ -5,71 +5,75 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Compartir experiencia · Casablanca</title>
 <style>
-  :root{
-    --text:#0b0f18; --muted:#6b7280; --accent:#2563eb;
-    --bg:#f9fafb; --border:#e5e7eb;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0; font-family:system-ui,-apple-system,Roboto,sans-serif;
-    background:var(--bg); color:var(--text);
-    display:flex; justify-content:center; padding:16px;
-    min-height:100svh; align-items:flex-start;
-  }
-  .wrap{
-    width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center;
-  }
-  header{
-    width:100%; display:flex; align-items:center; justify-content:flex-start; margin-bottom:12px;
-  }
-  .back{
-    background:rgba(0,0,0,.05); padding:8px 10px; border-radius:10px;
-    text-decoration:none; color:var(--text); font-weight:700; font-size:15px;
-  }
-  .share-card{
-    background:#fff; border-radius:14px; padding:20px;
-    border:1px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,.06);
-    width:100%; display:flex; flex-direction:column; align-items:center;
-    min-height:0; max-width:100%; 
-  }
-  h2{margin:0 0 6px; font-size:18px; text-align:center;}
-  p{margin:0 0 10px; font-size:14px; text-align:center;}
-  .photo-preview{
-    width:100%; max-height:250px; border-radius:10px;
-    object-fit:cover; display:none; margin-bottom:10px;
-    border:1px solid var(--border);
-  }
-  .row{display:flex; gap:8px; justify-content:center; margin-bottom:8px; width:100%;}
-  .btn{
-    flex:1; padding:12px 10px; border-radius:10px; border:0;
-    font-weight:700; cursor:pointer; font-size:15px;
-  }
-  .btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
-  .btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;}
-  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
-  .note{
-    text-align:center;color:var(--muted); font-size:13px; line-height:1.3; margin-top:4px;
-  }
-  #lang-selector{position:absolute; top:14px; right:14px;}
-  #current-lang{cursor:pointer; background:rgba(0,0,0,.05); padding:6px 8px; border-radius:8px;}
-  #lang-options{
-    display:none; position:absolute; right:0; top:44px; background:#fff;
-    border:1px solid var(--border); border-radius:10px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08); z-index:40;
-  }
-  .lang-option{padding:8px 10px; cursor:pointer; font-weight:700;}
-  .modal{
-    position:fixed; inset:0; background:rgba(0,0,0,.5);
-    display:none; align-items:center; justify-content:center; z-index:100;
-  }
-  .modal-content{
-    background:#fff; padding:18px 24px; border-radius:12px;
-    text-align:center; font-weight:600; color:var(--text);
-    box-shadow:0 8px 20px rgba(0,0,0,.15);
-  }
+:root{
+  --text:#0b0f18; --muted:#6b7280; --accent:#2563eb;
+  --bg:#f9fafb; --border:#e5e7eb;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; font-family:system-ui,-apple-system,Roboto,sans-serif;
+  background:var(--bg); color:var(--text);
+  display:flex; justify-content:center; align-items:center; padding:16px;
+  min-height:100svh;
+  position:relative;
+}
+.wrap{
+  width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center;
+}
+header{
+  width:100%; display:flex; align-items:center; justify-content:flex-start; margin-bottom:16px;
+  position:absolute; top:16px; left:16px; right:16px; z-index:10;
+}
+.back{
+  background:rgba(0,0,0,.05); padding:8px 10px; border-radius:10px;
+  text-decoration:none; color:var(--text); font-weight:700; font-size:15px;
+}
+.share-card{
+  background:#fff; border-radius:14px; padding:20px;
+  border:1px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,.06);
+  width:100%; display:flex; flex-direction:column; align-items:center;
+  max-width:100%;
+  min-height:200px; /* altura base */
+}
+h2{margin:0 0 6px; font-size:18px; text-align:center;}
+p{margin:0 0 10px; font-size:14px; text-align:center;}
+.photo-preview{
+  width:100%; max-height:250px; border-radius:10px;
+  object-fit:cover; display:none; margin-bottom:10px;
+  border:1px solid var(--border);
+}
+.row{display:flex; gap:8px; justify-content:center; margin-bottom:12px; width:100%;}
+.btn{
+  flex:1; padding:12px 0; border-radius:10px; border:0;
+  font-weight:700; cursor:pointer; font-size:15px;
+}
+.btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
+.btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.note{
+  text-align:center;color:var(--muted); font-size:13px; line-height:1.3; margin-top:4px;
+}
+#lang-selector{position:absolute; top:16px; right:16px;}
+#current-lang{cursor:pointer; background:rgba(0,0,0,.05); padding:6px 8px; border-radius:8px;}
+#lang-options{
+  display:none; position:absolute; right:0; top:40px; background:#fff;
+  border:1px solid var(--border); border-radius:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08); z-index:40;
+}
+.lang-option{padding:8px 10px; cursor:pointer; font-weight:700;}
+.modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:none; align-items:center; justify-content:center; z-index:100;
+}
+.modal-content{
+  background:#fff; padding:18px 24px; border-radius:12px;
+  text-align:center; font-weight:600; color:var(--text);
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
 </style>
 </head>
 <body>
+
 <div id="lang-selector">
   <div id="current-lang">🇪🇸</div>
   <div id="lang-options"></div>
@@ -103,14 +107,13 @@
 </div>
 
 <script>
-// Configuración y copy multilengua
 const RESTAURANT_NAME = "Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 const DEFAULT_CARD = "img/imagen_circular_recortada.png";
 
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
 const COPY = {
-  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir 💛!"},
+  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir tu momento 💛!"},
   en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",sharedOK:"Thanks for sharing 💛!"},
   de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",sharedOK:"Danke fürs Teilen 💛!"},
   fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!"}
@@ -234,4 +237,5 @@ btnShare.addEventListener('click', shareExperience);
 </script>
 </body>
 </html>
+
 
