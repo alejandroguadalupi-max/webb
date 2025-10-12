@@ -1,248 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Restaurante Casablanca — Gracias</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#0b0f18">
+<title>¿Cómo fue tu experiencia?</title>
+<style>
+  :root{
+    --text:#0b0f18; --muted:#566073;
+    --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
+    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
+  }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0; height:100%}
 
-  <style>
-    :root {
-      --brand: #0ea5a4;
-      --brand2: #7c3aed;
-      --tint: #e6fbfa;
-      --bgTop: #ffffff;
-      --bgBottom: #f5f7fb;
-      --text: #111827;
-      --textSec: #4b5563;
-      --stroke: #e5e7eb;
-    }
+  body{
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
+      var(--bg);
+  }
 
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; }
+  .card{
+    width:min(580px, 100%);
+    max-height:100svh;
+    display:flex; flex-direction:column; gap:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 18px 45px rgba(12,20,33,.08);
+    position:relative;
+  }
 
-    /* Hacemos el body un grid con dos filas: contenido + redes al final */
-    body {
-      min-height: 100dvh;
-      display: grid;
-      grid-template-rows: 1fr auto; /* main ocupa todo, footer se queda abajo */
-      padding: 16px;
-      background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      overflow-x: hidden;
-    }
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
+  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
+  .logo img{width:100%; height:100%; object-fit:cover}
+  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
+  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
-    main {
-      width: 100%;
-      max-width: 580px;
-      margin-inline: auto;
-      display: grid;
-      gap: 14px;
-      text-align: center;
-      align-self: center; /* centra el contenido verticalmente */
-    }
+  .grid{display:grid; gap:12px}
+  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
-    /* ==== Animación nombre del restaurante ==== */
-    .brand {
-      font-family: "Playfair Display", serif;
-      font-weight: 700;
-      font-size: clamp(2rem, 8vw, 2.7rem);
-      color: var(--brand);
-      margin: 0;
-      opacity: 0;
-      transform: translateY(-14px);
-      animation: brandIn 1s ease-out forwards,
-                 brandMove 1s ease-in-out 4.5s forwards;
-    }
+  .tile{
+    border:1px solid var(--border); border-radius:16px; background:#fff;
+    padding:12px; display:flex; flex-direction:column; align-items:center;
+  }
+  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
+  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
 
-    @keyframes brandIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes brandMove {
-      to { transform: translateY(40px); }
-    }
+  .btn{
+    display:block; width:100%; text-align:center; text-decoration:none;
+    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
+  .btn-share{background:linear-gradient(180deg,#6366f1,#4338ca);}
+  .note{font-size:12px; color:var(--muted); text-align:center}
 
-    /* ==== CARD ==== */
-    .card-wrap {
-      position: relative;
-      border-radius: 18px;
-      padding: 3px;
-      background: linear-gradient(90deg, var(--brand), var(--brand2), var(--brand)) no-repeat;
-      background-size: 300% 300%;
-      animation: borderFlow 6s linear infinite,
-                 cardEnter 5.5s cubic-bezier(.25,1.25,.4,1) .7s forwards;
-      opacity: 0;
-      transform: translateY(20px) scale(0.98);
-      filter: blur(8px);
-    }
-    @keyframes borderFlow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
-    @keyframes cardEnter {
-      60% { opacity: 1; transform: translateY(-6px) scale(1.02); filter: blur(0); }
-      100% { transform: translateY(0) scale(1); }
-    }
-
-    .card {
-      border-radius: 15px;
-      background: linear-gradient(180deg, var(--tint) 0%, #ffffff 70%);
-      border: 1px solid var(--stroke);
-      padding: clamp(20px, 5vw, 28px);
-    }
-
-    .card h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.7rem, 7vw, 2.2rem);
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .card p {
-      margin: 0;
-      font-size: clamp(1rem, 4vw, 1.12rem);
-      line-height: 1.6;
-      color: var(--textSec);
-    }
-
-    /* ==== Redes sociales (footer) ==== */
-    footer.social {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin-top: 18px;
-      padding: 12px 0;
-    }
-    footer.social a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform .15s ease;
-    }
-    footer.social img {
-      width: 44px;
-      height: 44px;
-      object-fit: cover;
-      display: block;
-      border-radius: 10px;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-    footer.social a:hover { transform: scale(1.08); }
-
-    @media (prefers-reduced-motion: reduce) {
-      .card-wrap, .brand {
-        animation: none;
-        opacity: 1;
-        transform: none;
-        filter: none;
-      }
-    }
-  </style>
+  textarea{
+    width:100%; min-height:80px; resize:vertical;
+    border:1px solid var(--border); border-radius:12px;
+    padding:10px; font-family:inherit; font-size:14px;
+    background:var(--bg); color:var(--text);
+  }
+</style>
 </head>
 <body>
-  <main>
-    <h2 class="brand" id="brand">Restaurante Casablanca</h2>
-
-    <div class="card-wrap">
-      <section class="card" aria-labelledby="t">
-        <h1 id="t">Gracias por tu ayuda</h1>
-        <p id="desc">Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
-      </section>
+<main class="card" role="main" aria-labelledby="t">
+  <header class="brand">
+    <div class="logo">
+      <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
     </div>
-  </main>
+    <h1 id="t">Restaurante Casablanca</h1>
+    <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
+  </header>
 
-  <footer class="social">
-    <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
-      <img src="img/ig.jpg" alt="Instagram">
-    </a>
-    <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
-      <img src="img/tiktok.jpg" alt="TikTok">
-    </a>
-  </footer>
+  <div class="grid">
+    <section class="tile">
+      <h2>⭐ Reseña pública</h2>
+      <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
+      <a class="btn btn-google" target="_blank" href="https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu">
+        Dejar reseña en Google
+      </a>
+      <div class="note">Queda visible para todos.</div>
+    </section>
 
-  <script>
-    // ===== Config =====
-    const BRAND_NAME = "Restaurante Casablanca";
+    <section class="tile">
+      <h2>📝 Comentario privado</h2>
+      <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+      <a class="btn btn-private" target="_blank" href="https://tally.so/r/w2Qla9">Enviar comentario privado</a>
+      <div class="note">Solo lo vemos nosotros.</div>
+    </section>
+  </div>
 
-    const IG_URL = "https://instagram.com/taply.es";
-    const TIKTOK_URL = "https://tiktok.com/@tu_usuario";
+  <section class="tile">
+    <h2>💬 Tu experiencia (opcional)</h2>
+    <p>¿Quieres compartir cómo lo pasaste?</p>
+    <textarea id="experience" placeholder="Escribe aquí tu experiencia..."></textarea>
+  </section>
 
-    // Textos para cada idioma
-    const COPY = {
-      es: {
-        title: `${BRAND_NAME} — Gracias`,
-        heading: "Gracias por tu ayuda",
-        desc: "Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio."
-      },
-      en: {
-        title: `${BRAND_NAME} — Thanks`,
-        heading: "Thanks for your help",
-        desc: "Your feedback helps us improve and offer you a better service."
-      },
-      de: {
-        title: `${BRAND_NAME} — Danke`,
-        heading: "Vielen Dank für Ihre Hilfe",
-        desc: "Ihr Feedback hilft uns, uns zu verbessern und Ihnen einen besseren Service zu bieten."
-      },
-      fr: {
-        title: `${BRAND_NAME} — Merci`,
-        heading: "Merci pour votre aide",
-        desc: "Vos commentaires nous aident à nous améliorer et à vous offrir un meilleur service."
-      }
-    };
+  <button id="shareButton" class="btn btn-share">📤 Compartir</button>
+  <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
+</main>
 
-    // 1. Nueva función para obtener el idioma
-    // Prioridad: Parámetro en URL > Idioma del navegador > Inglés por defecto
-    function getLanguage() {
-      // Lee el parámetro 'lang' de la URL (ej: ?lang=es)
-      const urlParams = new URLSearchParams(window.location.search);
-      const langFromUrl = urlParams.get('lang');
+<script>
+const MAPS_URL = "https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu";
 
-      if (langFromUrl && COPY[langFromUrl]) {
-        return langFromUrl; // Usa el idioma de la URL si es válido
-      }
+document.getElementById("shareButton").addEventListener("click", async () => {
+  const exp = document.getElementById("experience").value.trim();
+  const text = exp
+    ? `✨ Te recomiendo el Restaurante Casablanca 🍹\n\nMi experiencia: “${exp}”\n\nMira el lugar aquí 👇\n${MAPS_URL}`
+    : `✨ Te recomiendo el Restaurante Casablanca 🍹 — comida genial y vistas increíbles frente al mar 🌅\n\n${MAPS_URL}`;
 
-      // Si no hay parámetro, detecta el idioma del navegador
-      const browserLangs = navigator.languages || [navigator.language || 'en'];
-      for (const lang of browserLangs) {
-        const langCode = lang.slice(0, 2);
-        if (COPY[langCode]) {
-          return langCode; // Usa el primer idioma compatible del navegador
-        }
-      }
-
-      return 'en'; // Plan C: usa inglés por defecto
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Restaurante Casablanca · Las Canteras",
+        text: text,
+        url: MAPS_URL
+      });
+    } catch (err) {
+      console.log("No se pudo compartir:", err);
+      alert("No se pudo abrir el menú de compartir.");
     }
-    
-    // 2. Función para establecer los textos en la página
-    function setLang(lang) {
-      const dict = COPY[lang] || COPY.en; // Seguridad por si el idioma no existe
-      document.documentElement.lang = lang;
-      document.title = dict.title;
-      document.getElementById("brand").textContent = BRAND_NAME;
-      document.getElementById("t").textContent = dict.heading;
-      document.getElementById("desc").textContent = dict.desc;
-    }
-
-    // 3. Script de inicialización
-    (function () {
-      const lang = getLanguage(); // Obtiene el idioma con la nueva lógica
-      setLang(lang); // Aplica los textos
-
-      // Configura las URLs de redes sociales
-      document.getElementById("btnIG").href = IG_URL;
-      document.getElementById("btnTT").href = TIKTOK_URL;
-    })();
-  </script>
+  } else {
+    await navigator.clipboard.writeText(text);
+    alert("Texto copiado al portapapeles ✅");
+  }
+});
+</script>
 </body>
 </html>
+
 
 
 
