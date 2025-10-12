@@ -3,474 +3,252 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#0b0f18">
+<meta name="theme-color" content="#ffffff">
 <title>¿Cómo fue tu experiencia?</title>
 <style>
   :root{
-    --text:#0b0f18; --muted:#566073;
-    --brand:#0b0f18; --ok:#16a34a; --accent:#2563eb;
-    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
+    --text:#0b0f18; --muted:#6b7280;
+    --accent:#2563eb; --ok:#16a34a;
+    --card:#ffffff; --bg:#f4f5f7; --border:#e5e7eb;
   }
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0; height:100%; font-family:system-ui, -apple-system, Roboto, sans-serif; background:var(--bg); color:var(--text);}
+  body{display:flex; align-items:center; justify-content:center;}
 
-  * { box-sizing: border-box; }
-  html,body{ height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial; color:var(--text); background:var(--bg); }
-
-  /* Layout centrado y tarjeta full-height pero compacta */
-  body{
-    display:flex; align-items:center; justify-content:center;
-    padding:20px;
-    background:
-      radial-gradient(900px 600px at 8% -10%, #f1f5ff 0, #fff 50%) no-repeat,
-      var(--bg);
-  }
-
-  .shell{
-    width:min(980px,100%);
-    max-width:980px;
-    height:calc(100vh - 40px);
-    display:grid;
-    grid-template-columns: 1fr min(640px,100%);
-    gap:20px;
-    align-items:center;
-    justify-items:center;
-  }
-
-  /* banditas laterales decorativas */
-  .side-deco{
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .bar {
-    width:28px;
-    height:60%;
-    border-radius:18px;
-    background:linear-gradient(180deg, rgba(37,99,235,0.12), rgba(37,99,235,0.02));
-    box-shadow:0 6px 24px rgba(37,99,235,0.06) inset;
-  }
-
-  /* tarjeta principal */
   .card{
-    width:100%;
-    max-width:640px;
-    height:100%;
-    background:var(--card);
-    border-radius:18px;
-    border:1px solid var(--border);
-    padding:22px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    overflow:hidden;
+    width:100%; max-width:420px; height:100svh;
+    display:flex; flex-direction:column; justify-content:space-between;
+    background:var(--card); border-radius:24px; box-shadow:0 8px 28px rgba(0,0,0,.08);
+    overflow:hidden; position:relative; padding:20px;
   }
 
-  /* idioma */
-  #lang-selector{position:absolute; top:18px; right:22px; z-index:10;}
+  /* Idioma */
+  #lang-selector{position:absolute; top:12px; right:12px;}
   #current-lang{
-    cursor:pointer; font-size:20px; padding:6px; border-radius:8px;
-    background:rgba(0,0,0,.04); display:inline-grid; place-items:center;
+    cursor:pointer; background:rgba(0,0,0,.05);
+    padding:6px 10px; border-radius:8px; font-size:18px;
   }
-  #lang-options{ display:none; position:absolute; right:0; top:calc(100% + 6px);
-    background:var(--card); border:1px solid var(--border); border-radius:10px; padding:6px; box-shadow:0 8px 20px rgba(12,20,33,.08);
+  #lang-options{
+    display:none; position:absolute; right:0; top:40px;
+    background:#fff; border:1px solid var(--border); border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
   }
-  .lang-option{ padding:8px 10px; cursor:pointer; border-radius:8px; font-weight:700; color:var(--muted)}
-  .lang-option:hover{ background:var(--bg); }
+  .lang-option{padding:8px 12px; font-weight:600; cursor:pointer;}
+  .lang-option:hover{background:var(--bg);}
 
-  /* header */
-  .brand{ display:flex; align-items:center; gap:12px; padding-bottom:4px; }
-  .logo{ width:56px; height:56px; border-radius:12px; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 6px 18px rgba(12,20,33,0.06); }
-  .logo img{ width:100%; height:100%; object-fit:cover; }
-  .brand h1{ margin:0; font-size:18px; font-weight:800; }
-  .brand p{ margin:0; color:var(--muted); font-size:13px; }
+  header{text-align:center;}
+  .logo{width:70px; height:70px; border-radius:50%; overflow:hidden; margin:0 auto 8px;}
+  .logo img{width:100%; height:100%; object-fit:cover;}
+  h1{font-size:20px; margin:0;}
+  p.subtitle{font-size:14px; color:var(--muted); margin-top:4px;}
 
-  /* grid botones (reseña/private) */
-  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; }
-  .tile{ border-radius:12px; padding:10px; border:1px solid var(--border); background:#fff; display:flex; flex-direction:column; gap:8px; align-items:center; }
-  .tile h2{ margin:0; font-size:15px; }
-  .tile p{ margin:0; font-size:13px; color:var(--muted); text-align:center; }
-
-  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 12px; border-radius:10px; font-weight:800; text-decoration:none; color:#fff; border:0; cursor:pointer; }
-  .btn:active{ transform:translateY(1px); }
-  .btn-google{ background:linear-gradient(180deg,#6baeff,var(--accent)); min-width:170px; }
-  .btn-private{ background:linear-gradient(180deg,#4ade80,var(--ok)); min-width:170px; color:#063; }
-  .btn-ghost{ background:transparent; border:1px dashed var(--border); color:var(--muted); padding:8px 10px; border-radius:8px; font-weight:700; }
-
-  /* compartir compacto */
-  .share-row{ display:flex; gap:10px; align-items:center; justify-content:space-between; padding:10px; border-radius:12px; border:1px solid var(--border); background:linear-gradient(180deg,#fff,#fbfdff); }
-  .share-left{ display:flex; gap:10px; align-items:center; min-width:0; }
-  .share-meta{ display:flex; flex-direction:column; gap:4px; min-width:0; }
-  .share-title{ font-size:14px; font-weight:700; margin:0; }
-  .share-sub{ font-size:12px; color:var(--muted); margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .share-actions{ display:flex; gap:8px; align-items:center; }
-
-  /* preview */
-  .preview{
-    width:84px; height:64px; border-radius:10px; overflow:hidden; display:grid; place-items:center; background:linear-gradient(180deg,#f8fafc,#ffffff); border:1px solid var(--border);
+  .grid{display:grid; gap:10px;}
+  .tile{
+    border:1px solid var(--border); border-radius:16px; padding:14px; text-align:center;
+    background:#fff;
   }
-  .preview img{ width:100%; height:100%; object-fit:cover; }
-
-  .small-note{ font-size:12px; color:var(--muted); }
-
-  /* compact footer space */
-  .foot-space{ margin-top:auto; font-size:12px; color:var(--muted); text-align:center; padding-top:6px; }
-
-  @media(max-width:720px){
-    .shell{ grid-template-columns: 1fr; padding:10px; }
-    .side-deco{ display:none; }
-    .grid{ grid-template-columns:1fr; }
+  .tile h2{margin:0 0 6px; font-size:15px;}
+  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted);}
+  .btn{
+    display:block; width:100%; text-align:center;
+    background:var(--accent); color:#fff; border:none; border-radius:12px;
+    padding:12px; font-weight:700; text-decoration:none;
   }
+  .btn:active{opacity:.9;}
+  .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent));}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok));}
+
+  /* Compartir */
+  .share-section{
+    border:1px solid var(--border); border-radius:18px;
+    padding:16px; background:#fafafa; text-align:center;
+    margin-top:10px;
+  }
+  .share-section h2{font-size:14px; margin:0 0 6px; color:var(--text);}
+  .share-section p{font-size:13px; color:var(--muted); margin:0 0 10px;}
+  .photo-preview{width:100%; aspect-ratio:4/3; border-radius:12px; object-fit:cover; display:none; margin-bottom:10px;}
+  .note{text-align:center; font-size:12px; color:var(--muted); margin-top:10px;}
 </style>
 </head>
 <body>
-  <div class="shell" aria-hidden="false">
-    <div class="side-deco" aria-hidden="true">
-      <div class="bar"></div>
-    </div>
-
-    <div style="position:relative; width:100%; display:flex; justify-content:center;">
-      <div class="card" role="main" aria-labelledby="title">
-
-        <!-- idioma -->
-        <div id="lang-selector" aria-hidden="false">
-          <div id="current-lang" title="Cambiar idioma">🇪🇸</div>
-          <div id="lang-options" role="menu" aria-hidden="true"></div>
-        </div>
-
-        <header class="brand" role="banner">
-          <div class="logo"><img src="img/imagen_circular_recortada.png" alt="Logo Casablanca"></div>
-          <div>
-            <h1 id="title">Restaurante Casablanca</h1>
-            <p id="subtitle">Cuéntanos en 10 segundos cómo fue todo.</p>
-          </div>
-        </header>
-
-        <div class="grid" role="region" aria-label="Opciones">
-          <div class="tile" aria-labelledby="publicTitle">
-            <h2 id="publicTitle">⭐ Reseña pública</h2>
-            <p id="publicText">Si te fue bien, tu reseña nos da visibilidad en Google.</p>
-            <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
-            <div class="small-note" id="publicNote">Queda visible para todos.</div>
-          </div>
-
-          <div class="tile" aria-labelledby="privateTitle">
-            <h2 id="privateTitle">📝 Comentario privado</h2>
-            <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-            <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
-            <div class="small-note" id="privateNote">Solo lo vemos nosotros.</div>
-          </div>
-        </div>
-
-        <!-- sección compartir compacta -->
-        <div class="share-row" aria-labelledby="shareTitle" style="margin-top:6px;">
-          <div class="share-left">
-            <div class="preview" id="previewBox" aria-hidden="true"><span style="font-size:12px;color:var(--muted)">Sin foto</span></div>
-            <div class="share-meta">
-              <p id="shareTitle" class="share-title">📸 Comparte tu experiencia</p>
-              <p id="shareText" class="share-sub">Saca o elige una foto y comparte con tus amigos.</p>
-              <div style="display:flex;gap:8px;">
-                <button id="btnCamera" class="btn-ghost" title="Sacar foto">📷 Sacar</button>
-                <button id="btnGallery" class="btn-ghost" title="Elegir de galería">🖼️ Galería</button>
-                <button id="btnRetake" class="btn-ghost" title="Cambiar foto" style="display:none;">🔁 Repetir</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="share-actions">
-            <button id="btnShare" class="btn btn-google" title="Compartir">Compartir</button>
-          </div>
-        </div>
-
-        <div class="foot-space" id="hint">Primero elige o toma una foto. Después podrás compartirla junto al mensaje y la ubicación.</div>
+  <main class="card">
+    <header>
+      <div id="lang-selector">
+        <div id="current-lang">🇪🇸</div>
+        <div id="lang-options"></div>
       </div>
+
+      <div class="logo"><img src="img/imagen_circular_recortada.png" alt="Logo Casablanca"></div>
+      <h1 id="brandName">Restaurante Casablanca</h1>
+      <p id="subtitle">Cuéntanos en 10 segundos cómo fue todo.</p>
+    </header>
+
+    <div class="grid">
+      <section class="tile">
+        <h2 id="publicTitle">⭐ Reseña pública</h2>
+        <p id="publicText">Tu reseña nos da visibilidad en Google.</p>
+        <a id="btnGoogle" class="btn btn-google" target="_blank">Dejar reseña</a>
+      </section>
+
+      <section class="tile">
+        <h2 id="privateTitle">📝 Comentario privado</h2>
+        <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+        <a id="btnPrivate" class="btn btn-private" target="_blank">Enviar comentario</a>
+      </section>
     </div>
 
-    <div class="side-deco" aria-hidden="true">
-      <div class="bar" style="transform:scaleX(-1)"></div>
-    </div>
-  </div>
+    <section class="share-section">
+      <h2 id="shareTitle">📸 Comparte tu momento</h2>
+      <p id="shareText">Haz o elige una foto, prévisualízala y compártela con tus amigos.</p>
 
-  <!-- inputs ocultos para cámara y galería -->
-  <input id="cameraInput" type="file" accept="image/*" capture="environment" style="display:none" aria-hidden="true">
-  <input id="galleryInput" type="file" accept="image/*" style="display:none" aria-hidden="true">
+      <img id="photoPreview" class="photo-preview" alt="Vista previa de foto">
+
+      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
+      <a href="#" id="btnPhoto" class="btn" style="background:#fbbf24;color:#000;">📷 Tomar o elegir foto</a>
+      <a href="#" id="btnShare" class="btn" style="background:#2563eb;margin-top:8px;">Compartir experiencia</a>
+
+      <p class="note" id="note">Primero haz o elige una foto, luego pulsa “Compartir experiencia”.</p>
+    </section>
+
+    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  </main>
 
 <script>
-/* CONFIG */
-const RESTAURANT_NAME = "Terraza Casablanca Las Canteras";
-const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
+  const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
+  const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
+  const DEFAULT_CARD = "img/imagen_circular_recortada.png";
 
-/* MULTILINGÜE (completo para UI que vemos) */
-const COPY = {
-  es: {
-    pageTitle: "¿Cómo fue tu experiencia?",
-    subtitle: "Cuéntanos en 10 segundos cómo fue todo.",
-    publicTitle: "⭐ Reseña pública",
-    publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
-    publicBtn: "Dejar reseña en Google",
-    publicNote: "Queda visible para todos.",
-    privateTitle: "📝 Comentario privado",
-    privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
-    privateBtn: "Enviar comentario privado",
-    privateNote: "Solo lo vemos nosotros.",
-    shareTitle: "📸 Comparte tu experiencia",
-    shareText: "Saca o elige una foto y comparte con tus amigos.",
-    shareHint: "Primero elige o toma una foto. Después podrás compartirla junto al mensaje y la ubicación.",
-    shareBtn: "Compartir",
-    shareMsg: "¡Acabo de disfrutar en " + RESTAURANT_NAME + " 🍸✨ — ven a verlo!",
-    chooseCamera: "📷 Sacar",
-    chooseGallery: "🖼️ Galería",
-    retake: "🔁 Repetir",
-    sharedOK: "✅ ¡Compartido!",
-    copiedOK: "✅ Copiado al portapapeles"
-  },
-  en: {
-    pageTitle: "How was your experience?",
-    subtitle: "Tell us in 10 seconds how everything went.",
-    publicTitle: "⭐ Public review",
-    publicText: "If things went well, your review helps us on Google.",
-    publicBtn: "Leave a Google review",
-    publicNote: "Visible to everyone.",
-    privateTitle: "📝 Private feedback",
-    privateText: "If something went wrong, tell us and we’ll fix it.",
-    privateBtn: "Send private feedback",
-    privateNote: "Only we can see it.",
-    shareTitle: "📸 Share your experience",
-    shareText: "Take or choose a photo and share with friends.",
-    shareHint: "First take or choose a photo. Then you can share it with the message and location.",
-    shareBtn: "Share",
-    shareMsg: "I just enjoyed " + RESTAURANT_NAME + " 🍸✨ — you should come!",
-    chooseCamera: "📷 Take",
-    chooseGallery: "🖼️ Gallery",
-    retake: "🔁 Retake",
-    sharedOK: "✅ Shared!",
-    copiedOK: "✅ Copied to clipboard"
-  },
-  de: {
-    pageTitle: "Wie war Ihre Erfahrung?",
-    subtitle: "Erzählen Sie uns in 10 Sekunden, wie alles war.",
-    publicTitle: "⭐ Öffentliche Bewertung",
-    publicText: "Wenn es Ihnen gefallen hat, hilft uns Ihre Bewertung bei Google.",
-    publicBtn: "Google-Bewertung abgeben",
-    publicNote: "Für alle sichtbar.",
-    privateTitle: "📝 Privater Kommentar",
-    privateText: "Wenn etwas schief gelaufen ist, sagen Sie es uns und wir klären es.",
-    privateBtn: "Privaten Kommentar senden",
-    privateNote: "Nur wir sehen es.",
-    shareTitle: "📸 Teile deine Erfahrung",
-    shareText: "Mach ein Foto oder wähle eins und teile es mit Freunden.",
-    shareHint: "Zuerst Foto aufnehmen oder auswählen. Danach kannst du es mit Nachricht und Ort teilen.",
-    shareBtn: "Teilen",
-    shareMsg: "Ich habe gerade " + RESTAURANT_NAME + " genossen 🍸✨ — sehr empfehlenswert!",
-    chooseCamera: "📷 Foto",
-    chooseGallery: "🖼️ Galerie",
-    retake: "🔁 Neu",
-    sharedOK: "✅ Geteilt!",
-    copiedOK: "✅ In Zwischenablage kopiert"
-  },
-  fr: {
-    pageTitle: "Comment était votre expérience ?",
-    subtitle: "Racontez-nous en 10 secondes comment tout s'est passé.",
-    publicTitle: "⭐ Avis public",
-    publicText: "Si tout s'est bien passé, votre avis nous aide sur Google.",
-    publicBtn: "Laisser un avis Google",
-    publicNote: "Visible par tout le monde.",
-    privateTitle: "📝 Commentaire privé",
-    privateText: "Si quelque chose n'allait pas, dites-le nous et nous le corrigerons.",
-    privateBtn: "Envoyer un commentaire privé",
-    privateNote: "Seulement nous le voyons.",
-    shareTitle: "📸 Partage ton expérience",
-    shareText: "Prends ou choisis une photo et partage-la avec tes amis.",
-    shareHint: "D'abord prends ou choisis une photo. Ensuite tu peux la partager avec message et localisation.",
-    shareBtn: "Partager",
-    shareMsg: "Je viens de profiter de " + RESTAURANT_NAME + " 🍸✨ — à ne pas manquer !",
-    chooseCamera: "📷 Prendre",
-    chooseGallery: "🖼️ Galerie",
-    retake: "🔁 Refaire",
-    sharedOK: "✅ Partagé!",
-    copiedOK: "✅ Copié"
+  const TALLY_LINKS = {
+    es: "https://tally.so/r/w2Qla9",
+    en: "https://tally.so/r/w20k9D",
+    de: "https://tally.so/r/mBN1q1",
+    fr: "https://tally.so/r/mek0Dk"
+  };
+  const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
+
+  const COPY = {
+    es:{pageTitle:"¿Cómo fue tu experiencia?",subtitle:"Cuéntanos en 10 segundos cómo fue todo.",
+      publicTitle:"⭐ Reseña pública",publicText:"Tu reseña nos da visibilidad en Google.",
+      privateTitle:"📝 Comentario privado",privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.",
+      shareTitle:"📸 Comparte tu momento",shareText:"Haz o elige una foto, prévisualízala y compártela con tus amigos.",
+      shareMsg:"Acabo de disfrutar en Terraza Casablanca Las Canteras 🍸✨ ¡Tienes que venir!",
+      thanks:"¡Gracias por tu tiempo!",langSelectorTitle:"Cambiar idioma"},
+    en:{pageTitle:"How was your experience?",subtitle:"Tell us in 10 seconds how it went.",
+      publicTitle:"⭐ Public review",publicText:"Your review helps us on Google.",
+      privateTitle:"📝 Private feedback",privateText:"If something went wrong, tell us and we’ll fix it.",
+      shareTitle:"📸 Share your moment",shareText:"Take or choose a photo, preview it and share your experience.",
+      shareMsg:"Just had a great time at Terraza Casablanca Las Canteras 🍸✨ Highly recommended!",
+      thanks:"Thanks for your time!",langSelectorTitle:"Change language"},
+    de:{pageTitle:"Wie war Ihre Erfahrung?",subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.",
+      publicTitle:"⭐ Öffentliche Bewertung",publicText:"Ihre Bewertung hilft uns bei Google.",
+      privateTitle:"📝 Privates Feedback",privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.",
+      shareTitle:"📸 Teilen Sie Ihren Moment",shareText:"Foto aufnehmen oder auswählen, ansehen und teilen.",
+      shareMsg:"Ich habe gerade tolle Drinks bei Terraza Casablanca Las Canteras genossen 🍸✨ Sehr empfehlenswert!",
+      thanks:"Vielen Dank für Ihre Zeit!",langSelectorTitle:"Sprache ändern"},
+    fr:{pageTitle:"Comment était votre expérience ?",subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.",
+      publicTitle:"⭐ Avis public",publicText:"Votre avis nous aide sur Google.",
+      privateTitle:"📝 Commentaire privé",privateText:"S'il y a eu un souci, dites-le nous.",
+      shareTitle:"📸 Partage ton moment",shareText:"Prends ou choisis une photo, prévisualise-la et partage ton expérience.",
+      shareMsg:"Je viens de passer un super moment à la Terraza Casablanca Las Canteras 🍸✨ À ne pas manquer !",
+      thanks:"Merci pour votre temps !",langSelectorTitle:"Changer de langue"}
+  };
+
+  function getInitialLang(){
+    const saved=localStorage.getItem('userLang');
+    if(saved&&COPY[saved]) return saved;
+    const browser=navigator.languages||[navigator.language];
+    for(const l of browser){const c=l.slice(0,2);if(COPY[c])return c;}
+    return 'es';
   }
-};
 
-/* ELEMENTOS */
-const cameraInput = document.getElementById('cameraInput');
-const galleryInput = document.getElementById('galleryInput');
-const btnCamera = document.getElementById('btnCamera');
-const btnGallery = document.getElementById('btnGallery');
-const btnRetake = document.getElementById('btnRetake');
-const previewBox = document.getElementById('previewBox');
-const btnShare = document.getElementById('btnShare');
-const hint = document.getElementById('hint');
+  function setLang(lang){
+    const d=COPY[lang]; document.documentElement.lang=lang;
+    document.title=d.pageTitle;
+    document.getElementById("subtitle").textContent=d.subtitle;
+    document.getElementById("publicTitle").textContent=d.publicTitle;
+    document.getElementById("publicText").textContent=d.publicText;
+    document.getElementById("privateTitle").textContent=d.privateTitle;
+    document.getElementById("privateText").textContent=d.privateText;
+    document.getElementById("shareTitle").textContent=d.shareTitle;
+    document.getElementById("shareText").textContent=d.shareText;
+    document.getElementById("thanks").innerHTML=`<strong>${d.thanks}</strong>`;
+    document.getElementById("current-lang").textContent=FLAGS[lang];
+    document.getElementById("btnPrivate").href=TALLY_LINKS[lang];
+    document.getElementById("btnShare").onclick=(e)=>shareExperience(e,d.shareMsg);
+    localStorage.setItem('userLang',lang);
+    document.getElementById("lang-options").style.display='none';
+  }
 
-const btnGoogle = document.getElementById('btnGoogle');
-const btnPrivate = document.getElementById('btnPrivate');
-const publicNote = document.getElementById('publicNote');
-const privateNote = document.getElementById('privateNote');
+  function createLangSelector(){
+    const options=document.getElementById('lang-options');
+    Object.keys(COPY).forEach(code=>{
+      const opt=document.createElement('div');
+      opt.className='lang-option';
+      opt.dataset.lang=code;
+      opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
+      opt.onclick=()=>setLang(code);
+      options.appendChild(opt);
+    });
+    document.getElementById('current-lang').onclick=(e)=>{
+      e.stopPropagation();
+      options.style.display=options.style.display==='block'?'none':'block';
+    };
+    document.addEventListener('click',e=>{
+      if(!document.getElementById('lang-selector').contains(e.target))
+        options.style.display='none';
+    });
+  }
 
-const langSelector = document.getElementById('lang-selector');
-const currentLangFlag = document.getElementById('current-lang');
-const langOptions = document.getElementById('lang-options');
+  const photoInput=document.getElementById("photoInput");
+  const photoPreview=document.getElementById("photoPreview");
+  let selectedFile=null;
 
-/* idioma inicial */
-const LANGS = ['es','en','de','fr'];
-function getInitialLang(){
-  const saved = localStorage.getItem('userLang');
-  if(saved && LANGS.includes(saved)) return saved;
-  const bl = (navigator.languages || [navigator.language || 'en']).map(l=>l.slice(0,2));
-  for(const b of bl) if(LANGS.includes(b)) return b;
-  return 'es';
-}
-let currentLang = getInitialLang();
-
-/* rellenar selector idiomas */
-function buildLangOptions(){
-  langOptions.innerHTML = '';
-  LANGS.forEach(code=>{
-    const div = document.createElement('div');
-    div.className = 'lang-option';
-    const flag = ({es:'🇪🇸',en:'🇬🇧',de:'🇩🇪',fr:'🇫🇷'})[code];
-    div.textContent = flag + ' ' + code.toUpperCase();
-    div.addEventListener('click', ()=>setLang(code));
-    langOptions.appendChild(div);
+  document.getElementById("btnPhoto").addEventListener("click",()=>{
+    photoInput.click();
   });
-  currentLangFlag.textContent = ({es:'🇪🇸',en:'🇬🇧',de:'🇩🇪',fr:'🇫🇷'})[currentLang];
-}
-currentLangFlag.addEventListener('click', (e)=> { e.stopPropagation(); langOptions.style.display = langOptions.style.display==='block'?'none':'block'; });
-document.addEventListener('click', (e)=>{ if(!langSelector.contains(e.target)) langOptions.style.display='none'; });
 
-/* aplicar idioma */
-function setLang(code){
-  currentLang = code;
-  localStorage.setItem('userLang', code);
-  const dict = COPY[code];
-  document.title = dict.pageTitle;
-  document.getElementById('subtitle').textContent = dict.subtitle;
-  document.getElementById('publicTitle').textContent = dict.publicTitle;
-  document.getElementById('publicText').textContent = dict.publicText;
-  btnGoogle.textContent = dict.publicBtn;
-  publicNote.textContent = dict.publicNote;
-  document.getElementById('privateTitle').textContent = dict.privateTitle;
-  document.getElementById('privateText').textContent = dict.privateText;
-  btnPrivate.textContent = dict.privateBtn;
-  privateNote.textContent = dict.privateNote;
-  document.getElementById('shareTitle').textContent = dict.shareTitle;
-  document.getElementById('shareText').textContent = dict.shareText;
-  hint.textContent = dict.shareHint;
-  btnCamera.textContent = dict.chooseCamera;
-  btnGallery.textContent = dict.chooseGallery;
-  btnRetake.textContent = dict.retake;
-  btnShare.textContent = dict.shareBtn;
-  currentLangFlag.textContent = ({es:'🇪🇸',en:'🇬🇧',de:'🇩🇪',fr:'🇫🇷'})[code];
-  langOptions.style.display = 'none';
-}
+  photoInput.addEventListener("change",(e)=>{
+    selectedFile=e.target.files[0];
+    if(selectedFile){
+      const url=URL.createObjectURL(selectedFile);
+      photoPreview.src=url;
+      photoPreview.style.display='block';
+      document.getElementById("note").textContent="Pulsa 'Compartir experiencia' para enviarla 📲";
+    }
+  });
 
-/* carga inicial idioma y selector */
-buildLangOptions();
-setLang(currentLang);
+  async function shareExperience(e,msg){
+    e.preventDefault();
+    const text=`${msg}\n📍 Terraza Casablanca Las Canteras (Las Palmas de G.C.)`;
 
-/* Helpers preview */
-function showPreview(file){
-  const url = URL.createObjectURL(file);
-  previewBox.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = url;
-  img.onload = ()=> URL.revokeObjectURL(url);
-  previewBox.appendChild(img);
-  previewBox.setAttribute('aria-hidden','false');
-}
+    const shareData={text};
+    let fileToShare=null;
 
-/* reset photo */
-function clearPreview(){
-  previewBox.innerHTML = '<span style="font-size:12px;color:var(--muted)">Sin foto</span>';
-  previewBox.setAttribute('aria-hidden','true');
-  btnRetake.style.display = 'none';
-}
+    if(selectedFile){
+      fileToShare=selectedFile;
+    }else{
+      const res=await fetch(DEFAULT_CARD);
+      const blob=await res.blob();
+      fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
+    }
 
-/* gestión inputs y botones */
-let currentFile = null;
-btnCamera.addEventListener('click', ()=> cameraInput.click());
-btnGallery.addEventListener('click', ()=> galleryInput.click());
-btnRetake.addEventListener('click', ()=>{
-  cameraInput.value = '';
-  galleryInput.value = '';
-  currentFile = null;
-  clearPreview();
-  hint.textContent = COPY[currentLang].shareHint;
-});
+    if(navigator.canShare && navigator.canShare({files:[fileToShare]})){
+      shareData.files=[fileToShare];
+    }
 
-cameraInput.addEventListener('change', async (e)=>{
-  if(e.target.files && e.target.files[0]){
-    currentFile = e.target.files[0];
-    showPreview(currentFile);
-    btnRetake.style.display = 'inline-block';
-    hint.textContent = '✅ ' + (COPY[currentLang].shareBtn) + ' para enviar o pulsa 🔁 para repetir';
-    // Auto-open share if supported:
-    setTimeout(()=> tryAutoShare(), 450);
-  }
-});
-galleryInput.addEventListener('change', async (e)=>{
-  if(e.target.files && e.target.files[0]){
-    currentFile = e.target.files[0];
-    showPreview(currentFile);
-    btnRetake.style.display = 'inline-block';
-    hint.textContent = '✅ ' + (COPY[currentLang].shareBtn) + ' para enviar o pulsa 🔁 para repetir';
-    // Auto-open share if supported:
-    setTimeout(()=> tryAutoShare(), 450);
-  }
-});
-
-/* intento de compartir automático para flujo más inmediato.
-   Si falla (usuario cancela) deja la UI para compartir manualmente. */
-async function tryAutoShare(){
-  if(!currentFile) return;
-  const dict = COPY[currentLang];
-  const text = dict.shareMsg + "\n📍 " + RESTAURANT_NAME + "\n" + GOOGLE_MAPS_SHORT;
-  if(navigator.share && navigator.canShare && navigator.canShare({files:[currentFile]})){
     try{
-      await navigator.share({ files: [currentFile], text });
-      hint.textContent = dict.sharedOK;
-      // limpiar preview después de compartir
-      setTimeout(()=>{ currentFile=null; clearPreview(); }, 800);
+      await navigator.share(shareData);
     }catch(err){
-      // usuario canceló; dejamos la vista para compartir manual
-      console.log('Auto-share cancelado o fallido', err);
+      console.log("Compartir cancelado o fallido:",err);
     }
   }
-}
 
-/* botón compartir manual */
-btnShare.addEventListener('click', async (e)=>{
-  e.preventDefault();
-  const dict = COPY[currentLang];
-  const text = dict.shareMsg + "\n📍 " + RESTAURANT_NAME + "\n" + GOOGLE_MAPS_SHORT;
-  try{
-    if(currentFile && navigator.canShare && navigator.canShare({ files:[currentFile] }) && navigator.share){
-      await navigator.share({ files:[currentFile], text });
-      hint.textContent = dict.sharedOK;
-      currentFile = null;
-      clearPreview();
-    } else if (navigator.share){
-      // compartir solo texto
-      await navigator.share({ text });
-      hint.textContent = dict.sharedOK;
-    } else {
-      // fallback: copiar texto y (si hay imagen) descargarla o sugerir subir
-      await navigator.clipboard.writeText(text);
-      hint.textContent = dict.copiedOK;
-    }
-  }catch(err){
-    console.log('Compartir manual cancelado/fallido', err);
-  }
-});
-
-/* enlaces de botones */
-document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
-document.getElementById('btnPrivate').href = "https://tally.so/r/w2Qla9";
-
-/* inicial preview vacío */
-clearPreview();
-
+  (function init(){
+    document.getElementById("brandName").textContent=RESTAURANT_NAME;
+    document.getElementById("btnGoogle").href=GOOGLE_MAPS_SHORT;
+    createLangSelector();
+    setLang(getInitialLang());
+  })();
 </script>
 </body>
 </html>
-
