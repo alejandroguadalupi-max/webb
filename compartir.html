@@ -21,7 +21,7 @@ body{
 }
 header{
   width:100%; display:flex; align-items:center; justify-content:flex-start;
-  position:absolute; top:16px; left:16px; right:16px; z-index:10;
+  margin-bottom:16px; position:absolute; top:16px; left:16px; right:16px; z-index:10;
 }
 .back{
   background:rgba(0,0,0,.05); padding:8px 10px; border-radius:10px;
@@ -114,10 +114,10 @@ const DEFAULT_CARD = "img/imagen_circular_recortada.png";
 
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
 const COPY = {
-  es:{shareTitle:"📸 Comparte tu momento", shareSub:"Elige o toma una foto y compártela con tus amigos.", shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`, note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.", back:"⬅ Volver", shareBtn:"Compartir", sharedOK:"¡Gracias por compartir tu momento 💛!", photoBtn:"📷 Tomar o elegir", retakeBtn:"🔁 Repetir"},
-  en:{shareTitle:"📸 Share your moment", shareSub:"Take or choose a photo and share with friends.", shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`, note:"If you don't choose a photo, a minimal restaurant card will be shared.", back:"⬅ Back", shareBtn:"Share", sharedOK:"Thanks for sharing 💛!", photoBtn:"📷 Take or choose", retakeBtn:"🔁 Retake"},
-  de:{shareTitle:"📸 Teile deinen Moment", shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.", shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`, note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.", back:"⬅ Zurück", shareBtn:"Teilen", sharedOK:"Danke fürs Teilen 💛!", photoBtn:"📷 Foto wählen", retakeBtn:"🔁 Wiederholen"},
-  fr:{shareTitle:"📸 Partage ton moment", shareSub:"Prends ou choisis une photo et partage-la avec tes amis.", shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`, note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.", back:"⬅ Retour", shareBtn:"Partager", sharedOK:"Merci d’avoir partagé 💛!", photoBtn:"📷 Prendre ou choisir", retakeBtn:"🔁 Refaire"}
+  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir tu momento 💛!",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
+  en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",sharedOK:"Thanks for sharing 💛!",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"},
+  de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",sharedOK:"Danke fürs Teilen 💛!",photoBtn:"📷 Foto wählen",retakeBtn:"🔁 Wiederholen"},
+  fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!",photoBtn:"📷 Prendre ou choisir",retakeBtn:"🔁 Refaire"}
 };
 
 let currentLang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
@@ -142,18 +142,24 @@ function buildLangOptions(){
     const d = document.createElement('div');
     d.className='lang-option';
     d.textContent = `${FLAGS[code]} ${code.toUpperCase()}`;
-    d.addEventListener('click', ()=> setLang(code));
+    d.addEventListener('click', e=>{
+      e.stopPropagation();
+      setLang(code);
+    });
     langOptions.appendChild(d);
   });
-  currentLangEl.addEventListener('click', e=>{
-    e.stopPropagation();
-    langOptions.style.display = langOptions.style.display==='block'?'none':'block';
-  });
-  document.addEventListener('click', ev=>{
-    if(!document.getElementById('lang-selector').contains(ev.target))
-      langOptions.style.display='none';
-  });
 }
+
+currentLangEl.addEventListener('click', e=>{
+  e.stopPropagation();
+  langOptions.style.display = langOptions.style.display==='block'?'none':'block';
+});
+
+document.addEventListener('click', e=>{
+  if(!document.getElementById('lang-selector').contains(e.target)){
+    langOptions.style.display='none';
+  }
+});
 
 function setLang(lang){
   if(!COPY[lang]) lang='es';
@@ -166,7 +172,7 @@ function setLang(lang){
   btnRetake.textContent = c.retakeBtn;
   btnShare.textContent = c.shareBtn;
   backBtn.textContent = c.back;
-  noteEl.textContent = !selectedFile ? c.note : `✅ Previsualiza tu foto. Si no te gusta, pulsa '${c.retakeBtn}'.`;
+  noteEl.textContent = selectedFile ? `✅ Previsualiza tu foto. Si no te gusta, pulsa '${c.retakeBtn}'.` : c.note;
   currentLangEl.textContent = FLAGS[lang];
   langOptions.style.display='none';
 }
