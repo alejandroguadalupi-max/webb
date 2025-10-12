@@ -32,8 +32,8 @@ header{
   background:#fff; border-radius:14px; padding:20px;
   border:1px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,.06);
   width:100%; display:flex; flex-direction:column; align-items:center;
-  max-width:100%;
-  min-height:200px; /* altura base */
+  justify-content:center;
+  min-height:300px; /* más centrado verticalmente */
 }
 h2{margin:0 0 6px; font-size:18px; text-align:center;}
 p{margin:0 0 10px; font-size:14px; text-align:center;}
@@ -93,11 +93,14 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
     <input type="file" id="photoInput" accept="image/*" style="display:none;">
 
     <div class="row">
-      <button id="btnPhoto" class="btn btn-yellow">📷 Tomar o elegir</button>
-      <button id="btnRetake" class="btn btn-ghost" style="display:none;">🔁 Repetir</button>
+      <button id="btnPhoto" class="btn btn-yellow"></button>
+      <button id="btnRetake" class="btn btn-ghost" style="display:none;"></button>
     </div>
 
-    <button id="btnShare" class="btn btn-blue">Compartir</button>
+    <div class="row">
+      <button id="btnShare" class="btn btn-blue"></button>
+    </div>
+    
     <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.</p>
   </div>
 </div>
@@ -113,10 +116,10 @@ const DEFAULT_CARD = "img/imagen_circular_recortada.png";
 
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
 const COPY = {
-  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir tu momento 💛!"},
-  en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",sharedOK:"Thanks for sharing 💛!"},
-  de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",sharedOK:"Danke fürs Teilen 💛!"},
-  fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!"}
+  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir tu momento 💛!",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
+  en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",sharedOK:"Thanks for sharing 💛!",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"},
+  de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",sharedOK:"Danke fürs Teilen 💛!",photoBtn:"📷 Foto wählen",retakeBtn:"🔁 Wiederholen"},
+  fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!",photoBtn:"📷 Prendre ou choisir",retakeBtn:"🔁 Refaire"}
 };
 
 function getInitialLang(){
@@ -167,75 +170,7 @@ function setLang(lang){
   document.getElementById('shareSub').textContent = c.shareSub;
   document.getElementById('note').textContent = c.note;
   document.getElementById('btnShare').textContent = c.shareBtn;
+  document.getElementById('btnPhoto').textContent = c.photoBtn;
+  document.getElementById('btnRetake').textContent = c.retakeBtn;
   document.getElementById('backBtn').textContent = c.back;
-  currentLangEl.textContent = FLAGS[lang];
-  langOptions.style.display='none';
-}
-
-buildLangOptions();
-setLang(currentLang);
-
-/* Foto */
-btnPhoto.addEventListener('click', ()=> photoInput.click());
-photoInput.addEventListener('change', e=>{
-  const f = e.target.files?.[0];
-  if(!f) return;
-  selectedFile = f;
-  photoPreview.src = URL.createObjectURL(f);
-  photoPreview.style.display = 'block';
-  btnRetake.style.display = 'inline-block';
-  document.getElementById('note').textContent = "✅ Previsualiza tu foto. Si no te gusta, pulsa 'Repetir'.";
-});
-
-btnRetake.addEventListener('click', ()=>{
-  photoInput.value = '';
-  selectedFile = null;
-  photoPreview.src = '';
-  photoPreview.style.display = 'none';
-  btnRetake.style.display = 'none';
-  setLang(currentLang);
-});
-
-/* Compartir */
-async function shareExperience(e){
-  e && e.preventDefault();
-  const dict = COPY[currentLang];
-  const text = `${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
-  let fileToShare = selectedFile;
-
-  if(!fileToShare){
-    try{
-      const res = await fetch(DEFAULT_CARD);
-      const blob = await res.blob();
-      fileToShare = new File([blob], "casablanca.jpg", {type: blob.type});
-    }catch{}
-  }
-
-  const shareData = { text };
-  if(fileToShare && navigator.canShare && navigator.canShare({ files: [fileToShare] }))
-    shareData.files = [fileToShare];
-
-  try{
-    if(navigator.share){
-      await navigator.share(shareData);
-      showModal(dict.sharedOK);
-      btnRetake.click();
-    }else{
-      await navigator.clipboard.writeText(text);
-      showModal("Copiado al portapapeles ✅");
-    }
-  }catch(err){ console.log("cancelado o error", err); }
-}
-
-function showModal(msg){
-  modalMsg.textContent = msg;
-  modal.style.display='flex';
-  setTimeout(()=> modal.style.display='none', 2500);
-}
-
-btnShare.addEventListener('click', shareExperience);
-</script>
-</body>
-</html>
-
-
+  current
