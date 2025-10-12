@@ -6,27 +6,62 @@
 <meta name="theme-color" content="#ffffff">
 <title>Compartir experiencia · Casablanca</title>
 <style>
-  :root{--text:#0b0f18;--muted:#6b7280;--accent:#2563eb;--bg:#f9fafb;--border:#e5e7eb;}
+  :root{
+    --text:#0b0f18;--muted:#6b7280;--accent:#2563eb;
+    --bg:#f9fafb;--border:#e5e7eb;
+  }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center;min-height:100svh;padding:16px;}
+  body{
+    margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;
+    background:var(--bg);color:var(--text);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100svh;padding:20px;
+  }
   .wrap{width:100%;max-width:420px;}
   header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-  .back{background:rgba(0,0,0,.04);padding:8px 10px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;}
+  .back{background:rgba(0,0,0,.05);padding:8px 10px;
+    border-radius:10px;text-decoration:none;color:var(--text);
+    font-weight:700;}
   .title{flex:1;text-align:center;}
-  .logo{width:44px;height:44px;border-radius:10px;overflow:hidden;}
+  .logo{width:44px;height:44px;border-radius:10px;overflow:hidden;margin:0 auto;}
   .logo img{width:100%;height:100%;object-fit:cover;}
-  .share-card{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border);box-shadow:0 8px 20px rgba(0,0,0,.06);}
-  .photo-preview{width:100%;aspect-ratio:4/3;border-radius:10px;object-fit:cover;display:none;margin-bottom:10px;border:1px solid var(--border);}
+  .share-card{
+    background:#fff;border-radius:14px;padding:16px;
+    border:1px solid var(--border);
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+  }
+  .photo-preview{
+    width:100%;aspect-ratio:4/3;border-radius:10px;
+    object-fit:cover;display:none;margin-bottom:10px;
+    border:1px solid var(--border);
+  }
   .row{display:flex;gap:8px;}
-  .btn{flex:1;padding:12px;border-radius:10px;border:0;font-weight:800;cursor:pointer;}
+  .btn{
+    flex:1;padding:12px;border-radius:10px;border:0;
+    font-weight:800;cursor:pointer;
+  }
   .btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
   .btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;}
   .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
-  .note{text-align:center;color:var(--muted);font-size:13px;margin-top:8px;}
+  .note{text-align:center;color:var(--muted);font-size:13px;margin-top:8px;line-height:1.3;}
   #lang-selector{position:absolute; top:14px; right:14px;}
   #current-lang{cursor:pointer;background:rgba(0,0,0,.05);padding:6px 8px;border-radius:8px;}
-  #lang-options{display:none;position:absolute;right:0;top:44px;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:40;}
+  #lang-options{
+    display:none;position:absolute;right:0;top:44px;background:#fff;
+    border:1px solid var(--border);border-radius:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:40;
+  }
   .lang-option{padding:8px 10px;cursor:pointer;font-weight:700;}
+  .modal{
+    position:fixed;inset:0;background:rgba(0,0,0,.5);
+    display:none;align-items:center;justify-content:center;
+    z-index:100;
+  }
+  .modal-content{
+    background:#fff;padding:20px 28px;border-radius:12px;
+    text-align:center;font-weight:600;color:var(--text);
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+  }
 </style>
 </head>
 <body>
@@ -45,45 +80,43 @@
 
     <div class="share-card" aria-labelledby="shareTitle">
       <h2 id="shareTitle" style="margin:0 0 8px;font-size:16px;">📸 Comparte tu momento</h2>
-      <p id="shareSub" style="margin:0 0 10px;color:var(--muted);font-size:14px;">Elige o toma una foto, prévisualízala y compártela con tus amigos.</p>
+      <p id="shareSub" style="margin:0 0 10px;color:var(--muted);font-size:14px;">
+        Elige o toma una foto, prévisualízala y compártela con tus amigos.
+      </p>
 
       <img id="photoPreview" class="photo-preview" alt="Vista previa">
 
-      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
+      <input type="file" id="photoInput" accept="image/*" style="display:none;">
+
       <div class="row" style="margin-bottom:8px;">
         <button id="btnPhoto" class="btn btn-yellow">📷 Tomar o elegir</button>
         <button id="btnRetake" class="btn btn-ghost" style="display:none;">🔁 Repetir</button>
       </div>
 
       <button id="btnShare" class="btn btn-blue">Compartir experiencia</button>
-      <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.</p>
+      <p class="note" id="note">
+        Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.
+      </p>
     </div>
   </div>
 
+  <div class="modal" id="modal">
+    <div class="modal-content" id="modalMsg">¡Gracias por compartir 💛!</div>
+  </div>
+
 <script>
-/* Config y copy (multilengua) */
 const RESTAURANT_NAME = "Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 const DEFAULT_CARD = "img/imagen_circular_recortada.png";
 
-const TALLY_LINKS = {
-  es: "https://tally.so/r/w2Qla9",
-  en: "https://tally.so/r/w20k9D",
-  de: "https://tally.so/r/mBN1q1",
-  fr: "https://tally.so/r/mek0Dk"
-};
-
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
-
 const COPY = {
-  es:{shareTitle:"📸 Comparte tu momento", shareSub:"Elige o toma una foto, prévisualízala y compártela con tus amigos.", shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!` , note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.", back:"⬅ Volver", shareBtn:"Compartir experiencia"},
-  en:{shareTitle:"📸 Share your moment", shareSub:"Take or choose a photo, preview it and share with friends.", shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`, note:"If you don't choose a photo, a minimal restaurant card will be shared.", back:"⬅ Back", shareBtn:"Share experience"},
-  de:{shareTitle:"📸 Teile deinen Moment", shareSub:"Mach ein Foto oder wähle eins, zeig es dir an und teile es mit Freunden.", shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`, note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.", back:"⬅ Zurück", shareBtn:"Teilen"},
-  fr:{shareTitle:"📸 Partage ton moment", shareSub:"Prends ou choisis une photo, prévisualise-la et partage-la avec tes amis.", shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`, note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.", back:"⬅ Retour", shareBtn:"Partager"}
+  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto, prévisualízala y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir experiencia",sharedOK:"¡Gracias por compartir tu momento 💛!"},
+  en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo, preview it and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share experience",sharedOK:"Thanks for sharing your moment 💛!"},
+  de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins, zeig es dir an und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",back:"⬅ Zurück",shareBtn:"Erlebnis teilen",sharedOK:"Danke fürs Teilen 💛!"},
+  fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo, prévisualise-la et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!"}
 };
 
-/* idioma */
-const LANGS = Object.keys(COPY);
 function getInitialLang(){
   const s = localStorage.getItem('userLang');
   if(s && COPY[s]) return s;
@@ -93,22 +126,34 @@ function getInitialLang(){
 }
 
 let currentLang = getInitialLang();
-
-/* elementos */
 const currentLangEl = document.getElementById('current-lang');
 const langOptions = document.getElementById('lang-options');
+const photoInput = document.getElementById('photoInput');
+const photoPreview = document.getElementById('photoPreview');
+const btnPhoto = document.getElementById('btnPhoto');
+const btnRetake = document.getElementById('btnRetake');
+const btnShare = document.getElementById('btnShare');
+const modal = document.getElementById('modal');
+const modalMsg = document.getElementById('modalMsg');
+let selectedFile = null;
 
 function buildLangOptions(){
   langOptions.innerHTML = '';
-  LANGS.forEach(code=>{
+  Object.keys(COPY).forEach(code=>{
     const d = document.createElement('div');
     d.className='lang-option';
     d.textContent = `${FLAGS[code]} ${code.toUpperCase()}`;
     d.addEventListener('click', ()=> setLang(code));
     langOptions.appendChild(d);
   });
-  currentLangEl.addEventListener('click', (e)=>{ e.stopPropagation(); langOptions.style.display = langOptions.style.display==='block'?'none':'block'; });
-  document.addEventListener('click', ()=>{ if(!document.getElementById('lang-selector').contains(event?.target)) langOptions.style.display='none'; });
+  currentLangEl.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    langOptions.style.display = langOptions.style.display==='block'?'none':'block';
+  });
+  document.addEventListener('click', (ev)=>{
+    if(!document.getElementById('lang-selector').contains(ev.target))
+      langOptions.style.display='none';
+  });
 }
 
 function setLang(lang){
@@ -125,32 +170,19 @@ function setLang(lang){
   langOptions.style.display = 'none';
 }
 
-/* foto & preview */
-const photoInput = document.createElement('input');
-photoInput.type = 'file';
-photoInput.accept = 'image/*';
-photoInput.capture = 'environment';
-photoInput.style.display='none';
-document.body.appendChild(photoInput);
+buildLangOptions();
+setLang(currentLang);
 
-const photoPreview = document.getElementById('photoPreview');
-const btnPhoto = document.getElementById('btnPhoto');
-const btnRetake = document.getElementById('btnRetake');
-const btnShare = document.getElementById('btnShare');
-
-let selectedFile = null;
-
+/* foto */
 btnPhoto.addEventListener('click', ()=> photoInput.click());
 photoInput.addEventListener('change', (e)=>{
-  const f = e.target.files && e.target.files[0];
+  const f = e.target.files?.[0];
   if(!f) return;
   selectedFile = f;
-  const url = URL.createObjectURL(f);
-  photoPreview.src = url;
+  photoPreview.src = URL.createObjectURL(f);
   photoPreview.style.display = 'block';
   btnRetake.style.display = 'inline-block';
-  // hint text
-  document.getElementById('note').textContent = COPY[currentLang].shareMsg ? COPY[currentLang].shareMsg : COPY[currentLang].note;
+  document.getElementById('note').textContent = "✅ Previsualiza tu foto. Si no te gusta, pulsa 'Repetir'.";
 });
 
 btnRetake.addEventListener('click', ()=>{
@@ -159,7 +191,7 @@ btnRetake.addEventListener('click', ()=>{
   photoPreview.src = '';
   photoPreview.style.display = 'none';
   btnRetake.style.display = 'none';
-  setLang(currentLang); // restore text
+  setLang(currentLang);
 });
 
 /* compartir */
@@ -167,50 +199,41 @@ async function shareExperience(e){
   e && e.preventDefault();
   const dict = COPY[currentLang];
   const text = `${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
-  let fileToShare = null;
+  let fileToShare = selectedFile;
 
-  if(selectedFile){
-    fileToShare = selectedFile;
-  } else {
-    // cargar imagen por defecto (logo) y convertir a File
+  if(!fileToShare){
     try{
       const res = await fetch(DEFAULT_CARD);
       const blob = await res.blob();
       fileToShare = new File([blob], "casablanca.jpg", {type: blob.type});
-    }catch(err){
-      console.warn("No se pudo cargar tarjeta por defecto", err);
-    }
+    }catch{}
   }
 
   const shareData = { text };
-  if(fileToShare && navigator.canShare && navigator.canShare({ files: [fileToShare] })){
+  if(fileToShare && navigator.canShare && navigator.canShare({ files: [fileToShare] }))
     shareData.files = [fileToShare];
-  }
 
   try{
     if(navigator.share){
       await navigator.share(shareData);
-      // opcional: limpiar vista al compartir
+      showModal(dict.sharedOK);
       btnRetake.click();
-      alert(dict.sharedOK || 'Compartido');
     }else{
-      // fallback: copiar texto y notificar
       await navigator.clipboard.writeText(text);
-      alert(COPY[currentLang].copiedOK || 'Copiado al portapapeles');
+      showModal("Copiado al portapapeles ✅");
     }
-  }catch(err){
-    console.log("Compartir cancelado o fallido:", err);
-  }
+  }catch(err){ console.log("cancelado o error", err); }
 }
 
-/* build selector e init */
-buildLangOptions();
-setLang(currentLang);
+/* modal */
+function showModal(msg){
+  modalMsg.textContent = msg;
+  modal.style.display='flex';
+  setTimeout(()=> modal.style.display='none', 2500);
+}
 
-/* permitir compartir con botón */
 btnShare.addEventListener('click', shareExperience);
-
-/* si venimos con idioma guardado en localStorage, ya está sincronizado */
 </script>
 </body>
 </html>
+
