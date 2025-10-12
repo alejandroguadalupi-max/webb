@@ -19,7 +19,7 @@
     width:100%; max-width:420px; height:100svh;
     display:flex; flex-direction:column; justify-content:space-between;
     background:var(--card); border-radius:24px; box-shadow:0 8px 28px rgba(0,0,0,.08);
-    overflow:hidden; position:relative; padding:20px;
+    overflow:hidden; position:relative; padding:24px 20px;
   }
 
   /* Idioma */
@@ -37,29 +37,32 @@
   .lang-option:hover{background:var(--bg);}
 
   header{text-align:center;}
-  .logo{width:70px; height:70px; border-radius:50%; overflow:hidden; margin:0 auto 8px;}
+  .logo{width:80px; height:80px; border-radius:50%; overflow:hidden; margin:0 auto 10px;}
   .logo img{width:100%; height:100%; object-fit:cover;}
-  h1{font-size:20px; margin:0;}
-  p.subtitle{font-size:14px; color:var(--muted); margin-top:4px;}
+  h1{font-size:22px; margin:0;}
+  p.subtitle{font-size:15px; color:var(--muted); margin-top:6px;}
 
-  .grid{display:grid; gap:10px;}
+  .grid{display:grid; gap:14px; margin-top:10px;}
   .tile{
-    border:1px solid var(--border); border-radius:16px; padding:14px; text-align:center;
+    border:1px solid var(--border); border-radius:18px; padding:18px; text-align:center;
     background:#fff;
   }
-  .tile h2{margin:0 0 6px; font-size:15px;}
-  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted);}
+  .tile h2{margin:0 0 6px; font-size:16px;}
+  .tile p{margin:0 0 12px; font-size:14px; color:var(--muted);}
   .btn{
     display:block; width:100%; text-align:center;
-    background:var(--accent); color:#fff; border:none; border-radius:12px;
-    padding:12px; font-weight:700; text-decoration:none;
+    background:var(--accent); color:#fff; border:none; border-radius:14px;
+    padding:13px; font-weight:700; text-decoration:none;
   }
   .btn:active{opacity:.9;}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent));}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok));}
-  .btn-share{background:linear-gradient(180deg,#facc15,#fbbf24); color:#000;}
+  .btn-share{
+    background:linear-gradient(180deg,#facc15,#fbbf24); color:#000;
+    font-size:15px; font-weight:600; margin-top:12px;
+  }
 
-  .note{text-align:center; font-size:12px; color:var(--muted); margin-top:10px;}
+  .note{text-align:center; font-size:13px; color:var(--muted); margin-top:14px;}
 </style>
 </head>
 <body>
@@ -89,7 +92,7 @@
       </section>
     </div>
 
-    <a id="openShare" href="compartir.html" class="btn btn-share" style="margin-top:10px;">📸 Compartir experiencia</a>
+    <a id="openShare" href="compartir.html" class="btn btn-share">📸 Compartir experiencia</a>
 
     <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
   </main>
@@ -99,7 +102,7 @@
 const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 
-/* Tally form links por idioma */
+/* Formularios Tally */
 const TALLY_LINKS = {
   es: "https://tally.so/r/w2Qla9",
   en: "https://tally.so/r/w20k9D",
@@ -110,16 +113,17 @@ const TALLY_LINKS = {
 /* Banderas */
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
 
-/* Copia multilenguaje (UI) */
+/* Textos */
 const COPY = {
-  es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", publicNote:"Queda visible para todos.", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", privateNote:"Solo lo vemos nosotros.", shareTitle:"📸 Compartir experiencia", shareBtn:"Compartir experiencia", thanks:"¡Gracias por tu tiempo!", langSelectorTitle:"Cambiar idioma"},
-  en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", publicNote:"Visible to everyone.", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", privateNote:"Only we can see it.", shareTitle:"📸 Share experience", shareBtn:"Share experience", thanks:"Thanks for your time!", langSelectorTitle:"Change language"},
-  de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", publicNote:"Für alle sichtbar.", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", privateNote:"Nur wir sehen es.", shareTitle:"📸 Erfahrung teilen", shareBtn:"Erfahrung teilen", thanks:"Vielen Dank für Ihre Zeit!", langSelectorTitle:"Sprache ändern"},
-  fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", publicNote:"Visible par tout le monde.", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", privateNote:"Seulement nous le voyons.", shareTitle:"📸 Partager l'expérience", shareBtn:"Partager", thanks:"Merci pour votre temps !", langSelectorTitle:"Changer de langue"}
+  es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", shareBtn:"Compartir experiencia", thanks:"¡Gracias por tu tiempo!"},
+  en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", shareBtn:"Share experience", thanks:"Thanks for your time!"},
+  de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", shareBtn:"Erfahrung teilen", thanks:"Vielen Dank für Ihre Zeit!"},
+  fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", shareBtn:"Partager l'expérience", thanks:"Merci pour votre temps !"}
 };
 
-/* Helpers idioma */
+/* --- Funciones de idioma --- */
 const LANGS = Object.keys(COPY);
+
 function getInitialLang(){
   const saved = localStorage.getItem('userLang');
   if(saved && COPY[saved]) return saved;
@@ -127,6 +131,7 @@ function getInitialLang(){
   for(const b of browser){ const c = b.slice(0,2); if(COPY[c]) return c; }
   return 'es';
 }
+
 function setLang(lang){
   if(!COPY[lang]) lang = 'es';
   const d = COPY[lang];
@@ -136,23 +141,18 @@ function setLang(lang){
   document.getElementById('publicTitle').textContent = d.publicTitle;
   document.getElementById('publicText').textContent = d.publicText;
   document.getElementById('btnGoogle').textContent = d.publicBtn;
-  document.getElementById('publicNote')?.textContent = d.publicNote;
   document.getElementById('privateTitle').textContent = d.privateTitle;
   document.getElementById('privateText').textContent = d.privateText;
   document.getElementById('btnPrivate').textContent = d.privateBtn;
-  document.getElementById('privateNote')?.textContent = d.privateNote;
-  document.getElementById('openShare').textContent = d.shareBtn ? "📸 " + d.shareBtn : d.shareBtn;
+  document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
   document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
   document.getElementById('current-lang').textContent = FLAGS[lang] || '🇪🇸';
-  // poner el formulario Tally según idioma
   document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
-  // guardar
   localStorage.setItem('userLang', lang);
-  // hide lang options
   document.getElementById('lang-options').style.display = 'none';
 }
 
-/* crear selector de idiomas */
+/* Selector */
 function createLangSelector(){
   const options = document.getElementById('lang-options');
   options.innerHTML = '';
@@ -167,16 +167,15 @@ function createLangSelector(){
     e.stopPropagation();
     options.style.display = options.style.display === 'block' ? 'none' : 'block';
   });
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', (e)=>{
     if(!document.getElementById('lang-selector').contains(e.target)){
       options.style.display = 'none';
     }
   });
 }
 
-/* init */
+/* Inicializar */
 (function init(){
-  document.getElementById('brandName').textContent = RESTAURANT_NAME;
   document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
   createLangSelector();
   setLang(getInitialLang());
@@ -184,3 +183,4 @@ function createLangSelector(){
 </script>
 </body>
 </html>
+
