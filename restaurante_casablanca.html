@@ -3,184 +3,199 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#0b0f18">
 <title>¿Cómo fue tu experiencia?</title>
 <style>
   :root{
-    --text:#0b0f18; --muted:#6b7280;
+    --text:#0b0f18; --muted:#566073;
     --accent:#2563eb; --ok:#16a34a;
-    --card:#ffffff; --bg:#f4f5f7; --border:#e5e7eb;
+    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0; padding:0; height:100%; font-family:system-ui, -apple-system, Roboto, sans-serif; background:var(--bg); color:var(--text);}
-  body{display:flex; align-items:center; justify-content:center; padding:12px;}
+
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0; height:100%}
+
+  body{
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
+      var(--bg);
+  }
 
   .card{
-    width:100%; max-width:420px; height:100svh;
-    display:flex; flex-direction:column; justify-content:space-between;
-    background:var(--card); border-radius:24px; box-shadow:0 8px 28px rgba(0,0,0,.08);
-    overflow:hidden; position:relative; padding:24px 20px;
+    width:min(580px, 100%);
+    max-height:100svh;
+    display:flex; flex-direction:column; gap:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 18px 45px rgba(12,20,33,.08);
+    position:relative;
   }
 
-  /* Idioma */
-  #lang-selector{position:absolute; top:12px; right:12px;}
+  /* Selector de idioma */
+  #lang-selector{
+    position:absolute; top:12px; right:12px; z-index:10;
+  }
   #current-lang{
-    cursor:pointer; background:rgba(0,0,0,.05);
-    padding:6px 10px; border-radius:8px; font-size:18px;
+    cursor:pointer;
+    font-size:24px;
+    padding:4px;
+    border-radius:8px;
+    background:rgba(0,0,0,.04);
+    display:grid; place-items:center;
+    transition:background .2s ease;
   }
+  #current-lang:hover{ background:rgba(0,0,0,.08); }
   #lang-options{
-    display:none; position:absolute; right:0; top:40px;
-    background:#fff; border:1px solid var(--border); border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,.1); z-index:30;
+    display:none;
+    position:absolute;
+    top:calc(100% + 4px);
+    right:0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(12,20,33,.1);
+    padding:6px;
+    overflow:hidden;
   }
-  .lang-option{padding:8px 12px; font-weight:600; cursor:pointer;}
-  .lang-option:hover{background:var(--bg);}
+  .lang-option{
+    display:flex; align-items:center; gap:8px;
+    padding:8px 12px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background-color .2s ease;
+  }
+  .lang-option:hover{ background-color:var(--bg); }
 
-  header{text-align:center;}
-  .logo{width:80px; height:80px; border-radius:50%; overflow:hidden; margin:0 auto 10px;}
-  .logo img{width:100%; height:100%; object-fit:cover;}
-  h1{font-size:22px; margin:0;}
-  p.subtitle{font-size:15px; color:var(--muted); margin-top:6px;}
+  /* Branding */
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
+  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
+  .logo img{width:100%; height:100%; object-fit:cover}
+  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
+  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
-  .grid{display:grid; gap:14px; margin-top:10px;}
+  .grid{display:grid; gap:12px}
+  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
+
   .tile{
-    border:1px solid var(--border); border-radius:18px; padding:18px; text-align:center;
-    background:#fff;
+    border:1px solid var(--border); border-radius:16px; background:#fff;
+    padding:12px; display:flex; flex-direction:column; align-items:center;
   }
-  .tile h2{margin:0 0 6px; font-size:16px;}
-  .tile p{margin:0 0 12px; font-size:14px; color:var(--muted);}
+  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
+  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
+
   .btn{
-    display:block; width:100%; text-align:center;
-    background:var(--accent); color:#fff; border:none; border-radius:14px;
-    padding:13px; font-weight:700; text-decoration:none;
+    display:block; width:100%; text-align:center; text-decoration:none;
+    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
+    will-change:transform;
   }
-  .btn:active{opacity:.9;}
-  .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent));}
-  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok));}
+  .btn:active{transform:translateY(1px)}
+  .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent))}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
   .btn-share{
     background:linear-gradient(180deg,#facc15,#fbbf24); color:#000;
-    font-size:15px; font-weight:600; margin-top:12px;
+    font-size:13px; font-weight:600; margin-top:6px;
+    padding:10px;
   }
+  .note{font-size:12px; color:var(--muted); text-align:center}
 
-  .note{text-align:center; font-size:13px; color:var(--muted); margin-top:14px;}
+  @media(max-width:360px){
+    .brand h1{font-size:20px}
+    .btn{font-size:14px; padding:12px 14px}
+    .tile p{font-size:12px}
+    .btn-share{font-size:12px; padding:8px}
+  }
 </style>
 </head>
 <body>
-  <main class="card" id="mainCard" aria-labelledby="t">
-    <header>
-      <div id="lang-selector" aria-haspopup="true">
-        <div id="current-lang" aria-label="Cambiar idioma">🇪🇸</div>
-        <div id="lang-options" role="menu" aria-hidden="true"></div>
-      </div>
-
-      <div class="logo"><img src="img/imagen_circular_recortada.png" alt="Logo Casablanca"></div>
-      <h1 id="t">Restaurante Casablanca</h1>
-      <p id="subtitle" class="subtitle">Cuéntanos en 10 segundos cómo fue todo.</p>
-    </header>
-
-    <div class="grid" role="main">
-      <section class="tile" aria-labelledby="publicTitle">
-        <h2 id="publicTitle">⭐ Reseña pública</h2>
-        <p id="publicText">Tu reseña nos da visibilidad en Google.</p>
-        <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña</a>
-      </section>
-
-      <section class="tile" aria-labelledby="privateTitle">
-        <h2 id="privateTitle">📝 Comentario privado</h2>
-        <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-        <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario</a>
-      </section>
+<main class="card" role="main" aria-labelledby="t">
+  <header class="brand">
+    <div class="logo">
+      <img src="img/imagen_circular_recortada.png" alt="Logo Casablanca">
     </div>
+    <h1 id="t"><span id="brandName">Restaurante Casablanca</span></h1>
+    <p id="subtitle">Cuéntanos en 10 segundos cómo fue todo.</p>
+  </header>
 
-    <a id="openShare" href="compartir.html" class="btn btn-share">📸 Compartir experiencia</a>
+  <div class="grid">
+    <section class="tile" aria-labelledby="publicTitle">
+      <h2 id="publicTitle">⭐ Reseña pública</h2>
+      <p id="publicText">Tu reseña nos da visibilidad en Google.</p>
+      <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña</a>
+      <div class="note" id="publicNote">Queda visible para todos.</div>
+    </section>
 
-    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-  </main>
+    <section class="tile" aria-labelledby="privateTitle">
+      <h2 id="privateTitle">📝 Comentario privado</h2>
+      <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+      <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario</a>
+      <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
+    </section>
+  </div>
+
+  <a id="openShare" href="compartir.html" class="btn btn-share">📸 Compartir experiencia con amigos</a>
+
+  <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+</main>
 
 <script>
-/* Config */
+/* Configuración y links */
 const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
-
-/* Formularios Tally */
-const TALLY_LINKS = {
-  es: "https://tally.so/r/w2Qla9",
-  en: "https://tally.so/r/w20k9D",
-  de: "https://tally.so/r/mBN1q1",
-  fr: "https://tally.so/r/mek0Dk"
-};
-
-/* Banderas */
+const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1", fr:"https://tally.so/r/mek0Dk" };
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
-
-/* Textos */
 const COPY = {
-  es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", shareBtn:"Compartir experiencia", thanks:"¡Gracias por tu tiempo!"},
-  en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", shareBtn:"Share experience", thanks:"Thanks for your time!"},
-  de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", shareBtn:"Erfahrung teilen", thanks:"Vielen Dank für Ihre Zeit!"},
-  fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", shareBtn:"Partager l'expérience", thanks:"Merci pour votre temps !"}
+  es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", shareBtn:"Compartir experiencia con amigos", thanks:"¡Gracias por tu tiempo!"},
+  en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", shareBtn:"Share experience with friends", thanks:"Thanks for your time!"},
+  de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", shareBtn:"Erfahrung mit Freunden teilen", thanks:"Vielen Dank für Ihre Zeit!"},
+  fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", shareBtn:"Partager avec des amis", thanks:"Merci pour votre temps !"}
 };
 
 /* --- Funciones de idioma --- */
 const LANGS = Object.keys(COPY);
-
-function getInitialLang(){
-  const saved = localStorage.getItem('userLang');
-  if(saved && COPY[saved]) return saved;
-  const browser = navigator.languages || [navigator.language || 'es'];
-  for(const b of browser){ const c = b.slice(0,2); if(COPY[c]) return c; }
-  return 'es';
-}
-
+function getInitialLang(){ const saved = localStorage.getItem('userLang'); if(saved && COPY[saved]) return saved; const browser = navigator.languages || [navigator.language || 'es']; for(const b of browser){ const c = b.slice(0,2); if(COPY[c]) return c; } return 'es'; }
 function setLang(lang){
-  if(!COPY[lang]) lang = 'es';
-  const d = COPY[lang];
-  document.documentElement.lang = lang;
-  document.title = d.pageTitle;
-  document.getElementById('subtitle').textContent = d.subtitle;
-  document.getElementById('publicTitle').textContent = d.publicTitle;
-  document.getElementById('publicText').textContent = d.publicText;
-  document.getElementById('btnGoogle').textContent = d.publicBtn;
-  document.getElementById('privateTitle').textContent = d.privateTitle;
-  document.getElementById('privateText').textContent = d.privateText;
-  document.getElementById('btnPrivate').textContent = d.privateBtn;
-  document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
-  document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
-  document.getElementById('current-lang').textContent = FLAGS[lang] || '🇪🇸';
-  document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
-  localStorage.setItem('userLang', lang);
-  document.getElementById('lang-options').style.display = 'none';
+  if(!COPY[lang]) lang='es';
+  const d=COPY[lang];
+  document.documentElement.lang=lang;
+  document.title=d.pageTitle;
+  document.getElementById('subtitle').textContent=d.subtitle;
+  document.getElementById('publicTitle').textContent=d.publicTitle;
+  document.getElementById('publicText').textContent=d.publicText;
+  document.getElementById('btnGoogle').textContent=d.publicBtn;
+  document.getElementById('privateTitle').textContent=d.privateTitle;
+  document.getElementById('privateText').textContent=d.privateText;
+  document.getElementById('btnPrivate').textContent=d.privateBtn;
+  document.getElementById('openShare').textContent="📸 "+d.shareBtn;
+  document.getElementById('thanks').innerHTML=`<strong>${d.thanks}</strong>`;
+  document.getElementById('btnPrivate').href=TALLY_LINKS[lang]||TALLY_LINKS['es'];
+  localStorage.setItem('userLang',lang);
+  const options=document.getElementById('lang-options'); if(options) options.style.display='none';
 }
-
-/* Selector */
 function createLangSelector(){
-  const options = document.getElementById('lang-options');
-  options.innerHTML = '';
-  LANGS.forEach(code=>{
-    const o = document.createElement('div');
-    o.className = 'lang-option';
-    o.textContent = `${FLAGS[code]} ${code.toUpperCase()}`;
-    o.addEventListener('click', ()=> setLang(code));
-    options.appendChild(o);
-  });
-  document.getElementById('current-lang').addEventListener('click', (e)=>{
-    e.stopPropagation();
-    options.style.display = options.style.display === 'block' ? 'none' : 'block';
-  });
-  document.addEventListener('click', (e)=>{
-    if(!document.getElementById('lang-selector').contains(e.target)){
-      options.style.display = 'none';
-    }
-  });
+  const options=document.getElementById('lang-options'); options.innerHTML='';
+  LANGS.forEach(code=>{ const o=document.createElement('div'); o.className='lang-option'; o.textContent=`${FLAGS[code]} ${code.toUpperCase()}`; o.addEventListener('click',()=>setLang(code)); options.appendChild(o); });
+  document.getElementById('current-lang').addEventListener('click',(e)=>{ e.stopPropagation(); options.style.display=options.style.display==='block'?'none':'block'; });
+  document.addEventListener('click',(e)=>{ if(!document.getElementById('lang-selector').contains(e.target)) options.style.display='none'; });
 }
 
 /* Inicializar */
 (function init(){
-  document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
+  document.getElementById('btnGoogle').href=GOOGLE_MAPS_SHORT;
   createLangSelector();
   setLang(getInitialLang());
 })();
 </script>
 </body>
 </html>
+
 
