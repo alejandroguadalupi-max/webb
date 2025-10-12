@@ -12,34 +12,32 @@
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
 
-  *,*::before,*::after{box-sizing:border-box}
+  *,*::before,*::after{box-sizing:border-box;}
   html,body{margin:0; height:100%;}
 
   body{
-    min-height:100svh;
+    min-height:100vh;
     display:flex; align-items:center; justify-content:center;
-    padding:12px;
+    padding:0;
     font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     color:var(--text);
-    background:
-      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
-      var(--bg);
+    background: radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat, var(--bg);
   }
 
   .card{
-    width:min(580px, 100%);
-    min-height:100svh;
+    width:100%;
+    max-width:580px;
+    height:100vh;
     display:flex; flex-direction:column; justify-content:center; gap:14px;
     background:var(--card);
     border:1px solid var(--border);
-    border-radius:20px;
+    border-radius:0;
     padding:18px;
-    box-shadow:0 18px 45px rgba(12,20,33,.08);
+    box-shadow:none;
     position:relative;
   }
 
-  /* --- Selector de idioma --- */
-  #lang-selector{position:absolute; top:12px; right:12px; z-index:10;}
+  #lang-selector{position:absolute; top:12px; right:12px;}
   #current-lang{
     cursor:pointer; font-size:24px; padding:4px; border-radius:8px;
     background:rgba(0,0,0,.04); display:grid; place-items:center;
@@ -55,7 +53,6 @@
     font-size:14px; font-weight:600; border-radius:8px; cursor:pointer;
     transition:background-color .2s ease;}
   .lang-option:hover{background-color:var(--bg);}
-  /* ------------------------------------------- */
 
   .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
   .logo{width:68px; height:68px; border-radius:50%; overflow:hidden;
@@ -65,7 +62,7 @@
   .brand h1{margin:6px 0 0; font-size:22px; text-align:center}
   .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
-  .grid{display:grid; gap:12px}
+  .grid{display:grid; gap:12px; flex:1; place-content:center;}
   @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
   .tile{
@@ -83,7 +80,11 @@
   .btn:active{transform:translateY(1px)}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
+  .btn-share{background:linear-gradient(180deg,#93c5fd,#2563eb); color:#fff; font-weight:700;}
   .note{font-size:12px; color:var(--muted); text-align:center}
+
+  #shareSection{margin-top:10px; text-align:center;}
+  #shareSection small{display:block; color:var(--muted); font-size:12px; margin-top:4px;}
 </style>
 </head>
 <body>
@@ -112,204 +113,104 @@
       </section>
     </div>
 
-    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-
-    <!-- Bloque compartir experiencia -->
-    <section class="tile" aria-labelledby="shareTitle">
-      <h2 id="shareTitle">📸 Comparte tu experiencia</h2>
-      <p id="shareText">
-        Saca una foto o elige una de tu galería y cuéntales a tus amigos que estuviste en Casablanca 🍸✨
-      </p>
+    <div id="shareSection">
+      <p id="shareTitle" style="font-size:14px; font-weight:600;">📸 Comparte tu experiencia</p>
+      <p id="shareText" style="font-size:13px; margin:0 0 6px;">Saca o elige una foto y cuéntales a tus amigos que estuviste en Casablanca 🍸✨</p>
       <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
-      <a id="btnShare" href="#" class="btn btn-google">Compartir experiencia</a>
-      <div class="note" id="shareNote">Puedes añadir tu foto antes de compartir 💬</div>
-    </section>
+      <button id="btnChoose" class="btn btn-share" style="padding:10px 12px; font-size:14px;">Elegir o sacar foto 📷</button>
+      <button id="btnShare" class="btn btn-google" style="margin-top:6px; padding:10px 12px; font-size:14px;">Compartir con amigos →</button>
+      <small id="shareHint">Primero elige o toma una foto, luego toca “Compartir”.</small>
+    </div>
+
+    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
   </main>
 
 <script>
-  const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
-  const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
+const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
+const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 
-  const TALLY_LINKS = {
-    es: "https://tally.so/r/w2Qla9",
-    en: "https://tally.so/r/w20k9D",
-    de: "https://tally.so/r/mBN1q1",
-    fr: "https://tally.so/r/mek0Dk"
-  };
+let selectedPhoto = null;
 
-  const FLAGS = { es: '🇪🇸', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷' };
+const COPY = {
+  es: {
+    subtitle: "Cuéntanos en 10 segundos cómo fue todo.",
+    publicTitle: "⭐ Reseña pública",
+    publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
+    publicBtn: "Dejar reseña en Google",
+    publicNote: "Queda visible para todos.",
+    privateTitle: "📝 Comentario privado",
+    privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
+    privateBtn: "Enviar comentario privado",
+    privateNote: "Solo lo vemos nosotros.",
+    thanks: "¡Gracias por tu tiempo!",
+    shareTitle: "📸 Comparte tu experiencia",
+    shareText: "Saca o elige una foto y cuéntales a tus amigos que estuviste en Casablanca 🍸✨",
+    shareHint: "Primero elige o toma una foto, luego toca “Compartir”.",
+    shareMsg: "Acabo de disfrutar en Terraza Casablanca Las Canteras 🍸✨ ¡Tienes que venir!",
+  }
+};
 
-  const COPY = {
-    es: {
-      pageTitle: "¿Cómo fue tu experiencia?",
-      subtitle: "Cuéntanos en 10 segundos cómo fue todo.",
-      publicTitle: "⭐ Reseña pública",
-      publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
-      publicBtn: "Dejar reseña en Google",
-      publicNote: "Queda visible para todos.",
-      privateTitle: "📝 Comentario privado",
-      privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
-      privateBtn: "Enviar comentario privado",
-      privateNote: "Solo lo vemos nosotros.",
-      thanks: "¡Gracias por tu tiempo!",
-      shareTitle: "📸 Comparte tu experiencia",
-      shareText: "Saca una foto o elige una de tu galería y cuéntales a tus amigos que estuviste en Casablanca 🍸✨",
-      shareBtn: "Compartir experiencia",
-      shareMsg: "Acabo de disfrutar en Terraza Casablanca Las Canteras 🍹✨ ¡Tienes que venir! 📍 Las Palmas de G.C.",
-      langSelectorTitle: "Cambiar idioma"
-    },
-    en: {
-      pageTitle: "How was your experience?",
-      subtitle: "Tell us in 10 seconds how everything went.",
-      publicTitle: "⭐ Public review",
-      publicText: "If things went well, your review helps us on Google.",
-      publicBtn: "Leave a Google review",
-      publicNote: "Visible to everyone.",
-      privateTitle: "📝 Private feedback",
-      privateText: "If something went wrong, tell us and we’ll fix it.",
-      privateBtn: "Send private feedback",
-      privateNote: "Only we can see it.",
-      thanks: "Thanks for your time!",
-      shareTitle: "📸 Share your experience",
-      shareText: "Take or choose a photo and tell your friends you were at Casablanca 🍸✨",
-      shareBtn: "Share experience",
-      shareMsg: "Just had a great time at Terraza Casablanca Las Canteras 🍹✨ Highly recommended! 📍 Las Palmas de G.C.",
-      langSelectorTitle: "Change language"
-    },
-    de: {
-      pageTitle: "Wie war Ihre Erfahrung?",
-      subtitle: "Erzählen Sie uns in 10 Sekunden, wie alles war.",
-      publicTitle: "⭐ Öffentliche Bewertung",
-      publicText: "Wenn es Ihnen gefallen hat, hilft uns Ihre Bewertung bei Google.",
-      publicBtn: "Google-Bewertung abgeben",
-      publicNote: "Für alle sichtbar.",
-      privateTitle: "📝 Privater Kommentar",
-      privateText: "Wenn etwas schief gelaufen ist, sagen Sie es uns und wir klären es.",
-      privateBtn: "Privaten Kommentar senden",
-      privateNote: "Nur wir sehen es.",
-      thanks: "Vielen Dank für Ihre Zeit!",
-      shareTitle: "📸 Teilen Sie Ihre Erfahrung",
-      shareText: "Machen Sie ein Foto und erzählen Sie Ihren Freunden von Casablanca 🍸✨",
-      shareBtn: "Erfahrung teilen",
-      shareMsg: "Ich habe gerade Drinks und Aussicht bei Terraza Casablanca Las Canteras genossen 🍹✨ Sehr empfehlenswert! 📍 Las Palmas de G.C.",
-      langSelectorTitle: "Sprache ändern"
-    },
-    fr: {
-      pageTitle: "Comment était votre expérience ?",
-      subtitle: "Racontez-nous en 10 secondes comment tout s'est passé.",
-      publicTitle: "⭐ Avis public",
-      publicText: "Si tout s'est bien passé, votre avis nous aide sur Google.",
-      publicBtn: "Laisser un avis Google",
-      publicNote: "Visible par tout le monde.",
-      privateTitle: "📝 Commentaire privé",
-      privateText: "Si quelque chose n'allait pas, dites-le nous et nous le corrigerons.",
-      privateBtn: "Envoyer un commentaire privé",
-      privateNote: "Seulement nous le voyons.",
-      thanks: "Merci pour votre temps !",
-      shareTitle: "📸 Partage ton expérience",
-      shareText: "Prends ou choisis une photo et dis à tes amis que tu étais chez Casablanca 🍸✨",
-      shareBtn: "Partager l’expérience",
-      shareMsg: "Je viens de passer un super moment à la Terraza Casablanca Las Canteras 🍹✨ À ne pas manquer ! 📍 Las Palmas de G.C.",
-      langSelectorTitle: "Changer de langue"
-    }
-  };
+function setLang(lang='es'){
+  const dict = COPY[lang];
+  document.getElementById("subtitle").textContent = dict.subtitle;
+  document.getElementById("publicTitle").textContent = dict.publicTitle;
+  document.getElementById("publicText").textContent = dict.publicText;
+  document.getElementById("btnGoogle").textContent = dict.publicBtn;
+  document.getElementById("publicNote").textContent = dict.publicNote;
+  document.getElementById("privateTitle").textContent = dict.privateTitle;
+  document.getElementById("privateText").textContent = dict.privateText;
+  document.getElementById("btnPrivate").textContent = dict.privateBtn;
+  document.getElementById("privateNote").textContent = dict.privateNote;
+  document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
+  document.getElementById("shareTitle").textContent = dict.shareTitle;
+  document.getElementById("shareText").textContent = dict.shareText;
+  document.getElementById("shareHint").textContent = dict.shareHint;
+  document.getElementById("btnShare").onclick = (e)=>shareExperience(e,dict.shareMsg);
+}
 
-  function getInitialLang() {
-    const savedLang = localStorage.getItem('userLang');
-    if (savedLang && COPY[savedLang]) return savedLang;
-    const browserLangs = navigator.languages || [navigator.language || 'en'];
-    for (const lang of browserLangs) {
-      const langCode = lang.slice(0, 2);
-      if (COPY[langCode]) return langCode;
-    }
-    return 'en';
+document.getElementById("btnChoose").addEventListener("click",()=>document.getElementById("photoInput").click());
+
+document.getElementById("photoInput").addEventListener("change",(e)=>{
+  if(e.target.files && e.target.files[0]){
+    selectedPhoto = e.target.files[0];
+    document.getElementById("shareHint").textContent = "Perfecto 📸 — ahora toca “Compartir con amigos →”.";
+  }
+});
+
+async function shareExperience(e,msg){
+  e.preventDefault();
+  const text = `${msg}\n📍 Terraza Casablanca Las Canteras (Las Palmas de G.C.)`;
+  const shareData = { text };
+
+  if(selectedPhoto){
+    try{
+      const file = selectedPhoto;
+      if(navigator.canShare && navigator.canShare({ files:[file] })){
+        shareData.files = [file];
+      }
+    }catch(err){console.log(err);}
   }
 
-  function setLang(lang) {
-    const dict = COPY[lang] || COPY.en;
-    document.title = dict.pageTitle;
-    document.documentElement.lang = lang;
-    document.getElementById("subtitle").textContent = dict.subtitle;
-    document.getElementById("publicTitle").textContent = dict.publicTitle;
-    document.getElementById("publicText").textContent = dict.publicText;
-    document.getElementById("btnGoogle").textContent = dict.publicBtn;
-    document.getElementById("publicNote").textContent = dict.publicNote;
-    document.getElementById("privateTitle").textContent = dict.privateTitle;
-    document.getElementById("privateText").textContent = dict.privateText;
-    document.getElementById("btnPrivate").textContent = dict.privateBtn;
-    document.getElementById("privateNote").textContent = dict.privateNote;
-    document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
-    document.getElementById("shareTitle").textContent = dict.shareTitle;
-    document.getElementById("shareText").textContent = dict.shareText;
-    document.getElementById("btnShare").textContent = dict.shareBtn;
-    document.getElementById("btnPrivate").href = TALLY_LINKS[lang];
-    document.getElementById("btnShare").onclick = (e) => shareExperience(e, dict.shareMsg);
-    document.getElementById("current-lang-flag").textContent = FLAGS[lang];
-    document.getElementById("current-lang").title = dict.langSelectorTitle;
-    localStorage.setItem('userLang', lang);
-    document.getElementById("lang-options").style.display = 'none';
-  }
-
-  function createLangSelector() {
-    const card = document.querySelector('.card');
-    const selector = document.createElement('div');
-    selector.id = 'lang-selector';
-    selector.innerHTML = `<div id="current-lang"><span id="current-lang-flag"></span></div><div id="lang-options"></div>`;
-    card.prepend(selector);
-    const options = document.getElementById('lang-options');
-    Object.keys(COPY).forEach(code => {
-      const opt = document.createElement('div');
-      opt.className = 'lang-option';
-      opt.dataset.lang = code;
-      opt.innerHTML = `<span>${FLAGS[code]}</span> ${code.toUpperCase()}`;
-      opt.addEventListener('click', () => setLang(code));
-      options.appendChild(opt);
-    });
-    document.getElementById('current-lang').addEventListener('click', e=>{
-      e.stopPropagation();
-      options.style.display = options.style.display==='block'?'none':'block';
-    });
-    document.addEventListener('click', e=>{
-      if(!selector.contains(e.target)) options.style.display='none';
-    });
-  }
-
-  // --- Compartir experiencia con foto + link corto ---
-  async function shareExperience(e, msg) {
-    e.preventDefault();
-
-    const photoInput = document.getElementById("photoInput");
-
-    // Si el usuario aún no ha seleccionado foto, pedírsela
-    if (!photoInput.files.length) {
-      photoInput.click();
-      return;
-    }
-
-    const selectedPhoto = photoInput.files[0];
-    const shareText = `${msg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
-
-    const shareData = { text: shareText };
-
-    // Si el navegador soporta imágenes, las añade
-    if (navigator.canShare && navigator.canShare({ files: [selectedPhoto] })) {
-      shareData.files = [selectedPhoto];
-    }
-
-    try {
+  try{
+    if(navigator.share){
       await navigator.share(shareData);
-    } catch (err) {
-      console.log("Compartir cancelado o fallido:", err);
+      document.getElementById("shareHint").textContent = "✅ ¡Compartido con éxito!";
+      selectedPhoto = null;
+      document.getElementById("photoInput").value = "";
+    }else{
+      await navigator.clipboard.writeText(text);
+      document.getElementById("shareHint").textContent = "Link copiado 📋";
     }
+  }catch(err){
+    console.log("Compartir cancelado:",err);
   }
+}
 
-  (function init() {
-    document.getElementById("brandName").textContent = RESTAURANT_NAME;
-    document.getElementById("btnGoogle").href = GOOGLE_MAPS_SHORT;
-    createLangSelector();
-    setLang(getInitialLang());
-  })();
+(function init(){
+  document.getElementById("brandName").textContent = RESTAURANT_NAME;
+  document.getElementById("btnGoogle").href = GOOGLE_MAPS_SHORT;
+  setLang();
+})();
 </script>
 </body>
 </html>
-
