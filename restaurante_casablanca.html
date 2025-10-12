@@ -5,25 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#0b0f18">
 <title>¿Cómo fue tu experiencia?</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
   :root{
     --text:#0b0f18; --muted:#566073;
     --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
     --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
   }
-
   *,*::before,*::after{box-sizing:border-box}
   html,body{margin:0; height:100%}
-
   body{
     min-height:100svh;
     display:flex; align-items:center; justify-content:center;
     padding:12px;
     font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     color:var(--text);
-    background:
-      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
-      var(--bg);
+    background:radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,var(--bg);
   }
 
   .card{
@@ -38,27 +35,12 @@
     position:relative;
   }
 
-  /* Selector de idioma */
+  /* Idiomas */
   #lang-selector{position:absolute; top:12px; right:12px; z-index:10;}
   #current-lang{
     cursor:pointer; font-size:24px; padding:4px; border-radius:8px;
     background:rgba(0,0,0,.04); display:grid; place-items:center;
-    transition:background .2s ease;
   }
-  #current-lang:hover{background:rgba(0,0,0,.08);}
-  #lang-options{
-    display:none; position:absolute; top:calc(100% + 4px); right:0;
-    background:var(--card); border:1px solid var(--border);
-    border-radius:12px; box-shadow:0 8px 20px rgba(12,20,33,.1);
-    padding:6px; overflow:hidden;
-  }
-  .lang-option{
-    display:flex; align-items:center; gap:8px; padding:8px 12px;
-    font-size:14px; font-weight:600; border-radius:8px; cursor:pointer;
-    transition:background-color .2s ease;
-  }
-  .lang-option:hover{background-color:var(--bg);}
-
   .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
   .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
   .logo img{width:100%; height:100%; object-fit:cover}
@@ -74,7 +56,6 @@
   }
   .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
   .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
-
   .btn{
     display:block; width:100%; text-align:center; text-decoration:none;
     padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
@@ -85,10 +66,9 @@
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
   .note{font-size:12px; color:var(--muted); text-align:center}
 
-  /* ==== BLOQUE DE COMPARTIR ==== */
+  /* Compartir */
   .share-tile{
     text-align:center;
-    background:var(--card);
     border:1px solid var(--border);
     border-radius:16px;
     padding:16px;
@@ -107,75 +87,79 @@
   .telegram{background:#0088cc;}
   .instagram{background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);}
   .copy{background:#64748b;}
-  @media(max-width:360px){.share-btn{font-size:13px; padding:9px 10px;}}
+
+  /* Tarjeta generada */
+  #cardPreview{
+    display:none;
+    margin-top:12px;
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    background:#fff;
+    text-align:center;
+    font-family:inherit;
+  }
+  #cardPreview h3{margin:8px 0;font-size:20px;}
+  #cardPreview p{margin:6px 0;color:#333;}
+  #userMessage{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px;margin-top:8px;font-size:13px;}
+  #generateCard{background:#0b0f18;color:#fff;padding:10px 14px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:10px;}
+  #shareGenerated{display:none;margin-top:8px;padding:8px 14px;background:#2563eb;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;}
 </style>
 </head>
 <body>
 <main class="card" role="main" aria-labelledby="t">
   <header class="brand">
-    <div class="logo">
-      <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
-    </div>
+    <div class="logo"><img src="img/imagen_circular_recortada.png" alt="Logo"></div>
     <h1 id="t"><span id="brandName">Restaurante Casablanca</span></h1>
-    <p id="subtitle">Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
+    <p>Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
   </header>
 
   <div class="grid">
-    <section class="tile" aria-labelledby="publicTitle">
-      <h2 id="publicTitle">⭐ Reseña pública</h2>
-      <p id="publicText">Si te fue bien, tu reseña nos da visibilidad en Google.</p>
+    <section class="tile">
+      <h2>⭐ Reseña pública</h2>
+      <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
       <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
-      <div class="note" id="publicNote">Queda visible para todos.</div>
+      <div class="note">Queda visible para todos.</div>
     </section>
 
-    <section class="tile" aria-labelledby="privateTitle">
-      <h2 id="privateTitle">📝 Comentario privado</h2>
-      <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+    <section class="tile">
+      <h2>📝 Comentario privado</h2>
+      <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
       <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
-      <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
+      <div class="note">Solo lo vemos nosotros.</div>
     </section>
   </div>
 
-  <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
 
-  <!-- 🔥 BLOQUE DE COMPARTIR -->
-  <section class="tile share-tile" aria-labelledby="shareTitle">
-    <h2 id="shareTitle">📤 Comparte el restaurante</h2>
-    <p>¿Te gustó la experiencia? ¡Recomiéndanos a tus amigos! 💫</p>
+  <!-- 🔥 Bloque de compartir -->
+  <section class="tile share-tile">
+    <h2>📤 Comparte el restaurante</h2>
+    <p>¿Te gustó la experiencia? ¡Recomiéndanos o crea tu tarjeta! 💫</p>
     <div class="share-buttons">
       <a id="shareWhatsapp" class="share-btn whatsapp" target="_blank" rel="noopener">WhatsApp</a>
       <a id="shareTelegram" class="share-btn telegram" target="_blank" rel="noopener">Telegram</a>
       <a id="shareInstagram" class="share-btn instagram" target="_blank" rel="noopener">Instagram</a>
       <button id="copyLink" class="share-btn copy">Copiar enlace</button>
     </div>
-    <div class="note">Gracias por ayudarnos a crecer 💛</div>
+
+    <!-- Tarjeta de experiencia -->
+    <div id="cardPreview">
+      <h3>He visitado Terraza Casa Blanca 🍸</h3>
+      <p>y me encantó 😍</p>
+      <p>📍 <a href="https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk" target="_blank" style="color:#2563eb;text-decoration:none;">Ver ubicación</a></p>
+      <textarea id="userMessage" placeholder="Escribe aquí algo sobre tu experiencia (opcional)"></textarea>
+      <button id="generateCard">Generar tarjeta</button>
+      <button id="shareGenerated">Compartir tarjeta</button>
+    </div>
   </section>
 </main>
 
 <script>
-const RESTAURANT_NAME = "Casablanca · Las Canteras";
-const PLACE_ID_OR_URL = "https://www.google.com/search?q=Restaurante+Casablanca+Las+Canteras";
-const MAPS_URL = "https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu&g_ep=EgoyMDI1MTAwOC4wIKXMDSoASAFQAw%3D%3D"; // 🔗 Cambia este enlace
-
-// Formularios Tally
-const TALLY_LINKS = {
-  es: "https://tally.so/r/w2Qla9",
-  en: "https://tally.so/r/w20k9D",
-  de: "https://tally.so/r/mBN1q1",
-  fr: "https://tally.so/r/mek0Dk"
-};
-const FLAGS = { es: '🇪🇸', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷' };
-
-// Textos
-const COPY = {
-  es: { thanks:"¡Gracias por tu tiempo!" },
-  en: { thanks:"Thanks for your time!" },
-  de: { thanks:"Vielen Dank für Ihre Zeit!" },
-  fr: { thanks:"Merci pour votre temps !" }
-};
+const MAPS_URL = "https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk";
 
 function setupShareSection(){
-  const message = encodeURIComponent("✨ Te recomiendo el Restaurante Casablanca 🍹 — comida genial y vistas increíbles frente al mar 🌅");
+  const message = encodeURIComponent("✨ Te recomiendo Terraza Casa Blanca 🍹 — comida genial y vistas increíbles frente al mar 🌅");
   const full = `${message}%0A${encodeURIComponent(MAPS_URL)}`;
   document.getElementById("shareWhatsapp").href = `https://wa.me/?text=${full}`;
   document.getElementById("shareTelegram").href = `https://t.me/share/url?url=${encodeURIComponent(MAPS_URL)}&text=${message}`;
@@ -190,22 +174,40 @@ function setupShareSection(){
   });
 }
 
-function createLangSelector(){
-  const card=document.querySelector('.card');
-  const s=document.createElement('div');
-  s.id='lang-selector';
-  s.innerHTML=`
-    <div id="current-lang"><span id="current-lang-flag">🇪🇸</span></div>
-    <div id="lang-options"></div>`;
-  card.prepend(s);
-}
+// === Generador de tarjeta ===
+const generateBtn = document.getElementById("generateCard");
+const shareBtn = document.getElementById("shareGenerated");
+generateBtn.addEventListener("click",()=>{
+  html2canvas(document.getElementById("cardPreview")).then(canvas=>{
+    const link=document.createElement("a");
+    link.download="Mi_experiencia_Casablanca.png";
+    link.href=canvas.toDataURL();
+    link.click();
+    shareBtn.style.display="inline-block";
+  });
+});
+
+shareBtn.addEventListener("click",()=>{
+  html2canvas(document.getElementById("cardPreview")).then(canvas=>{
+    canvas.toBlob(blob=>{
+      const file = new File([blob],"Mi_experiencia_Casablanca.png",{type:"image/png"});
+      if(navigator.share){
+        navigator.share({
+          title:"Mi experiencia en Terraza Casa Blanca",
+          text:"He visitado Terraza Casa Blanca 🍸 y me encantó 😍",
+          files:[file]
+        });
+      }else{
+        alert("Tu navegador no soporta compartir imágenes directamente.");
+      }
+    });
+  });
+});
 
 (function init(){
-  document.getElementById("brandName").textContent=RESTAURANT_NAME;
-  document.getElementById("btnGoogle").href=PLACE_ID_OR_URL;
-  createLangSelector();
   setupShareSection();
 })();
 </script>
 </body>
 </html>
+
