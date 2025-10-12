@@ -13,7 +13,7 @@
   }
 
   *,*::before,*::after{box-sizing:border-box}
-  html,body{margin:0; height:100%}
+  html,body{margin:0; height:100%;}
 
   body{
     min-height:100svh;
@@ -28,8 +28,8 @@
 
   .card{
     width:min(580px, 100%);
-    max-height:100svh;
-    display:flex; flex-direction:column; gap:14px;
+    min-height:100svh;
+    display:flex; flex-direction:column; justify-content:center; gap:14px;
     background:var(--card);
     border:1px solid var(--border);
     border-radius:20px;
@@ -38,46 +38,31 @@
     position:relative;
   }
 
-  #lang-selector{
-    position:absolute; top:12px; right:12px;
-    z-index:10;
-  }
+  /* --- Selector de idioma --- */
+  #lang-selector{position:absolute; top:12px; right:12px; z-index:10;}
   #current-lang{
-    cursor:pointer;
-    font-size:24px;
-    padding:4px;
-    border-radius:8px;
-    background:rgba(0,0,0,.04);
-    display:grid; place-items:center;
+    cursor:pointer; font-size:24px; padding:4px; border-radius:8px;
+    background:rgba(0,0,0,.04); display:grid; place-items:center;
     transition:background .2s ease;
   }
   #current-lang:hover{ background:rgba(0,0,0,.08); }
   #lang-options{
-    display:none;
-    position:absolute;
-    top:calc(100% + 4px);
-    right:0;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(12,20,33,.1);
-    padding:6px;
+    display:none; position:absolute; top:calc(100% + 4px); right:0;
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    box-shadow:0 8px 20px rgba(12,20,33,.1); padding:6px;
   }
-  .lang-option{
-    display:flex; align-items:center; gap:8px;
-    padding:8px 12px;
-    font-size:14px;
-    font-weight:600;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background-color .2s ease;
-  }
-  .lang-option:hover{ background-color:var(--bg); }
+  .lang-option{display:flex; align-items:center; gap:8px; padding:8px 12px;
+    font-size:14px; font-weight:600; border-radius:8px; cursor:pointer;
+    transition:background-color .2s ease;}
+  .lang-option:hover{background-color:var(--bg);}
+  /* ------------------------------------------- */
 
   .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
-  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
+  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden;
+    display:grid; place-items:center; background:#fff;
+    box-shadow:0 4px 10px rgba(0,0,0,.08)}
   .logo img{width:100%; height:100%; object-fit:cover}
-  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
+  .brand h1{margin:6px 0 0; font-size:22px; text-align:center}
   .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
 
   .grid{display:grid; gap:12px}
@@ -94,19 +79,11 @@
     display:block; width:100%; text-align:center; text-decoration:none;
     padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
     box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
-    will-change:transform;
   }
   .btn:active{transform:translateY(1px)}
   .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
   .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-  .btn-share{background:linear-gradient(180deg,#f59e0b,#d97706)}
   .note{font-size:12px; color:var(--muted); text-align:center}
-
-  @media(max-width:360px){
-    .brand h1{font-size:20px}
-    .btn{font-size:14px; padding:12px 14px}
-    .tile p{font-size:12px}
-  }
 </style>
 </head>
 <body>
@@ -137,17 +114,19 @@
 
     <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 
-    <!-- NUEVA SECCIÓN DE COMPARTIR -->
-    <div class="note" id="shareOption">
-      📸 <strong id="shareTitle">Comparte tu experiencia</strong><br>
-      <span id="shareText">Cuéntales a tus amigos que estuviste disfrutando en Casablanca, con cócteles, vistas y buena vibra.</span><br>
-      <a id="btnShare" href="#" class="btn btn-share" style="margin-top:10px;">Compartir con amigos</a>
-    </div>
+    <!-- Bloque compartir (versión discreta) -->
+    <p class="note" id="shareOption">
+      <span id="shareTitle">📸 Comparte tu experiencia</span><br>
+      <span id="shareText">Cuéntales a tus amigos que estuviste en Casablanca, disfrutando de cócteles, vistas y buena vibra.</span><br>
+      <a id="btnShare" href="#" style="display:inline-block;margin-top:6px;font-weight:600;text-decoration:none;color:var(--google);">
+        Compartir con amigos →
+      </a>
+    </p>
   </main>
 
 <script>
   const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
-  const GOOGLE_MAPS_LINK = "https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu&g_ep=EgoyMDI1MTAwOC4wIKXMDSoASAFQAw%3D%3D";
+  const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 
   const TALLY_LINKS = {
     es: "https://tally.so/r/w2Qla9",
@@ -172,8 +151,8 @@
       privateNote: "Solo lo vemos nosotros.",
       thanks: "¡Gracias por tu tiempo!",
       shareTitle: "📸 Comparte tu experiencia",
-      shareText: "Cuéntales a tus amigos que estuviste disfrutando en Casablanca, con cócteles, vistas y buena vibra.",
-      shareBtn: "Compartir con amigos",
+      shareText: "Cuéntales a tus amigos que estuviste en Casablanca, disfrutando de cócteles, vistas y buena vibra.",
+      shareBtn: "Compartir con amigos →",
       shareMsg: "Acabo de disfrutar en Terraza Casablanca Las Canteras 🍸✨ ¡Tienes que venir!",
       langSelectorTitle: "Cambiar idioma"
     },
@@ -190,8 +169,8 @@
       privateNote: "Only we can see it.",
       thanks: "Thanks for your time!",
       shareTitle: "📸 Share your experience",
-      shareText: "Tell your friends you enjoyed cocktails, views and great vibes at Casablanca!",
-      shareBtn: "Share with friends",
+      shareText: "Tell your friends you enjoyed cocktails, sea views and good vibes at Casablanca.",
+      shareBtn: "Share with friends →",
       shareMsg: "Just had a great time at Terraza Casablanca Las Canteras 🍸✨ Highly recommended!",
       langSelectorTitle: "Change language"
     },
@@ -209,7 +188,7 @@
       thanks: "Vielen Dank für Ihre Zeit!",
       shareTitle: "📸 Teilen Sie Ihre Erfahrung",
       shareText: "Erzählen Sie Ihren Freunden von Ihren Drinks und der tollen Atmosphäre bei Casablanca!",
-      shareBtn: "Mit Freunden teilen",
+      shareBtn: "Mit Freunden teilen →",
       shareMsg: "Ich habe gerade die Aussicht und Drinks bei Terraza Casablanca Las Canteras genossen 🍸✨ Sehr empfehlenswert!",
       langSelectorTitle: "Sprache ändern"
     },
@@ -227,7 +206,7 @@
       thanks: "Merci pour votre temps !",
       shareTitle: "📸 Partage ton expérience",
       shareText: "Dis à tes amis que tu as profité de la vue et des cocktails chez Casablanca 🍸✨",
-      shareBtn: "Partager avec des amis",
+      shareBtn: "Partager avec des amis →",
       shareMsg: "Je viens de passer un super moment à la Terraza Casablanca Las Canteras 🍸✨ À ne pas manquer !",
       langSelectorTitle: "Changer de langue"
     }
@@ -262,10 +241,10 @@
     document.getElementById("shareText").textContent = dict.shareText;
     document.getElementById("btnShare").textContent = dict.shareBtn;
     document.getElementById("btnPrivate").href = TALLY_LINKS[lang];
+    document.getElementById("btnShare").onclick = (e) => shareExperience(e, dict.shareMsg);
     document.getElementById("current-lang-flag").textContent = FLAGS[lang];
     document.getElementById("current-lang").title = dict.langSelectorTitle;
     localStorage.setItem('userLang', lang);
-    document.getElementById("btnShare").onclick = (e) => shareExperience(e, dict.shareMsg);
     document.getElementById("lang-options").style.display = 'none';
   }
 
@@ -275,22 +254,21 @@
     selector.id = 'lang-selector';
     selector.innerHTML = `<div id="current-lang"><span id="current-lang-flag"></span></div><div id="lang-options"></div>`;
     card.prepend(selector);
-    const optionsContainer = document.getElementById('lang-options');
-    Object.keys(COPY).forEach(langCode => {
-      const option = document.createElement('div');
-      option.className = 'lang-option';
-      option.dataset.lang = langCode;
-      option.innerHTML = `<span>${FLAGS[langCode]}</span> <span>${langCode.toUpperCase()}</span>`;
-      option.addEventListener('click', () => setLang(langCode));
-      optionsContainer.appendChild(option);
+    const options = document.getElementById('lang-options');
+    Object.keys(COPY).forEach(code => {
+      const opt = document.createElement('div');
+      opt.className = 'lang-option';
+      opt.dataset.lang = code;
+      opt.innerHTML = `<span>${FLAGS[code]}</span> ${code.toUpperCase()}`;
+      opt.addEventListener('click', () => setLang(code));
+      options.appendChild(opt);
     });
-    document.getElementById('current-lang').addEventListener('click', e => {
+    document.getElementById('current-lang').addEventListener('click', e=>{
       e.stopPropagation();
-      const options = document.getElementById('lang-options');
-      options.style.display = options.style.display === 'block' ? 'none' : 'block';
+      options.style.display = options.style.display==='block'?'none':'block';
     });
-    document.addEventListener('click', e => {
-      if (!selector.contains(e.target)) document.getElementById('lang-options').style.display = 'none';
+    document.addEventListener('click', e=>{
+      if(!selector.contains(e.target)) options.style.display='none';
     });
   }
 
@@ -298,29 +276,22 @@
     e.preventDefault();
     try {
       if (navigator.share) {
-        await navigator.share({
-          title: "Terraza Casablanca Las Canteras",
-          text: msg,
-          url: GOOGLE_MAPS_LINK
-        });
+        await navigator.share({ text: msg }); // sin link visible
       } else {
-        await navigator.clipboard.writeText(GOOGLE_MAPS_LINK);
-        const btn = document.getElementById("btnShare");
-        const oldText = btn.textContent;
-        btn.textContent = "✅ Enlace copiado";
-        setTimeout(() => btn.textContent = oldText, 2000);
+        await navigator.clipboard.writeText(GOOGLE_MAPS_SHORT);
+        const b = document.getElementById("btnShare");
+        const old = b.textContent;
+        b.textContent = "✅ Enlace copiado";
+        setTimeout(()=>b.textContent=old,2000);
       }
-    } catch (err) {
-      console.log("Compartir cancelado o no soportado:", err);
-    }
+    } catch {}
   }
 
   (function init() {
     document.getElementById("brandName").textContent = RESTAURANT_NAME;
-    document.getElementById("btnGoogle").href = GOOGLE_MAPS_LINK;
+    document.getElementById("btnGoogle").href = GOOGLE_MAPS_SHORT;
     createLangSelector();
-    const initialLang = getInitialLang();
-    setLang(initialLang);
+    setLang(getInitialLang());
   })();
 </script>
 </body>
