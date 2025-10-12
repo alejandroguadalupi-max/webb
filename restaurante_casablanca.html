@@ -117,7 +117,13 @@
 </style>
 </head>
 <body>
-<main class="card" role="main" aria-labelledby="t">
+<main class="card" id="mainCard" role="main" aria-labelledby="t">
+  <!-- Selector de idioma -->
+  <div id="lang-selector" aria-haspopup="true">
+    <div id="current-lang" aria-label="Cambiar idioma"></div>
+    <div id="lang-options" role="menu" aria-hidden="true"></div>
+  </div>
+
   <header class="brand">
     <div class="logo">
       <img src="img/imagen_circular_recortada.png" alt="Logo Casablanca">
@@ -148,11 +154,17 @@
 </main>
 
 <script>
-/* Configuración y links */
+/* Config */
 const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
+
+/* Formularios Tally */
 const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1", fr:"https://tally.so/r/mek0Dk" };
+
+/* Banderas */
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
+
+/* Textos */
 const COPY = {
   es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", shareBtn:"Compartir experiencia con amigos", thanks:"¡Gracias por tu tiempo!"},
   en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", shareBtn:"Share experience with friends", thanks:"Thanks for your time!"},
@@ -162,35 +174,59 @@ const COPY = {
 
 /* --- Funciones de idioma --- */
 const LANGS = Object.keys(COPY);
-function getInitialLang(){ const saved = localStorage.getItem('userLang'); if(saved && COPY[saved]) return saved; const browser = navigator.languages || [navigator.language || 'es']; for(const b of browser){ const c = b.slice(0,2); if(COPY[c]) return c; } return 'es'; }
-function setLang(lang){
-  if(!COPY[lang]) lang='es';
-  const d=COPY[lang];
-  document.documentElement.lang=lang;
-  document.title=d.pageTitle;
-  document.getElementById('subtitle').textContent=d.subtitle;
-  document.getElementById('publicTitle').textContent=d.publicTitle;
-  document.getElementById('publicText').textContent=d.publicText;
-  document.getElementById('btnGoogle').textContent=d.publicBtn;
-  document.getElementById('privateTitle').textContent=d.privateTitle;
-  document.getElementById('privateText').textContent=d.privateText;
-  document.getElementById('btnPrivate').textContent=d.privateBtn;
-  document.getElementById('openShare').textContent="📸 "+d.shareBtn;
-  document.getElementById('thanks').innerHTML=`<strong>${d.thanks}</strong>`;
-  document.getElementById('btnPrivate').href=TALLY_LINKS[lang]||TALLY_LINKS['es'];
-  localStorage.setItem('userLang',lang);
-  const options=document.getElementById('lang-options'); if(options) options.style.display='none';
+
+function getInitialLang(){
+  const saved = localStorage.getItem('userLang');
+  if(saved && COPY[saved]) return saved;
+  const browser = navigator.languages || [navigator.language || 'es'];
+  for(const b of browser){ const c = b.slice(0,2); if(COPY[c]) return c; }
+  return 'es';
 }
+
+function setLang(lang){
+  if(!COPY[lang]) lang = 'es';
+  const d = COPY[lang];
+  document.documentElement.lang = lang;
+  document.title = d.pageTitle;
+  document.getElementById('subtitle').textContent = d.subtitle;
+  document.getElementById('publicTitle').textContent = d.publicTitle;
+  document.getElementById('publicText').textContent = d.publicText;
+  document.getElementById('btnGoogle').textContent = d.publicBtn;
+  document.getElementById('privateTitle').textContent = d.privateTitle;
+  document.getElementById('privateText').textContent = d.privateText;
+  document.getElementById('btnPrivate').textContent = d.privateBtn;
+  document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
+  document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
+  document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
+  document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
+  document.getElementById('current-lang').textContent = FLAGS[lang] || '🇪🇸';
+  localStorage.setItem('userLang', lang);
+  document.getElementById('lang-options').style.display = 'none';
+}
+
 function createLangSelector(){
-  const options=document.getElementById('lang-options'); options.innerHTML='';
-  LANGS.forEach(code=>{ const o=document.createElement('div'); o.className='lang-option'; o.textContent=`${FLAGS[code]} ${code.toUpperCase()}`; o.addEventListener('click',()=>setLang(code)); options.appendChild(o); });
-  document.getElementById('current-lang').addEventListener('click',(e)=>{ e.stopPropagation(); options.style.display=options.style.display==='block'?'none':'block'; });
-  document.addEventListener('click',(e)=>{ if(!document.getElementById('lang-selector').contains(e.target)) options.style.display='none'; });
+  const options = document.getElementById('lang-options');
+  options.innerHTML = '';
+  LANGS.forEach(code=>{
+    const o = document.createElement('div');
+    o.className = 'lang-option';
+    o.textContent = `${FLAGS[code]} ${code.toUpperCase()}`;
+    o.addEventListener('click', ()=> setLang(code));
+    options.appendChild(o);
+  });
+  document.getElementById('current-lang').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    options.style.display = options.style.display === 'block' ? 'none' : 'block';
+  });
+  document.addEventListener('click', (e)=>{
+    if(!document.getElementById('lang-selector').contains(e.target)){
+      options.style.display = 'none';
+    }
+  });
 }
 
 /* Inicializar */
 (function init(){
-  document.getElementById('btnGoogle').href=GOOGLE_MAPS_SHORT;
   createLangSelector();
   setLang(getInitialLang());
 })();
