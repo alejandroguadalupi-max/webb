@@ -5,171 +5,149 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#0b0f18">
 <title>¿Cómo fue tu experiencia?</title>
+
+<!-- ✅ META PARA PREVISUALIZACIÓN (WhatsApp, Telegram, etc.) -->
+<meta property="og:title" content="Restaurante Casablanca · Las Canteras">
+<meta property="og:description" content="He visitado Restaurante Casablanca · Las Canteras y te lo recomiendo 🍹✨ Comida genial y vistas espectaculares frente al mar 🌅">
+<meta property="og:image" content="https://tudominio.com/img/share_card.jpg">
+<meta property="og:type" content="website">
+
 <style>
-  :root{
-    --text:#0b0f18; --muted:#566073;
-    --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
-    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
-  }
+  :root{
+    --text:#0b0f18; --muted:#566073;
+    --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
+    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
+    --share:#4f46e5;
+  }
 
-  *,*::before,*::after{box-sizing:border-box}
-  html,body{margin:0; height:100%}
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0; height:100%}
 
-  body{
-    min-height:100svh;
-    display:flex; align-items:center; justify-content:center;
-    padding:12px;
-    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-    color:var(--text);
-    background:
-      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
-      var(--bg);
-  }
+  body{
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
+      var(--bg);
+  }
 
-  .card{
-    width:min(580px, 100%);
-    max-height:100svh;
-    display:flex; flex-direction:column; gap:14px;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:18px;
-    box-shadow:0 18px 45px rgba(12,20,33,.08);
-    position:relative;
-  }
+  .card{
+    width:min(580px, 100%);
+    display:flex; flex-direction:column; gap:18px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:24px;
+    box-shadow:0 18px 45px rgba(12,20,33,.08);
+  }
 
-  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
-  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
-  .logo img{width:100%; height:100%; object-fit:cover}
-  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
-  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
+  .logo{width:80px; height:80px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
+  .logo img{width:100%; height:100%; object-fit:cover}
+  .brand h1{margin:8px 0 0; font-size:23px; text-align:center}
+  .brand p{margin:2px 0 0; color:var(--muted); font-size:15px; text-align:center}
 
-  .grid{display:grid; gap:12px}
-  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
+  .grid{display:grid; gap:12px}
+  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
-  .tile{
-    border:1px solid var(--border); border-radius:16px; background:#fff;
-    padding:12px; display:flex; flex-direction:column; align-items:center;
-  }
-  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
-  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
+  .tile{
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:#fff;
+    padding:14px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .tile h2{margin:0 0 6px; font-size:17px; text-align:center}
+  .tile p{margin:0 0 10px; font-size:14px; color:var(--muted); text-align:center}
 
-  .btn{
-    display:block; width:100%; text-align:center; text-decoration:none;
-    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
-    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
-  }
-  .btn:active{transform:translateY(1px)}
-  .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
-  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-  .btn-share{background:linear-gradient(180deg,#6366f1,#4338ca);}
-  .note{font-size:12px; color:var(--muted); text-align:center}
+  .btn{
+    display:block; width:100%; text-align:center; text-decoration:none;
+    padding:14px 16px; border-radius:12px;
+    font-weight:700; font-size:15px; color:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+    transition:transform .06s ease, filter .2s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn:hover{filter:brightness(1.05);}
+  .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
+  .btn-share{background:linear-gradient(180deg,#6366f1,#4338ca);}
+  .note{font-size:12px; color:var(--muted); text-align:center}
 
-  /* Estilos para el nuevo botón de compartir único */
-  .share-container {
-    border:1px solid var(--border); 
-    border-radius:16px; 
-    background:#fff;
-    padding:20px; 
-    display:flex; 
-    flex-direction:column; 
-    align-items:center;
-    gap: 10px;
-    text-align: center;
-  }
-  .share-container h2 {
-    margin: 0 0 4px; 
-    font-size: 18px; 
-  }
-  .share-container p {
-    margin: 0 0 10px; 
-    font-size: 14px; 
-    color: var(--muted);
-  }
+  textarea{
+    width:100%; min-height:90px; resize:vertical;
+    border:1px solid var(--border); border-radius:12px;
+    padding:10px; font-family:inherit; font-size:14px;
+    background:var(--bg); color:var(--text);
+  }
 </style>
 </head>
 <body>
-<main class="card" role="main" aria-labelledby="t">
-  <header class="brand">
-    <div class="logo">
-      <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
-    </div>
-    <h1 id="t">Restaurante Casablanca</h1>
-    <p>Cuéntanos en 10 segundos cómo fue todo.</p>
-  </header>
+<main class="card">
+  <header class="brand">
+    <div class="logo">
+      <img src="img/imagen_circular_recortada.png" alt="Logo Restaurante Casablanca">
+    </div>
+    <h1>Restaurante Casablanca</h1>
+    <p>Cuéntanos en 10 segundos cómo fue tu experiencia.</p>
+  </header>
 
-  <div class="grid">
-    <section class="tile">
-      <h2>⭐ Reseña pública</h2>
-      <p>Si te fue bien, tu reseña nos da visibilidad en Google.</p>
-      <a class="btn btn-google" target="_blank" href="https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu">
-        Dejar reseña en Google
-      </a>
-      <div class="note">Queda visible para todos.</div>
-    </section>
+  <div class="grid">
+    <section class="tile">
+      <h2>⭐ Reseña pública</h2>
+      <p>Si te fue bien, deja una reseña en Google. Nos ayudas muchísimo.</p>
+      <a class="btn btn-google" target="_blank" href="https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu">Dejar reseña en Google</a>
+      <div class="note">Visible para todos.</div>
+    </section>
 
-    <section class="tile">
-      <h2>📝 Comentario privado</h2>
-      <p>Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-      <a class="btn btn-private" target="_blank" href="https://tally.so/r/w2Qla9">Enviar comentario privado</a>
-      <div class="note">Solo lo vemos nosotros.</div>
-    </section>
-  </div>
-  
-    <section class="share-container">
-    <h2>✨ ¡Me ha encantado!</h2>
-    <p>Comparte tu recomendación con tus amigos en WhatsApp, Instagram, etc.</p>
-    <button id="shareButton" class="btn btn-share">
-      📤 Recomendar y Compartir
-    </button>
-    <div class="note">Se abrirá el menú nativo de tu móvil.</div>
-  </section>
+    <section class="tile">
+      <h2>📝 Comentario privado</h2>
+      <p>Si algo no salió bien, cuéntanoslo en privado y lo solucionamos.</p>
+      <a class="btn btn-private" target="_blank" href="https://tally.so/r/w2Qla9">Enviar comentario</a>
+      <div class="note">Solo lo vemos nosotros.</div>
+    </section>
+  </div>
 
-  <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
+  <section class="tile">
+    <h2>💬 Tu experiencia (opcional)</h2>
+    <p>¿Quieres contar cómo lo pasaste?</p>
+    <textarea id="experience" placeholder="Escribe aquí tu experiencia..."></textarea>
+  </section>
+
+  <button id="shareButton" class="btn btn-share">📤 Compartir con amigos</button>
+  <p class="note"><strong>¡Gracias por tu tiempo!</strong></p>
 </main>
 
 <script>
 const MAPS_URL = "https://www.google.com/maps/place/Terraza+Casa+Blanca+Las+Canteras/@28.141278,-15.4374678,768m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc409546bd250fb7:0x1844c8ed175e5104!8m2!3d28.141278!4d-15.4348929!16s%2Fg%2F11qb8pxwyk?entry=ttu";
 
 document.getElementById("shareButton").addEventListener("click", async () => {
-    const titleText = "Restaurante Casablanca Las Canteras";
-    const shareText = "¡He visitado el Restaurante Casablanca y me ha encantado! Te lo recomiendo. Comida excelente y vistas increíbles frente al mar. 🍹🌅";
+  const exp = document.getElementById("experience").value.trim();
+  
+  const text = exp
+    ? `He visitado *Restaurante Casablanca · Las Canteras* y te lo recomiendo 🍹✨\n\n"${exp}"\n\nComida genial y vistas frente al mar 🌅`
+    : `He visitado *Restaurante Casablanca · Las Canteras* y te lo recomiendo 🍹✨\n\nComida genial y vistas frente al mar 🌅`;
 
-    // Objeto de datos para la Web Share API
-    const shareData = {
-        title: titleText,
-        text: shareText,
-        url: MAPS_URL // La URL/Ubicación que quieres compartir
-    };
+  const shareData = {
+    title: "Restaurante Casablanca · Las Canteras",
+    text,
+    url: MAPS_URL
+  };
 
-    if (navigator.share) {
-        try {
-            // Usa Web Share API para abrir el menú nativo
-            await navigator.share(shareData);
-        } catch (err) {
-            // Manejo de errores (por ejemplo, el usuario cancela)
-            console.log("No se pudo compartir:", err);
-            if (err.name !== 'AbortError') {
-                // Si no es un error de cancelación del usuario, notificar
-                alert("Ocurrió un error al intentar compartir. Por favor, intenta de nuevo.");
-            }
-        }
-    } else {
-        // Fallback: Si el navegador no soporta la Web Share API (por ejemplo, en escritorio)
-        // Copiamos el mensaje completo al portapapeles.
-        const fallbackText = `${shareData.text}\n\nMira la ubicación aquí: ${shareData.url}`;
-        
-        try {
-            await navigator.clipboard.writeText(fallbackText);
-            alert("Texto de recomendación y enlace copiados al portapapeles ✅");
-        } catch (err) {
-            console.log("No se pudo copiar el texto:", err);
-            alert("Tu navegador no soporta la función de compartir nativa. Copia este enlace manualmente: " + MAPS_URL);
-        }
-    }
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.warn("Cancelado o no se pudo compartir:", err);
+    }
+  } else {
+    await navigator.clipboard.writeText(`${text}\n${MAPS_URL}`);
+    alert("Texto copiado al portapapeles ✅");
+  }
 });
 </script>
 </body>
 </html>
-
-
