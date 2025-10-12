@@ -6,314 +6,353 @@
 <meta name="theme-color" content="#0b0f18">
 <title>¿Cómo fue tu experiencia?</title>
 <style>
-  :root{
-    --text:#0b0f18; --muted:#566073;
-    --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
-    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
+  :root{
+    --text:#0b0f18; --muted:#566073;
+    --brand:#0b0f18; --ok:#16a34a; --google:#2563eb;
+    --share:#94a3b8; /* Nuevo color para el botón de compartir */
+    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0; height:100%}
+
+  body{
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
+      var(--bg);
+  }
+
+  .card{
+    width:min(580px, 100%);
+    max-height:100svh;
+    display:flex; flex-direction:column; gap:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 18px 45px rgba(12,20,33,.08);
+    position:relative; /* Para el selector de idioma */
+  }
+
+  /* --- Estilos para el Selector de Idioma (Sin cambios) --- */
+  #lang-selector{
+    position:absolute; top:12px; right:12px;
+    z-index:10;
+  }
+  #current-lang{
+    cursor:pointer;
+    font-size:24px;
+    padding:4px;
+    border-radius:8px;
+    background:rgba(0,0,0,.04);
+    display:grid; place-items:center;
+    transition:background .2s ease;
+  }
+  #current-lang:hover{ background:rgba(0,0,0,.08); }
+  #lang-options{
+    display:none; /* Se muestra con JS */
+    position:absolute;
+    top:calc(100% + 4px);
+    right:0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(12,20,33,.1);
+    padding:6px;
+    overflow:hidden;
+  }
+  .lang-option{
+    display:flex; align-items:center; gap:8px;
+    padding:8px 12px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background-color .2s ease;
+  }
+  .lang-option:hover{ background-color:var(--bg); }
+  /* ------------------------------------------- */
+
+  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
+  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
+  .logo img{width:100%; height:100%; object-fit:cover}
+  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
+  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
+
+  .grid{display:grid; gap:12px}
+  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
+
+  .tile{
+    border:1px solid var(--border); border-radius:16px; background:#fff;
+    padding:12px; display:flex; flex-direction:column; align-items:center;
+  }
+  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
+  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
+  
+  /* Estilo específico para el tile de compartir para que ocupe todo el ancho en mobile */
+  .shareTile {
+    grid-column: 1 / -1; /* Ocupa las 2 columnas */
+    padding: 18px 12px; /* Un poco más de padding vertical */
   }
 
-  *,*::before,*::after{box-sizing:border-box}
-  html,body{margin:0; height:100%}
+  .btn{
+    display:block; width:100%; text-align:center; text-decoration:none;
+    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
+    will-change:transform;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
+  /* NUEVO ESTILO: Botón de compartir */
+  .btn-share{background:linear-gradient(180deg,#c9d2de,var(--share))}
 
-  body{
-    min-height:100svh;
-    display:flex; align-items:center; justify-content:center;
-    padding:12px;
-    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-    color:var(--text);
-    background:
-      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
-      var(--bg);
-  }
+  .note{font-size:12px; color:var(--muted); text-align:center}
 
-  .card{
-    width:min(580px, 100%);
-    max-height:100svh;
-    display:flex; flex-direction:column; gap:14px;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:18px;
-    box-shadow:0 18px 45px rgba(12,20,33,.08);
-    position:relative; /* Para el selector de idioma */
-  }
-
-  /* --- Estilos para el Selector de Idioma --- */
-  #lang-selector{
-    position:absolute; top:12px; right:12px;
-    z-index:10;
-  }
-  #current-lang{
-    cursor:pointer;
-    font-size:24px;
-    padding:4px;
-    border-radius:8px;
-    background:rgba(0,0,0,.04);
-    display:grid; place-items:center;
-    transition:background .2s ease;
-  }
-  #current-lang:hover{ background:rgba(0,0,0,.08); }
-  #lang-options{
-    display:none; /* Se muestra con JS */
-    position:absolute;
-    top:calc(100% + 4px);
-    right:0;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(12,20,33,.1);
-    padding:6px;
-    overflow:hidden;
-  }
-  .lang-option{
-    display:flex; align-items:center; gap:8px;
-    padding:8px 12px;
-    font-size:14px;
-    font-weight:600;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background-color .2s ease;
-  }
-  .lang-option:hover{ background-color:var(--bg); }
-  /* ------------------------------------------- */
-
-  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
-  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
-  .logo img{width:100%; height:100%; object-fit:cover}
-  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
-  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
-
-  .grid{display:grid; gap:12px}
-  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
-
-  .tile{
-    border:1px solid var(--border); border-radius:16px; background:#fff;
-    padding:12px; display:flex; flex-direction:column; align-items:center;
-  }
-  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
-  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
-
-  .btn{
-    display:block; width:100%; text-align:center; text-decoration:none;
-    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
-    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
-    will-change:transform;
-  }
-  .btn:active{transform:translateY(1px)}
-  .btn-google{background:linear-gradient(180deg,#6baeff,var(--google))}
-  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-  .note{font-size:12px; color:var(--muted); text-align:center}
-
-  @media(max-width:360px){
-    .brand h1{font-size:20px}
-    .btn{font-size:14px; padding:12px 14px}
-    .tile p{font-size:12px}
-  }
+  @media(max-width:360px){
+    .brand h1{font-size:20px}
+    .btn{font-size:14px; padding:12px 14px}
+    .tile p{font-size:12px}
+  }
 </style>
 </head>
 <body>
-  <main class="card" role="main" aria-labelledby="t">
-    <header class="brand">
-      <div class="logo">
-        <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
-      </div>
-      <h1 id="t"><span id="brandName">Restaurante Casablanca</span></h1>
-      <p id="subtitle">Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
-    </header>
+  <main class="card" role="main" aria-labelledby="t">
+    <header class="brand">
+      <div class="logo">
+        <img src="img/imagen_circular_recortada.png" alt="Logo Coctelería Casablanca">
+      </div>
+      <h1 id="t"><span id="brandName">Restaurante Casablanca</span></h1>
+      <p id="subtitle">Cuéntanos en 10&nbsp;segundos cómo fue todo.</p>
+    </header>
 
-    <div class="grid">
-      <section class="tile" aria-labelledby="publicTitle">
-        <h2 id="publicTitle">⭐ Reseña pública</h2>
-        <p id="publicText">Si te fue bien, tu reseña nos da visibilidad en Google.</p>
-        <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
-        <div class="note" id="publicNote">Queda visible para todos.</div>
-      </section>
+    <div class="grid">
+      <section class="tile" aria-labelledby="publicTitle">
+        <h2 id="publicTitle">⭐ Reseña pública</h2>
+        <p id="publicText">Si te fue bien, tu reseña nos da visibilidad en Google.</p>
+        <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
+        <div class="note" id="publicNote">Queda visible para todos.</div>
+      </section>
 
-      <section class="tile" aria-labelledby="privateTitle">
-        <h2 id="privateTitle">📝 Comentario privado</h2>
-        <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-        <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
-        <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
-      </section>
-    </div>
+      <section class="tile" aria-labelledby="privateTitle">
+        <h2 id="privateTitle">📝 Comentario privado</h2>
+        <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+        <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario privado</a>
+        <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
+      </section>
 
-    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-  </main>
+      <section class="tile shareTile" aria-labelledby="shareTitle">
+        <h2 id="shareTitle">✨ ¡Comparte tu momento!</h2>
+        <p id="shareText">Crea una tarjeta personalizada para compartir tu visita.</p>
+        <a id="btnShare" class="btn btn-share" href="share.html">Compartir Experiencia</a>
+        <div class="note" id="shareNote">Ideal para tus redes sociales.</div>
+      </section>
+          </div>
+
+    <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  </main>
 
 <script>
-  // ===== Configurable =====
-  const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
-  const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
+  // ===== Configurable =====
+  const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
+  const PLACE_ID_OR_URL = "https://www.google.com/search?sca_esv=b4f5d26490e949a3&...";
 
-  // Enlaces de formularios Tally por idioma
-  const TALLY_LINKS = {
-    es: "https://tally.so/r/w2Qla9",
-    en: "https://tally.so/r/w20k9D",
-    de: "https://tally.so/r/mBN1q1",
-    fr: "https://tally.so/r/mek0Dk"
-  };
+  // Enlaces de formularios Tally por idioma
+  const TALLY_LINKS = {
+    es: "https://tally.so/r/w2Qla9",
+    en: "https://tally.so/r/w20k9D",
+    de: "https://tally.so/r/mBN1q1",
+    fr: "https://tally.so/r/mek0Dk"
+  };
 
-  const FLAGS = { es: '🇪🇸', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷' };
+  const FLAGS = { es: '🇪🇸', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷' };
 
-  // ===== i18n copy =====
-  const COPY = {
-    es: {
-      pageTitle: "¿Cómo fue tu experiencia?",
-      subtitle: "Cuéntanos en 10\u00a0segundos cómo fue todo.",
-      publicTitle: "⭐ Reseña pública",
-      publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
-      publicBtn: "Dejar reseña en Google",
-      publicNote: "Queda visible para todos.",
-      privateTitle: "📝 Comentario privado",
-      privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
-      privateBtn: "Enviar comentario privado",
-      privateNote: "Solo lo vemos nosotros.",
-      thanks: "¡Gracias por tu tiempo!",
-      langSelectorTitle: "Cambiar idioma"
-    },
-    en: {
-      pageTitle: "How was your experience?",
-      subtitle: "Tell us in 10\u00a0seconds how everything went.",
-      publicTitle: "⭐ Public review",
-      publicText: "If things went well, your review helps us on Google.",
-      publicBtn: "Leave a Google review",
-      publicNote: "Visible to everyone.",
-      privateTitle: "📝 Private feedback",
-      privateText: "If something went wrong, tell us and we’ll fix it.",
-      privateBtn: "Send private feedback",
-      privateNote: "Only we can see it.",
-      thanks: "Thanks for your time!",
-      langSelectorTitle: "Change language"
-    },
-    de: {
-      pageTitle: "Wie war Ihre Erfahrung?",
-      subtitle: "Erzählen Sie uns in 10\u00a0Sekunden, wie alles war.",
-      publicTitle: "⭐ Öffentliche Bewertung",
-      publicText: "Wenn es Ihnen gefallen hat, hilft uns Ihre Bewertung bei Google.",
-      publicBtn: "Google-Bewertung abgeben",
-      publicNote: "Für alle sichtbar.",
-      privateTitle: "📝 Privater Kommentar",
-      privateText: "Wenn etwas schief gelaufen ist, sagen Sie es uns und wir klären es.",
-      privateBtn: "Privaten Kommentar senden",
-      privateNote: "Nur wir sehen es.",
-      thanks: "Vielen Dank für Ihre Zeit!",
-      langSelectorTitle: "Sprache ändern"
-    },
-    fr: {
-      pageTitle: "Comment était votre expérience ?",
-      subtitle: "Racontez-nous en 10\u00a0secondes comment tout s'est passé.",
-      publicTitle: "⭐ Avis public",
-      publicText: "Si tout s'est bien passé, votre avis nous aide sur Google.",
-      publicBtn: "Laisser un avis Google",
-      publicNote: "Visible par tout le monde.",
-      privateTitle: "📝 Commentaire privé",
-      privateText: "Si quelque chose n'allait pas, dites-le nous et nous le corrigerons.",
-      privateBtn: "Envoyer un commentaire privé",
-      privateNote: "Seulement nous le voyons.",
-      thanks: "Merci pour votre temps !",
-      langSelectorTitle: "Changer de langue"
-    }
-  };
+  // ===== i18n copy (Añadido texto para la nueva sección) =====
+  const COPY = {
+    es: {
+      pageTitle: "¿Cómo fue tu experiencia?",
+      subtitle: "Cuéntanos en 10\u00a0segundos cómo fue todo.",
+      publicTitle: "⭐ Reseña pública",
+      publicText: "Si te fue bien, tu reseña nos da visibilidad en Google.",
+      publicBtn: "Dejar reseña en Google",
+      publicNote: "Queda visible para todos.",
+      privateTitle: "📝 Comentario privado",
+      privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
+      privateBtn: "Enviar comentario privado",
+      privateNote: "Solo lo vemos nosotros.",
+      shareTitle: "✨ ¡Comparte tu momento!",
+      shareText: "Crea una tarjeta personalizada para compartir tu visita.",
+      shareBtn: "Compartir Experiencia",
+      shareNote: "Ideal para tus redes sociales.",
+      thanks: "¡Gracias por tu tiempo!",
+      langSelectorTitle: "Cambiar idioma"
+    },
+    en: {
+      pageTitle: "How was your experience?",
+      subtitle: "Tell us in 10\u00a0seconds how everything went.",
+      publicTitle: "⭐ Public review",
+      publicText: "If things went well, your review helps us on Google.",
+      publicBtn: "Leave a Google review",
+      publicNote: "Visible to everyone.",
+      privateTitle: "📝 Private feedback",
+      privateText: "If something went wrong, tell us and we’ll fix it.",
+      privateBtn: "Send private feedback",
+      privateNote: "Only we can see it.",
+      shareTitle: "✨ Share your moment!",
+      shareText: "Create a personalized card to share your visit.",
+      shareBtn: "Share Experience",
+      shareNote: "Great for your social media.",
+      thanks: "Thanks for your time!",
+      langSelectorTitle: "Change language"
+    },
+    de: {
+      pageTitle: "Wie war Ihre Erfahrung?",
+      subtitle: "Erzählen Sie uns in 10\u00a0Sekunden, wie alles war.",
+      publicTitle: "⭐ Öffentliche Bewertung",
+      publicText: "Wenn es Ihnen gefallen hat, hilft uns Ihre Bewertung bei Google.",
+      publicBtn: "Google-Bewertung abgeben",
+      publicNote: "Für alle sichtbar.",
+      privateTitle: "📝 Privater Kommentar",
+      privateText: "Wenn etwas schief gelaufen ist, sagen Sie es uns und wir klären es.",
+      privateBtn: "Privaten Kommentar senden",
+      privateNote: "Nur wir sehen es.",
+      shareTitle: "✨ Teilen Sie Ihren Moment!",
+      shareText: "Erstellen Sie eine personalisierte Karte, um Ihren Besuch zu teilen.",
+      shareBtn: "Erfahrung teilen",
+      shareNote: "Ideal für Ihre sozialen Medien.",
+      thanks: "Vielen Dank für Ihre Zeit!",
+      langSelectorTitle: "Sprache ändern"
+    },
+    fr: {
+      pageTitle: "Comment était votre expérience ?",
+      subtitle: "Racontez-nous en 10\u00a0secondes comment tout s'est passé.",
+      publicTitle: "⭐ Avis public",
+      publicText: "Si tout s'est bien passé, votre avis nous aide sur Google.",
+      publicBtn: "Laisser un avis Google",
+      publicNote: "Visible par tout le monde.",
+      privateTitle: "📝 Commentaire privé",
+      privateText: "Si quelque chose n'allait pas, dites-le nous et nous le corrigerons.",
+      privateBtn: "Envoyer un commentaire privé",
+      privateNote: "Seulement nous le voyons.",
+      shareTitle: "✨ Partagez votre moment !",
+      shareText: "Créez une carte personnalisée pour partager votre visite.",
+      shareBtn: "Partager l'Expérience",
+      shareNote: "Idéal pour vos réseaux sociaux.",
+      thanks: "Merci pour votre temps !",
+      langSelectorTitle: "Changer de langue"
+    }
+  };
 
-  // ===== Helpers =====
-  function getInitialLang() {
-    const savedLang = localStorage.getItem('userLang');
-    if (savedLang && COPY[savedLang]) {
-      return savedLang;
-    }
-    const browserLangs = navigator.languages || [navigator.language || 'en'];
-    for (const lang of browserLangs) {
-      const langCode = lang.slice(0, 2);
-      if (COPY[langCode]) {
-        return langCode;
-      }
-    }
-    return 'en'; // Default
-  }
+  // ===== Helpers (Modificado `setLang` para incluir los nuevos textos) =====
+  function getInitialLang() {
+    const savedLang = localStorage.getItem('userLang');
+    if (savedLang && COPY[savedLang]) {
+      return savedLang;
+    }
+    const browserLangs = navigator.languages || [navigator.language || 'en'];
+    for (const lang of browserLangs) {
+      const langCode = lang.slice(0, 2);
+      if (COPY[langCode]) {
+        return langCode;
+      }
+    }
+    return 'en'; // Default
+  }
 
-  function setLang(lang) {
-    const dict = COPY[lang] || COPY.en;
-    document.title = dict.pageTitle;
-    document.documentElement.lang = lang;
+  function setLang(lang) {
+    const dict = COPY[lang] || COPY.en;
+    document.title = dict.pageTitle;
+    document.documentElement.lang = lang;
 
-    // Actualizar textos
-    document.getElementById("subtitle").textContent = dict.subtitle;
-    document.getElementById("publicTitle").textContent = dict.publicTitle;
-    document.getElementById("publicText").textContent = dict.publicText;
-    document.getElementById("btnGoogle").textContent = dict.publicBtn;
-    document.getElementById("publicNote").textContent = dict.publicNote;
-    document.getElementById("privateTitle").textContent = dict.privateTitle;
-    document.getElementById("privateText").textContent = dict.privateText;
-    document.getElementById("btnPrivate").textContent = dict.privateBtn;
-    document.getElementById("privateNote").textContent = dict.privateNote;
-    document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
+    // Actualizar textos
+    document.getElementById("subtitle").textContent = dict.subtitle;
+    document.getElementById("publicTitle").textContent = dict.publicTitle;
+    document.getElementById("publicText").textContent = dict.publicText;
+    document.getElementById("btnGoogle").textContent = dict.publicBtn;
+    document.getElementById("publicNote").textContent = dict.publicNote;
+    document.getElementById("privateTitle").textContent = dict.privateTitle;
+    document.getElementById("privateText").textContent = dict.privateText;
+    document.getElementById("btnPrivate").textContent = dict.privateBtn;
+    document.getElementById("privateNote").textContent = dict.privateNote;
+    // NUEVOS TEXTOS
+    document.getElementById("shareTitle").textContent = dict.shareTitle;
+    document.getElementById("shareText").textContent = dict.shareText;
+    document.getElementById("btnShare").textContent = dict.shareBtn;
+    document.getElementById("shareNote").textContent = dict.shareNote;
 
-    // **Actualizar URL del formulario privado dinámicamente**
-    document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS.en;
+    document.getElementById("thanks").innerHTML = `<strong>${dict.thanks}</strong>`;
 
-    // Actualizar selector de idioma
-    if (document.getElementById("current-lang-flag")) {
-      document.getElementById("current-lang-flag").textContent = FLAGS[lang];
-      document.getElementById("current-lang").title = dict.langSelectorTitle;
-    }
-    
-    // Guardar preferencia
-    localStorage.setItem('userLang', lang);
+    // **Actualizar URL del formulario privado dinámicamente**
+    document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS.en;
 
-    // Ocultar opciones
-    const options = document.getElementById("lang-options");
-    if(options) options.style.display = 'none';
-  }
+    // Actualizar selector de idioma
+    if (document.getElementById("current-lang-flag")) {
+      document.getElementById("current-lang-flag").textContent = FLAGS[lang];
+      document.getElementById("current-lang").title = dict.langSelectorTitle;
+    }
+    
+    // Guardar preferencia
+    localStorage.setItem('userLang', lang);
 
-  function createLangSelector() {
-    const card = document.querySelector('.card');
-    const selector = document.createElement('div');
-    selector.id = 'lang-selector';
-    
-    selector.innerHTML = `
-      <div id="current-lang">
-        <span id="current-lang-flag"></span>
-      </div>
-      <div id="lang-options"></div>
-    `;
-    card.prepend(selector); // Añade el selector al principio del .card
+    // Ocultar opciones
+    const options = document.getElementById("lang-options");
+    if(options) options.style.display = 'none';
+  }
 
-    const optionsContainer = document.getElementById('lang-options');
-    Object.keys(COPY).forEach(langCode => {
-      const option = document.createElement('div');
-      option.className = 'lang-option';
-      option.dataset.lang = langCode;
-      option.innerHTML = `<span>${FLAGS[langCode]}</span> <span>${langCode.toUpperCase()}</span>`;
-      option.addEventListener('click', () => setLang(langCode));
-      optionsContainer.appendChild(option);
-    });
+  function createLangSelector() {
+    const card = document.querySelector('.card');
+    const selector = document.createElement('div');
+    selector.id = 'lang-selector';
+    
+    selector.innerHTML = `
+      <div id="current-lang">
+        <span id="current-lang-flag"></span>
+      </div>
+      <div id="lang-options"></div>
+    `;
+    card.prepend(selector); // Añade el selector al principio del .card
 
-    document.getElementById('current-lang').addEventListener('click', (e) => {
-      e.stopPropagation();
-      const options = document.getElementById('lang-options');
-      options.style.display = options.style.display === 'block' ? 'none' : 'block';
-    });
-    
-    document.addEventListener('click', (e) => {
-      if (!selector.contains(e.target)) {
-        document.getElementById('lang-options').style.display = 'none';
-      }
-    });
-  }
+    const optionsContainer = document.getElementById('lang-options');
+    Object.keys(COPY).forEach(langCode => {
+      const option = document.createElement('div');
+      option.className = 'lang-option';
+      option.dataset.lang = langCode;
+      option.innerHTML = `<span>${FLAGS[langCode]}</span> <span>${langCode.toUpperCase()}</span>`;
+      option.addEventListener('click', () => setLang(langCode));
+      optionsContainer.appendChild(option);
+    });
 
-  // ===== Init =====
-  (function init() {
-    // Marca y enlace de Google
-    document.getElementById("brandName").textContent = RESTAURANT_NAME;
-    document.getElementById("btnGoogle").href = PLACE_ID_OR_URL;
+    document.getElementById('current-lang').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const options = document.getElementById('lang-options');
+      options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!selector.contains(e.target)) {
+        document.getElementById('lang-options').style.display = 'none';
+      }
+    });
+  }
 
-    // Crear y configurar el selector de idioma
-    createLangSelector();
+  // ===== Init =====
+  (function init() {
+    // Marca y enlace de Google
+    document.getElementById("brandName").textContent = RESTAURANT_NAME;
+    document.getElementById("btnGoogle").href = PLACE_ID_OR_URL;
 
-    // Detección de idioma y aplicación de textos
-    const initialLang = getInitialLang();
-    setLang(initialLang);
-  })();
+    // Crear y configurar el selector de idioma
+    createLangSelector();
+
+    // Detección de idioma y aplicación de textos
+    const initialLang = getInitialLang();
+    setLang(initialLang);
+  })();
 </script>
 </body>
 </html>
