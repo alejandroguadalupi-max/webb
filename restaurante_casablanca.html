@@ -177,11 +177,12 @@ const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1", fr:"https://tally.so/r/mek0Dk" };
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
+
 const COPY = {
-  es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", shareBtn:"Compartir experiencia con amigos", thanks:"¡Gracias por tu tiempo!"},
-  en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", shareBtn:"Share experience with friends", thanks:"Thanks for your time!"},
-  de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", shareBtn:"Erfahrung mit Freunden teilen", thanks:"Vielen Dank für Ihre Zeit!"},
-  fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", shareBtn:"Partager avec des amis", thanks:"Merci pour votre temps !"}
+  es:{pageTitle:"¿Cómo fue tu experiencia?", subtitle:"Cuéntanos en 10 segundos cómo fue todo.", publicTitle:"⭐ Reseña pública", publicText:"Tu reseña nos da visibilidad en Google.", publicBtn:"Dejar reseña", publicNote:"Queda visible para todos.", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", privateNote:"Solo lo vemos nosotros.", shareBtn:"Compartir experiencia con amigos", thanks:"¡Gracias por tu tiempo!"},
+  en:{pageTitle:"How was your experience?", subtitle:"Tell us in 10 seconds how it went.", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", publicNote:"Visible to everyone.", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", privateNote:"Only we can see it.", shareBtn:"Share experience with friends", thanks:"Thanks for your time!"},
+  de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", publicNote:"Für alle sichtbar.", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", privateNote:"Nur wir können es sehen.", shareBtn:"Erfahrung mit Freunden teilen", thanks:"Vielen Dank für Ihre Zeit!"},
+  fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", publicNote:"Visible par tout le monde.", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", privateNote:"Visible uniquement par nous.", shareBtn:"Partager avec des amis", thanks:"Merci pour votre temps !"}
 };
 
 const LANGS = Object.keys(COPY);
@@ -203,15 +204,16 @@ function setLang(lang){
   document.getElementById('publicTitle').textContent = d.publicTitle;
   document.getElementById('publicText').textContent = d.publicText;
   document.getElementById('btnGoogle').textContent = d.publicBtn;
-  document.getElementById('btnPrivate').textContent = d.privateBtn;
+  document.getElementById('publicNote').textContent = d.publicNote;
   document.getElementById('privateTitle').textContent = d.privateTitle;
   document.getElementById('privateText').textContent = d.privateText;
+  document.getElementById('btnPrivate').textContent = d.privateBtn;
+  document.getElementById('privateNote').textContent = d.privateNote;
   document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
   document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
 
   document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
   document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
-
   document.getElementById('current-lang').textContent = FLAGS[lang];
   localStorage.setItem('userLang', lang);
   document.getElementById('lang-options').style.display='none';
