@@ -126,10 +126,42 @@ const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
 
 const FLAGS={es:"🇪🇸",en:"🇬🇧",de:"🇩🇪",fr:"🇫🇷"};
 const COPY={
- es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir tu momento 💛!",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
- en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",sharedOK:"Thanks for sharing 💛!",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"},
- de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",previewNote:"✅ Vorschau deines Fotos. Wenn es dir nicht gefällt, drücke '🔁 Wiederholen'.",back:"⬅ Zurück",shareBtn:"Teilen",sharedOK:"Danke fürs Teilen 💛!",photoBtn:"📷 Foto wählen",retakeBtn:"🔁 Wiederholen"},
- fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",previewNote:"✅ Prévisualisez votre photo. Si elle ne vous plaît pas, appuyez sur '🔁 Refaire'.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!",photoBtn:"📷 Prendre ou choisir",retakeBtn:"🔁 Refaire"}
+ es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
+ en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"},
+ de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",previewNote:"✅ Vorschau deines Fotos. Wenn es dir nicht gefällt, drücke '🔁 Wiederholen'.",back:"⬅ Zurück",shareBtn:"Teilen",photoBtn:"📷 Foto wählen",retakeBtn:"🔁 Wiederholen"},
+ fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",previewNote:"✅ Prévisualisez votre photo. Si elle ne vous plaît pas, appuyez sur '🔁 Refaire'.",back:"⬅ Retour",shareBtn:"Partager",photoBtn:"📷 Prendre ou choisir",retakeBtn:"🔁 Refaire"}
+};
+
+// ✨ Frases aleatorias por idioma
+const RANDOM_QUOTES = {
+ es:[
+   "Los mejores momentos se disfrutan sin prisa 💛",
+   "Pequeños momentos, grandes recuerdos ✨",
+   "Donde el sabor y la compañía se encuentran 🍷",
+   "Cada instante en Casablanca se siente especial 🌅",
+   "Brindando por momentos que merecen ser contados 🥂"
+ ],
+ en:[
+   "Moments that taste like happiness 💛",
+   "Good vibes and even better company ✨",
+   "Savor the moment, share the joy 🍸",
+   "Every sunset brings a new story 🌅",
+   "Cheers to memories worth sharing 🥂"
+ ],
+ de:[
+   "Die schönsten Momente brauchen keine Eile 💛",
+   "Kleine Momente, große Erinnerungen ✨",
+   "Genuss und Gesellschaft – perfekt vereint 🍷",
+   "Jeder Augenblick zählt 🌅",
+   "Auf unvergessliche Erlebnisse 🥂"
+ ],
+ fr:[
+   "Les plus beaux moments se savourent lentement 💛",
+   "Petits instants, grands souvenirs ✨",
+   "L’endroit parfait pour partager un sourire 🍷",
+   "Chaque moment ici devient un souvenir 🌅",
+   "Trinquons à la vie et à ses plaisirs 🥂"
+ ]
 };
 
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
@@ -195,7 +227,7 @@ photoInput.addEventListener('change',e=>{
  photoPreview.src=URL.createObjectURL(f);
  photoPreview.style.display='block';
  btnRetake.style.display='inline-block';
- wrap.classList.add('centered'); // centra el bloque
+ wrap.classList.add('centered');
  setLang(currentLang);
 });
 btnRetake.addEventListener('click',()=>{
@@ -204,7 +236,7 @@ btnRetake.addEventListener('click',()=>{
  photoPreview.src='';
  photoPreview.style.display='none';
  btnRetake.style.display='none';
- wrap.classList.remove('centered'); // vuelve arriba
+ wrap.classList.remove('centered');
  setLang(currentLang);
 });
 
@@ -227,7 +259,10 @@ async function shareExperience(e){
  try{
    if(navigator.share){
      await navigator.share(shareData);
-     showModal(dict.sharedOK);
+     // Frase aleatoria al compartir
+     const quoteList = RANDOM_QUOTES[currentLang] || RANDOM_QUOTES.es;
+     const randomQuote = quoteList[Math.floor(Math.random() * quoteList.length)];
+     showModal(randomQuote);
      btnRetake.click();
    }else{
      await navigator.clipboard.writeText(text);
