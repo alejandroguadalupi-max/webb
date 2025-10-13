@@ -46,7 +46,7 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
   width:100%;
   aspect-ratio:4/3;
   border-radius:10px;
-  background:#000;
+  background:#fff; /* fondo claro neutro */
   overflow:hidden;
   display:none;
   margin-bottom:10px;
@@ -130,7 +130,7 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 <script>
 const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9";
-const DEFAULT_CARD="img/Captura_de_pantalla_2025-10-13_095018.png";
+const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
 
 const RANDOM_QUOTES={
   es:[
@@ -235,7 +235,7 @@ function handleFileInput(input){
   wrap.classList.add('centered');
 }
 
-// 🧩 Marca de agua en fotos seleccionadas
+// 🌴 Marca de agua elegante (arriba derecha)
 async function addWatermarkToImage(file){
   return new Promise((resolve)=>{
     const img=new Image();
@@ -245,10 +245,16 @@ async function addWatermarkToImage(file){
       canvas.width=img.width;
       canvas.height=img.height;
       ctx.drawImage(img,0,0);
-      ctx.font=`${canvas.width*0.04}px sans-serif`;
-      ctx.fillStyle="rgba(255,255,255,0.7)";
-      ctx.textAlign="center";
-      ctx.fillText("Terraza Casablanca Las Canteras",canvas.width/2,canvas.height-30);
+
+      const fontSize=canvas.width*0.035;
+      ctx.font=`${fontSize}px "Segoe UI", Roboto, sans-serif`;
+      ctx.textAlign="right";
+      ctx.textBaseline="top";
+      ctx.fillStyle="rgba(255,255,255,0.85)";
+      ctx.shadowColor="rgba(0,0,0,0.5)";
+      ctx.shadowBlur=6;
+      ctx.fillText("🌴 Terraza Casablanca - Las Canteras",canvas.width-20,20);
+
       canvas.toBlob(blob=>{
         resolve(new File([blob],"casablanca_momento.jpg",{type:"image/jpeg"}));
       },"image/jpeg",0.9);
@@ -280,7 +286,7 @@ async function shareExperience(e){
       // 🔹 Sin foto → compartir tarjeta + texto
       const res=await fetch(DEFAULT_CARD);
       const blob=await res.blob();
-      fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
+      fileToShare=new File([blob],"casablanca_card.jpg",{type:blob.type});
       if(navigator.canShare?.({files:[fileToShare],text})){
         await navigator.share({files:[fileToShare],text});
       } else {
@@ -300,6 +306,12 @@ async function shareExperience(e){
     console.log("Cancelado o error:",err);
   }
 }
+
+btnShare.onclick=shareExperience;
+</script>
+</body>
+</html>
+
 
 btnShare.onclick=shareExperience;
 </script>
