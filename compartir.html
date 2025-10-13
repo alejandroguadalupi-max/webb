@@ -46,7 +46,7 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
   width:100%;
   aspect-ratio:4/3;
   border-radius:10px;
-  background:#fff; /* fondo claro neutro */
+  background:#fff;
   overflow:hidden;
   display:none;
   margin-bottom:10px;
@@ -130,28 +130,8 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 <script>
 const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9";
-const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
+const DEFAULT_CARD="img/logo35.png";
 
-const RANDOM_QUOTES={
-  es:[
-    "La vida sabe mejor cuando se comparte 💛",
-    "Momentos que se disfrutan con los cinco sentidos ✨",
-    "Brindemos por los sabores que nos hacen sonreír 🥂",
-    "Cada instante en Casablanca invita a disfrutar 🌅",
-    "Buen ambiente, buena compañía, buenos recuerdos 🍷",
-    "Porque los mejores planes no se planean, se viven 💫"
-  ],
-  en:[
-    "Life tastes better when shared 💛",
-    "Savor the moment, feel the vibe ✨",
-    "Cheers to flavors that make us smile 🥂",
-    "Every minute at Casablanca feels like a holiday 🌅",
-    "Good food, great company, unforgettable memories 🍷",
-    "The best plans aren’t planned — they just happen 💫"
-  ]
-};
-
-const FLAGS={es:"🇪🇸",en:"🇬🇧"};
 const COPY={
  es:{
    shareTitle:"📸 Comparte tu momento",
@@ -171,43 +151,8 @@ const COPY={
  }
 };
 
-// Idioma
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
-const currentLangEl=document.getElementById('current-lang');
-const langOptions=document.getElementById('lang-options');
-
-function setLang(lang){
-  const c=COPY[lang]||COPY.es;
-  currentLang=lang;localStorage.setItem('userLang',lang);
-  shareTitle.textContent=c.shareTitle;
-  shareSub.textContent=c.shareSub;
-  btnShare.textContent=c.shareBtn;
-  backBtn.textContent=c.back;
-  noteEl.textContent=c.note;
-  currentLangEl.textContent=FLAGS[lang];
-}
-function buildLangOptions(){
-  langOptions.innerHTML='';
-  Object.keys(COPY).forEach(code=>{
-    const el=document.createElement('div');
-    el.className='lang-option';
-    el.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
-    el.onclick=()=>{setLang(code);langOptions.style.display='none';};
-    langOptions.appendChild(el);
-  });
-}
-currentLangEl.onclick=e=>{
-  e.stopPropagation();
-  langOptions.style.display=langOptions.style.display==='block'?'none':'block';
-};
-document.addEventListener('click',e=>{
-  if(!document.getElementById('lang-selector').contains(e.target))
-    langOptions.style.display='none';
-});
-buildLangOptions();
-
-// Elementos
 const wrap=document.getElementById('wrap');
 const cameraInput=document.getElementById('cameraInput');
 const galleryInput=document.getElementById('galleryInput');
@@ -221,6 +166,14 @@ const noteEl=document.getElementById('note');
 const quoteBox=document.getElementById('randomQuote');
 let selectedFile=null;
 
+function setLang(lang){
+  const c=COPY[lang]||COPY.es;
+  shareTitle.textContent=c.shareTitle;
+  shareSub.textContent=c.shareSub;
+  btnShare.textContent=c.shareBtn;
+  backBtn.textContent=c.back;
+  noteEl.textContent=c.note;
+}
 setLang(currentLang);
 
 btnCamera.onclick=()=>cameraInput.click();
@@ -235,7 +188,7 @@ function handleFileInput(input){
   wrap.classList.add('centered');
 }
 
-// 🌴 Marca de agua elegante (arriba derecha)
+// 🌅 Marca de agua elegante con fondo translúcido dorado
 async function addWatermarkToImage(file){
   return new Promise((resolve)=>{
     const img=new Image();
@@ -247,13 +200,28 @@ async function addWatermarkToImage(file){
       ctx.drawImage(img,0,0);
 
       const fontSize=canvas.width*0.035;
-      ctx.font=`${fontSize}px "Segoe UI", Roboto, sans-serif`;
-      ctx.textAlign="right";
-      ctx.textBaseline="top";
-      ctx.fillStyle="rgba(255,255,255,0.85)";
-      ctx.shadowColor="rgba(0,0,0,0.5)";
-      ctx.shadowBlur=6;
-      ctx.fillText("🌴 Terraza Casablanca - Las Canteras",canvas.width-20,20);
+      const text="Terraza Casablanca - Las Canteras";
+      const padding=fontSize*0.6;
+
+      // Fondo redondeado semitransparente
+      const textWidth=ctx.measureText(text).width+padding*2;
+      const rectHeight=fontSize*2.2;
+      const x=canvas.width-textWidth-30;
+      const y=canvas.height-rectHeight-30;
+
+      const grad=ctx.createLinearGradient(x, y, x+textWidth, y+rectHeight);
+      grad.addColorStop(0,"rgba(255,215,0,0.85)");
+      grad.addColorStop(1,"rgba(255,255,255,0.85)");
+      ctx.fillStyle=grad;
+      ctx.roundRect(x, y, textWidth, rectHeight, 15);
+      ctx.fill();
+
+      // Texto
+      ctx.font=`600 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
+      ctx.fillStyle="#1f2937";
+      ctx.textAlign="center";
+      ctx.textBaseline="middle";
+      ctx.fillText(text,x+textWidth/2,y+rectHeight/2.2);
 
       canvas.toBlob(blob=>{
         resolve(new File([blob],"casablanca_momento.jpg",{type:"image/jpeg"}));
@@ -263,18 +231,22 @@ async function addWatermarkToImage(file){
   });
 }
 
+// función para esquinas redondeadas (compatibilidad)
+CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+  if(w<2*r)r=w/2;if(h<2*r)r=h/2;
+  this.beginPath();
+  this.moveTo(x+r,y);
+  this.arcTo(x+w,y,x+w,y+h,r);
+  this.arcTo(x+w,y+h,x,y+h,r);
+  this.arcTo(x,y+h,x,y,r);
+  this.arcTo(x,y,x+w,y,r);
+  this.closePath();
+  return this;
+};
+
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
-function showRandomQuote(){
-  const list=RANDOM_QUOTES[currentLang]||RANDOM_QUOTES.es;
-  const q=list[Math.floor(Math.random()*list.length)];
-  quoteBox.textContent=q;
-  quoteBox.classList.add('visible');
-  setTimeout(()=>quoteBox.classList.remove('visible'),2500);
-}
-
-// Compartir experiencia
 async function shareExperience(e){
   e&&e.preventDefault();
   const dict=COPY[currentLang];
@@ -283,25 +255,20 @@ async function shareExperience(e){
 
   try{
     if(!selectedFile){
-      // 🔹 Sin foto → compartir tarjeta + texto
       const res=await fetch(DEFAULT_CARD);
       const blob=await res.blob();
       fileToShare=new File([blob],"casablanca_card.jpg",{type:blob.type});
       if(navigator.canShare?.({files:[fileToShare],text})){
         await navigator.share({files:[fileToShare],text});
-      } else {
-        await navigator.share({text});
-      }
-    } else {
-      // 🔹 Con foto → añadir marca de agua y compartir solo la imagen
+      }else await navigator.share({text});
+    }else{
       fileToShare=await addWatermarkToImage(selectedFile);
       if(navigator.canShare?.({files:[fileToShare]})){
         await navigator.share({files:[fileToShare]});
-      } else {
-        await navigator.share({text});
-      }
+      }else await navigator.share({text});
     }
-    showRandomQuote();
+    alert("💛 La vida sabe mejor cuando se comparte");
+    window.location.href="https://valoratuvisita.com/restaurante_casablanca";
   }catch(err){
     console.log("Cancelado o error:",err);
   }
@@ -312,9 +279,4 @@ btnShare.onclick=shareExperience;
 </body>
 </html>
 
-
-btnShare.onclick=shareExperience;
-</script>
-</body>
-</html>
 
