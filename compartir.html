@@ -114,10 +114,54 @@ const DEFAULT_CARD = "img/imagen_circular_recortada.png";
 
 const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
 const COPY = {
-  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",sharedOK:"¡Gracias por compartir tu momento 💛!",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
-  en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",sharedOK:"Thanks for sharing 💛!",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"},
-  de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",sharedOK:"Danke fürs Teilen 💛!",photoBtn:"📷 Foto wählen",retakeBtn:"🔁 Wiederholen"},
-  fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",back:"⬅ Retour",shareBtn:"Partager",sharedOK:"Merci d’avoir partagé 💛!",photoBtn:"📷 Prendre ou choisir",retakeBtn:"🔁 Refaire"}
+  es:{
+    shareTitle:"📸 Comparte tu momento",
+    shareSub:"Elige o toma una foto y compártela con tus amigos.",
+    shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,
+    note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",
+    previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",
+    back:"⬅ Volver",
+    shareBtn:"Compartir",
+    sharedOK:"¡Gracias por compartir tu momento 💛!",
+    photoBtn:"📷 Tomar o elegir",
+    retakeBtn:"🔁 Repetir"
+  },
+  en:{
+    shareTitle:"📸 Share your moment",
+    shareSub:"Take or choose a photo and share with friends.",
+    shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,
+    note:"If you don't choose a photo, a minimal restaurant card will be shared.",
+    previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",
+    back:"⬅ Back",
+    shareBtn:"Share",
+    sharedOK:"Thanks for sharing 💛!",
+    photoBtn:"📷 Take or choose",
+    retakeBtn:"🔁 Retake"
+  },
+  de:{
+    shareTitle:"📸 Teile deinen Moment",
+    shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",
+    shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,
+    note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",
+    previewNote:"✅ Vorschau deines Fotos. Wenn es dir nicht gefällt, drücke '🔁 Wiederholen'.",
+    back:"⬅ Zurück",
+    shareBtn:"Teilen",
+    sharedOK:"Danke fürs Teilen 💛!",
+    photoBtn:"📷 Foto wählen",
+    retakeBtn:"🔁 Wiederholen"
+  },
+  fr:{
+    shareTitle:"📸 Partage ton moment",
+    shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",
+    shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,
+    note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",
+    previewNote:"✅ Prévisualisez votre photo. Si elle ne vous plaît pas, appuyez sur '🔁 Refaire'.",
+    back:"⬅ Retour",
+    shareBtn:"Partager",
+    sharedOK:"Merci d’avoir partagé 💛!",
+    photoBtn:"📷 Prendre ou choisir",
+    retakeBtn:"🔁 Refaire"
+  }
 };
 
 let currentLang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
@@ -172,7 +216,7 @@ function setLang(lang){
   btnRetake.textContent = c.retakeBtn;
   btnShare.textContent = c.shareBtn;
   backBtn.textContent = c.back;
-  noteEl.textContent = selectedFile ? `✅ Previsualiza tu foto. Si no te gusta, pulsa '${c.retakeBtn}'.` : c.note;
+  noteEl.textContent = selectedFile ? c.previewNote : c.note;
   currentLangEl.textContent = FLAGS[lang];
   langOptions.style.display='none';
 }
@@ -242,3 +286,4 @@ btnShare.addEventListener('click', shareExperience);
 </script>
 </body>
 </html>
+
