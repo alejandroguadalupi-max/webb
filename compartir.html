@@ -119,10 +119,10 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 
 <script>
 const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
-const GOOGLE_MAPS_SHORT="https://sl1nk.com/restaurantecasablanca";
-const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
+const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9"; // link directo sin acortador
+const DEFAULT_CARD="img/Captura_de_pantalla_2025-10-13_095018.png";
 
-// ✨ Frases aleatorias
+// ✨ Frases
 const RANDOM_QUOTES={
   es:[
     "La vida sabe mejor cuando se comparte 💛",
@@ -162,16 +162,17 @@ const COPY={
  }
 };
 
-// Idioma
+// Idiomas
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
 const currentLangEl=document.getElementById('current-lang');
 const langOptions=document.getElementById('lang-options');
+
 function setLang(lang){
   const c=COPY[lang]||COPY.es;
   currentLang=lang;localStorage.setItem('userLang',lang);
-  document.getElementById('shareTitle').textContent=c.shareTitle;
-  document.getElementById('shareSub').textContent=c.shareSub;
+  shareTitle.textContent=c.shareTitle;
+  shareSub.textContent=c.shareSub;
   btnShare.textContent=c.shareBtn;
   backBtn.textContent=c.back;
   noteEl.textContent=c.note;
@@ -226,7 +227,7 @@ function handleFileInput(input){
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
-// Mostrar frase random animada
+// Frase random animada
 function showRandomQuote(){
   const list=RANDOM_QUOTES[currentLang]||RANDOM_QUOTES.es;
   const q=list[Math.floor(Math.random()*list.length)];
@@ -239,25 +240,27 @@ function showRandomQuote(){
 async function shareExperience(e){
   e&&e.preventDefault();
   const dict=COPY[currentLang];
-  const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
+  const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_LINK}`;
   let fileToShare=selectedFile;
 
-  if(!fileToShare){
-    const res=await fetch(DEFAULT_CARD);
-    const blob=await res.blob();
-    fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
-  }
-
-  const shareData={text,files:[fileToShare]};
-
   try{
-    if(navigator.share && navigator.canShare?.(shareData)){
+    // Si no hay foto elegida, usa la tarjeta por defecto como blob local
+    if(!fileToShare){
+      const res=await fetch(DEFAULT_CARD);
+      const blob=await res.blob();
+      fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
+    }
+
+    const shareData={text,files:[fileToShare]};
+
+    if(navigator.canShare?.(shareData)){
       await navigator.share(shareData);
     }else{
-      // Fallback: solo texto vía WhatsApp
+      // Fallback: solo texto (sin "abriendo WhatsApp")
       const encoded=encodeURIComponent(text);
       window.open(`https://api.whatsapp.com/send?text=${encoded}`,"_blank");
     }
+
     showRandomQuote();
   }catch(err){
     console.log("Cancelado o error:",err);
