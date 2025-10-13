@@ -24,11 +24,10 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; }
 
-    /* Hacemos el body un grid con dos filas: contenido + redes al final */
     body {
       min-height: 100dvh;
       display: grid;
-      grid-template-rows: 1fr auto; /* main ocupa todo, footer se queda abajo */
+      grid-template-rows: 1fr auto;
       padding: 16px;
       background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -42,10 +41,9 @@
       display: grid;
       gap: 14px;
       text-align: center;
-      align-self: center; /* centra el contenido verticalmente */
+      align-self: center;
     }
 
-    /* ==== Animación nombre del restaurante ==== */
     .brand {
       font-family: "Playfair Display", serif;
       font-weight: 700;
@@ -65,7 +63,6 @@
       to { transform: translateY(40px); }
     }
 
-    /* ==== CARD ==== */
     .card-wrap {
       position: relative;
       border-radius: 18px;
@@ -108,7 +105,6 @@
       color: var(--textSec);
     }
 
-    /* ==== Redes sociales (footer) ==== */
     footer.social {
       display: flex;
       justify-content: center;
@@ -169,7 +165,6 @@
 
   <script>
     // ===== Config =====
-    const BRAND_NAME = "Coctelería Casablanca";
     const BRAND_NAME = "Restaurante Casablanca";
 
     const IG_URL = "https://instagram.com/taply.es";
@@ -199,32 +194,23 @@
       }
     };
 
-    // 1. Nueva función para obtener el idioma
-    // Prioridad: Parámetro en URL > Idioma del navegador > Inglés por defecto
+    // 1. Detecta idioma (URL > navegador > inglés)
     function getLanguage() {
-      // Lee el parámetro 'lang' de la URL (ej: ?lang=es)
       const urlParams = new URLSearchParams(window.location.search);
       const langFromUrl = urlParams.get('lang');
+      if (langFromUrl && COPY[langFromUrl]) return langFromUrl;
 
-      if (langFromUrl && COPY[langFromUrl]) {
-        return langFromUrl; // Usa el idioma de la URL si es válido
-      }
-
-      // Si no hay parámetro, detecta el idioma del navegador
       const browserLangs = navigator.languages || [navigator.language || 'en'];
       for (const lang of browserLangs) {
         const langCode = lang.slice(0, 2);
-        if (COPY[langCode]) {
-          return langCode; // Usa el primer idioma compatible del navegador
-        }
+        if (COPY[langCode]) return langCode;
       }
-
-      return 'en'; // Plan C: usa inglés por defecto
+      return 'en';
     }
 
-    // 2. Función para establecer los textos en la página
+    // 2. Aplica textos
     function setLang(lang) {
-      const dict = COPY[lang] || COPY.en; // Seguridad por si el idioma no existe
+      const dict = COPY[lang] || COPY.en;
       document.documentElement.lang = lang;
       document.title = dict.title;
       document.getElementById("brand").textContent = BRAND_NAME;
@@ -232,18 +218,17 @@
       document.getElementById("desc").textContent = dict.desc;
     }
 
-    // 3. Script de inicialización
+    // 3. Inicialización
     (function () {
-      const lang = getLanguage(); // Obtiene el idioma con la nueva lógica
-      setLang(lang); // Aplica los textos
-
-      // Configura las URLs de redes sociales
+      const lang = getLanguage();
+      setLang(lang);
       document.getElementById("btnIG").href = IG_URL;
       document.getElementById("btnTT").href = TIKTOK_URL;
     })();
   </script>
 </body>
 </html>
+
 
 
 
