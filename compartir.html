@@ -13,22 +13,18 @@
 body{
   margin:0; font-family:system-ui,-apple-system,Roboto,sans-serif;
   background:var(--bg); color:var(--text);
-  min-height:100svh;
-  display:flex; flex-direction:column;
-  justify-content:flex-start; align-items:center;
-  padding:16px;
-  position:relative;
+  min-height:100svh; display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-start;
+  padding:16px; position:relative;
 }
 .wrap{
   width:100%; max-width:420px;
   display:flex; flex-direction:column; align-items:center;
-  margin-top:20vh;
-  transition:margin-top .4s ease;
+  margin-top:20vh; transition:margin-top .4s ease;
 }
 .wrap.centered{margin-top:8vh;}
 header{
-  width:100%;
-  display:flex; align-items:center; justify-content:flex-start;
+  width:100%; display:flex; align-items:center; justify-content:flex-start;
   position:absolute; top:16px; left:16px; right:16px;
 }
 .back{
@@ -95,8 +91,9 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
 
     <img id="photoPreview" class="photo-preview" alt="Vista previa">
 
-    <!-- 📷 CORRECCIÓN: permitir cámara directamente -->
-    <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
+    <!-- Inputs separados para garantizar compatibilidad en Android/iOS -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
+    <input type="file" id="galleryInput" accept="image/*" style="display:none;">
 
     <div class="row">
       <button id="btnPhoto" class="btn btn-yellow"></button>
@@ -118,18 +115,15 @@ const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_SHORT="https://sl1nk.com/restaurantecasablanca";
 const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
 
-const FLAGS={es:"🇪🇸",en:"🇬🇧",de:"🇩🇪",fr:"🇫🇷"};
+const FLAGS={es:"🇪🇸",en:"🇬🇧"};
 const COPY={
  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
  en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"}
 };
 
-// ————————————————
-// ⚙️ Idiomas
-// ————————————————
+// — Idiomas —
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
-
 const currentLangEl=document.getElementById('current-lang');
 const langOptions=document.getElementById('lang-options');
 function setLang(lang){
@@ -164,11 +158,10 @@ document.addEventListener('click',e=>{
 });
 buildLangOptions();
 
-// ————————————————
-// 📸 Foto
-// ————————————————
+// — Foto —
 const wrap=document.getElementById('wrap');
-const photoInput=document.getElementById('photoInput');
+const cameraInput=document.getElementById('cameraInput');
+const galleryInput=document.getElementById('galleryInput');
 const photoPreview=document.getElementById('photoPreview');
 const btnPhoto=document.getElementById('btnPhoto');
 const btnRetake=document.getElementById('btnRetake');
@@ -181,9 +174,17 @@ let selectedFile=null;
 
 setLang(currentLang);
 
-btnPhoto.onclick=()=>photoInput.click();
-photoInput.onchange=e=>{
-  const f=e.target.files?.[0];
+btnPhoto.onclick=()=>{
+  // Mostrar menú nativo según dispositivo
+  if(confirm("¿Quieres tomar una foto con la cámara? (Cancelar para elegir de la galería)")){
+    cameraInput.click();
+  }else{
+    galleryInput.click();
+  }
+};
+
+function handleFileInput(input){
+  const f=input.files?.[0];
   if(!f)return;
   selectedFile=f;
   photoPreview.src=URL.createObjectURL(f);
@@ -191,18 +192,20 @@ photoInput.onchange=e=>{
   btnRetake.style.display='inline-block';
   wrap.classList.add('centered');
   noteEl.textContent=COPY[currentLang].previewNote;
-};
+}
+cameraInput.onchange=()=>handleFileInput(cameraInput);
+galleryInput.onchange=()=>handleFileInput(galleryInput);
+
 btnRetake.onclick=()=>{
-  photoInput.value=''; selectedFile=null;
-  photoPreview.src=''; photoPreview.style.display='none';
+  cameraInput.value=''; galleryInput.value='';
+  selectedFile=null; photoPreview.src='';
+  photoPreview.style.display='none';
   btnRetake.style.display='none';
   wrap.classList.remove('centered');
   noteEl.textContent=COPY[currentLang].note;
 };
 
-// ————————————————
-// 📤 Compartir universal
-// ————————————————
+// — Compartir universal —
 async function shareExperience(e){
   e&&e.preventDefault();
   const dict=COPY[currentLang];
@@ -215,21 +218,19 @@ async function shareExperience(e){
     fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
   }
 
-  // Intento principal
   const shareData={text};
-  if(navigator.canShare && navigator.canShare({files:[fileToShare]})){
+  if(navigator.canShare?.({files:[fileToShare]}))
     shareData.files=[fileToShare];
-  }
 
   try{
-    // Si puede compartir texto+imagen, perfecto
     if(navigator.share && (navigator.canShare?.(shareData) || navigator.canShare?.({files:[fileToShare]}))){
       await navigator.share(shareData);
       showModal("✅ ¡Compartido con éxito!");
     }else{
-      // Fallback Android/WhatsApp
+      // Fallback: abrir WhatsApp con texto (funciona en Android/iPhone)
       const encoded=encodeURIComponent(text);
-      window.open(`https://wa.me/?text=${encoded}`,"_blank");
+      window.open(`https://api.whatsapp.com/send?text=${encoded}`,"_blank");
+      showModal("📱 Compartiendo por WhatsApp...");
     }
     btnRetake.click();
   }catch(err){
