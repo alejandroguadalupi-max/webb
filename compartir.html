@@ -134,35 +134,40 @@ const COPY={
 
 // ✨ Frases aleatorias por idioma
 const RANDOM_QUOTES = {
- es:[
-   "Los mejores momentos se disfrutan sin prisa 💛",
-   "Pequeños momentos, grandes recuerdos ✨",
-   "Donde el sabor y la compañía se encuentran 🍷",
-   "Cada instante en Casablanca se siente especial 🌅",
-   "Brindando por momentos que merecen ser contados 🥂"
- ],
- en:[
-   "Moments that taste like happiness 💛",
-   "Good vibes and even better company ✨",
-   "Savor the moment, share the joy 🍸",
-   "Every sunset brings a new story 🌅",
-   "Cheers to memories worth sharing 🥂"
- ],
- de:[
-   "Die schönsten Momente brauchen keine Eile 💛",
-   "Kleine Momente, große Erinnerungen ✨",
-   "Genuss und Gesellschaft – perfekt vereint 🍷",
-   "Jeder Augenblick zählt 🌅",
-   "Auf unvergessliche Erlebnisse 🥂"
- ],
- fr:[
-   "Les plus beaux moments se savourent lentement 💛",
-   "Petits instants, grands souvenirs ✨",
-   "L’endroit parfait pour partager un sourire 🍷",
-   "Chaque moment ici devient un souvenir 🌅",
-   "Trinquons à la vie et à ses plaisirs 🥂"
- ]
+  es: [
+    "La vida sabe mejor cuando se comparte 💛",
+    "Momentos que se disfrutan con los cinco sentidos ✨",
+    "Brindemos por los sabores que nos hacen sonreír 🥂",
+    "Cada instante en Casablanca invita a disfrutar 🌅",
+    "Buen ambiente, buena compañía, buenos recuerdos 🍷",
+    "Porque los mejores planes no se planean, se viven 💫"
+  ],
+  en: [
+    "Life tastes better when shared 💛",
+    "Savor the moment, feel the vibe ✨",
+    "Cheers to flavors that make us smile 🥂",
+    "Every minute at Casablanca feels like a holiday 🌅",
+    "Good food, great company, unforgettable memories 🍷",
+    "The best plans aren’t planned — they just happen 💫"
+  ],
+  de: [
+    "Das Leben schmeckt besser, wenn man es teilt 💛",
+    "Genieße den Moment mit allen Sinnen ✨",
+    "Auf die Aromen, die uns glücklich machen 🥂",
+    "Jeder Augenblick im Casablanca fühlt sich besonders an 🌅",
+    "Gutes Essen, gute Gesellschaft, schöne Erinnerungen 🍷",
+    "Die besten Erlebnisse entstehen spontan 💫"
+  ],
+  fr: [
+    "La vie a meilleur goût quand elle se partage 💛",
+    "Savourez l’instant, ressentez la magie ✨",
+    "À la santé des saveurs qui nous font sourire 🥂",
+    "Chaque moment au Casablanca est un plaisir 🌅",
+    "Bonne table, bons amis, beaux souvenirs 🍷",
+    "Les plus beaux instants sont ceux qu’on ne prévoit pas 💫"
+  ]
 };
+
 
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
