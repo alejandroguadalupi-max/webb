@@ -45,8 +45,13 @@ header{
 h2{margin:0 0 6px;font-size:18px;text-align:center;}
 p{margin:0 0 10px;font-size:14px;text-align:center;}
 .photo-preview{
-  width:100%;max-height:250px;border-radius:10px;
-  object-fit:cover;display:none;margin-bottom:10px;
+  width:100%;
+  max-height:250px;
+  border-radius:10px;
+  object-fit:contain; /* 🔧 muestra toda la imagen */
+  background:#000; /* fondo para mejor contraste */
+  display:none;
+  margin-bottom:10px;
   border:1px solid var(--border);
   transition:opacity .3s ease;
 }
@@ -119,7 +124,7 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 
 <script>
 const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
-const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9"; // link directo sin acortador
+const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9";
 const DEFAULT_CARD="img/Captura_de_pantalla_2025-10-13_095018.png";
 
 // ✨ Frases
@@ -162,7 +167,7 @@ const COPY={
  }
 };
 
-// Idiomas
+// Idioma
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
 const currentLangEl=document.getElementById('current-lang');
@@ -236,7 +241,7 @@ function showRandomQuote(){
   setTimeout(()=>quoteBox.classList.remove('visible'),2500);
 }
 
-// Compartir
+// Compartir experiencia
 async function shareExperience(e){
   e&&e.preventDefault();
   const dict=COPY[currentLang];
@@ -244,19 +249,20 @@ async function shareExperience(e){
   let fileToShare=selectedFile;
 
   try{
-    // Si no hay foto elegida, usa la tarjeta por defecto como blob local
+    // Si no hay foto elegida, usa la tarjeta por defecto
     if(!fileToShare){
       const res=await fetch(DEFAULT_CARD);
       const blob=await res.blob();
       fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
     }
 
-    const shareData={text,files:[fileToShare]};
-
-    if(navigator.canShare?.(shareData)){
-      await navigator.share(shareData);
-    }else{
-      // Fallback: solo texto (sin "abriendo WhatsApp")
+    // 🧠 FIX Android: no combinar texto + archivo (solo uno)
+    if(navigator.canShare?.({files:[fileToShare]})){
+      await navigator.share({files:[fileToShare]});
+    } else if(navigator.canShare?.({text})){
+      await navigator.share({text});
+    } else {
+      // Fallback: WhatsApp con texto
       const encoded=encodeURIComponent(text);
       window.open(`https://api.whatsapp.com/send?text=${encoded}`,"_blank");
     }
@@ -266,12 +272,6 @@ async function shareExperience(e){
     console.log("Cancelado o error:",err);
   }
 }
-
-btnShare.onclick=shareExperience;
-</script>
-</body>
-</html>
-
 
 btnShare.onclick=shareExperience;
 </script>
