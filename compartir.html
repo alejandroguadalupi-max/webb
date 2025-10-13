@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -6,57 +7,54 @@
 <title>Compartir experiencia · Casablanca</title>
 <style>
 :root{
-  --text:#0b0f18; --muted:#6b7280; --accent:#2563eb;
-  --bg:#f9fafb; --border:#e5e7eb;
+  --text:#0b0f18;--muted:#6b7280;--accent:#2563eb;
+  --bg:#f9fafb;--border:#e5e7eb;
 }
 *{box-sizing:border-box;}
 body{
-  margin:0; font-family:system-ui,-apple-system,Roboto,sans-serif;
-  background:var(--bg); color:var(--text);
-  min-height:100svh; display:flex; flex-direction:column;
-  align-items:center; justify-content:flex-start;
-  padding:16px; position:relative;
+  margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:16px;position:relative;
 }
 .wrap{
-  width:100%; max-width:420px;
-  display:flex; flex-direction:column; align-items:center;
-  margin-top:20vh; transition:margin-top .4s ease;
+  width:100%;max-width:420px;
+  display:flex;flex-direction:column;align-items:center;
+  margin-top:20vh;transition:margin-top .4s ease;
 }
 .wrap.centered{margin-top:8vh;}
 header{
-  width:100%; display:flex; align-items:center; justify-content:flex-start;
-  position:absolute; top:16px; left:16px; right:16px;
+  width:100%;display:flex;align-items:center;justify-content:flex-start;
+  position:absolute;top:16px;left:16px;right:16px;
 }
 .back{
-  background:rgba(0,0,0,.05); padding:8px 10px; border-radius:10px;
-  text-decoration:none; color:var(--text); font-weight:700; font-size:15px;
+  background:rgba(0,0,0,.05);padding:8px 10px;border-radius:10px;
+  text-decoration:none;color:var(--text);font-weight:700;font-size:15px;
 }
 .share-card{
-  background:#fff; border-radius:14px; padding:20px;
+  background:#fff;border-radius:14px;padding:20px;
   border:1px solid var(--border);
   box-shadow:0 8px 20px rgba(0,0,0,.06);
-  width:100%; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; min-height:300px;
+  width:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:300px;
 }
-h2{margin:0 0 6px; font-size:18px; text-align:center;}
-p{margin:0 0 10px; font-size:14px; text-align:center;}
+h2{margin:0 0 6px;font-size:18px;text-align:center;}
+p{margin:0 0 10px;font-size:14px;text-align:center;}
 .photo-preview{
-  width:100%; max-height:250px; border-radius:10px;
-  object-fit:cover; display:none; margin-bottom:10px;
+  width:100%;max-height:250px;border-radius:10px;
+  object-fit:cover;display:none;margin-bottom:10px;
   border:1px solid var(--border);
 }
-.row{display:flex; gap:8px; justify-content:center; margin-bottom:12px; width:100%;}
+.row{display:flex;gap:8px;justify-content:center;margin-bottom:12px;width:100%;}
 .btn{
-  flex:1; padding:14px 0; border-radius:10px; border:0;
-  font-weight:700; cursor:pointer; font-size:16px;
+  flex:1;padding:14px 0;border-radius:10px;border:0;
+  font-weight:700;cursor:pointer;font-size:16px;
   transition:transform .15s ease;
 }
 .btn:active{transform:scale(.96);}
 .btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
-.btn-blue{
-  background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;
-  width:100%;
-}
+.btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;width:100%;}
 .note{text-align:center;color:var(--muted);font-size:13px;line-height:1.3;margin-top:4px;}
 #lang-selector{position:absolute;top:16px;right:16px;}
 #current-lang{cursor:pointer;background:rgba(0,0,0,.05);padding:6px 8px;border-radius:8px;}
@@ -74,6 +72,12 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
   background:#fff;padding:18px 24px;border-radius:12px;
   text-align:center;font-weight:600;color:var(--text);
   box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+#randomQuote{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(255,255,255,.95);padding:14px 18px;border-radius:12px;
+  font-size:15px;font-style:italic;box-shadow:0 6px 20px rgba(0,0,0,.15);
+  display:none;z-index:200;text-align:center;
 }
 </style>
 </head>
@@ -108,10 +112,10 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
     </div>
     
     <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta del restaurante.</p>
-    <p class="note" id="randomQuote" style="margin-top:8px;font-style:italic;"></p>
   </div>
 </div>
 
+<div id="randomQuote"></div>
 <div class="modal" id="modal"><div class="modal-content" id="modalMsg"></div></div>
 
 <script>
@@ -159,7 +163,7 @@ const COPY={
  }
 };
 
-// Idiomas
+// Idioma
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
 const currentLangEl=document.getElementById('current-lang');
@@ -173,7 +177,6 @@ function setLang(lang){
   backBtn.textContent=c.back;
   noteEl.textContent=c.note;
   currentLangEl.textContent=FLAGS[lang];
-  showRandomQuote();
 }
 function buildLangOptions(){
   langOptions.innerHTML='';
@@ -195,15 +198,7 @@ document.addEventListener('click',e=>{
 });
 buildLangOptions();
 
-// Mostrar frase aleatoria
-function showRandomQuote(){
-  const list=RANDOM_QUOTES[currentLang]||RANDOM_QUOTES.es;
-  const q=list[Math.floor(Math.random()*list.length)];
-  document.getElementById('randomQuote').textContent=q;
-}
-showRandomQuote();
-
-// Foto
+// Elementos
 const wrap=document.getElementById('wrap');
 const cameraInput=document.getElementById('cameraInput');
 const galleryInput=document.getElementById('galleryInput');
@@ -215,6 +210,7 @@ const backBtn=document.getElementById('backBtn');
 const noteEl=document.getElementById('note');
 const modal=document.getElementById('modal');
 const modalMsg=document.getElementById('modalMsg');
+const quoteBox=document.getElementById('randomQuote');
 let selectedFile=null;
 
 setLang(currentLang);
@@ -233,36 +229,50 @@ function handleFileInput(input){
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
-// Compartir universal
+// Mostrar frase en el centro
+function showRandomQuote(){
+  const list=RANDOM_QUOTES[currentLang]||RANDOM_QUOTES.es;
+  const q=list[Math.floor(Math.random()*list.length)];
+  quoteBox.textContent=q;
+  quoteBox.style.display='block';
+  setTimeout(()=>quoteBox.style.display='none',2500);
+}
+
+// Compartir
 async function shareExperience(e){
   e&&e.preventDefault();
   const dict=COPY[currentLang];
-  showRandomQuote(); // 💬 Nueva frase antes de compartir
   const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
   let fileToShare=selectedFile;
+
   if(!fileToShare){
     const res=await fetch(DEFAULT_CARD);
     const blob=await res.blob();
     fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
   }
 
-  const shareData={text};
-  if(navigator.canShare?.({files:[fileToShare]}))
-    shareData.files=[fileToShare];
+  const shareData={text,files:[fileToShare]};
 
   try{
-    if(navigator.share && navigator.canShare?.(shareData)){
+    const isAndroid=/android/i.test(navigator.userAgent);
+
+    if(!isAndroid && navigator.share && navigator.canShare?.(shareData)){
       await navigator.share(shareData);
       showModal("✅ ¡Compartido con éxito!");
+      showRandomQuote();
     }else{
+      // Android o fallback: abrir WhatsApp con texto
       const encoded=encodeURIComponent(text);
       window.open(`https://api.whatsapp.com/send?text=${encoded}`,"_blank");
       showModal("📱 Abriendo WhatsApp...");
+      // Volver al sitio tras 3s
+      setTimeout(()=>{ showRandomQuote(); window.focus(); },3000);
     }
   }catch(err){
-    console.log("Cancelado o error, se ignora.");
+    console.log("Cancelado o error:",err);
   }
 }
+
 btnShare.onclick=shareExperience;
 
 function showModal(msg){
@@ -273,5 +283,4 @@ function showModal(msg){
 </script>
 </body>
 </html>
-
 
