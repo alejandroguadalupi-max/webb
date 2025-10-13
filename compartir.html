@@ -17,23 +17,19 @@ body{
   display:flex; flex-direction:column;
   justify-content:flex-start; align-items:center;
   padding:16px;
-  transition:all .3s ease;
   position:relative;
 }
 .wrap{
   width:100%; max-width:420px;
   display:flex; flex-direction:column; align-items:center;
-  margin-top:20vh; /* centrado inicial */
+  margin-top:20vh;
   transition:margin-top .4s ease;
 }
-.wrap.centered{
-  margin-top:8vh; /* baja el bloque al centro */
-}
+.wrap.centered{margin-top:8vh;}
 header{
   width:100%;
   display:flex; align-items:center; justify-content:flex-start;
   position:absolute; top:16px; left:16px; right:16px;
-  z-index:10;
 }
 .back{
   background:rgba(0,0,0,.05); padding:8px 10px; border-radius:10px;
@@ -45,7 +41,6 @@ header{
   box-shadow:0 8px 20px rgba(0,0,0,.06);
   width:100%; display:flex; flex-direction:column; align-items:center;
   justify-content:center; min-height:300px;
-  transition:all .3s ease;
 }
 h2{margin:0 0 6px; font-size:18px; text-align:center;}
 p{margin:0 0 10px; font-size:14px; text-align:center;}
@@ -68,7 +63,7 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
 #lang-options{
   display:none;position:absolute;right:0;top:40px;background:#fff;
   border:1px solid var(--border);border-radius:10px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);z-index:40;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 .lang-option{padding:8px 10px;cursor:pointer;font-weight:700;}
 .modal{
@@ -89,18 +84,19 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
   <div id="lang-options"></div>
 </div>
 
-<div class="wrap" role="main" id="wrap">
+<div class="wrap" id="wrap">
   <header>
-    <a id="backBtn" class="back" href="restaurante_casablanca.html" aria-label="Volver">⬅ Volver</a>
+    <a id="backBtn" class="back" href="restaurante_casablanca.html">⬅ Volver</a>
   </header>
 
-  <div class="share-card" aria-labelledby="shareTitle">
+  <div class="share-card">
     <h2 id="shareTitle">📸 Comparte tu momento</h2>
     <p id="shareSub">Elige o toma una foto y compártela con tus amigos.</p>
 
     <img id="photoPreview" class="photo-preview" alt="Vista previa">
 
-    <input type="file" id="photoInput" accept="image/*" style="display:none;">
+    <!-- 📷 CORRECCIÓN: permitir cámara directamente -->
+    <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none;">
 
     <div class="row">
       <button id="btnPhoto" class="btn btn-yellow"></button>
@@ -115,9 +111,7 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
   </div>
 </div>
 
-<div class="modal" id="modal">
-  <div class="modal-content" id="modalMsg"></div>
-</div>
+<div class="modal" id="modal"><div class="modal-content" id="modalMsg"></div></div>
 
 <script>
 const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
@@ -126,55 +120,54 @@ const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
 
 const FLAGS={es:"🇪🇸",en:"🇬🇧",de:"🇩🇪",fr:"🇫🇷"};
 const COPY={
- es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta minimalista del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
- en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a minimal restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"},
- de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach ein Foto oder wähle eins und teile es mit Freunden.",shareMsg:`Ich habe gerade ${RESTAURANT_NAME} genossen 🍸✨ Sehr empfehlenswert!`,note:"Wenn du kein Foto auswählst, wird eine minimalistische Karte geteilt.",previewNote:"✅ Vorschau deines Fotos. Wenn es dir nicht gefällt, drücke '🔁 Wiederholen'.",back:"⬅ Zurück",shareBtn:"Teilen",photoBtn:"📷 Foto wählen",retakeBtn:"🔁 Wiederholen"},
- fr:{shareTitle:"📸 Partage ton moment",shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",shareMsg:`Je viens de profiter de ${RESTAURANT_NAME} 🍸✨ À ne pas manquer !`,note:"Si vous ne choisissez pas de photo, une carte minimaliste sera partagée.",previewNote:"✅ Prévisualisez votre photo. Si elle ne vous plaît pas, appuyez sur '🔁 Refaire'.",back:"⬅ Retour",shareBtn:"Partager",photoBtn:"📷 Prendre ou choisir",retakeBtn:"🔁 Refaire"}
+ es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
+ en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"}
 };
 
-// ✨ Frases aleatorias por idioma
-const RANDOM_QUOTES = {
-  es: [
-    "La vida sabe mejor cuando se comparte 💛",
-    "Momentos que se disfrutan con los cinco sentidos ✨",
-    "Brindemos por los sabores que nos hacen sonreír 🥂",
-    "Cada instante en Casablanca invita a disfrutar 🌅",
-    "Buen ambiente, buena compañía, buenos recuerdos 🍷",
-    "Porque los mejores planes no se planean, se viven 💫"
-  ],
-  en: [
-    "Life tastes better when shared 💛",
-    "Savor the moment, feel the vibe ✨",
-    "Cheers to flavors that make us smile 🥂",
-    "Every minute at Casablanca feels like a holiday 🌅",
-    "Good food, great company, unforgettable memories 🍷",
-    "The best plans aren’t planned — they just happen 💫"
-  ],
-  de: [
-    "Das Leben schmeckt besser, wenn man es teilt 💛",
-    "Genieße den Moment mit allen Sinnen ✨",
-    "Auf die Aromen, die uns glücklich machen 🥂",
-    "Jeder Augenblick im Casablanca fühlt sich besonders an 🌅",
-    "Gutes Essen, gute Gesellschaft, schöne Erinnerungen 🍷",
-    "Die besten Erlebnisse entstehen spontan 💫"
-  ],
-  fr: [
-    "La vie a meilleur goût quand elle se partage 💛",
-    "Savourez l’instant, ressentez la magie ✨",
-    "À la santé des saveurs qui nous font sourire 🥂",
-    "Chaque moment au Casablanca est un plaisir 🌅",
-    "Bonne table, bons amis, beaux souvenirs 🍷",
-    "Les plus beaux instants sont ceux qu’on ne prévoit pas 💫"
-  ]
-};
-
-
+// ————————————————
+// ⚙️ Idiomas
+// ————————————————
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang])currentLang='es';
 
-const wrap=document.getElementById('wrap');
 const currentLangEl=document.getElementById('current-lang');
 const langOptions=document.getElementById('lang-options');
+function setLang(lang){
+  const c=COPY[lang]||COPY.es;
+  currentLang=lang;localStorage.setItem('userLang',lang);
+  document.getElementById('shareTitle').textContent=c.shareTitle;
+  document.getElementById('shareSub').textContent=c.shareSub;
+  btnPhoto.textContent=c.photoBtn;
+  btnRetake.textContent=c.retakeBtn;
+  btnShare.textContent=c.shareBtn;
+  backBtn.textContent=c.back;
+  noteEl.textContent=selectedFile?c.previewNote:c.note;
+  currentLangEl.textContent=FLAGS[lang];
+}
+function buildLangOptions(){
+  langOptions.innerHTML='';
+  Object.keys(COPY).forEach(code=>{
+    const el=document.createElement('div');
+    el.className='lang-option';
+    el.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
+    el.onclick=()=>{setLang(code);langOptions.style.display='none';};
+    langOptions.appendChild(el);
+  });
+}
+currentLangEl.onclick=e=>{
+  e.stopPropagation();
+  langOptions.style.display=langOptions.style.display==='block'?'none':'block';
+};
+document.addEventListener('click',e=>{
+  if(!document.getElementById('lang-selector').contains(e.target))
+    langOptions.style.display='none';
+});
+buildLangOptions();
+
+// ————————————————
+// 📸 Foto
+// ————————————————
+const wrap=document.getElementById('wrap');
 const photoInput=document.getElementById('photoInput');
 const photoPreview=document.getElementById('photoPreview');
 const btnPhoto=document.getElementById('btnPhoto');
@@ -186,101 +179,72 @@ const modal=document.getElementById('modal');
 const modalMsg=document.getElementById('modalMsg');
 let selectedFile=null;
 
-function buildLangOptions(){
- langOptions.innerHTML='';
- Object.keys(COPY).forEach(code=>{
-  const d=document.createElement('div');
-  d.className='lang-option';
-  d.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
-  d.addEventListener('click',e=>{
-   e.stopPropagation();setLang(code);
-  });
-  langOptions.appendChild(d);
- });
-}
-currentLangEl.addEventListener('click',e=>{
- e.stopPropagation();
- langOptions.style.display=langOptions.style.display==='block'?'none':'block';
-});
-document.addEventListener('click',e=>{
- if(!document.getElementById('lang-selector').contains(e.target))
-   langOptions.style.display='none';
-});
-function setLang(lang){
- if(!COPY[lang])lang='es';
- currentLang=lang;
- localStorage.setItem('userLang',lang);
- const c=COPY[lang];
- document.getElementById('shareTitle').textContent=c.shareTitle;
- document.getElementById('shareSub').textContent=c.shareSub;
- btnPhoto.textContent=c.photoBtn;
- btnRetake.textContent=c.retakeBtn;
- btnShare.textContent=c.shareBtn;
- backBtn.textContent=c.back;
- noteEl.textContent=selectedFile?c.previewNote:c.note;
- currentLangEl.textContent=FLAGS[lang];
- langOptions.style.display='none';
-}
-buildLangOptions(); setLang(currentLang);
+setLang(currentLang);
 
-/* Foto */
-btnPhoto.addEventListener('click',()=>photoInput.click());
-photoInput.addEventListener('change',e=>{
- const f=e.target.files?.[0];
- if(!f)return;
- selectedFile=f;
- photoPreview.src=URL.createObjectURL(f);
- photoPreview.style.display='block';
- btnRetake.style.display='inline-block';
- wrap.classList.add('centered');
- setLang(currentLang);
-});
-btnRetake.addEventListener('click',()=>{
- photoInput.value='';
- selectedFile=null;
- photoPreview.src='';
- photoPreview.style.display='none';
- btnRetake.style.display='none';
- wrap.classList.remove('centered');
- setLang(currentLang);
-});
+btnPhoto.onclick=()=>photoInput.click();
+photoInput.onchange=e=>{
+  const f=e.target.files?.[0];
+  if(!f)return;
+  selectedFile=f;
+  photoPreview.src=URL.createObjectURL(f);
+  photoPreview.style.display='block';
+  btnRetake.style.display='inline-block';
+  wrap.classList.add('centered');
+  noteEl.textContent=COPY[currentLang].previewNote;
+};
+btnRetake.onclick=()=>{
+  photoInput.value=''; selectedFile=null;
+  photoPreview.src=''; photoPreview.style.display='none';
+  btnRetake.style.display='none';
+  wrap.classList.remove('centered');
+  noteEl.textContent=COPY[currentLang].note;
+};
 
-/* Compartir */
+// ————————————————
+// 📤 Compartir universal
+// ————————————————
 async function shareExperience(e){
- e&&e.preventDefault();
- const dict=COPY[currentLang];
- const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
- let fileToShare=selectedFile;
- if(!fileToShare){
-   try{
-     const res=await fetch(DEFAULT_CARD);
-     const blob=await res.blob();
-     fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
-   }catch{}
- }
- const shareData={text};
- if(fileToShare&&navigator.canShare&&navigator.canShare({files:[fileToShare]}))
-   shareData.files=[fileToShare];
- try{
-   if(navigator.share){
-     await navigator.share(shareData);
-     // Frase aleatoria al compartir
-     const quoteList = RANDOM_QUOTES[currentLang] || RANDOM_QUOTES.es;
-     const randomQuote = quoteList[Math.floor(Math.random() * quoteList.length)];
-     showModal(randomQuote);
-     btnRetake.click();
-   }else{
-     await navigator.clipboard.writeText(text);
-     showModal("Copiado al portapapeles ✅");
-   }
- }catch(err){console.log("cancelado o error",err);}
+  e&&e.preventDefault();
+  const dict=COPY[currentLang];
+  const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_SHORT}`;
+  let fileToShare=selectedFile;
+
+  if(!fileToShare){
+    const res=await fetch(DEFAULT_CARD);
+    const blob=await res.blob();
+    fileToShare=new File([blob],"casablanca.jpg",{type:blob.type});
+  }
+
+  // Intento principal
+  const shareData={text};
+  if(navigator.canShare && navigator.canShare({files:[fileToShare]})){
+    shareData.files=[fileToShare];
+  }
+
+  try{
+    // Si puede compartir texto+imagen, perfecto
+    if(navigator.share && (navigator.canShare?.(shareData) || navigator.canShare?.({files:[fileToShare]}))){
+      await navigator.share(shareData);
+      showModal("✅ ¡Compartido con éxito!");
+    }else{
+      // Fallback Android/WhatsApp
+      const encoded=encodeURIComponent(text);
+      window.open(`https://wa.me/?text=${encoded}`,"_blank");
+    }
+    btnRetake.click();
+  }catch(err){
+    console.log("Cancelado o error:",err);
+    showModal("❌ No se pudo compartir");
+  }
 }
+
+btnShare.onclick=shareExperience;
+
 function showModal(msg){
- modalMsg.textContent=msg;
- modal.style.display='flex';
- setTimeout(()=>modal.style.display='none',2500);
+  modalMsg.textContent=msg;
+  modal.style.display='flex';
+  setTimeout(()=>modal.style.display='none',2500);
 }
-btnShare.addEventListener('click',shareExperience);
 </script>
 </body>
 </html>
