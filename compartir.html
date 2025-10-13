@@ -49,7 +49,9 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
 .btn{
   flex:1; padding:12px 0; border-radius:10px; border:0;
   font-weight:700; cursor:pointer; font-size:15px;
+  transition:transform .15s ease;
 }
+.btn:active{transform:scale(.96);}
 .btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
 .btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
@@ -91,20 +93,21 @@ p{margin:0 0 10px; font-size:14px; text-align:center;}
 
     <img id="photoPreview" class="photo-preview" alt="Vista previa">
 
-    <!-- Inputs separados para garantizar compatibilidad en Android/iOS -->
+    <!-- Inputs separados -->
     <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
     <input type="file" id="galleryInput" accept="image/*" style="display:none;">
 
     <div class="row">
-      <button id="btnPhoto" class="btn btn-yellow"></button>
-      <button id="btnRetake" class="btn btn-ghost" style="display:none;"></button>
+      <button id="btnCamera" class="btn btn-yellow">📷 Tomar foto</button>
+      <button id="btnGallery" class="btn btn-yellow">🖼️ Elegir foto</button>
     </div>
 
     <div class="row">
-      <button id="btnShare" class="btn btn-blue"></button>
+      <button id="btnRetake" class="btn btn-ghost" style="display:none;">🔁 Repetir</button>
+      <button id="btnShare" class="btn btn-blue">Compartir</button>
     </div>
     
-    <p class="note" id="note"></p>
+    <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta del restaurante.</p>
   </div>
 </div>
 
@@ -117,8 +120,8 @@ const DEFAULT_CARD="img/Captura de pantalla 2025-10-13 095018.png";
 
 const FLAGS={es:"🇪🇸",en:"🇬🇧"};
 const COPY={
- es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",photoBtn:"📷 Tomar o elegir",retakeBtn:"🔁 Repetir"},
- en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",photoBtn:"📷 Take or choose",retakeBtn:"🔁 Retake"}
+ es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",previewNote:"✅ Previsualiza tu foto. Si no te gusta, pulsa '🔁 Repetir'.",back:"⬅ Volver",shareBtn:"Compartir",retakeBtn:"🔁 Repetir"},
+ en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,note:"If you don't choose a photo, a restaurant card will be shared.",previewNote:"✅ Preview your photo. If you don’t like it, tap '🔁 Retake'.",back:"⬅ Back",shareBtn:"Share",retakeBtn:"🔁 Retake"}
 };
 
 // — Idiomas —
@@ -131,9 +134,8 @@ function setLang(lang){
   currentLang=lang;localStorage.setItem('userLang',lang);
   document.getElementById('shareTitle').textContent=c.shareTitle;
   document.getElementById('shareSub').textContent=c.shareSub;
-  btnPhoto.textContent=c.photoBtn;
-  btnRetake.textContent=c.retakeBtn;
   btnShare.textContent=c.shareBtn;
+  btnRetake.textContent=c.retakeBtn;
   backBtn.textContent=c.back;
   noteEl.textContent=selectedFile?c.previewNote:c.note;
   currentLangEl.textContent=FLAGS[lang];
@@ -163,7 +165,8 @@ const wrap=document.getElementById('wrap');
 const cameraInput=document.getElementById('cameraInput');
 const galleryInput=document.getElementById('galleryInput');
 const photoPreview=document.getElementById('photoPreview');
-const btnPhoto=document.getElementById('btnPhoto');
+const btnCamera=document.getElementById('btnCamera');
+const btnGallery=document.getElementById('btnGallery');
 const btnRetake=document.getElementById('btnRetake');
 const btnShare=document.getElementById('btnShare');
 const backBtn=document.getElementById('backBtn');
@@ -174,14 +177,8 @@ let selectedFile=null;
 
 setLang(currentLang);
 
-btnPhoto.onclick=()=>{
-  // Mostrar menú nativo según dispositivo
-  if(confirm("¿Quieres tomar una foto con la cámara? (Cancelar para elegir de la galería)")){
-    cameraInput.click();
-  }else{
-    galleryInput.click();
-  }
-};
+btnCamera.onclick=()=>cameraInput.click();
+btnGallery.onclick=()=>galleryInput.click();
 
 function handleFileInput(input){
   const f=input.files?.[0];
@@ -223,14 +220,14 @@ async function shareExperience(e){
     shareData.files=[fileToShare];
 
   try{
-    if(navigator.share && (navigator.canShare?.(shareData) || navigator.canShare?.({files:[fileToShare]}))){
+    if(navigator.share && (navigator.canShare?.(shareData))){
       await navigator.share(shareData);
       showModal("✅ ¡Compartido con éxito!");
     }else{
-      // Fallback: abrir WhatsApp con texto (funciona en Android/iPhone)
+      // Fallback universal (WhatsApp API oficial)
       const encoded=encodeURIComponent(text);
       window.open(`https://api.whatsapp.com/send?text=${encoded}`,"_blank");
-      showModal("📱 Compartiendo por WhatsApp...");
+      showModal("📱 Abriendo WhatsApp...");
     }
     btnRetake.click();
   }catch(err){
@@ -238,7 +235,6 @@ async function shareExperience(e){
     showModal("❌ No se pudo compartir");
   }
 }
-
 btnShare.onclick=shareExperience;
 
 function showModal(msg){
