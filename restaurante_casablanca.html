@@ -7,9 +7,13 @@
 <title>¿Cómo fue tu experiencia?</title>
 <style>
   :root{
-    --text:#0b0f18; --muted:#566073;
-    --accent:#2563eb; --ok:#16a34a;
-    --card:#ffffff; --bg:#f7f7fb; --border:#e6e8ee;
+    --text:#0b0f18; 
+    --muted:#566073;
+    --accent:#2563eb; 
+    --ok:#16a34a;
+    --card:#ffffff; 
+    --bg:#f7f7fb; 
+    --border:#cfd8f3; /* borde más elegante acorde al azul del acento */
   }
 
   *,*::before,*::after{box-sizing:border-box}
@@ -31,18 +35,26 @@
     max-height:100svh;
     display:flex; flex-direction:column; gap:14px;
     background:var(--card);
-    border:1px solid var(--border);
+    border:2px solid var(--border); /* borde un poco más visible */
     border-radius:20px;
     padding:18px;
     box-shadow:0 18px 45px rgba(12,20,33,.08);
     position:relative;
   }
 
-  /* Selector de idioma moderno */
+  /* Selector de idioma centrado */
   #lang-selector{
-    position:absolute; top:12px; right:12px; z-index:10;
+    position:absolute; 
+    top:-40px; 
+    left:50%; 
+    transform:translateX(-50%);
+    z-index:10;
     font-size:0;
+    display:flex; 
+    flex-direction:column; 
+    align-items:center;
   }
+
   #current-lang{
     cursor:pointer;
     font-size:22px;
@@ -53,13 +65,14 @@
     align-items:center;
     justify-content:center;
     transition:background .2s ease;
+    border:1px solid rgba(0,0,0,.05);
   }
   #current-lang:hover{ background:rgba(0,0,0,.08); }
+
   #lang-options{
     display:none;
     position:absolute;
     top:calc(100% + 6px);
-    right:0;
     background:var(--card);
     border:1px solid var(--border);
     border-radius:12px;
@@ -68,6 +81,7 @@
     overflow:hidden;
     min-width:120px;
   }
+
   .lang-option{
     display:flex; align-items:center; gap:8px;
     padding:6px 10px;
@@ -90,8 +104,13 @@
   @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
   .tile{
-    border:1px solid var(--border); border-radius:16px; background:#fff;
-    padding:12px; display:flex; flex-direction:column; align-items:center;
+    border:1px solid var(--border); 
+    border-radius:16px; 
+    background:#fff;
+    padding:12px; 
+    display:flex; 
+    flex-direction:column; 
+    align-items:center;
   }
   .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
   .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
@@ -137,7 +156,7 @@
 </head>
 <body>
 <main class="card" id="mainCard" role="main" aria-labelledby="t">
-  <!-- Selector de idioma -->
+  <!-- Selector de idioma centrado -->
   <div id="lang-selector" aria-haspopup="true">
     <div id="current-lang" aria-label="Cambiar idioma"></div>
     <div id="lang-options" role="menu" aria-hidden="true"></div>
@@ -211,7 +230,6 @@ function setLang(lang){
   document.getElementById('privateNote').textContent = d.privateNote;
   document.getElementById('openShare').textContent = "📸 " + d.shareBtn;
   document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
-
   document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
   document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
   document.getElementById('current-lang').textContent = FLAGS[lang];
@@ -249,3 +267,4 @@ initLangSelector();
 </script>
 </body>
 </html>
+
