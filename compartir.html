@@ -1,150 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Compartir experiencia · Casablanca</title>
+<style>
+:root{
+  --text:#0b0f18;--muted:#6b7280;--accent:#2563eb;
+  --bg:#f9fafb;--border:#e5e7eb;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:16px;position:relative;
+}
+.wrap{
+  width:100%;max-width:420px;
+  display:flex;flex-direction:column;align-items:center;
+  margin-top:20vh;transition:margin-top .4s ease;
+}
+.wrap.centered{margin-top:8vh;}
+header{
+  width:100%;display:flex;align-items:center;justify-content:flex-start;
+  position:absolute;top:16px;left:16px;right:16px;
+}
+.back{
+  background:rgba(0,0,0,.05);padding:8px 10px;border-radius:10px;
+  text-decoration:none;color:var(--text);font-weight:700;font-size:15px;
+  transition:background .2s ease;
+}
+.back:hover{background:rgba(0,0,0,.1);}
+.share-card{
+  background:#fff;border-radius:14px;padding:20px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  width:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:300px;
+}
+h2{margin:0 0 6px;font-size:18px;text-align:center;}
+p{margin:0 0 10px;font-size:14px;text-align:center;}
+.photo-container{
+  width:100%;
+  aspect-ratio:4/3;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden;
+  display:none;
+  margin-bottom:10px;
+  border:1px solid var(--border);
+}
+.photo-preview{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  transition:opacity .3s ease;
+}
+.row{display:flex;gap:8px;justify-content:center;margin-bottom:12px;width:100%;}
+.btn{
+  flex:1;padding:14px 0;border-radius:10px;border:0;
+  font-weight:700;cursor:pointer;font-size:16px;
+  transition:transform .15s ease, box-shadow .2s ease;
+}
+.btn:active{transform:scale(.96);}
+.btn-yellow{background:linear-gradient(180deg,#fde047,#facc15);color:#000;}
+.btn-yellow:hover{box-shadow:0 3px 8px rgba(0,0,0,.15);}
+.btn-blue{background:linear-gradient(180deg,#6baeff,var(--accent));color:#fff;width:100%;}
+.btn-blue:hover{box-shadow:0 3px 10px rgba(0,0,0,.2);}
+.note{text-align:center;color:var(--muted);font-size:13px;line-height:1.3;margin-top:4px;}
+#lang-selector{position:absolute;top:16px;right:16px;}
+#current-lang{cursor:pointer;background:rgba(0,0,0,.05);padding:6px 8px;border-radius:8px;}
+#lang-options{
+  display:none;position:absolute;right:0;top:40px;background:#fff;
+  border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.lang-option{padding:8px 10px;cursor:pointer;font-weight:700;}
+.lang-option:hover{background:#f1f5f9;}
+</style>
+</head>
+<body>
+
+<div id="lang-selector">
+  <div id="current-lang">🇪🇸</div>
+  <div id="lang-options"></div>
+</div>
+
+<div class="wrap" id="wrap">
+  <header>
+    <a id="backBtn" class="back" href="restaurante_casablanca.html">⬅ Volver</a>
+  </header>
+
+  <div class="share-card">
+    <h2 id="shareTitle">📸 Comparte tu momento</h2>
+    <p id="shareSub">Elige o toma una foto y compártela con tus amigos.</p>
+
+    <div class="photo-container" id="photoContainer">
+      <img id="photoPreview" class="photo-preview" alt="Vista previa">
+    </div>
+
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
+    <input type="file" id="galleryInput" accept="image/*" style="display:none;">
+
+    <div class="row">
+      <button id="btnCamera" class="btn btn-yellow">📷 Tomar foto</button>
+      <button id="btnGallery" class="btn btn-yellow">🖼️ Elegir foto</button>
+    </div>
+
+    <div class="row">
+      <button id="btnShare" class="btn btn-blue">Compartir</button>
+    </div>
+    
+    <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta del restaurante.</p>
+  </div>
+</div>
+
 <script>
 const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9";
 const DEFAULT_CARD="img/logo35.png";
-const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
 
 const COPY={
-  es:{
-    shareTitle:"📸 Comparte tu momento",
-    shareSub:"Elige o toma una foto y compártela con tus amigos.",
-    btnCamera:"📷 Tomar foto",
-    btnGallery:"🖼️ Elegir foto",
-    shareBtn:"Compartir",
-    note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",
-    back:"⬅ Volver",
-    shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`
-  },
-  en:{
-    shareTitle:"📸 Share your moment",
-    shareSub:"Take or choose a photo and share with friends.",
-    btnCamera:"📷 Take photo",
-    btnGallery:"🖼️ Choose photo",
-    shareBtn:"Share",
-    note:"If you don't choose a photo, a restaurant card will be shared.",
-    back:"⬅ Back",
-    shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`
-  },
-  fr:{
-    shareTitle:"📸 Partage ton moment",
-    shareSub:"Prends ou choisis une photo et partage-la avec tes amis.",
-    btnCamera:"📷 Prendre une photo",
-    btnGallery:"🖼️ Choisir une photo",
-    shareBtn:"Partager",
-    note:"Si tu ne choisis pas de photo, une carte du restaurant sera partagée.",
-    back:"⬅ Retour",
-    shareMsg:`Je viens de passer un bon moment à ${RESTAURANT_NAME} 🍸✨ À découvrir absolument !`
-  },
-  de:{
-    shareTitle:"📸 Teile deinen Moment",
-    shareSub:"Mach ein Foto oder wähle eines aus und teile es mit Freunden.",
-    btnCamera:"📷 Foto aufnehmen",
-    btnGallery:"🖼️ Foto auswählen",
-    shareBtn:"Teilen",
-    note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",
-    back:"⬅ Zurück",
-    shareMsg:`Gerade eine tolle Zeit bei ${RESTAURANT_NAME} 🍸✨ Sehr zu empfehlen!`
-  }
+ es:{
+   shareTitle:"📸 Comparte tu momento",
+   shareSub:"Elige o toma una foto y compártela con tus amigos.",
+   shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,
+   note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",
+   back:"⬅ Volver",
+   shareBtn:"Compartir",
+   takePhoto:"📷 Tomar foto",
+   choosePhoto:"🖼️ Elegir foto",
+   flag:"🇪🇸"
+ },
+ en:{
+   shareTitle:"📸 Share your moment",
+   shareSub:"Take or choose a photo and share with friends.",
+   shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,
+   note:"If you don't choose a photo, a restaurant card will be shared.",
+   back:"⬅ Back",
+   shareBtn:"Share",
+   takePhoto:"📷 Take photo",
+   choosePhoto:"🖼️ Choose photo",
+   flag:"🇬🇧"
+ }
 };
 
-let currentLang=localStorage.getItem("userLang")||navigator.language.slice(0,2)||"es";
-if(!COPY[currentLang])currentLang="es";
-
-const wrap=document.getElementById("wrap");
-const cameraInput=document.getElementById("cameraInput");
-const galleryInput=document.getElementById("galleryInput");
-const photoPreview=document.getElementById("photoPreview");
-const photoContainer=document.getElementById("photoContainer");
-const btnCamera=document.getElementById("btnCamera");
-const btnGallery=document.getElementById("btnGallery");
-const btnShare=document.getElementById("btnShare");
-const backBtn=document.getElementById("backBtn");
-const noteEl=document.getElementById("note");
+let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
+if(!COPY[currentLang])currentLang='es';
+const wrap=document.getElementById('wrap');
+const cameraInput=document.getElementById('cameraInput');
+const galleryInput=document.getElementById('galleryInput');
+const photoPreview=document.getElementById('photoPreview');
+const photoContainer=document.getElementById('photoContainer');
+const btnCamera=document.getElementById('btnCamera');
+const btnGallery=document.getElementById('btnGallery');
+const btnShare=document.getElementById('btnShare');
+const backBtn=document.getElementById('backBtn');
+const noteEl=document.getElementById('note');
+const currentLangDiv=document.getElementById('current-lang');
+let selectedFile=null;
 
 function setLang(lang){
-  const t=COPY[lang]||COPY.es;
-  document.getElementById("shareTitle").textContent=t.shareTitle;
-  document.getElementById("shareSub").textContent=t.shareSub;
-  btnCamera.textContent=t.btnCamera;
-  btnGallery.textContent=t.btnGallery;
-  btnShare.textContent=t.shareBtn;
-  noteEl.textContent=t.note;
-  backBtn.textContent=t.back;
-  document.getElementById("current-lang").textContent=FLAGS[lang]||"🇪🇸";
-  localStorage.setItem("userLang",lang);
+  const c=COPY[lang]||COPY.es;
+  shareTitle.textContent=c.shareTitle;
+  shareSub.textContent=c.shareSub;
+  btnShare.textContent=c.shareBtn;
+  backBtn.textContent=c.back;
+  noteEl.textContent=c.note;
+  btnCamera.textContent=c.takePhoto;
+  btnGallery.textContent=c.choosePhoto;
+  currentLangDiv.textContent=c.flag;
 }
 setLang(currentLang);
 
-// selector de idioma
-const currentLangDiv=document.getElementById("current-lang");
-const langOptions=document.getElementById("lang-options");
-Object.keys(COPY).forEach(code=>{
-  const opt=document.createElement("div");
-  opt.className="lang-option";
-  opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
-  opt.onclick=()=>setLang(code);
-  langOptions.appendChild(opt);
-});
-currentLangDiv.onclick=(e)=>{
-  e.stopPropagation();
-  langOptions.style.display=langOptions.style.display==="block"?"none":"block";
-};
-document.addEventListener("click",()=>langOptions.style.display="none");
+btnCamera.onclick=()=>cameraInput.click();
+btnGallery.onclick=()=>galleryInput.click();
 
-// carga foto
-let selectedFile=null;
-cameraInput.onchange=()=>handleFile(cameraInput);
-galleryInput.onchange=()=>handleFile(galleryInput);
-function handleFile(input){
-  const file=input.files?.[0];
-  if(!file)return;
-  selectedFile=file;
-  photoPreview.src=URL.createObjectURL(file);
-  photoContainer.style.display="block";
-  wrap.classList.add("centered");
+function handleFileInput(input){
+  const f=input.files?.[0];
+  if(!f)return;
+  selectedFile=f;
+  photoPreview.src=URL.createObjectURL(f);
+  photoContainer.style.display='block';
+  wrap.classList.add('centered');
 }
 
-// Marca de agua moderna
+// 🖋 Marca de agua moderna
 async function addWatermarkToImage(file){
-  return new Promise((resolve)=>{
+  return new Promise(resolve=>{
     const img=new Image();
     img.onload=()=>{
-      const canvas=document.createElement("canvas");
-      const ctx=canvas.getContext("2d");
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d');
       canvas.width=img.width;
       canvas.height=img.height;
       ctx.drawImage(img,0,0);
 
       const fontSize=canvas.width*0.045;
       const text="Terraza Casablanca";
+      const padding=fontSize*0.8;
       ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
-      const textWidth=ctx.measureText(text).width;
-      const padding=fontSize*0.6;
-      const rectWidth=textWidth+padding*2;
-      const rectHeight=fontSize*1.8;
-      const x=canvas.width-rectWidth-60;
-      const y=canvas.height-rectHeight-100;
+      const textWidth=ctx.measureText(text).width+padding*2;
+      const rectHeight=fontSize*1.9;
+      const x=canvas.width-textWidth-50;
+      const y=canvas.height-rectHeight-100; // un poco más arriba
 
-      // fondo moderno dorado con leve desenfoque
-      ctx.fillStyle="rgba(255, 215, 0, 0.85)";
-      ctx.roundRect(x,y,rectWidth,rectHeight,14);
-      ctx.shadowColor="rgba(0,0,0,0.25)";
-      ctx.shadowBlur=8;
+      // Fondo dorado degradado moderno
+      const grad=ctx.createLinearGradient(x,y,x+textWidth,y+rectHeight);
+      grad.addColorStop(0,"rgba(255,215,0,0.85)");
+      grad.addColorStop(1,"rgba(255,255,255,0.9)");
+      ctx.fillStyle=grad;
+      ctx.roundRect(x,y,textWidth,rectHeight,20);
       ctx.fill();
-      ctx.shadowBlur=0;
 
-      // texto centrado, con leve inclinación
-      ctx.save();
-      ctx.translate(canvas.width/2,canvas.height/2);
-      ctx.rotate(-0.02);
-      ctx.restore();
-      ctx.fillStyle="#1a1a1a";
+      // Texto
+      ctx.fillStyle="#1f2937";
       ctx.textAlign="center";
       ctx.textBaseline="middle";
-      ctx.fillText(text,x+rectWidth/2,y+rectHeight/2.1);
+      ctx.fillText(text,x+textWidth/2,y+rectHeight/2.1);
 
-      canvas.toBlob(b=>{
-        resolve(new File([b],"casablanca_momento.jpg",{type:"image/jpeg"}));
+      canvas.toBlob(blob=>{
+        resolve(new File([blob],"casablanca_momento.jpg",{type:"image/jpeg"}));
       },"image/jpeg",0.9);
     };
     img.src=URL.createObjectURL(file);
@@ -163,45 +241,38 @@ CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
   return this;
 };
 
-// compartir
-btnCamera.onclick=()=>cameraInput.click();
-btnGallery.onclick=()=>galleryInput.click();
+cameraInput.onchange=()=>handleFileInput(cameraInput);
+galleryInput.onchange=()=>handleFileInput(galleryInput);
 
-btnShare.onclick=async(e)=>{
-  e.preventDefault();
-  const t=COPY[currentLang];
-  const text=`${t.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_LINK}`;
+async function shareExperience(e){
+  e&&e.preventDefault();
+  const dict=COPY[currentLang];
+  const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_LINK}`;
+  let fileToShare;
 
   try{
-    let fileToShare;
-    if(selectedFile){
-      fileToShare=await addWatermarkToImage(selectedFile);
-    }else{
+    if(!selectedFile){
       const res=await fetch(DEFAULT_CARD);
       const blob=await res.blob();
-      const baseFile=new File([blob],"casablanca_card.jpg",{type:"image/jpeg"});
-      fileToShare=await addWatermarkToImage(baseFile);
+      const logoFile=await addWatermarkToImage(new File([blob],"default.jpg",{type:"image/jpeg"}));
+      fileToShare=logoFile;
+    }else{
+      fileToShare=await addWatermarkToImage(selectedFile);
     }
 
     if(navigator.canShare?.({files:[fileToShare],text})){
       await navigator.share({files:[fileToShare],text});
-    }else{
-      await navigator.share({text});
-    }
+    }else await navigator.share({text});
 
-    // compatibilidad Android/iOS
-    setTimeout(()=>{
-      sessionStorage.setItem("sharedMessage","💛 Gracias por compartir tu experiencia");
-      window.location.href="restaurante_casablanca.html?shared=1";
-    },800);
-
+    alert("💛 La vida sabe mejor cuando se comparte");
+    setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },800);
   }catch(err){
-    // Si cancela o Android se queda en WhatsApp, forzar retorno igualmente
     console.log("Cancelado o error:",err);
-    setTimeout(()=>{
-      sessionStorage.setItem("sharedMessage","💛 Gracias por compartir tu experiencia");
-      window.location.href="restaurante_casablanca.html?shared=1";
-    },1200);
+    setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },1200);
   }
-};
+}
+
+btnShare.onclick=shareExperience;
 </script>
+</body>
+</html>
