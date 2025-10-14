@@ -7,7 +7,7 @@
 <style>
 :root{
   --text:#0b0f18;--muted:#6b7280;--accent:#2563eb;
-  --bg:#f9fafb;--border:#e5e7eb;
+  --bg:#f9fafb;--border:#e5e7eb;--success:#22c55e;
 }
 *{box-sizing:border-box;}
 body{
@@ -16,6 +16,7 @@ body{
   min-height:100svh;display:flex;flex-direction:column;
   align-items:center;justify-content:flex-start;
   padding:16px;position:relative;
+  overflow-x:hidden;
 }
 .wrap{
   width:100%;max-width:420px;
@@ -84,6 +85,22 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 }
 .lang-option{padding:8px 10px;cursor:pointer;font-weight:700;}
 .lang-option:hover{background:#f1f5f9;}
+.success-popup{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;
+  animation:fadeIn .3s ease;
+}
+.success-box{
+  background:#fff;padding:28px 36px;border-radius:18px;
+  text-align:center;box-shadow:0 8px 25px rgba(0,0,0,.2);
+  animation:scaleUp .4s ease;
+}
+.success-box h3{color:var(--success);margin:0;font-size:20px;}
+.success-box p{margin-top:6px;color:var(--muted);font-size:15px;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes scaleUp{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
 </style>
 </head>
 <body>
@@ -116,7 +133,7 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 
     <label class="watermark-toggle">
       <input type="checkbox" id="chkWatermark" checked>
-      Incluir marca de agua del restaurante
+      <span id="watermarkLabel">Incluir nombre del restaurante</span>
     </label>
 
     <div class="row">
@@ -131,10 +148,10 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 const DEFAULT_CARD="img/logo35.png";
 const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
 const COPY={
- es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto"},
- en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo"},
- fr:{shareTitle:"📸 Partagez votre moment",shareSub:"Prenez ou choisissez une photo à partager avec vos amis.",note:"Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",back:"⬅ Retour",shareBtn:"Partager",takePhoto:"📷 Prendre une photo",choosePhoto:"🖼️ Choisir une photo"},
- de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach oder wähle ein Foto und teile es mit Freunden.",note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",takePhoto:"📷 Foto machen",choosePhoto:"🖼️ Foto auswählen"}
+ es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",watermark:"Incluir nombre del restaurante",success:"Compartido con éxito"},
+ en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",watermark:"Include restaurant name",success:"Shared successfully"},
+ fr:{shareTitle:"📸 Partagez votre moment",shareSub:"Prenez ou choisissez une photo à partager avec vos amis.",note:"Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",back:"⬅ Retour",shareBtn:"Partager",takePhoto:"📷 Prendre une photo",choosePhoto:"🖼️ Choisir une photo",watermark:"Inclure le nom du restaurant",success:"Partagé avec succès"},
+ de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach oder wähle ein Foto und teile es mit Freunden.",note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",takePhoto:"📷 Foto machen",choosePhoto:"🖼️ Foto auswählen",watermark:"Restaurantname einfügen",success:"Erfolgreich geteilt"}
 };
 
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
@@ -153,6 +170,7 @@ const noteEl=document.getElementById('note');
 const currentLangDiv=document.getElementById('current-lang');
 const optionsDiv=document.getElementById('lang-options');
 const chkWatermark=document.getElementById('chkWatermark');
+const watermarkLabel=document.getElementById('watermarkLabel');
 
 function setLang(lang){
   if(!COPY[lang])lang='es';
@@ -164,10 +182,10 @@ function setLang(lang){
   noteEl.textContent=c.note;
   btnCamera.textContent=c.takePhoto;
   btnGallery.textContent=c.choosePhoto;
+  watermarkLabel.textContent=c.watermark;
   currentLangDiv.textContent=FLAGS[lang];
   localStorage.setItem('userLang',lang);
 }
-
 function initLangSelector(){
   optionsDiv.innerHTML="";
   Object.keys(COPY).forEach(code=>{
@@ -194,7 +212,6 @@ btnCamera.onclick=()=>cameraInput.click();
 btnGallery.onclick=()=>galleryInput.click();
 
 let selectedFile=null;
-
 function handleFileInput(input){
   const f=input.files?.[0];
   if(!f)return;
@@ -203,33 +220,30 @@ function handleFileInput(input){
   photoContainer.style.display='block';
   wrap.classList.add('centered');
 }
-
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
-/* Añadir marca de agua */
+/* Añadir nombre del restaurante */
 async function addWatermarkToImage(file){
   return new Promise(resolve=>{
     const img=new Image();
     img.onload=()=>{
       const canvas=document.createElement('canvas');
       const ctx=canvas.getContext('2d');
-      canvas.width=img.width;
-      canvas.height=img.height;
+      canvas.width=img.width;canvas.height=img.height;
       ctx.drawImage(img,0,0,canvas.width,canvas.height);
       const fontSize=Math.max(16,canvas.width*0.045);
-      const text="Restaurante Casablanca · Las Canteras";
+      const text="Restaurante Casablanca";
       ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
+      ctx.fillStyle="rgba(255,255,255,0.8)";
       const padding=fontSize*0.6;
       const textWidth=ctx.measureText(text).width+padding*2;
       const rectHeight=fontSize*1.9;
       const x=canvas.width-textWidth-40;
       const y=canvas.height-rectHeight-50;
-      ctx.fillStyle="rgba(255,255,255,0.8)";
       ctx.fillRect(x,y,textWidth,rectHeight);
       ctx.fillStyle="#1f2937";
-      ctx.textAlign="center";
-      ctx.textBaseline="middle";
+      ctx.textAlign="center";ctx.textBaseline="middle";
       ctx.fillText(text,x+textWidth/2,y+rectHeight/2.1);
       canvas.toBlob(b=>{
         resolve(new File([b],"casablanca_momento.jpg",{type:"image/jpeg"}));
@@ -237,6 +251,15 @@ async function addWatermarkToImage(file){
     };
     img.src=URL.createObjectURL(file);
   });
+}
+
+/* Mensaje de éxito */
+function showSuccessMessage(){
+  const popup=document.createElement('div');
+  popup.className='success-popup';
+  popup.innerHTML=`<div class="success-box"><h3>✅ ${COPY[currentLang].success}</h3><p>Redirigiendo...</p></div>`;
+  document.body.appendChild(popup);
+  setTimeout(()=>{ window.location.href="restaurante_casablanca.html"; },2000);
 }
 
 /* Compartir */
@@ -255,12 +278,14 @@ async function shareExperience(e){
     if(chkWatermark.checked){
       fileToShare=await addWatermarkToImage(baseFile);
     }
+
     if(navigator.canShare?.({files:[fileToShare]})){
       await navigator.share({files:[fileToShare]});
+      showSuccessMessage();
     }else{
       const url=URL.createObjectURL(fileToShare);
       window.open(url,"_blank");
-      setTimeout(()=>URL.revokeObjectURL(url),10000);
+      showSuccessMessage();
     }
   }catch(err){
     console.log("Error o cancelado:",err);
@@ -270,5 +295,3 @@ btnShare.onclick=shareExperience;
 </script>
 </body>
 </html>
-
-
