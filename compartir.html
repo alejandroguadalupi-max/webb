@@ -122,28 +122,25 @@ const RESTAURANT_NAME="Terraza Casablanca Las Canteras";
 const GOOGLE_MAPS_LINK="https://goo.gl/maps/F5r1E7vAeqkz2nYZ9";
 const DEFAULT_CARD="img/logo35.png";
 
+const FLAGS={es:"🇪🇸",en:"🇬🇧"};
 const COPY={
  es:{
    shareTitle:"📸 Comparte tu momento",
    shareSub:"Elige o toma una foto y compártela con tus amigos.",
-   shareMsg:`Acabo de disfrutar en ${RESTAURANT_NAME} 🍸✨ ¡Tienes que venir!`,
    note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",
    back:"⬅ Volver",
    shareBtn:"Compartir",
    takePhoto:"📷 Tomar foto",
-   choosePhoto:"🖼️ Elegir foto",
-   flag:"🇪🇸"
+   choosePhoto:"🖼️ Elegir foto"
  },
  en:{
    shareTitle:"📸 Share your moment",
    shareSub:"Take or choose a photo and share with friends.",
-   shareMsg:`Just had a great time at ${RESTAURANT_NAME} 🍸✨ Highly recommended!`,
    note:"If you don't choose a photo, a restaurant card will be shared.",
    back:"⬅ Back",
    shareBtn:"Share",
    takePhoto:"📷 Take photo",
-   choosePhoto:"🖼️ Choose photo",
-   flag:"🇬🇧"
+   choosePhoto:"🖼️ Choose photo"
  }
 };
 
@@ -160,7 +157,6 @@ const btnShare=document.getElementById('btnShare');
 const backBtn=document.getElementById('backBtn');
 const noteEl=document.getElementById('note');
 const currentLangDiv=document.getElementById('current-lang');
-let selectedFile=null;
 
 function setLang(lang){
   const c=COPY[lang]||COPY.es;
@@ -171,7 +167,7 @@ function setLang(lang){
   noteEl.textContent=c.note;
   btnCamera.textContent=c.takePhoto;
   btnGallery.textContent=c.choosePhoto;
-  currentLangDiv.textContent=c.flag;
+  currentLangDiv.textContent=FLAGS[lang];
 }
 setLang(currentLang);
 
@@ -187,7 +183,9 @@ function handleFileInput(input){
   wrap.classList.add('centered');
 }
 
-// 🖋 Marca de agua moderna
+let selectedFile=null;
+
+// Marca de agua moderna abajo a la derecha
 async function addWatermarkToImage(file){
   return new Promise(resolve=>{
     const img=new Image();
@@ -200,14 +198,14 @@ async function addWatermarkToImage(file){
 
       const fontSize=canvas.width*0.045;
       const text="Terraza Casablanca";
-      const padding=fontSize*0.8;
       ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
+      const padding=fontSize*0.6;
       const textWidth=ctx.measureText(text).width+padding*2;
       const rectHeight=fontSize*1.9;
-      const x=canvas.width-textWidth-50;
-      const y=canvas.height-rectHeight-100; // un poco más arriba
 
-      // Fondo dorado degradado moderno
+      const x=canvas.width-textWidth-40;
+      const y=canvas.height-rectHeight-50; // un poco hacia arriba
+
       const grad=ctx.createLinearGradient(x,y,x+textWidth,y+rectHeight);
       grad.addColorStop(0,"rgba(255,215,0,0.85)");
       grad.addColorStop(1,"rgba(255,255,255,0.9)");
@@ -215,7 +213,6 @@ async function addWatermarkToImage(file){
       ctx.roundRect(x,y,textWidth,rectHeight,20);
       ctx.fill();
 
-      // Texto
       ctx.fillStyle="#1f2937";
       ctx.textAlign="center";
       ctx.textBaseline="middle";
@@ -246,29 +243,29 @@ galleryInput.onchange=()=>handleFileInput(galleryInput);
 
 async function shareExperience(e){
   e&&e.preventDefault();
-  const dict=COPY[currentLang];
-  const text=`${dict.shareMsg}\n📍 ${RESTAURANT_NAME}\n${GOOGLE_MAPS_LINK}`;
   let fileToShare;
 
   try{
     if(!selectedFile){
       const res=await fetch(DEFAULT_CARD);
       const blob=await res.blob();
-      const logoFile=await addWatermarkToImage(new File([blob],"default.jpg",{type:"image/jpeg"}));
-      fileToShare=logoFile;
+      fileToShare=await addWatermarkToImage(new File([blob],"default.jpg",{type:"image/jpeg"}));
     }else{
       fileToShare=await addWatermarkToImage(selectedFile);
     }
 
-    if(navigator.canShare?.({files:[fileToShare],text})){
-      await navigator.share({files:[fileToShare],text});
-    }else await navigator.share({text});
+    if(navigator.canShare?.({files:[fileToShare]})){
+      await navigator.share({files:[fileToShare]});
+    }else{
+      await navigator.share();
+    }
 
-    alert("💛 La vida sabe mejor cuando se comparte");
+    // Tras compartir → volver a página principal
     setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },800);
+
   }catch(err){
     console.log("Cancelado o error:",err);
-    setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },1200);
+    // Si cancela, NO salir
   }
 }
 
