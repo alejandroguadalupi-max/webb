@@ -79,6 +79,11 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 }
 .lang-option{padding:8px 10px;cursor:pointer;font-weight:700;}
 .lang-option:hover{background:#f1f5f9;}
+.watermark-toggle{
+  margin:8px 0 14px;
+  display:flex;align-items:center;gap:8px;
+  font-size:14px;color:var(--muted);
+}
 </style>
 </head>
 <body>
@@ -109,6 +114,12 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
       <button id="btnGallery" class="btn btn-yellow">🖼️ Elegir foto</button>
     </div>
 
+    <!-- Checkbox para incluir o quitar la marca de agua -->
+    <label class="watermark-toggle">
+      <input type="checkbox" id="chkWatermark" checked>
+      Incluir marca de agua del restaurante
+    </label>
+
     <div class="row">
       <button id="btnShare" class="btn btn-blue">Compartir</button>
     </div>
@@ -121,42 +132,10 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 const DEFAULT_CARD="img/logo35.png";
 const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
 const COPY={
- es:{
-   shareTitle:"📸 Comparte tu momento",
-   shareSub:"Elige o toma una foto y compártela con tus amigos.",
-   note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",
-   back:"⬅ Volver",
-   shareBtn:"Compartir",
-   takePhoto:"📷 Tomar foto",
-   choosePhoto:"🖼️ Elegir foto"
- },
- en:{
-   shareTitle:"📸 Share your moment",
-   shareSub:"Take or choose a photo and share with friends.",
-   note:"If you don't choose a photo, a restaurant card will be shared.",
-   back:"⬅ Back",
-   shareBtn:"Share",
-   takePhoto:"📷 Take photo",
-   choosePhoto:"🖼️ Choose photo"
- },
- fr:{
-   shareTitle:"📸 Partagez votre moment",
-   shareSub:"Prenez ou choisissez une photo à partager avec vos amis.",
-   note:"Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",
-   back:"⬅ Retour",
-   shareBtn:"Partager",
-   takePhoto:"📷 Prendre une photo",
-   choosePhoto:"🖼️ Choisir une photo"
- },
- de:{
-   shareTitle:"📸 Teile deinen Moment",
-   shareSub:"Mach oder wähle ein Foto und teile es mit Freunden.",
-   note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",
-   back:"⬅ Zurück",
-   shareBtn:"Teilen",
-   takePhoto:"📷 Foto machen",
-   choosePhoto:"🖼️ Foto auswählen"
- }
+ es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto"},
+ en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo"},
+ fr:{shareTitle:"📸 Partagez votre moment",shareSub:"Prenez ou choisissez une photo à partager avec vos amis.",note:"Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",back:"⬅ Retour",shareBtn:"Partager",takePhoto:"📷 Prendre une photo",choosePhoto:"🖼️ Choisir une photo"},
+ de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach oder wähle ein Foto und teile es mit Freunden.",note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",takePhoto:"📷 Foto machen",choosePhoto:"🖼️ Foto auswählen"}
 };
 
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
@@ -174,6 +153,7 @@ const backBtn=document.getElementById('backBtn');
 const noteEl=document.getElementById('note');
 const currentLangDiv=document.getElementById('current-lang');
 const optionsDiv=document.getElementById('lang-options');
+const chkWatermark=document.getElementById('chkWatermark');
 
 function setLang(lang){
   if(!COPY[lang])lang='es';
@@ -282,9 +262,14 @@ async function shareExperience(e){
     if(!selectedFile){
       const res=await fetch(DEFAULT_CARD);
       const blob=await res.blob();
-      fileToShare=await addWatermarkToImage(new File([blob],"default.jpg",{type:"image/jpeg"}));
+      fileToShare=new File([blob],"default.jpg",{type:"image/jpeg"});
     }else{
-      fileToShare=await addWatermarkToImage(selectedFile);
+      // Si el checkbox está marcado, añade la marca de agua
+      if(chkWatermark.checked){
+        fileToShare=await addWatermarkToImage(selectedFile);
+      }else{
+        fileToShare=selectedFile;
+      }
     }
 
     if(navigator.canShare?.({files:[fileToShare]})){
@@ -298,11 +283,9 @@ async function shareExperience(e){
 
   }catch(err){
     console.log("Cancelado o error:",err);
-    // Si cancela, quedarse
   }
 }
 btnShare.onclick=shareExperience;
 </script>
 </body>
 </html>
-
