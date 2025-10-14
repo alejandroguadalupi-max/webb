@@ -117,7 +117,7 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
     <!-- Checkbox para incluir o quitar la marca de agua -->
     <label class="watermark-toggle">
       <input type="checkbox" id="chkWatermark" checked>
-      Incluir nombre del restaurante en la foto
+      Incluir marca de agua del restaurante
     </label>
 
     <div class="row">
@@ -129,7 +129,9 @@ p{margin:0 0 10px;font-size:14px;text-align:center;}
 </div>
 
 <script>
-const DEFAULT_CARD="img/logo35.png";
+const DEFAULT_CARD="img/logo35.png"; // Asegúrate de que esta ruta sea accesible
+const SHARE_TITLE = "Restaurante Casablanca";
+const SHARE_TEXT = "Mira mi momento en Restaurante Casablanca · Las Canteras";
 const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
 const COPY={
  es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto"},
@@ -208,6 +210,7 @@ function handleFileInput(input){
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
+/* Helper para redondear rectángulos en canvas */
 CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
   if(w<2*r)r=w/2;if(h<2*r)r=h/2;
   this.beginPath();
@@ -220,6 +223,7 @@ CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
   return this;
 };
 
+/* Añadir marca de agua y devolver File */
 async function addWatermarkToImage(file){
   return new Promise(resolve=>{
     const img=new Image();
@@ -228,8 +232,9 @@ async function addWatermarkToImage(file){
       const ctx=canvas.getContext('2d');
       canvas.width=img.width;
       canvas.height=img.height;
-      ctx.drawImage(img,0,0);
-      const fontSize=canvas.width*0.045;
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+      const fontSize=Math.max(16, canvas.width*0.045);
       const text="Restaurante Casablanca · Las Canteras";
       ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
       const padding=fontSize*0.6;
@@ -237,55 +242,149 @@ async function addWatermarkToImage(file){
       const rectHeight=fontSize*1.9;
       const x=canvas.width-textWidth-40;
       const y=canvas.height-rectHeight-50;
+
+      // fondo semitransparente
+      ctx.save();
       const grad=ctx.createLinearGradient(x,y,x+textWidth,y+rectHeight);
       grad.addColorStop(0,"rgba(255,215,0,0.85)");
       grad.addColorStop(1,"rgba(255,255,255,0.9)");
       ctx.fillStyle=grad;
       ctx.roundRect(x,y,textWidth,rectHeight,20);
       ctx.fill();
+
+      // texto
       ctx.fillStyle="#1f2937";
       ctx.textAlign="center";
       ctx.textBaseline="middle";
       ctx.fillText(text,x+textWidth/2,y+rectHeight/2.1);
+      ctx.restore();
+
       canvas.toBlob(blob=>{
         resolve(new File([blob],"casablanca_momento.jpg",{type:"image/jpeg"}));
-      },"image/jpeg",0.9);
+      },"image/jpeg",0.92);
+    };
+    img.onerror=()=>{
+      // Si falla la carga, devolver el file original
+      resolve(file);
     };
     img.src=URL.createObjectURL(file);
   });
 }
 
+/* Fallback: abrir blob en nueva pestaña para que usuario pueda compartir/guardar */
+function openBlobInNewTab(blob){
+  const url = URL.createObjectURL(blob);
+  window.open(url,'_blank');
+  // liberamos el URL después de un tiempo
+  setTimeout(()=>URL.revokeObjectURL(url), 10000);
+}
+
+/* Convierte Blob/File a objeto con archivo listo (File) sin cambios */
+function blobToFile(blob, name="file.jpg"){
+  return new File([blob], name, {type: blob.type || "image/jpeg"});
+}
+
+/* Función principal de compartir */
 async function shareExperience(e){
   e&&e.preventDefault();
-  let fileToShare;
   try{
-    if(!selectedFile){
-      const res=await fetch(DEFAULT_CARD);
-      const blob=await res.blob();
-      fileToShare=new File([blob],"default.jpg",{type:"image/jpeg"});
-    }else{
-      // Si el checkbox está marcado, añade la marca de agua
-      if(chkWatermark.checked){
-        fileToShare=await addWatermarkToImage(selectedFile);
-      }else{
-        fileToShare=selectedFile;
+    // 1) obtener el blob/file base: foto seleccionada o tarjeta por defecto
+    let baseFile;
+    if(selectedFile){
+      baseFile = selectedFile;
+    } else {
+      // fetch del recurso por defecto (puede fallar en file://; en producción en servidor sirve)
+      try{
+        const res = await fetch(DEFAULT_CARD, {cache: "no-store"});
+        const blob = await res.blob();
+        baseFile = blobToFile(blob, "casablanca_card.jpg");
+      }catch(fetchErr){
+        console.warn("No se pudo obtener la tarjeta por defecto:", fetchErr);
+        // fallback: crear un canvas simple con texto si no existe DEFAULT_CARD
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 800;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#111827";
+        ctx.font = "bold 48px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Restaurante Casablanca", canvas.width/2, canvas.height/2 - 10);
+        ctx.font = "24px Arial";
+        ctx.fillText("Compartiendo desde la tarjeta del restaurante", canvas.width/2, canvas.height/2 + 40);
+        const blob = await new Promise(res=>canvas.toBlob(res,'image/jpeg',0.9));
+        baseFile = blobToFile(blob, "casablanca_card.jpg");
       }
     }
 
-    if(navigator.canShare?.({files:[fileToShare]})){
-      await navigator.share({files:[fileToShare]});
-    }else{
-      await navigator.share();
+    // 2) Aplicar watermark si está marcado (y si el usuario quiere)
+    let fileToShare = baseFile;
+    if(chkWatermark.checked){
+      fileToShare = await addWatermarkToImage(baseFile);
+    } else {
+      // si baseFile es Blob generado por fetch con tipo distinto, asegurar que sea File
+      if(!(fileToShare instanceof File)){
+        fileToShare = blobToFile(fileToShare, "casablanca.jpg");
+      }
     }
 
-    // tras compartir
-    setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },800);
+    // 3) Intentar compartir como archivo (si el navegador lo permite)
+    const canShareFiles = !!navigator.canShare && navigator.canShare({files:[fileToShare]});
+    if(canShareFiles){
+      await navigator.share({
+        title: SHARE_TITLE,
+        text: SHARE_TEXT,
+        files: [fileToShare]
+      });
+      // redirigir o finalizar
+      setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },800);
+      return;
+    }
+
+    // 4) Si no se puede compartir archivos, intentar compartir solo texto+url (si procede)
+    if(navigator.share){
+      try{
+        // Intentamos ofrecer al menos un texto y enlace si hay una URL pública
+        await navigator.share({
+          title: SHARE_TITLE,
+          text: SHARE_TEXT
+        });
+        setTimeout(()=>{ window.location.href="https://valoratuvisita.com/restaurante_casablanca"; },800);
+        return;
+      }catch(err){
+        // si falla, caemos al fallback visual
+        console.warn("navigator.share texto falló:", err);
+      }
+    }
+
+    // 5) Fallback visual: abrir la imagen generada en una nueva pestaña para que el usuario la guarde/comparta manualmente
+    // Obtener blob de fileToShare y abrir
+    const blobForOpen = await fileToShare.arrayBuffer().then(buf=>new Blob([buf], {type: fileToShare.type || 'image/jpeg'}));
+    openBlobInNewTab(blobForOpen);
 
   }catch(err){
-    console.log("Cancelado o error:",err);
+    console.error("Error al compartir:", err);
+    // si el usuario canceló o hubo error, no redirigimos
   }
 }
+
+/* listeners */
 btnShare.onclick=shareExperience;
+
+/* Inputs */
+function handleFileInputDOMContent(input){
+  const f = input.files?.[0];
+  if(!f) return;
+  selectedFile = f;
+  photoPreview.src = URL.createObjectURL(f);
+  photoContainer.style.display = 'block';
+  wrap.classList.add('centered');
+}
+cameraInput.onchange = ()=>handleFileInputDOMContent(cameraInput);
+galleryInput.onchange = ()=>handleFileInputDOMContent(galleryInput);
+
 </script>
 </body>
 </html>
+
