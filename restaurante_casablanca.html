@@ -7,12 +7,12 @@
 <title>¿Cómo fue tu experiencia?</title>
 <style>
   :root{
-    --text:#0b0f18; 
+    --text:#0b0f18;
     --muted:#566073;
-    --accent:#2563eb; 
+    --accent:#2563eb;
     --ok:#16a34a;
-    --card:#ffffff; 
-    --bg:#f7f7fb; 
+    --card:#ffffff;
+    --bg:#f7f7fb;
     --border:#e6e8ee;
   }
 
@@ -44,9 +44,9 @@
 
   /* Selector de idioma */
   #lang-selector{
-    position:absolute; 
-    top:12px; 
-    right:12px; 
+    position:absolute;
+    top:12px;
+    right:12px;
     z-index:10;
     font-size:0;
   }
@@ -78,9 +78,9 @@
   }
 
   .lang-option{
-    display:flex; 
+    display:flex;
     justify-content:center;
-    align-items:center; 
+    align-items:center;
     gap:6px;
     padding:6px;
     font-size:14px;
@@ -105,11 +105,11 @@
   .tile{
     border:none;
     border:1px solid rgba(0,0,0,0.05);
-    border-radius:16px; 
+    border-radius:16px;
     background:#fff;
-    padding:14px; 
-    display:flex; 
-    flex-direction:column; 
+    padding:14px;
+    display:flex;
+    flex-direction:column;
     align-items:center;
     transition:box-shadow .2s ease, transform .1s ease;
   }
@@ -179,24 +179,30 @@
     <section class="tile" aria-labelledby="publicTitle">
       <h2 id="publicTitle">⭐ Reseña pública</h2>
       <p id="publicText"> Si te gustó, tu reseña nos ayuda a crecer.</p>
-      <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña en Google</a>
+      <!-- abrimos EN LA MISMA PESTAÑA para garantizar que "Atrás" vuelva correctamente -->
+      <a id="btnGoogle" class="btn btn-google" rel="noopener">Dejar reseña en Google</a>
       <div class="note" id="publicNote">Queda visible para todos.</div>
     </section>
 
     <section class="tile" aria-labelledby="privateTitle">
       <h2 id="privateTitle">📝 Comentario privado</h2>
       <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-      <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario</a>
+      <!-- abrimos EN LA MISMA PESTAÑA para garantizar que "Atrás" vuelva correctamente -->
+      <a id="btnPrivate" class="btn btn-private" rel="noopener">Enviar comentario</a>
       <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
     </section>
   </div>
 
+  <!-- enlace interno a compartir (misma pestaña por defecto) -->
   <a id="openShare" href="compartir.html" class="btn btn-share">📸 Compartir experiencia con amigos</a>
 
   <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 </main>
 
 <script>
+/* ----------------------------
+   CONFIG
+   ---------------------------- */
 const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
 const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1", fr:"https://tally.so/r/mek0Dk" };
@@ -208,19 +214,20 @@ const COPY = {
   de:{pageTitle:"Wie war Ihre Erfahrung?", subtitle:"Erzählen Sie uns in 10 Sekunden, wie alles war.", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", publicNote:"Für alle sichtbar.", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", privateNote:"Nur wir können es sehen.", shareBtn:"Erfahrung mit Freunden teilen", thanks:"Vielen Dank für Ihre Zeit!"},
   fr:{pageTitle:"Comment était votre expérience ?", subtitle:"Racontez-nous en 10 secondes comment tout s'est passé.", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", publicNote:"Visible par tout le monde.", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", privateNote:"Visible uniquement par nous.", shareBtn:"Partager avec des amis", thanks:"Merci pour votre temps !"}
 };
-
 const LANGS = Object.keys(COPY);
+const MAIN_PAGE = "restaurante_casablanca.html"; // fallback principal
 
+/* ----------------------------
+   Detectar idioma y aplicar textos
+   ---------------------------- */
 function getInitialLang(){
   const saved = localStorage.getItem('userLang');
   if(saved && COPY[saved]) return saved;
-
   const browser = navigator.languages || [navigator.language || 'es'];
   for(const b of browser){
     const c = b.slice(0,2).toLowerCase();
     if(COPY[c]) return c;
   }
-
   return 'es';
 }
 
@@ -247,6 +254,9 @@ function setLang(lang){
   document.getElementById('lang-options').style.display='none';
 }
 
+/* ----------------------------
+   Inicializar selector de idioma
+   ---------------------------- */
 function initLangSelector(){
   const currentLangDiv = document.getElementById('current-lang');
   const optionsDiv = document.getElementById('lang-options');
@@ -274,7 +284,103 @@ function initLangSelector(){
   });
 }
 
-document.addEventListener('DOMContentLoaded', initLangSelector);
+/* ----------------------------
+   NAVIGACION A ENLACES EXTERNOS
+   - IMPORTANTE: abrimos enlaces externos en la MISMA pestaña
+   - así, el botón atrás vuelve siempre a esta página (o, si hay alguna anomalía
+     en el historial, forzamos la redirección al MAIN_PAGE)
+   ---------------------------- */
+function navigateSameTab(url){
+  // Guardamos una marca para detectar que venimos desde aquí (opcional)
+  try{ sessionStorage.setItem('cameFromMain', location.href); }catch(e){}
+  // Navegamos en la misma pestaña (no target="_blank")
+  location.href = url;
+}
+
+/* Forzar comportamiento de "Volver" seguro.
+   Intentamos history.back(); si no funciona (no cambia history), redirigimos
+   al MAIN_PAGE pasado como fallback. */
+function goBackToMain(fallback = MAIN_PAGE){
+  const prevLen = history.length;
+  history.back();
+  // Si tras 350ms la longitud de history es la misma, asumimos que no hubo back efectivo
+  setTimeout(() => {
+    if (history.length === prevLen) {
+      location.href = fallback;
+    }
+  }, 350);
+}
+
+/* Interceptar evento popstate para casos de webviews/external returns:
+   si la referencia viene de otro dominio que no es este site y el history
+   no apunta a una ruta local, redirigimos al MAIN_PAGE. */
+function handlePopStateFallback(){
+  // Si el referrer es de otro host y la ruta actual es la página principal, no hacemos nada.
+  // Pero si detectamos que el usuario vino desde un origin distinto y el navegador intenta
+  // navegar atrás a una página vieja, redirigimos al MAIN_PAGE.
+  window.addEventListener('popstate', () => {
+    try {
+      const ref = document.referrer || '';
+      if (ref && !ref.includes(location.hostname)) {
+        // referrer externo: forzamos al MAIN_PAGE
+        location.href = MAIN_PAGE;
+      }
+    } catch (e) {
+      location.href = MAIN_PAGE;
+    }
+  }, {passive: true});
+}
+
+/* ----------------------------
+   Evento DOMContentLoaded
+   ---------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  initLangSelector();
+
+  // aseguramos que los enlaces externos se abran en la misma pestaña
+  const btnGoogle = document.getElementById('btnGoogle');
+  const btnPrivate = document.getElementById('btnPrivate');
+  const openShare = document.getElementById('openShare');
+
+  // btnGoogle -> a Google Maps shortlink (misma pestaña)
+  btnGoogle.addEventListener('click', (e) => {
+    e.preventDefault();
+    navigateSameTab(GOOGLE_MAPS_SHORT);
+  });
+
+  // btnPrivate -> formulario Tally (misma pestaña)
+  btnPrivate.addEventListener('click', (e) => {
+    e.preventDefault();
+    const lang = document.documentElement.lang || 'es';
+    const url = TALLY_LINKS[lang] || TALLY_LINKS['es'];
+    navigateSameTab(url);
+  });
+
+  // openShare es interno (compartir.html). Lo dejamos navegando normal,
+  // pero interceptamos su click para añadir un pushState previo que
+  // ayuda con el historial en algunos navegadores.
+  openShare.addEventListener('click', (e) => {
+    // No prevenir navegación; añadimos un estado válido para que history.back() funcione bien
+    history.replaceState({fromMain:true}, '');
+    // navigation proceeds to compartir.html as usual
+  });
+
+  // Si se pulsa el botón "atrás" (si tuvieras uno en esta página), puedes usar:
+  // (ejemplo si añades un botón con clase .back en otras páginas que controles)
+  // document.querySelectorAll('.back').forEach(b => b.addEventListener('click', e => { e.preventDefault(); goBackToMain(MAIN_PAGE); }));
+
+  // Manejo global de popstate/referrer para evitar volver a pestañas antiguas
+  handlePopStateFallback();
+});
+
+/* ----------------------------
+   (opcional) Si esta página se carga y venimos desde ventana externa,
+   podemos limpiar la marca 'cameFromMain' para evitar confusión.
+   ---------------------------- */
+window.addEventListener('pageshow', () => {
+  try { sessionStorage.removeItem('cameFromMain'); } catch(e){}
+});
 </script>
 </body>
 </html>
+
