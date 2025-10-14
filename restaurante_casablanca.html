@@ -1,215 +1,3 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#0b0f18">
-<title>¿Cómo fue tu experiencia?</title>
-<style>
-  :root{
-    --text:#0b0f18; 
-    --muted:#566073;
-    --accent:#2563eb; 
-    --ok:#16a34a;
-    --card:#ffffff; 
-    --bg:#f7f7fb; 
-    --border:#e6e8ee;
-  }
-
-  *,*::before,*::after{box-sizing:border-box}
-  html,body{margin:0; height:100%}
-
-  body{
-    min-height:100svh;
-    display:flex; align-items:center; justify-content:center;
-    padding:12px;
-    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-    color:var(--text);
-    background:
-      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
-      var(--bg);
-  }
-
-  .card{
-    width:min(580px, 100%);
-    max-height:100svh;
-    display:flex; flex-direction:column; gap:14px;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:18px;
-    box-shadow:0 18px 45px rgba(12,20,33,.08);
-    position:relative;
-  }
-
-  /* Selector de idioma */
-  #lang-selector{
-    position:absolute; 
-    top:12px; 
-    right:12px; 
-    z-index:10;
-    font-size:0;
-  }
-  #current-lang{
-    cursor:pointer;
-    font-size:22px;
-    padding:6px 10px;
-    border-radius:10px;
-    background:rgba(0,0,0,.04);
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    transition:background .2s ease;
-  }
-  #current-lang:hover{ background:rgba(0,0,0,.08); }
-
-  #lang-options{
-    display:none;
-    position:absolute;
-    top:calc(100% + 6px);
-    right:0;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow:0 6px 16px rgba(0,0,0,.12);
-    padding:4px;
-    min-width:90px;
-    text-align:center;
-  }
-
-  .lang-option{
-    display:flex; 
-    justify-content:center;
-    align-items:center; 
-    gap:6px;
-    padding:6px;
-    font-size:14px;
-    font-weight:600;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background-color .2s ease;
-  }
-  .lang-option:hover{ background-color:var(--bg); }
-
-  /* Branding */
-  .brand{display:flex; flex-direction:column; align-items:center; gap:6px}
-  .logo{width:68px; height:68px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.08)}
-  .logo img{width:100%; height:100%; object-fit:cover}
-  .brand h1{margin:6px 0 0; font-size:22px; line-height:1.2; text-align:center}
-  .brand p{margin:2px 0 0; color:var(--muted); font-size:14px; text-align:center}
-
-  .grid{display:grid; gap:12px}
-  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
-  /* Cuadrícula */
-  .grid{
-    display:grid; 
-    gap:12px;
-  }
-  @media(min-width:560px){
-    .grid{grid-template-columns:1fr 1fr}
-  }
-
-  /* Tarjetas */
-  .tile{
-    border:none; /* sin borde */
-    border:1px solid rgba(0,0,0,0.05);
-    border-radius:16px; 
-    background:#fff;
-    padding:12px; 
-    background:linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(249,250,253,1) 100%);
-    padding:14px; 
-    display:flex; 
-    flex-direction:column; 
-    align-items:center;
-    transition:box-shadow .2s ease, transform .1s ease;
-  }
-  .tile:hover{
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
-    transform:translateY(-2px);
-  }
-
-  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
-  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
-
-  .btn{
-    display:block; width:100%; text-align:center; text-decoration:none;
-    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
-    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
-    will-change:transform;
-  }
-  .btn:active{transform:translateY(1px)}
-  .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent))}
-  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
-
-  /* Botón compartir discreto */
-  .btn-share{
-    display:block;
-    width:100%;
-    text-align:center;
-    padding:10px;
-    border-radius:10px;
-    font-size:13px;
-    font-weight:600;
-    color:var(--accent);
-    border:1px solid var(--accent);
-    border:1px dashed var(--accent);
-    background:transparent;
-    transition:background .2s,color .2s;
-    transition:background .2s,color .2s,border-color .2s;
-  }
-  .btn-share:hover{
-    background:var(--accent);
-    color:#fff;
-    border-color:transparent;
-  }
-
-  .note{font-size:12px; color:var(--muted); text-align:center}
-
-  @media(max-width:360px){
-    .brand h1{font-size:20px}
-    .btn{font-size:14px; padding:12px 14px}
-    .tile p{font-size:12px}
-    .btn-share{font-size:12px; padding:8px}
-  }
-</style>
-</head>
-<body>
-<main class="card" id="mainCard" role="main" aria-labelledby="t">
-  <!-- Selector de idioma -->
-  <div id="lang-selector" aria-haspopup="true">
-    <div id="current-lang" aria-label="Cambiar idioma"></div>
-    <div id="lang-options" role="menu" aria-hidden="true"></div>
-  </div>
-
-  <header class="brand">
-    <div class="logo">
-      <img src="img/imagen_circular_recortada.png" alt="Logo Casablanca">
-    </div>
-    <h1 id="t"><span id="brandName">Restaurante Casablanca</span></h1>
-    <p id="subtitle">Cuéntanos en 10 segundos cómo fue todo.</p>
-  </header>
-
-  <div class="grid">
-    <section class="tile" aria-labelledby="publicTitle">
-      <h2 id="publicTitle">⭐ Reseña pública</h2>
-      <p id="publicText">Tu reseña nos da visibilidad en Google.</p>
-      <a id="btnGoogle" class="btn btn-google" target="_blank" rel="noopener">Dejar reseña</a>
-      <div class="note" id="publicNote">Queda visible para todos.</div>
-    </section>
-
-    <section class="tile" aria-labelledby="privateTitle">
-      <h2 id="privateTitle">📝 Comentario privado</h2>
-      <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-      <a id="btnPrivate" class="btn btn-private" target="_blank" rel="noopener">Enviar comentario</a>
-      <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
-    </section>
-  </div>
-
-  <a id="openShare" href="compartir.html" class="btn btn-share">📸 Compartir experiencia con amigos</a>
-
-  <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-</main>
-
 <script>
 const RESTAURANT_NAME = "Restaurante Casablanca · Las Canteras";
 const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
@@ -226,10 +14,18 @@ const COPY = {
 const LANGS = Object.keys(COPY);
 
 function getInitialLang(){
+  // 1️⃣ Si el usuario ya eligió idioma antes, úsalo
   const saved = localStorage.getItem('userLang');
   if(saved && COPY[saved]) return saved;
+
+  // 2️⃣ Si no, detectar idioma del dispositivo/navegador
   const browser = navigator.languages || [navigator.language || 'es'];
-  for(const b of browser){ const c = b.slice(0,2); if(COPY[c]) return c; }
+  for(const b of browser){
+    const c = b.slice(0,2).toLowerCase();
+    if(COPY[c]) return c;
+  }
+
+  // 3️⃣ Si no se reconoce, volver al español
   return 'es';
 }
 
@@ -259,6 +55,8 @@ function setLang(lang){
 function initLangSelector(){
   const currentLangDiv = document.getElementById('current-lang');
   const optionsDiv = document.getElementById('lang-options');
+
+  // ✅ Idioma inicial: dispositivo o guardado
   const initialLang = getInitialLang();
   setLang(initialLang);
 
@@ -282,9 +80,5 @@ function initLangSelector(){
   });
 }
 
-initLangSelector();
+document.addEventListener('DOMContentLoaded', initLangSelector);
 </script>
-</body>
-</html>
-
-
