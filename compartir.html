@@ -250,7 +250,7 @@ async function addWatermarkToImage(file){
       canvas.height=img.height;
       ctx.drawImage(img,0,0);
       const fontSize=canvas.width*0.045;
-      const text="Terraza Casablanca";
+      const text="Restaurante Casablanca · Las Canteras";
       ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
       const padding=fontSize*0.6;
       const textWidth=ctx.measureText(text).width+padding*2;
