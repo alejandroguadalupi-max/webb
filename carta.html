@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta | Restaurante Casablanca</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, #faf6f1, #e9dbc6);
+      color: #3e2f23;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: #5c4a3a;
+      font-size: 1rem;
+    }
+    .menu-section {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fffaf3;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      border-bottom: 2px solid #cba679;
+      padding-bottom: 0.3rem;
+      margin-bottom: 1rem;
+      color: #3e2f23;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px dotted #d8c5a5;
+    }
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    .menu-item span {
+      font-weight: 600;
+    }
+    .price {
+      color: #b38b5b;
+      font-weight: 600;
+    }
+    .back {
+      display: block;
+      text-align: center;
+      margin: 3rem auto 2rem;
+    }
+    a.button {
+      text-decoration: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      background-color: #cba679;
+      color: white;
+      font-weight: 600;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    a.button:hover {
+      background-color: #b38b5b;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Carta</h1>
+    <p>Descubre nuestra selección de platos elaborados con ingredientes frescos y de temporada.</p>
+  </header>
+
+  <div class="menu-section">
+    <h2>Entrantes</h2>
+    <div class="menu-item"><span>Ensalada Casablanca</span><span class="price">8,50 €</span></div>
+    <div class="menu-item"><span>Tabla de quesos artesanales</span><span class="price">10,90 €</span></div>
+    <div class="menu-item"><span>Hummus con pan de pita</span><span class="price">7,00 €</span></div>
+
+    <h2>Platos Principales</h2>
+    <div class="menu-item"><span>Cordero al horno con hierbas</span><span class="price">17,50 €</span></div>
+    <div class="menu-item"><span>Merluza en salsa verde</span><span class="price">16,00 €</span></div>
+    <div class="menu-item"><span>Risotto de setas y trufa</span><span class="price">15,00 €</span></div>
+
+    <h2>Postres</h2>
+    <div class="menu-item"><span>Tarta de queso al horno</span><span class="price">6,50 €</span></div>
+    <div class="menu-item"><span>Coulant de chocolate</span><span class="price">6,90 €</span></div>
+    <div class="menu-item"><span>Sorbete de limón al cava</span><span class="price">5,50 €</span></div>
+  </div>
+
+  <div class="back">
+    <a href="index.html" class="button">Volver al Inicio</a>
+  </div>
+</body>
+</html>
