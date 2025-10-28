@@ -1,1 +1,80 @@
-<!DOCTYPE html> <html lang="es"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>Restaurante Casablanca</title> <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> <style> body { margin: 0; font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg, #faf6f1, #e9dbc6); color: #3e2f23; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; } header { position: absolute; top: 2rem; } h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 0.5rem; letter-spacing: 1px; } p { font-size: 1.1rem; margin-bottom: 2.5rem; max-width: 600px; } .buttons { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; } a.button { text-decoration: none; padding: 0.9rem 2rem; border-radius: 2rem; font-weight: 600; background-color: #cba679; color: white; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.15); } a.button:hover { background-color: #b38b5b; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.2); } footer { position: absolute; bottom: 1rem; font-size: 0.9rem; opacity: 0.8; } </style> </head> <body> <header> <h1>Restaurante Casablanca</h1> </header> <p>Sabores únicos y una experiencia gastronómica inigualable. Descubre nuestra carta o comparte tu opinión.</p> <div class="buttons"> <a href="carta.html" class="button">Ver Carta</a> <a href="https://valoratuvisita.com/restaurante_casablanca" target="_blank" class="button">Ver Valoraciones</a> </div> <footer>© 2025 Restaurante Casablanca — Todos los derechos reservados</footer> </body> </html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurante Casablanca</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, #faf6f1, #e9dbc6);
+      color: #3e2f23;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    header {
+      position: absolute;
+      top: 2rem;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+    }
+    .buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    a.button {
+      text-decoration: none;
+      padding: 0.9rem 2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      background-color: #cba679;
+      color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    a.button:hover {
+      background-color: #b38b5b;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+    footer {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Restaurante Casablanca</h1>
+  </header>
+
+  <p>Sabores únicos y una experiencia gastronómica inigualable. Descubre nuestra carta o comparte tu opinión.</p>
+
+  <div class="buttons">
+    <a href="carta.html" class="button">Ver Carta</a>
+    <a href="https://valoratuvisita.com/restaurante_casablanca" target="_blank" class="button">Ver Valoraciones</a>
+  </div>
+
+  <footer>© 2025 Restaurante Casablanca — Todos los derechos reservados</footer>
+</body>
+</html>
+
