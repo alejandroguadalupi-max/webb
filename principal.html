@@ -1,232 +1,219 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-lang="title">Bienvenido a PataMig</title>
-    
-    <style>
-        :root {
-            --primary-green: #4a7c59;   /* Verde principal del logo */
-            --accent-orange: #e89f4b;   /* Naranja de acento */
-            --text-dark: #333333;       /* Texto oscuro */
-            --bg-white: #ffffff;       /* Blanco para la tarjeta */
-            --bg-light: #f9f9f9;       /* Blanco roto para el fondo */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-lang="title">Bienvenido a PataMig</title>
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-        }
+  <style>
+    :root {
+      --primary-green: #4a7c59;
+      --accent-orange: #e89f4b;
+      --text-dark: #333333;
+      --bg-white: #ffffff;
+      --bg-light: #f9f9f9;
+    }
 
-        body {
-            /* Centra todo el contenido vertical y horizontalmente */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
 
-        /* La tarjeta principal */
-        .landing-container {
-            background-color: var(--bg-white);
-            border-radius: 12px;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            padding: 40px 30px;
-            max-width: 400px;
-            width: 100%;
-            
-            /* El acento naranja, sutil en la parte superior */
-            border-top: 6px solid var(--accent-orange);
-        }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
-        /* El nombre del restaurante estilizado */
-        .logo {
-            font-size: 3.5em; /* 3.5 veces el tamaño de fuente normal */
-            font-weight: bold;
-            color: var(--primary-green);
-            margin-bottom: 10px;
-        }
+    .landing-container {
+      background-color: var(--bg-white);
+      border-radius: 12px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      padding: 40px 30px;
+      max-width: 400px;
+      width: 100%;
+      border-top: 6px solid var(--accent-orange);
+    }
 
-        h2 {
-            font-weight: 500;
-            font-size: 1.4em;
-            margin-top: 0;
-            color: var(--text-dark);
-        }
+    .logo {
+      font-size: 3.5em;
+      font-weight: bold;
+      color: var(--primary-green);
+      margin-bottom: 10px;
+    }
 
-        p {
-            color: #666;
-            font-size: 1.1em;
-            margin-bottom: 30px;
-        }
+    h2 {
+      font-weight: 500;
+      font-size: 1.4em;
+      margin-top: 0;
+      color: var(--text-dark);
+    }
 
-        /* Contenedor de los botones */
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espacio entre los botones */
-        }
+    p {
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
 
-        /* Estilo base de los botones */
-        .btn {
-            display: block;
-            padding: 16px 20px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-        /* Botón Primario (Ver Carta) - Verde Sólido */
-        .btn-primary {
-            background-color: var(--primary-green);
-            color: var(--bg-white);
-            border-color: var(--primary-green);
-        }
+    .btn {
+      display: block;
+      padding: 16px 20px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
 
-        .btn-primary:hover {
-            background-color: #3b6347; /* Un verde más oscuro al pasar el ratón */
-            border-color: #3b6347;
-        }
+    .btn-primary {
+      background-color: var(--primary-green);
+      color: var(--bg-white);
+      border-color: var(--primary-green);
+    }
 
-        /* Botón Secundario (Compartir) - Blanco con borde Verde */
-        .btn-secondary {
-            background-color: var(--bg-white);
-            color: var(--primary-green);
-            border-color: var(--primary-green);
-        }
+    .btn-primary:hover {
+      background-color: #3b6347;
+      border-color: #3b6347;
+    }
 
-        .btn-secondary:hover {
-            background-color: #f0f8f2; /* Un fondo verde muy sutil al pasar el ratón */
-        }
+    .btn-secondary {
+      background-color: var(--bg-white);
+      color: var(--primary-green);
+      border-color: var(--primary-green);
+    }
 
-        /* Selector de idioma, discreto en la parte inferior */
-        #lang-switcher {
-            margin-top: 30px;
-            text-align: center;
-            width: 100%;
-        }
+    .btn-secondary:hover {
+      background-color: #f0f8f2;
+    }
 
-        #lang-switcher button {
-            background: none;
-            border: 1px solid #ccc;
-            color: #888;
-            padding: 8px 12px;
-            margin: 0 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-        }
+    #lang-switcher {
+      margin-top: 30px;
+      text-align: center;
+      width: 100%;
+    }
 
-        #lang-switcher button:hover {
-            background-color: #eee;
-            color: #333;
-        }
+    #lang-switcher button {
+      background: none;
+      border: 1px solid #ccc;
+      color: #888;
+      padding: 8px 12px;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+    }
 
-        #lang-switcher button.active {
-            background-color: var(--primary-green);
-            color: var(--bg-white);
-            border-color: var(--primary-green);
-            font-weight: bold;
-        }
+    #lang-switcher button:hover {
+      background-color: #eee;
+      color: #333;
+    }
 
-    </style>
+    #lang-switcher button.active {
+      background-color: var(--primary-green);
+      color: var(--bg-white);
+      border-color: var(--primary-green);
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <main class="landing-container">
+    <div class="logo">PataMig</div>
+    <h2 data-lang="welcome">¡Bienvenido!</h2>
+    <p data-lang="prompt">¿Qué te gustaría hacer?</p>
 
-    <main class="landing-container">
-        
-        <div class="logo">PataMig</div>
-        
-        <h2 data-lang="welcome">¡Bienvenido!</h2>
-        <p data-lang="prompt">¿Qué te gustaría hacer?</p>
-        
-        <div class="button-group">
-            <a href="http://valoratuvisita.com/carta" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta</a>
-            
-            <a href="http://valoratuvisita.com/restaurante_casablanca" class="btn btn-secondary" data-lang="share_experience">Compartir Experiencia</a>
-        </div>
-        
-    </main>
+    <div class="button-group">
+      <a href="http://valoratuvisita.com/carta" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta</a>
+      <a id="shareLink" class="btn btn-secondary" data-lang="share_experience">Compartir Experiencia</a>
+    </div>
+  </main>
 
-    <footer id="lang-switcher">
-        <button data-lang-switch="es">Español</button>
-        <button data-lang-switch="en">English</button>
-        <button data-lang-switch="de">Deutsch</button>
-    </footer>
+  <footer id="lang-switcher">
+    <button data-lang-switch="es">Español</button>
+    <button data-lang-switch="en">English</button>
+    <button data-lang-switch="de">Deutsch</button>
+  </footer>
 
-    <script>
-        // --- BASE DE DATOS DE TRADUCCIONES ---
-        const translations = {
-            es: {
-                title: "Bienvenido a PataMig",
-                welcome: "¡Bienvenido!",
-                prompt: "¿Qué te gustaría hacer?",
-                view_menu: "Acceder a la Carta",
-                share_experience: "Compartir Experiencia"
-            },
-            en: {
-                title: "Welcome to PataMig",
-                welcome: "Welcome!",
-                prompt: "What would you like to do?",
-                view_menu: "View the Menu",
-                share_experience: "Share Experience"
-            },
-            de: {
-                title: "Willkommen bei PataMig",
-                welcome: "Willkommen!",
-                prompt: "Was möchten Sie tun?",
-                view_menu: "Speisekarte ansehen",
-                share_experience: "Erlebnis teilen"
-            }
-        };
+  <script>
+    // --- Traducciones ---
+    const translations = {
+      es: {
+        title: "Bienvenido a PataMig",
+        welcome: "¡Bienvenido!",
+        prompt: "¿Qué te gustaría hacer?",
+        view_menu: "Acceder a la Carta",
+        share_experience: "Compartir Experiencia"
+      },
+      en: {
+        title: "Welcome to PataMig",
+        welcome: "Welcome!",
+        prompt: "What would you like to do?",
+        view_menu: "View the Menu",
+        share_experience: "Share Experience"
+      },
+      de: {
+        title: "Willkommen bei PataMig",
+        welcome: "Willkommen!",
+        prompt: "Was möchten Sie tun?",
+        view_menu: "Speisekarte ansehen",
+        share_experience: "Erlebnis teilen"
+      }
+    };
 
-        // --- LÓGICA DEL SCRIPT (Exactamente la misma de antes) ---
+    const langSwitcher = document.getElementById('lang-switcher');
+    const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
+    const shareLink = document.getElementById('shareLink');
+    const defaultLang = 'es';
 
-        const langSwitcher = document.getElementById('lang-switcher');
-        const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
-        const defaultLang = 'es';
+    function setLanguage(lang) {
+      if (!translations[lang]) lang = defaultLang;
+      document.documentElement.lang = lang;
 
-        function setLanguage(lang) {
-            if (!translations[lang]) {
-                lang = defaultLang;
-            }
-            document.documentElement.lang = lang;
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                const key = el.dataset.lang;
-                const translation = translations[lang][key];
-                if (translation) {
-                    el.textContent = translation;
-                }
-            });
-            langButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.langSwitch === lang);
-            });
-        }
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.dataset.lang;
+        el.textContent = translations[lang][key] || el.textContent;
+      });
 
-        function detectLanguage() {
-            const browserLang = navigator.language.split('-')[0];
-            setLanguage(browserLang);
-        }
+      langButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.langSwitch === lang);
+      });
 
-        langSwitcher.addEventListener('click', (e) => {
-            if (e.target.dataset.langSwitch) {
-                setLanguage(e.target.dataset.langSwitch);
-            }
-        });
+      // Actualiza enlace a restaurante_2.html con idioma
+      shareLink.href = `restaurante_2.html?lang=${lang}`;
+      document.title = translations[lang].title;
+    }
 
-        document.addEventListener('DOMContentLoaded', detectLanguage);
-    </script>
+    function detectLanguage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get('lang');
+      const browserLang = navigator.language.split('-')[0];
+      setLanguage(langParam || browserLang || defaultLang);
+    }
+
+    langSwitcher.addEventListener('click', e => {
+      if (e.target.dataset.langSwitch) {
+        setLanguage(e.target.dataset.langSwitch);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', detectLanguage);
+  </script>
 </body>
 </html>
+
