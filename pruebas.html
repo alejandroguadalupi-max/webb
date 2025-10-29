@@ -1,86 +1,239 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Restaurante Casablanca - Edición Halloween</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans:wght@400;600&family=Creepster&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      /* Fondo oscuro de Halloween */
-      background: linear-gradient(135deg, #2c3e50, #000000); /* Tonos más oscuros y misteriosos */
-      color: #f0f0f0; /* Color de texto claro para el contraste */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      /* Añadiendo un patrón sutil de telarañas o fantasmas */
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"><path d="M50 0 L50 100 M0 50 L100 50 M20 20 L80 80 M20 80 L80 20"/><circle cx="50" cy="50" r="10"/></g></svg>');
-    }
-    header {
-      position: absolute;
-      top: 2rem;
-    }
-    h1 {
-      font-family: 'Creepster', cursive; /* Fuente espeluznante para el título */
-      font-size: 3.5rem; /* Un poco más grande para destacar */
-      margin-bottom: 0.5rem;
-      letter-spacing: 1px;
-      color: #ff6600; /* Naranja calabaza */
-      text-shadow: 0 0 8px rgba(255,102,0,0.7); /* Efecto de brillo fantasmal */
-    }
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 2.5rem;
-      max-width: 600px;
-      color: #cccccc; /* Un gris claro para el texto */
-    }
-    .buttons {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    a.button {
-      text-decoration: none;
-      padding: 0.9rem 2rem;
-      border-radius: 2rem;
-      font-weight: 600;
-      background-color: #9b59b6; /* Un morado oscuro de Halloween */
-      color: white;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra más pronunciada para el fondo oscuro */
-    }
-    a.button:hover {
-      background-color: #8e44ad; /* Morado ligeramente más oscuro al pasar el ratón */
-      transform: translateY(-3px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.5);
-    }
-    footer {
-      position: absolute;
-      bottom: 1rem;
-      font-size: 0.9rem;
-      opacity: 0.7; /* Ligeramente más transparente */
-      color: #a0a0a0; /* Gris más oscuro para el footer */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="title">Bienvenido a PataMig</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* --- Paleta de Halloween --- */
+            --primary-green: #581845;  /* Verde cambiado por Morado oscuro */
+            --accent-orange: #e89f4b;  /* Naranja de acento (¡Ya era perfecto!) */
+            --text-dark: #f0f0f0;      /* Texto oscuro cambiado por Texto claro */
+            --bg-white: #2a2a2a;      /* Blanco cambiado por Gris oscuro (tarjeta) */
+            --bg-light: #121212;      /* Blanco roto cambiado por Negro (fondo) */
+
+            /* Variables para hover (basadas en las nuevas) */
+            --primary-darker: #421132; /* Morado más oscuro para hover */
+            --bg-hover-light: #333333; /* Gris más claro para hover secundario */
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light); /* Fondo negro */
+            color: var(--text-dark); /* Texto claro */
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* La tarjeta principal */
+        .landing-container {
+            background-color: var(--bg-white); /* Fondo tarjeta gris oscuro */
+            border-radius: 12px;
+            /* Sombra cambiada a un brillo naranja */
+            box-shadow: 0 6px 25px rgba(232, 159, 75, 0.15);
+            text-align: center;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            border-top: 6px solid var(--accent-orange); /* Borde naranja (ya estaba) */
+        }
+
+        /* El nombre del restaurante estilizado */
+        .logo {
+            font-family: 'Creepster', cursive; /* Fuente de Halloween */
+            font-size: 3.5em; 
+            font-weight: bold;
+            color: var(--accent-orange); /* Color naranja para el logo */
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px rgba(232, 159, 75, 0.6); /* Sombra brillante naranja */
+        }
+
+        h2 {
+            font-weight: 500;
+            font-size: 1.4em;
+            margin-top: 0;
+            color: var(--text-dark); /* Texto claro */
+        }
+
+        p {
+            color: #aaaaaa; /* Gris más claro para el párrafo */
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        /* Contenedor de los botones */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+        }
+
+        /* Estilo base de los botones */
+        .btn {
+            display: block;
+            padding: 16px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        /* Botón Primario (Ver Carta) - Morado Sólido */
+        .btn-primary {
+            background-color: var(--primary-green); /* Morado */
+            color: #ffffff; /* Texto blanco (forzado) */
+            border-color: var(--primary-green); /* Morado */
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-darker); /* Morado más oscuro */
+            border-color: var(--primary-darker);
+        }
+
+        /* Botón Secundario (Compartir) - Fondo oscuro con borde Morado */
+        .btn-secondary {
+            background-color: var(--bg-white); /* Fondo tarjeta oscuro */
+            color: var(--primary-green); /* Texto morado */
+            border-color: var(--primary-green); /* Borde morado */
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-hover-light); /* Fondo gris más claro */
+        }
+
+        /* Selector de idioma, discreto en la parte inferior */
+        #lang-switcher {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+        }
+
+        #lang-switcher button {
+            background: none;
+            border: 1px solid #555; /* Borde gris oscuro */
+            color: #888;
+            padding: 8px 12px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+
+        #lang-switcher button:hover {
+            background-color: #444; /* Hover gris oscuro */
+            color: #eee;
+        }
+
+        #lang-switcher button.active {
+            background-color: var(--primary-green); /* Morado */
+            color: #ffffff; /* Texto blanco (forzado) */
+            border-color: var(--primary-green);
+            font-weight: bold;
+        }
+
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Restaurante Casablanca</h1>
-  </header>
 
-  <p>Sabores únicos y una experiencia gastronómica inigualable. Descubre nuestra carta o comparte tu opinión.</p>
+        <main class="landing-container">
+        
+        <div class="logo">PataMig</div>
+        
+        <h2 data-lang="welcome">¡Bienvenido!</h2>
+        <p data-lang="prompt">¿Qué te gustaría hacer?</p>
+        
+        <div class="button-group">
+            <a href="http://valoratuvisita.com/carta" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta</a>
+            
+            <a href="http://valoratuvisita.com/restaurante_casablanca" class="btn btn-secondary" data-lang="share_experience">Compartir Experiencia</a>
+        </div>
+        
+    </main>
 
-  <div class="buttons">
-    <a href="carta.html" class="button">Ver Carta</a>
-    <a href="https://valoratuvisita.com/restaurante_casablanca" target="_blank" class="button">Ver Valoraciones</a>
-  </div>
+    <footer id="lang-switcher">
+        <button data-lang-switch="es">Español</button>
+        <button data-lang-switch="en">English</button>
+        <button data-lang-switch="de">Deutsch</button>
+    </footer>
 
-  <footer>© 2025 Restaurante Casablanca — Todos los derechos reservados</footer>
+    <script>
+        // --- BASE DE DATOS DE TRADUCCIONES ---
+        const translations = {
+            es: {
+                title: "Bienvenido a PataMig",
+                welcome: "¡Bienvenido!",
+                prompt: "¿Qué te gustaría hacer?",
+                view_menu: "Acceder a la Carta",
+                share_experience: "Compartir Experiencia"
+            },
+            en: {
+                title: "Welcome to PataMig",
+                welcome: "Welcome!",
+                prompt: "What would you like to do?",
+                view_menu: "View the Menu",
+                share_experience: "Share Experience"
+            },
+            de: {
+                title: "Willkommen bei PataMig",
+                welcome: "Willkommen!",
+                prompt: "Was möchten Sie tun?",
+                view_menu: "Speisekarte ansehen",
+                share_experience: "Erlebnis teilen"
+            }
+        };
+
+        // --- LÓGICA DEL SCRIPT (Exactamente la misma de antes) ---
+
+        const langSwitcher = document.getElementById('lang-switcher');
+        const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
+        const defaultLang = 'es';
+
+        function setLanguage(lang) {
+            if (!translations[lang]) {
+                lang = defaultLang;
+            }
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                const translation = translations[lang][key];
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+            langButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.langSwitch === lang);
+            });
+        }
+
+        function detectLanguage() {
+            const browserLang = navigator.language.split('-')[0];
+            setLanguage(browserLang);
+            }
+
+        langSwitcher.addEventListener('click', (e) => {
+            if (e.target.dataset.langSwitch) {
+                setLanguage(e.target.dataset.langSwitch);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', detectLanguage);
+    </script>
 </body>
 </html>
