@@ -1,239 +1,264 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-lang="title">Bienvenido a PataMig</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="title">🎃 Bienvenido a PataMig - Edición Halloween 🎃</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            /* --- Paleta de Halloween --- */
-            --primary-green: #581845;  /* Verde cambiado por Morado oscuro */
-            --accent-orange: #e89f4b;  /* Naranja de acento (¡Ya era perfecto!) */
-            --text-dark: #f0f0f0;      /* Texto oscuro cambiado por Texto claro */
-            --bg-white: #2a2a2a;      /* Blanco cambiado por Gris oscuro (tarjeta) */
-            --bg-light: #121212;      /* Blanco roto cambiado por Negro (fondo) */
+    <style>
+        :root {
+            --primary-green: #4a7c59;
+            --accent-orange: #ff7518; /* Naranja más fuerte para Halloween */
+            --text-dark: #2b1d0e;
+            --bg-dark: #1a0d00; /* Fondo oscuro para el tema */
+            --bg-card: #2b1a08; /* Fondo de la tarjeta */
+            --purple-accent: #7b3fa1; /* Toque morado Halloween */
+        }
 
-            /* Variables para hover (basadas en las nuevas) */
-            --primary-darker: #421132; /* Morado más oscuro para hover */
-            --bg-hover-light: #333333; /* Gris más claro para hover secundario */
-        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            overflow: hidden;
+        }
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-light); /* Fondo negro */
-            color: var(--text-dark); /* Texto claro */
-        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
 
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+        /* Fondo animado con murciélagos */
+        .bats {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.imgur.com/XEUt6oZ.png');
+            background-repeat: repeat;
+            background-size: 250px;
+            opacity: 0.05;
+            animation: fly 30s linear infinite;
+            z-index: 0;
+        }
 
-        /* La tarjeta principal */
-        .landing-container {
-            background-color: var(--bg-white); /* Fondo tarjeta gris oscuro */
-            border-radius: 12px;
-            /* Sombra cambiada a un brillo naranja */
-            box-shadow: 0 6px 25px rgba(232, 159, 75, 0.15);
-            text-align: center;
-            padding: 40px 30px;
-            max-width: 400px;
-            width: 100%;
-            border-top: 6px solid var(--accent-orange); /* Borde naranja (ya estaba) */
-        }
+        @keyframes fly {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
 
-        /* El nombre del restaurante estilizado */
-        .logo {
-            font-family: 'Creepster', cursive; /* Fuente de Halloween */
-            font-size: 3.5em; 
-            font-weight: bold;
-            color: var(--accent-orange); /* Color naranja para el logo */
-            margin-bottom: 10px;
-            text-shadow: 0 0 8px rgba(232, 159, 75, 0.6); /* Sombra brillante naranja */
-        }
+        .landing-container {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 6px 25px rgba(255, 100, 0, 0.4);
+            text-align: center;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            border-top: 6px solid var(--accent-orange);
+            position: relative;
+            z-index: 1;
+        }
 
-        h2 {
-            font-weight: 500;
-            font-size: 1.4em;
-            margin-top: 0;
-            color: var(--text-dark); /* Texto claro */
-        }
+        .landing-container::before {
+            content: "🕸️";
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.5em;
+            opacity: 0.7;
+        }
 
-        p {
-            color: #aaaaaa; /* Gris más claro para el párrafo */
-            font-size: 1.1em;
-            margin-bottom: 30px;
-        }
+        .landing-container::after {
+            content: "🕷️";
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 1.5em;
+            opacity: 0.8;
+            animation: crawl 8s linear infinite alternate;
+        }
 
-        /* Contenedor de los botones */
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px; 
-        }
+        @keyframes crawl {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
 
-        /* Estilo base de los botones */
-        .btn {
-            display: block;
-            padding: 16px 20px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
+        .logo {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: var(--accent-orange);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--purple-accent);
+        }
 
-        /* Botón Primario (Ver Carta) - Morado Sólido */
-        .btn-primary {
-            background-color: var(--primary-green); /* Morado */
-            color: #ffffff; /* Texto blanco (forzado) */
-            border-color: var(--primary-green); /* Morado */
-        }
+        h2 {
+            font-weight: 500;
+            font-size: 1.5em;
+            margin-top: 0;
+            color: #f6c28b;
+        }
 
-        .btn-primary:hover {
-            background-color: var(--primary-darker); /* Morado más oscuro */
-            border-color: var(--primary-darker);
-        }
+        p {
+            color: #d8b489;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
 
-        /* Botón Secundario (Compartir) - Fondo oscuro con borde Morado */
-        .btn-secondary {
-            background-color: var(--bg-white); /* Fondo tarjeta oscuro */
-            color: var(--primary-green); /* Texto morado */
-            border-color: var(--primary-green); /* Borde morado */
-        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-        .btn-secondary:hover {
-            background-color: var(--bg-hover-light); /* Fondo gris más claro */
-        }
+        .btn {
+            display: block;
+            padding: 16px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
 
-        /* Selector de idioma, discreto en la parte inferior */
-        #lang-switcher {
-            margin-top: 30px;
-            text-align: center;
-            width: 100%;
-        }
+        .btn-primary {
+            background-color: var(--accent-orange);
+            color: black;
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 10px rgba(255, 117, 24, 0.7);
+        }
 
-        #lang-switcher button {
-            background: none;
-            border: 1px solid #555; /* Borde gris oscuro */
-            color: #888;
-            padding: 8px 12px;
-            margin: 0 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-        }
+        .btn-primary:hover {
+            background-color: #ff5500;
+            transform: scale(1.05);
+        }
 
-        #lang-switcher button:hover {
-            background-color: #444; /* Hover gris oscuro */
-            color: #eee;
-        }
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
 
-        #lang-switcher button.active {
-            background-color: var(--primary-green); /* Morado */
-            color: #ffffff; /* Texto blanco (forzado) */
-            border-color: var(--primary-green);
-            font-weight: bold;
-        }
+        .btn-secondary:hover {
+            background-color: rgba(255, 117, 24, 0.1);
+            transform: scale(1.05);
+        }
 
-    </style>
+        #lang-switcher {
+            margin-top: 30px;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+        }
+
+        #lang-switcher button {
+            background: none;
+            border: 1px solid #ffbb88;
+            color: #ffbb88;
+            padding: 8px 12px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+
+        #lang-switcher button:hover {
+            background-color: #ff7518;
+            color: #000;
+        }
+
+        #lang-switcher button.active {
+            background-color: var(--accent-orange);
+            color: #000;
+            border-color: var(--accent-orange);
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-        <main class="landing-container">
-        
-        <div class="logo">PataMig</div>
-        
-        <h2 data-lang="welcome">¡Bienvenido!</h2>
-        <p data-lang="prompt">¿Qué te gustaría hacer?</p>
-        
-        <div class="button-group">
-            <a href="http://valoratuvisita.com/carta" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta</a>
-            
-            <a href="http://valoratuvisita.com/restaurante_casablanca" class="btn btn-secondary" data-lang="share_experience">Compartir Experiencia</a>
-        </div>
-        
-    </main>
+    <div class="bats"></div>
 
-    <footer id="lang-switcher">
-        <button data-lang-switch="es">Español</button>
-        <button data-lang-switch="en">English</button>
-        <button data-lang-switch="de">Deutsch</button>
-    </footer>
+    <main class="landing-container">
+        <div class="logo">PataMig 🎃</div>
+        <h2 data-lang="welcome">¡Bienvenido a la noche de Halloween!</h2>
+        <p data-lang="prompt">Elige tu camino… si te atreves 👻</p>
+        
+        <div class="button-group">
+            <a href="http://valoratuvisita.com/carta" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta Maldita</a>
+            <a href="http://valoratuvisita.com/restaurante_casablanca" class="btn btn-secondary" data-lang="share_experience">Compartir tu Hechizo</a>
+        </div>
+    </main>
 
-    <script>
-        // --- BASE DE DATOS DE TRADUCCIONES ---
-        const translations = {
-            es: {
-                title: "Bienvenido a PataMig",
-                welcome: "¡Bienvenido!",
-                prompt: "¿Qué te gustaría hacer?",
-                view_menu: "Acceder a la Carta",
-                share_experience: "Compartir Experiencia"
-            },
-            en: {
-                title: "Welcome to PataMig",
-                welcome: "Welcome!",
-                prompt: "What would you like to do?",
-                view_menu: "View the Menu",
-                share_experience: "Share Experience"
-            },
-            de: {
-                title: "Willkommen bei PataMig",
-                welcome: "Willkommen!",
-                prompt: "Was möchten Sie tun?",
-                view_menu: "Speisekarte ansehen",
-                share_experience: "Erlebnis teilen"
-            }
-        };
+    <footer id="lang-switcher">
+        <button data-lang-switch="es">Español</button>
+        <button data-lang-switch="en">English</button>
+        <button data-lang-switch="de">Deutsch</button>
+    </footer>
 
-        // --- LÓGICA DEL SCRIPT (Exactamente la misma de antes) ---
+    <script>
+        const translations = {
+            es: {
+                title: "🎃 Bienvenido a PataMig - Edición Halloween 🎃",
+                welcome: "¡Bienvenido a la noche de Halloween!",
+                prompt: "Elige tu camino… si te atreves 👻",
+                view_menu: "Acceder a la Carta Maldita",
+                share_experience: "Compartir tu Hechizo"
+            },
+            en: {
+                title: "🎃 Welcome to PataMig - Halloween Edition 🎃",
+                welcome: "Welcome to the Night of Frights!",
+                prompt: "Choose your path… if you dare 👻",
+                view_menu: "Access the Cursed Menu",
+                share_experience: "Share Your Spell"
+            },
+            de: {
+                title: "🎃 Willkommen bei PataMig - Halloween 🎃",
+                welcome: "Willkommen in der Nacht des Grauens!",
+                prompt: "Wähle deinen Weg… wenn du dich traust 👻",
+                view_menu: "Zugang zur verfluchten Speisekarte",
+                share_experience: "Teile deinen Zauber"
+            }
+        };
 
-        const langSwitcher = document.getElementById('lang-switcher');
-        const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
-        const defaultLang = 'es';
+        const langSwitcher = document.getElementById('lang-switcher');
+        const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
+        const defaultLang = 'es';
 
-        function setLanguage(lang) {
-            if (!translations[lang]) {
-                lang = defaultLang;
-            }
-            document.documentElement.lang = lang;
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                const key = el.dataset.lang;
-                const translation = translations[lang][key];
-                if (translation) {
-                    el.textContent = translation;
-                }
-            });
-            langButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.langSwitch === lang);
-            });
-        }
+        function setLanguage(lang) {
+            if (!translations[lang]) lang = defaultLang;
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                const translation = translations[lang][key];
+                if (translation) el.textContent = translation;
+            });
+            langButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.langSwitch === lang);
+            });
+        }
 
-        function detectLanguage() {
-            const browserLang = navigator.language.split('-')[0];
-            setLanguage(browserLang);
-            }
+        function detectLanguage() {
+            const browserLang = navigator.language.split('-')[0];
+            setLanguage(browserLang);
+        }
 
-        langSwitcher.addEventListener('click', (e) => {
-            if (e.target.dataset.langSwitch) {
-                setLanguage(e.target.dataset.langSwitch);
-            }
-        });
+        langSwitcher.addEventListener('click', (e) => {
+            if (e.target.dataset.langSwitch) {
+                setLanguage(e.target.dataset.langSwitch);
+            }
+        });
 
-        document.addEventListener('DOMContentLoaded', detectLanguage);
-    </script>
+        document.addEventListener('DOMContentLoaded', detectLanguage);
+    </script>
 </body>
 </html>
