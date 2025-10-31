@@ -165,6 +165,7 @@ p { margin: 0 0 12px; font-size: 14px; text-align: center; color: var(--muted); 
 </style>
 </head>
 <body>
+
 <div id="lang-selector">
   <div id="current-lang">🇪🇸</div>
   <div id="lang-options"></div>
@@ -205,7 +206,153 @@ p { margin: 0 0 12px; font-size: 14px; text-align: center; color: var(--muted); 
 </div>
 
 <script>
-// Mantener todo el JS tal cual estaba
+const DEFAULT_CARD="img/logo35.png";
+const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
+const COPY={
+ es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",watermark:"Incluir nombre del restaurante",success:"Compartido con éxito"},
+ en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",watermark:"Include restaurant name",success:"Shared successfully"},
+ fr:{title:"Partager l'expérience · PataMig",shareTitle:"📸 Partagez votre moment",shareSub:"Prenez ou choisissez une photo à partager avec vos amis.",note:"Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",back:"⬅ Retour",shareBtn:"Partager",takePhoto:"📷 Prendre une photo",choosePhoto:"🖼️ Choisir une photo",watermark:"Inclure le nom du restaurant",success:"Partagé avec succès"},
+ de:{title:"Erfahrung teilen · PataMig",shareTitle:"📸 Teile deinen Moment",shareSub:"Mach oder wähle ein Foto und teile es mit Freunden.",note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",takePhoto:"📷 Foto machen",choosePhoto:"🖼️ Foto auswählen",watermark:"Restaurantname einfügen",success:"Erfolgreich geteilt"}
+};
+
+let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
+if(!COPY[currentLang]) currentLang='es';
+
+const wrap=document.getElementById('wrap');
+const cameraInput=document.getElementById('cameraInput');
+const galleryInput=document.getElementById('galleryInput');
+const photoPreview=document.getElementById('photoPreview');
+const photoContainer=document.getElementById('photoContainer');
+const btnCamera=document.getElementById('btnCamera');
+const btnGallery=document.getElementById('btnGallery');
+const btnShare=document.getElementById('btnShare');
+const backBtn=document.getElementById('backBtn');
+const noteEl=document.getElementById('note');
+const currentLangDiv=document.getElementById('current-lang');
+const optionsDiv=document.getElementById('lang-options');
+const chkWatermark=document.getElementById('chkWatermark');
+const watermarkLabel=document.getElementById('watermarkLabel');
+
+function setLang(lang){
+  if(!COPY[lang]) lang='es';
+  const c=COPY[lang];
+  document.title = c.title;
+  document.getElementById('shareTitle').textContent=c.shareTitle;
+  document.getElementById('shareSub').textContent=c.shareSub;
+  btnShare.textContent=c.shareBtn;
+  backBtn.textContent=c.back;
+  noteEl.textContent=c.note;
+  btnCamera.textContent=c.takePhoto;
+  btnGallery.textContent=c.choosePhoto;
+  watermarkLabel.textContent=c.watermark;
+  currentLangDiv.textContent=FLAGS[lang];
+  localStorage.setItem('userLang',lang);
+}
+
+function initLangSelector(){
+  optionsDiv.innerHTML="";
+  Object.keys(COPY).forEach(code=>{
+    const opt=document.createElement('div');
+    opt.className='lang-option';
+    opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
+    opt.onclick=()=>{ setLang(code); optionsDiv.style.display='none'; };
+    optionsDiv.appendChild(opt);
+  });
+  currentLangDiv.onclick=e=>{
+    e.stopPropagation();
+    optionsDiv.style.display = optionsDiv.style.display==='block' ? 'none' : 'block';
+  };
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('lang-selector').contains(e.target)){
+      optionsDiv.style.display='none';
+    }
+  });
+}
+
+initLangSelector();
+setLang(currentLang);
+
+btnCamera.onclick=()=>cameraInput.click();
+btnGallery.onclick=()=>galleryInput.click();
+
+let selectedFile=null;
+function handleFileInput(input){
+  const f=input.files?.[0];
+  if(!f) return;
+  selectedFile=f;
+  photoPreview.src=URL.createObjectURL(f);
+  photoContainer.style.display='block';
+  wrap.classList.add('centered');
+}
+cameraInput.onchange=()=>handleFileInput(cameraInput);
+galleryInput.onchange=()=>handleFileInput(galleryInput);
+
+async function addWatermarkToImage(file){
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d');
+      canvas.width=img.width; canvas.height=img.height;
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      const fontSize=Math.max(16,canvas.width*0.045);
+      const text="PataMig";
+      ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
+      ctx.fillStyle="rgba(255,255,255,0.8)";
+      const padding=fontSize*0.6;
+      const textWidth=ctx.measureText(text).width+padding*2;
+      const rectHeight=fontSize*1.9;
+      const x=canvas.width-textWidth-40;
+      const y=canvas.height-rectHeight-50;
+      ctx.fillRect(x,y,textWidth,rectHeight);
+      ctx.fillStyle="#1f2937";
+      ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText(text,x+textWidth/2,y+rectHeight/2.1);
+      canvas.toBlob(b=>{
+        resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
+      },"image/jpeg",0.9);
+    };
+    img.src=URL.createObjectURL(file);
+  });
+}
+
+function showSuccessMessage(){
+  const popup=document.createElement('div');
+  popup.className='success-popup';
+  popup.innerHTML=`<div class="success-box"><h3>✅ ${COPY[currentLang].success}</h3><p>Redirigiendo...</p></div>`;
+  document.body.appendChild(popup);
+  setTimeout(()=>{ window.location.href="principal.html"; },2000);
+}
+
+async function shareExperience(e){
+  e&&e.preventDefault();
+  try{
+    let baseFile;
+    if(selectedFile){
+      baseFile=selectedFile;
+    } else {
+      const res=await fetch(DEFAULT_CARD);
+      const blob=await res.blob();
+      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
+    }
+    let fileToShare=baseFile;
+    if(chkWatermark.checked){
+      fileToShare=await addWatermarkToImage(baseFile);
+    }
+
+    if(navigator.canShare?.({files:[fileToShare]})){
+      await navigator.share({files:[fileToShare]});
+      showSuccessMessage();
+    } else {
+      const url=URL.createObjectURL(fileToShare);
+      window.open(url,"_blank");
+      showSuccessMessage();
+    }
+  }catch(err){ console.log("Error o cancelado:", err); }
+}
+
+btnShare.onclick=shareExperience;
 </script>
+
 </body>
 </html>
