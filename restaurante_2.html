@@ -1,13 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#4a7c59">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#5aa37a" />
 <title>¿Cómo fue tu experiencia?</title>
+
 <style>
   :root {
-    --primary-green: #4a7c59;
+    --primary-green: #5aa37a;
     --accent-orange: #e89f4b;
     --text-dark: #333333;
     --bg-white: #ffffff;
@@ -15,15 +16,19 @@
     --muted: #666666;
   }
 
-  *,*::before,*::after { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial; }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+  }
 
   body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--bg-light);
-    color: var(--text-dark);
     padding: 20px;
   }
 
@@ -33,37 +38,53 @@
     background-color: var(--bg-white);
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    padding: 30px 20px;
+    padding: 30px 24px;
     display: flex;
     flex-direction: column;
     gap: 25px;
   }
 
-  /* Selector de idioma */
   #lang-selector {
     display: flex;
     justify-content: flex-end;
-    gap: 6px;
+    gap: 8px;
     margin-bottom: 10px;
   }
+
   #lang-selector button {
     background: none;
     border: 1px solid #ccc;
-    color: #888;
-    padding: 6px 10px;
+    color: #666;
+    padding: 8px 12px;
     cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    border-radius: 7px;
+    font-weight: 600;
+    transition: all 0.18s ease-in-out;
   }
-  #lang-selector button:hover { background-color: #eee; color: #333; }
-  #lang-selector button.active { background-color: var(--primary-green); color: var(--bg-white); border-color: var(--primary-green); font-weight: bold; }
+
+  #lang-selector button:hover {
+    background-color: #eee;
+    color: #333;
+  }
+
+  #lang-selector button.active {
+    background-color: var(--primary-green);
+    color: var(--bg-white);
+    border-color: var(--primary-green);
+    font-weight: 700;
+  }
 
   h2 {
     font-size: 1.3em;
     color: var(--text-dark);
     margin-bottom: 8px;
   }
-  p { font-size: 1em; color: var(--muted); margin-bottom: 16px; }
+
+  p {
+    font-size: 1em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
 
   .tile {
     background-color: var(--bg-white);
@@ -73,7 +94,11 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     transition: transform 0.1s ease, box-shadow 0.2s ease;
   }
-  .tile:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
 
   .btn {
     display: block;
@@ -84,16 +109,36 @@
     font-weight: bold;
     font-size: 1.05em;
     text-align: center;
-    color: #fff;
+    color: var(--bg-white);
     transition: all 0.3s ease;
   }
-  .btn-google { background-color: var(--primary-green); }
-  .btn-google:hover { background-color: #3b6347; }
 
-  .btn-private { background-color: var(--accent-orange); }
-  .btn-private:hover { background-color: #d48833; }
+  .btn-google {
+    background-color: var(--primary-green);
+    border: 2px solid var(--primary-green);
+    box-shadow: 0 8px 20px rgba(90,163,122,0.12);
+  }
 
-  .note { font-size: 0.9em; color: var(--muted); margin-top: 6px; }
+  .btn-google:hover {
+    background-color: #4a8c68;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(90,163,122,0.16);
+  }
+
+  .btn-private {
+    background-color: var(--accent-orange);
+  }
+
+  .btn-private:hover {
+    background-color: #d48833;
+    transform: translateY(-2px);
+  }
+
+  .note {
+    font-size: 0.9em;
+    color: var(--muted);
+    margin-top: 6px;
+  }
 
   @media (max-width: 360px) {
     .card { padding: 20px 15px; gap: 20px; }
@@ -102,80 +147,128 @@
 </style>
 </head>
 <body>
+
 <main class="card">
-  <!-- Selector de idioma -->
   <div id="lang-selector">
-    <button data-lang="es">ES</button>
-    <button data-lang="en">EN</button>
-    <button data-lang="de">DE</button>
+    <button data-lang-switch="es">ES</button>
+    <button data-lang-switch="en">EN</button>
+    <button data-lang-switch="de">DE</button>
   </div>
 
   <section class="tile">
-    <h2 id="publicTitle">⭐ Reseña pública</h2>
-    <p id="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
-    <a id="btnGoogle" class="btn btn-google" href="#" rel="noopener">Dejar reseña en Google</a>
-    <div class="note" id="publicNote">Queda visible para todos.</div>
+    <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
+    <p data-lang="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
+    <a id="btnGoogle" class="btn btn-google" data-lang="publicBtn" href="#" rel="noopener">Dejar reseña en Google</a>
+    <div class="note" data-lang="publicNote">Queda visible para todos.</div>
   </section>
 
   <section class="tile">
-    <h2 id="privateTitle">📝 Comentario privado</h2>
-    <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-    <a id="btnPrivate" class="btn btn-private" href="#" rel="noopener">Enviar comentario</a>
-    <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
+    <h2 data-lang="privateTitle">📝 Comentario privado</h2>
+    <p data-lang="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+    <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" rel="noopener">Enviar comentario</a>
+    <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
   </section>
 
-  <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  <p class="note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 </main>
 
 <script>
 const GOOGLE_LINK = "https://maps.app.goo.gl/CasablancaLasCanteras";
-const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1" };
-const COPY = {
-  es:{ publicTitle:"⭐ Reseña pública", publicText:"Si te gustó, tu reseña nos ayuda a crecer.", publicBtn:"Dejar reseña en Google", publicNote:"Queda visible para todos.", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", privateNote:"Solo lo vemos nosotros.", thanks:"¡Gracias por tu tiempo!" },
-  en:{ publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", publicNote:"Visible to everyone.", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", privateNote:"Only we can see it.", thanks:"Thanks for your time!" },
-  de:{ publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", publicNote:"Für alle sichtbar.", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", privateNote:"Nur wir können es sehen.", thanks:"Vielen Dank für Ihre Zeit!" }
+const TALLY_LINKS = {
+  es: "https://tally.so/r/w2Qla9",
+  en: "https://tally.so/r/w20k9D",
+  de: "https://tally.so/r/mBN1q1"
 };
 
-function setLang(lang){
-  if(!COPY[lang]) lang='es';
-  const d = COPY[lang];
-  document.getElementById('publicTitle').textContent = d.publicTitle;
-  document.getElementById('publicText').textContent = d.publicText;
-  document.getElementById('btnGoogle').textContent = d.publicBtn;
-  document.getElementById('publicNote').textContent = d.publicNote;
-  document.getElementById('privateTitle').textContent = d.privateTitle;
-  document.getElementById('privateText').textContent = d.privateText;
-  document.getElementById('btnPrivate').textContent = d.privateBtn;
-  document.getElementById('privateNote').textContent = d.privateNote;
-  document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
-  document.getElementById('btnGoogle').href = GOOGLE_LINK;
-  document.getElementById('btnPrivate').href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
+const translations = {
+  es: {
+    publicTitle: "⭐ Reseña pública",
+    publicText: "Si te gustó, tu reseña nos ayuda a crecer.",
+    publicBtn: "Dejar reseña en Google",
+    publicNote: "Queda visible para todos.",
+    privateTitle: "📝 Comentario privado",
+    privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
+    privateBtn: "Enviar comentario",
+    privateNote: "Solo lo vemos nosotros.",
+    thanks: "¡Gracias por tu tiempo!"
+  },
+  en: {
+    publicTitle: "⭐ Public review",
+    publicText: "Your review helps us on Google.",
+    publicBtn: "Leave a review",
+    publicNote: "Visible to everyone.",
+    privateTitle: "📝 Private feedback",
+    privateText: "If something went wrong, tell us and we’ll fix it.",
+    privateBtn: "Send feedback",
+    privateNote: "Only we can see it.",
+    thanks: "Thanks for your time!"
+  },
+  de: {
+    publicTitle: "⭐ Öffentliche Bewertung",
+    publicText: "Ihre Bewertung hilft uns bei Google.",
+    publicBtn: "Bewertung abgeben",
+    publicNote: "Für alle sichtbar.",
+    privateTitle: "📝 Privates Feedback",
+    privateText: "Wenn etwas schiefging, sagen Sie es uns bitte.",
+    privateBtn: "Feedback senden",
+    privateNote: "Nur wir können es sehen.",
+    thanks: "Vielen Dank für Ihre Zeit!"
+  }
+};
+
+function getPreferredLangFromUrl() {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const p = urlParams.get("lang");
+    if (p && translations[p]) return p;
+  } catch {}
+  return null;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Detectar idioma inicial
-  const savedLang = localStorage.getItem('userLang') || (navigator.language || 'es').slice(0,2);
-  setLang(savedLang);
+function getPreferredLang() {
+  const urlLang = getPreferredLangFromUrl();
+  if (urlLang) return urlLang;
+  const saved = localStorage.getItem("userLang");
+  if (saved && translations[saved]) return saved;
+  const nav = (navigator.language || navigator.userLanguage || "es").slice(0,2);
+  return translations[nav] ? nav : "es";
+}
 
-  document.querySelectorAll('#lang-selector button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const lang = btn.dataset.lang;
-      setLang(lang);
-      localStorage.setItem('userLang', lang);
-    });
+function setLanguage(lang, pushState = true) {
+  if (!translations[lang]) lang = "es";
+  localStorage.setItem("userLang", lang);
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll("[data-lang]").forEach(el => {
+    const key = el.dataset.lang;
+    if (translations[lang][key]) el.textContent = translations[lang][key];
   });
 
-  // Abrir enlaces en la misma pestaña
-  document.getElementById('btnGoogle').addEventListener('click', e=>{
-    e.preventDefault(); location.href = GOOGLE_LINK;
+  document.querySelectorAll("#lang-selector button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.langSwitch === lang);
   });
-  document.getElementById('btnPrivate').addEventListener('click', e=>{
-    e.preventDefault();
-    const lang = document.documentElement.lang || 'es';
-    location.href = TALLY_LINKS[lang] || TALLY_LINKS['es'];
+
+  document.getElementById("btnGoogle").href = GOOGLE_LINK;
+  document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS["es"];
+
+  if (pushState) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", lang);
+    history.replaceState({}, "", url);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const initialLang = getPreferredLang();
+  setLanguage(initialLang, false);
+
+  document.getElementById("lang-selector").addEventListener("click", e => {
+    const btn = e.target.closest("button[data-lang-switch]");
+    if (!btn) return;
+    setLanguage(btn.dataset.langSwitch, true);
   });
 });
 </script>
+
 </body>
 </html>
-
