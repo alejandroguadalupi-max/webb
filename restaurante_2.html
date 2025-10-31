@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#5aa37a" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#68B553" />
 <title>¿Cómo fue tu experiencia?</title>
 
 <style>
   :root {
-    --primary-green: #5aa37a;
+    --primary-green: #68B553;
     --accent-orange: #e89f4b;
     --text-dark: #333333;
     --bg-white: #ffffff;
@@ -17,19 +17,17 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; }
+
   html, body {
     margin: 0;
     height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-light);
     color: var(--text-dark);
-  }
-
-  body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    text-align: center;
   }
 
   .card {
@@ -41,12 +39,14 @@
     padding: 30px 24px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 25px;
   }
 
+  /* Selector de idioma */
   #lang-selector {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 8px;
     margin-bottom: 10px;
   }
@@ -93,6 +93,7 @@
     text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     transition: transform 0.1s ease, box-shadow 0.2s ease;
+    width: 100%;
   }
 
   .tile:hover {
@@ -116,13 +117,13 @@
   .btn-google {
     background-color: var(--primary-green);
     border: 2px solid var(--primary-green);
-    box-shadow: 0 8px 20px rgba(90,163,122,0.12);
+    box-shadow: 0 8px 20px rgba(104,181,83,0.12);
   }
 
   .btn-google:hover {
-    background-color: #4a8c68;
+    background-color: #589748;
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(90,163,122,0.16);
+    box-shadow: 0 12px 28px rgba(104,181,83,0.16);
   }
 
   .btn-private {
@@ -138,6 +139,13 @@
     font-size: 0.9em;
     color: var(--muted);
     margin-top: 6px;
+  }
+
+  .thanks {
+    margin-top: 10px;
+    font-size: 1em;
+    color: var(--muted);
+    text-align: center;
   }
 
   @media (max-width: 360px) {
@@ -169,7 +177,7 @@
     <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
   </section>
 
-  <p class="note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  <p class="thanks" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 </main>
 
 <script>
