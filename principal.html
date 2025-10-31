@@ -1,14 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-lang="title">Bienvenido a PataMig</title>
+  <title data-lang="title">Bienvenido</title>
 
   <style>
     :root {
-      /* verde ligeramente más claro para coincidir con la imagen */
       --primary-green: #5aa37a;
       --accent-orange: #e89f4b;
       --text-dark: #333333;
@@ -35,45 +33,45 @@
 
     .landing-container {
       background-color: var(--bg-white);
-      border-radius: 12px;
+      border-radius: 14px;
       box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
       text-align: center;
-      padding: 36px 28px;
-      max-width: 440px;
+      padding: 40px 28px;
+      max-width: 460px;
       width: 100%;
       border-top: 6px solid var(--accent-orange);
     }
 
     .logo {
-      width: 92px;
-      height: 92px;
-      margin: 0 auto 14px;
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 18px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
-      background: linear-gradient(180deg, #ffffff 0%, rgba(90,163,122,0.05) 100%);
-      box-shadow: 0 6px 18px rgba(90,163,122,0.08);
+      background: linear-gradient(180deg, #ffffff 0%, rgba(90,163,122,0.07) 100%);
+      box-shadow: 0 8px 24px rgba(90,163,122,0.15);
     }
 
     .logo img {
-      width: 80%;
-      height: 80%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
       display: block;
     }
 
     h2 {
       font-weight: 600;
-      font-size: 1.45em;
-      margin: 8px 0 6px;
+      font-size: 1.6em;
+      margin: 10px 0 8px;
       color: var(--text-dark);
     }
 
     p {
       color: #666;
       font-size: 1.05em;
-      margin-bottom: 26px;
+      margin-bottom: 28px;
     }
 
     .button-group {
@@ -149,17 +147,26 @@
     }
 
     @media (max-width: 420px) {
-      .landing-container { padding: 26px 18px; }
-      .logo { width: 76px; height: 76px; }
-      h2 { font-size: 1.25em; }
+      .landing-container {
+        padding: 26px 18px;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+
+      h2 {
+        font-size: 1.35em;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="landing-container">
     <div class="logo" aria-hidden="true">
-      <!-- usa la imagen exacta img/PataMig.png (cambia extensión si la tuya es .jpg/svg) -->
-      <img src="img/PataMig.png" alt="PataMig logo" />
+      <img src="img/PataMig.png" alt="Logo" />
     </div>
 
     <h2 data-lang="welcome">¡Bienvenido!</h2>
@@ -168,7 +175,6 @@
     <div class="button-group">
       <a id="menuLink" class="btn btn-primary" data-lang="view_menu" role="button">Acceder a la Carta</a>
       <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" role="button">Dejar Reseña</a>
-      <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" role="button">Compartir Experiencia con Amigos</a>
     </div>
   </main>
 
@@ -179,45 +185,34 @@
   </footer>
 
   <script>
-    // Traducciones
     const translations = {
       es: {
-        title: "Bienvenido a PataMig",
+        title: "Bienvenido",
         welcome: "¡Bienvenido!",
         prompt: "¿Qué te gustaría hacer?",
         view_menu: "Acceder a la Carta",
-        leave_review: "Dejar Reseña",
-        share_with_friends: "Compartir Experiencia con Amigos"
+        leave_review: "Dejar Reseña"
       },
       en: {
-        title: "Welcome to PataMig",
+        title: "Welcome",
         welcome: "Welcome!",
         prompt: "What would you like to do?",
         view_menu: "View the Menu",
-        leave_review: "Leave a Review",
-        share_with_friends: "Share Experience with Friends"
+        leave_review: "Leave a Review"
       },
       de: {
-        title: "Willkommen bei PataMig",
+        title: "Willkommen",
         welcome: "Willkommen!",
         prompt: "Was möchten Sie tun?",
         view_menu: "Speisekarte ansehen",
-        leave_review: "Rezension hinterlassen",
-        share_with_friends: "Erlebnis mit Freunden teilen"
+        leave_review: "Rezension hinterlassen"
       }
     };
 
-    // Elementos
     const langSwitcher = document.getElementById('lang-switcher');
     const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
     const menuLink = document.getElementById('menuLink');
     const reviewLink = document.getElementById('reviewLink');
-    const shareLink = document.getElementById('shareLink');
-
-    // Lógica unificada de idioma:
-    // 1) ?lang= en URL
-    // 2) localStorage.userLang
-    // 3) navigator.language
     const defaultLang = 'es';
 
     function getPreferredLangFromUrl() {
@@ -225,7 +220,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const p = urlParams.get('lang');
         if (p && translations[p]) return p;
-      } catch (e) { /* ignore */ }
+      } catch {}
       return null;
     }
 
@@ -234,59 +229,42 @@
       if (urlLang) return urlLang;
       const saved = localStorage.getItem('userLang');
       if (saved && translations[saved]) return saved;
-      const nav = (navigator.language || navigator.userLanguage || defaultLang).slice(0,2);
-      if (nav && translations[nav]) return nav;
-      return defaultLang;
+      const nav = (navigator.language || navigator.userLanguage || defaultLang).slice(0, 2);
+      return translations[nav] ? nav : defaultLang;
     }
 
     function setLanguage(lang, pushState = true) {
       if (!translations[lang]) lang = defaultLang;
-      // guardar elección
       localStorage.setItem('userLang', lang);
-      // aplicar atributo lang al documento
       document.documentElement.lang = lang;
 
-      // traducir todos los nodos con data-lang
       document.querySelectorAll('[data-lang]').forEach(el => {
         const key = el.dataset.lang;
         if (translations[lang][key]) el.textContent = translations[lang][key];
       });
 
-      // marcar botón activo
       langButtons.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.langSwitch === lang);
       });
 
-      // actualizar enlaces para que otras páginas reciban el lang elegido
-      // aquí usamos rutas relativas; si tus ficheros están en otro folder ajusta.
       menuLink.href = `carta.html?lang=${lang}`;
       reviewLink.href = `restaurante_2.html?lang=${lang}`;
-      shareLink.href = `compartir_2.html?lang=${lang}`;
+      document.title = translations[lang].title;
 
-      // actualizar título
-      document.title = translations[lang].title || document.title;
-
-      // opcional: actualizar URL en barra sin recargar (solo si no venimos con ?lang)
       if (pushState) {
-        try {
-          const url = new URL(window.location.href);
-          url.searchParams.set('lang', lang);
-          history.replaceState({}, '', url);
-        } catch (e) { /* ignore */ }
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState({}, '', url);
       }
     }
 
-    // Detectar al cargar
     function initLanguageUI() {
       const initial = getPreferredLang();
       setLanguage(initial, false);
-
-      // event delegation para botones
       langSwitcher.addEventListener('click', (e) => {
         const btn = e.target.closest('button[data-lang-switch]');
         if (!btn) return;
-        const lang = btn.dataset.langSwitch;
-        setLanguage(lang, true);
+        setLanguage(btn.dataset.langSwitch, true);
       });
     }
 
