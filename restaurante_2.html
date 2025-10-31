@@ -131,7 +131,6 @@
   </footer>
 
   <script>
-    // ===== Config =====
     const COPY = {
       es: {
         title: "Gracias — PataMig",
@@ -159,7 +158,7 @@
       }
     };
 
-    // Detecta idioma
+    // Detecta idioma desde URL o navegador
     function getLanguage() {
       const urlParams = new URLSearchParams(window.location.search);
       const langFromUrl = urlParams.get('lang');
@@ -172,7 +171,6 @@
       return 'en';
     }
 
-    // Aplica idioma
     function setLang(lang) {
       const dict = COPY[lang] || COPY.en;
       document.documentElement.lang = lang;
@@ -182,7 +180,7 @@
       document.getElementById("backBtn").textContent = dict.back;
     }
 
-    // Navegar atrás manteniendo idioma
+    // Volver atrás manteniendo idioma
     function goBack() {
       const lang = document.documentElement.lang;
       const prev = document.referrer ? new URL(document.referrer) : null;
@@ -194,7 +192,6 @@
       }
     }
 
-    // Inicializa
     (function () {
       const lang = getLanguage();
       setLang(lang);
@@ -204,3 +201,4 @@
   </script>
 </body>
 </html>
+
