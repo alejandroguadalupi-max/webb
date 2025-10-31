@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title data-lang="title">Compartir experiencia · PataMig</title>
+<title>Compartir experiencia</title>
 <style>
 :root {
   --primary-green: #4a7c59;
@@ -12,7 +12,7 @@
   --bg-white: #ffffff;
   --bg-light: #f9f9f9;
   --border: #e0e0e0;
-  --muted: #6b7280;
+  --muted: #666666;
   --success: #22c55e;
 }
 
@@ -21,44 +21,37 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-light);
+  background: var(--bg-light);
   color: var(--text-dark);
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start;
   padding: 16px;
-  position: relative;
 }
 
-.wrap {
+.card {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
+  background: var(--bg-white);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 28px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 20vh;
-  transition: margin-top 0.4s ease;
+  gap: 20px;
 }
-.wrap.centered { margin-top: 8vh; }
 
 header {
-  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: flex-start;
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
 }
 
 .back {
   background: var(--primary-green);
   color: var(--bg-white);
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
   text-decoration: none;
   font-weight: 700;
   font-size: 15px;
@@ -66,64 +59,70 @@ header {
 }
 .back:hover { background: #3b6347; }
 
-.share-card {
-  background: var(--bg-white);
-  border-radius: 14px;
-  padding: 20px;
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.3em;
+  text-align: center;
 }
-
-h2 { margin: 0 0 6px; font-size: 18px; text-align: center; }
-p { margin: 0 0 10px; font-size: 14px; text-align: center; }
+p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  text-align: center;
+  color: var(--muted);
+}
 
 .photo-container {
   width: 100%;
   aspect-ratio: 4/3;
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--bg-white);
   overflow: hidden;
   display: none;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   border: 1px solid var(--border);
 }
-.photo-preview { width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease; }
+.photo-preview { width: 100%; height: 100%; object-fit: contain; }
 
-.row { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; width: 100%; }
+.row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
 
 .btn {
   flex: 1;
   padding: 14px 0;
-  border-radius: 10px;
-  border: 0;
+  border-radius: 12px;
+  border: none;
   font-weight: 700;
   cursor: pointer;
-  font-size: 16px;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  font-size: 15px;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
 }
 .btn:active { transform: scale(0.96); }
+
 .btn-yellow { background: linear-gradient(180deg,#fde047,#facc15); color:#000; }
 .btn-yellow:hover { box-shadow: 0 3px 8px rgba(0,0,0,.15); }
+
 .btn-green { background: var(--primary-green); color: var(--bg-white); width: 100%; }
 .btn-green:hover { background: #3b6347; }
 
 .note { text-align: center; color: var(--muted); font-size: 13px; line-height: 1.3; margin-top: 4px; }
 
-.watermark-toggle {
-  margin: 8px 0 14px;
-  display: flex; align-items: center; gap: 8px;
-  font-size: 14px;
-  color: var(--muted);
+#lang-selector {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 6px;
 }
-
-#lang-selector { position: absolute; top: 16px; right: 16px; }
-#current-lang { cursor: pointer; background: rgba(0,0,0,.05); padding: 6px 8px; border-radius: 8px; }
+#current-lang {
+  cursor: pointer;
+  background: rgba(0,0,0,0.05);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
 #lang-options {
   display: none;
   position: absolute;
@@ -134,7 +133,7 @@ p { margin: 0 0 10px; font-size: 14px; text-align: center; }
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,.08);
 }
-.lang-option { padding: 8px 10px; cursor: pointer; font-weight: 700; }
+.lang-option { padding: 8px 12px; cursor: pointer; font-weight: 700; }
 .lang-option:hover { background: #f1f5f9; }
 
 .success-popup {
@@ -169,187 +168,60 @@ p { margin: 0 0 10px; font-size: 14px; text-align: center; }
   <div id="lang-options"></div>
 </div>
 
-<div class="wrap" id="wrap">
+<main class="card">
   <header>
     <a id="backBtn" class="back" href="principal.html">⬅ Volver</a>
   </header>
 
-  <div class="share-card">
-    <h2 id="shareTitle">📸 Comparte tu momento</h2>
-    <p id="shareSub">Elige o toma una foto y compártela con tus amigos.</p>
+  <h2 id="shareTitle">📸 Comparte tu momento</h2>
+  <p id="shareSub">Elige o toma una foto.</p>
 
-    <div class="photo-container" id="photoContainer">
-      <img id="photoPreview" class="photo-preview" alt="Vista previa">
-    </div>
-
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
-    <input type="file" id="galleryInput" accept="image/*" style="display:none;">
-
-    <div class="row">
-      <button id="btnCamera" class="btn btn-yellow">📷 Tomar foto</button>
-      <button id="btnGallery" class="btn btn-yellow">🖼️ Elegir foto</button>
-    </div>
-
-    <label class="watermark-toggle">
-      <input type="checkbox" id="chkWatermark" checked>
-      <span id="watermarkLabel">Incluir nombre del restaurante</span>
-    </label>
-
-    <div class="row">
-      <button id="btnShare" class="btn btn-green">Compartir</button>
-    </div>
-
-    <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta del restaurante.</p>
+  <div class="photo-container" id="photoContainer">
+    <img id="photoPreview" class="photo-preview" alt="Vista previa">
   </div>
-</div>
+
+  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
+  <input type="file" id="galleryInput" accept="image/*" style="display:none;">
+
+  <div class="row">
+    <button id="btnCamera" class="btn btn-yellow">📷 Tomar foto</button>
+    <button id="btnGallery" class="btn btn-yellow">🖼️ Elegir foto</button>
+  </div>
+
+  <div class="row">
+    <button id="btnShare" class="btn btn-green">Compartir</button>
+  </div>
+
+  <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta por defecto.</p>
+</main>
 
 <script>
-const DEFAULT_CARD="img/logo35.png";
 const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
 const COPY={
- es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",watermark:"Incluir nombre del restaurante",success:"Compartido con éxito"},
- en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",watermark:"Include restaurant name",success:"Shared successfully"},
- fr:{title:"Partager l'expérience · PataMig",shareTitle:"📸 Partagez votre moment",shareSub:"Prenez ou choisissez une photo à partager avec vos amis.",note:"Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",back:"⬅ Retour",shareBtn:"Partager",takePhoto:"📷 Prendre une photo",choosePhoto:"🖼️ Choisir une photo",watermark:"Inclure le nom du restaurant",success:"Partagé avec succès"},
- de:{title:"Erfahrung teilen · PataMig",shareTitle:"📸 Teile deinen Moment",shareSub:"Mach oder wähle ein Foto und teile es mit Freunden.",note:"Wenn du kein Foto auswählst, wird eine Restaurantkarte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",takePhoto:"📷 Foto machen",choosePhoto:"🖼️ Foto auswählen",watermark:"Restaurantname einfügen",success:"Erfolgreich geteilt"}
+ es:{shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto.",note:"Si no eliges foto, se compartirá una tarjeta por defecto.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",success:"Compartido con éxito"},
+ en:{shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo.",note:"If you don't choose a photo, a default card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",success:"Shared successfully"},
+ fr:{shareTitle:"📸 Partagez votre moment",shareSub:"Prenez ou choisissez une photo.",note:"Si vous ne choisissez pas de photo, une carte par défaut sera partagée.",back:"⬅ Retour",shareBtn:"Partager",takePhoto:"📷 Prendre photo",choosePhoto:"🖼️ Choisir photo",success:"Partagé avec succès"},
+ de:{shareTitle:"📸 Teile deinen Moment",shareSub:"Mach oder wähle ein Foto.",note:"Wenn du kein Foto auswählst, wird eine Standardkarte geteilt.",back:"⬅ Zurück",shareBtn:"Teilen",takePhoto:"📷 Foto machen",choosePhoto:"🖼️ Foto auswählen",success:"Erfolgreich geteilt"}
 };
 
 let currentLang=localStorage.getItem('userLang')||navigator.language.slice(0,2)||'es';
 if(!COPY[currentLang]) currentLang='es';
 
-const wrap=document.getElementById('wrap');
-const cameraInput=document.getElementById('cameraInput');
-const galleryInput=document.getElementById('galleryInput');
-const photoPreview=document.getElementById('photoPreview');
-const photoContainer=document.getElementById('photoContainer');
-const btnCamera=document.getElementById('btnCamera');
-const btnGallery=document.getElementById('btnGallery');
-const btnShare=document.getElementById('btnShare');
-const backBtn=document.getElementById('backBtn');
-const noteEl=document.getElementById('note');
-const currentLangDiv=document.getElementById('current-lang');
-const optionsDiv=document.getElementById('lang-options');
-const chkWatermark=document.getElementById('chkWatermark');
-const watermarkLabel=document.getElementById('watermarkLabel');
-
 function setLang(lang){
   if(!COPY[lang]) lang='es';
   const c=COPY[lang];
-  document.title = c.title;
   document.getElementById('shareTitle').textContent=c.shareTitle;
   document.getElementById('shareSub').textContent=c.shareSub;
-  btnShare.textContent=c.shareBtn;
-  backBtn.textContent=c.back;
-  noteEl.textContent=c.note;
-  btnCamera.textContent=c.takePhoto;
-  btnGallery.textContent=c.choosePhoto;
-  watermarkLabel.textContent=c.watermark;
-  currentLangDiv.textContent=FLAGS[lang];
+  document.getElementById('btnShare').textContent=c.shareBtn;
+  document.getElementById('backBtn').textContent=c.back;
+  document.getElementById('note').textContent=c.note;
+  document.getElementById('btnCamera').textContent=c.takePhoto;
+  document.getElementById('btnGallery').textContent=c.choosePhoto;
+  document.getElementById('current-lang').textContent=FLAGS[lang];
   localStorage.setItem('userLang',lang);
 }
 
+const optionsDiv=document.getElementById('lang-options');
 function initLangSelector(){
   optionsDiv.innerHTML="";
   Object.keys(COPY).forEach(code=>{
-    const opt=document.createElement('div');
-    opt.className='lang-option';
-    opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
-    opt.onclick=()=>{ setLang(code); optionsDiv.style.display='none'; };
-    optionsDiv.appendChild(opt);
-  });
-  currentLangDiv.onclick=e=>{
-    e.stopPropagation();
-    optionsDiv.style.display = optionsDiv.style.display==='block' ? 'none' : 'block';
-  };
-  document.addEventListener('click', e=>{
-    if(!document.getElementById('lang-selector').contains(e.target)){
-      optionsDiv.style.display='none';
-    }
-  });
-}
-
-initLangSelector();
-setLang(currentLang);
-
-btnCamera.onclick=()=>cameraInput.click();
-btnGallery.onclick=()=>galleryInput.click();
-
-let selectedFile=null;
-function handleFileInput(input){
-  const f=input.files?.[0];
-  if(!f) return;
-  selectedFile=f;
-  photoPreview.src=URL.createObjectURL(f);
-  photoContainer.style.display='block';
-  wrap.classList.add('centered');
-}
-cameraInput.onchange=()=>handleFileInput(cameraInput);
-galleryInput.onchange=()=>handleFileInput(galleryInput);
-
-async function addWatermarkToImage(file){
-  return new Promise(resolve=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      const ctx=canvas.getContext('2d');
-      canvas.width=img.width; canvas.height=img.height;
-      ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      const fontSize=Math.max(16,canvas.width*0.045);
-      const text="PataMig";
-      ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
-      ctx.fillStyle="rgba(255,255,255,0.8)";
-      const padding=fontSize*0.6;
-      const textWidth=ctx.measureText(text).width+padding*2;
-      const rectHeight=fontSize*1.9;
-      const x=canvas.width-textWidth-40;
-      const y=canvas.height-rectHeight-50;
-      ctx.fillRect(x,y,textWidth,rectHeight);
-      ctx.fillStyle="#1f2937";
-      ctx.textAlign="center"; ctx.textBaseline="middle";
-      ctx.fillText(text,x+textWidth/2,y+rectHeight/2.1);
-      canvas.toBlob(b=>{
-        resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
-      },"image/jpeg",0.9);
-    };
-    img.src=URL.createObjectURL(file);
-  });
-}
-
-function showSuccessMessage(){
-  const popup=document.createElement('div');
-  popup.className='success-popup';
-  popup.innerHTML=`<div class="success-box"><h3>✅ ${COPY[currentLang].success}</h3><p>Redirigiendo...</p></div>`;
-  document.body.appendChild(popup);
-  setTimeout(()=>{ window.location.href="principal.html"; },2000);
-}
-
-async function shareExperience(e){
-  e&&e.preventDefault();
-  try{
-    let baseFile;
-    if(selectedFile){
-      baseFile=selectedFile;
-    } else {
-      const res=await fetch(DEFAULT_CARD);
-      const blob=await res.blob();
-      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
-    }
-    let fileToShare=baseFile;
-    if(chkWatermark.checked){
-      fileToShare=await addWatermarkToImage(baseFile);
-    }
-
-    if(navigator.canShare?.({files:[fileToShare]})){
-      await navigator.share({files:[fileToShare]});
-      showSuccessMessage();
-    } else {
-      const url=URL.createObjectURL(fileToShare);
-      window.open(url,"_blank");
-      showSuccessMessage();
-    }
-  }catch(err){ console.log("Error o cancelado:", err); }
-}
-
-btnShare.onclick=shareExperience;
-</script>
-</body>
-</html>
