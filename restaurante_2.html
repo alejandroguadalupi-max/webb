@@ -1,204 +1,202 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gracias — PataMig</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#0b0f18">
+<title>¿Cómo fue tu experiencia?</title>
+<style>
+  :root{
+    --text:#0b0f18;
+    --muted:#566073;
+    --accent:#2563eb;
+    --ok:#16a34a;
+    --card:#ffffff;
+    --bg:#f7f7fb;
+    --border:#e6e8ee;
+  }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0; height:100%}
 
-  <style>
-    :root {
-      --brand: #4a7c59;
-      --brand2: #e89f4b;
-      --tint: #f9f9f9;
-      --bgTop: #ffffff;
-      --bgBottom: #f3f3f3;
-      --text: #222;
-      --textSec: #555;
-      --stroke: #e0e0e0;
-    }
+  body{
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #f1f5ff 0, #fff 60%) no-repeat,
+      var(--bg);
+  }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  .card{
+    width:min(580px, 100%);
+    max-height:100svh;
+    display:flex; flex-direction:column; gap:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 18px 45px rgba(12,20,33,.08);
+    position:relative;
+  }
 
-    html, body { height: 100%; }
+  /* Selector de idioma */
+  #lang-selector{
+    position:absolute;
+    top:12px;
+    right:12px;
+    z-index:10;
+    font-size:0;
+  }
+  #current-lang{
+    cursor:pointer;
+    font-size:22px;
+    padding:6px 10px;
+    border-radius:10px;
+    background:rgba(0,0,0,.04);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .2s ease;
+  }
+  #current-lang:hover{ background:rgba(0,0,0,.08); }
 
-    body {
-      display: grid;
-      grid-template-rows: 1fr auto;
-      padding: 16px;
-      background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      overflow-x: hidden;
-    }
+  #lang-options{
+    display:none;
+    position:absolute;
+    top:calc(100% + 6px);
+    right:0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
+    padding:4px;
+    min-width:90px;
+    text-align:center;
+  }
 
-    main {
-      width: 100%;
-      max-width: 480px;
-      margin-inline: auto;
-      display: grid;
-      gap: 20px;
-      text-align: center;
-      align-self: center;
-    }
+  .lang-option{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    padding:6px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background-color .2s ease;
+  }
+  .lang-option:hover{ background-color:var(--bg); }
 
-    .card-wrap {
-      position: relative;
-      border-radius: 18px;
-      padding: 3px;
-      background: linear-gradient(90deg, var(--brand), var(--brand2), var(--brand)) no-repeat;
-      background-size: 300% 300%;
-      animation: borderFlow 6s linear infinite, cardEnter 1s ease-out forwards;
-      opacity: 0;
-      transform: translateY(20px);
-      filter: blur(6px);
-    }
+  .grid{display:grid; gap:12px}
+  @media(min-width:560px){ .grid{grid-template-columns:1fr 1fr} }
 
-    @keyframes borderFlow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
+  /* Tarjetas */
+  .tile{
+    border:none;
+    border:1px solid rgba(0,0,0,0.05);
+    border-radius:16px;
+    background:#fff;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition:box-shadow .2s ease, transform .1s ease;
+  }
+  .tile:hover{
+    box-shadow:0 4px 14px rgba(0,0,0,.06);
+    transform:translateY(-2px);
+  }
 
-    @keyframes cardEnter {
-      60% { opacity: 1; transform: translateY(-4px); filter: blur(0); }
-      100% { transform: translateY(0); }
-    }
+  .tile h2{margin:0 0 6px; font-size:16px; text-align:center}
+  .tile p{margin:0 0 10px; font-size:13px; color:var(--muted); text-align:center}
 
-    .card {
-      border-radius: 15px;
-      background: linear-gradient(180deg, var(--tint) 0%, #ffffff 80%);
-      border: 1px solid var(--stroke);
-      padding: clamp(22px, 6vw, 32px);
-    }
+  .btn{
+    display:block; width:100%; text-align:center; text-decoration:none;
+    padding:14px 16px; border-radius:12px; font-weight:800; font-size:15px; color:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .06s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-google{background:linear-gradient(180deg,#6baeff,var(--accent))}
+  .btn-private{background:linear-gradient(180deg,#4ade80,var(--ok))}
 
-    h1 {
-      font-size: clamp(1.6rem, 6vw, 2rem);
-      font-weight: 700;
-      color: var(--brand);
-      margin-bottom: 10px;
-    }
+  .note{font-size:12px; color:var(--muted); text-align:center}
 
-    p {
-      font-size: clamp(1rem, 4vw, 1.15rem);
-      line-height: 1.6;
-      color: var(--textSec);
-    }
-
-    .back-btn {
-      margin-top: 25px;
-      background-color: var(--brand);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 14px 20px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .back-btn:hover {
-      background-color: #3b6347;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px 0;
-      font-size: 0.9rem;
-      color: var(--textSec);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .card-wrap { animation: none; opacity: 1; transform: none; filter: none; }
-    }
-  </style>
+  @media(max-width:360px){
+    .btn{font-size:14px; padding:12px 14px}
+    .tile p{font-size:12px}
+  }
+</style>
 </head>
 <body>
-  <main>
-    <div class="card-wrap">
-      <section class="card" aria-labelledby="t">
-        <h1 id="t">Gracias por tu ayuda</h1>
-        <p id="desc">Tu opinión nos ayuda a mejorar y ofrecerte un mejor servicio.</p>
-        <button class="back-btn" id="backBtn">← Atrás</button>
-      </section>
-    </div>
-  </main>
+<main class="card" role="main">
+  <!-- Selector de idioma -->
+  <div id="lang-selector" aria-haspopup="true">
+    <div id="current-lang" aria-label="Cambiar idioma"></div>
+    <div id="lang-options" role="menu" aria-hidden="true"></div>
+  </div>
 
-  <footer>
-    © <span id="year"></span> PataMig
-  </footer>
+  <div class="grid">
+    <section class="tile" aria-labelledby="publicTitle">
+      <h2 id="publicTitle">⭐ Reseña pública</h2>
+      <p id="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
+      <a id="btnGoogle" class="btn btn-google" rel="noopener">Dejar reseña en Google</a>
+      <div class="note" id="publicNote">Queda visible para todos.</div>
+    </section>
 
-  <script>
-    const COPY = {
-      es: {
-        title: "Gracias — PataMig",
-        heading: "Gracias por tu ayuda",
-        desc: "Tu opinión nos ayuda a mejorar y ofrecerte un mejor servicio.",
-        back: "← Atrás"
-      },
-      en: {
-        title: "Thanks — PataMig",
-        heading: "Thanks for your help",
-        desc: "Your feedback helps us improve and offer you better service.",
-        back: "← Back"
-      },
-      de: {
-        title: "Danke — PataMig",
-        heading: "Vielen Dank für Ihre Hilfe",
-        desc: "Ihr Feedback hilft uns, uns zu verbessern und Ihnen einen besseren Service zu bieten.",
-        back: "← Zurück"
-      },
-      fr: {
-        title: "Merci — PataMig",
-        heading: "Merci pour votre aide",
-        desc: "Vos commentaires nous aident à nous améliorer et à vous offrir un meilleur service.",
-        back: "← Retour"
-      }
-    };
+    <section class="tile" aria-labelledby="privateTitle">
+      <h2 id="privateTitle">📝 Comentario privado</h2>
+      <p id="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+      <a id="btnPrivate" class="btn btn-private" rel="noopener">Enviar comentario</a>
+      <div class="note" id="privateNote">Solo lo vemos nosotros.</div>
+    </section>
+  </div>
 
-    // Detecta idioma desde URL o navegador
-    function getLanguage() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const langFromUrl = urlParams.get('lang');
-      if (langFromUrl && COPY[langFromUrl]) return langFromUrl;
-      const browserLangs = navigator.languages || [navigator.language || 'en'];
-      for (const lang of browserLangs) {
-        const code = lang.slice(0, 2);
-        if (COPY[code]) return code;
-      }
-      return 'en';
-    }
+  <p class="note" id="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+</main>
 
-    function setLang(lang) {
-      const dict = COPY[lang] || COPY.en;
-      document.documentElement.lang = lang;
-      document.title = dict.title;
-      document.getElementById("t").textContent = dict.heading;
-      document.getElementById("desc").textContent = dict.desc;
-      document.getElementById("backBtn").textContent = dict.back;
-    }
+<script>
+const GOOGLE_MAPS_SHORT = "https://maps.app.goo.gl/CasablancaLasCanteras";
+const TALLY_LINKS = { es:"https://tally.so/r/w2Qla9", en:"https://tally.so/r/w20k9D", de:"https://tally.so/r/mBN1q1", fr:"https://tally.so/r/mek0Dk" };
+const FLAGS = { es:"🇪🇸", en:"🇬🇧", de:"🇩🇪", fr:"🇫🇷" };
 
-    // Volver atrás manteniendo idioma
-    function goBack() {
-      const lang = document.documentElement.lang;
-      const prev = document.referrer ? new URL(document.referrer) : null;
-      if (prev) {
-        prev.searchParams.set("lang", lang);
-        location.href = prev.href;
-      } else {
-        window.history.back();
-      }
-    }
+const COPY = {
+  es:{pageTitle:"¿Cómo fue tu experiencia?", publicTitle:"⭐ Reseña pública", publicText:"Si te gustó, tu reseña nos ayuda a crecer.", publicBtn:"Dejar reseña en Google", publicNote:"Queda visible para todos.", privateTitle:"📝 Comentario privado", privateText:"Si algo falló, cuéntanos y lo arreglamos contigo.", privateBtn:"Enviar comentario", privateNote:"Solo lo vemos nosotros.", thanks:"¡Gracias por tu tiempo!"},
+  en:{pageTitle:"How was your experience?", publicTitle:"⭐ Public review", publicText:"Your review helps us on Google.", publicBtn:"Leave a review", publicNote:"Visible to everyone.", privateTitle:"📝 Private feedback", privateText:"If something went wrong, tell us and we’ll fix it.", privateBtn:"Send feedback", privateNote:"Only we can see it.", thanks:"Thanks for your time!"},
+  de:{pageTitle:"Wie war Ihre Erfahrung?", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Bewertung hilft uns bei Google.", publicBtn:"Bewertung abgeben", publicNote:"Für alle sichtbar.", privateTitle:"📝 Privates Feedback", privateText:"Wenn etwas schiefging, sagen Sie es uns bitte.", privateBtn:"Feedback senden", privateNote:"Nur wir können es sehen.", thanks:"Vielen Dank für Ihre Zeit!"},
+  fr:{pageTitle:"Comment était votre expérience ?", publicTitle:"⭐ Avis public", publicText:"Votre avis nous aide sur Google.", publicBtn:"Laisser un avis", publicNote:"Visible par tout le monde.", privateTitle:"📝 Commentaire privé", privateText:"S'il y a eu un souci, dites-le nous.", privateBtn:"Envoyer un commentaire", privateNote:"Visible uniquement par nous.", thanks:"Merci pour votre temps !"}
+};
+const LANGS = Object.keys(COPY);
+const MAIN_PAGE = "restaurante_casablanca.html";
 
-    (function () {
-      const lang = getLanguage();
-      setLang(lang);
-      document.getElementById("year").textContent = new Date().getFullYear();
-      document.getElementById("backBtn").addEventListener("click", goBack);
-    })();
-  </script>
-</body>
-</html>
+function getInitialLang(){
+  const saved = localStorage.getItem('userLang');
+  if(saved && COPY[saved]) return saved;
+  const browser = navigator.languages || [navigator.language || 'es'];
+  for(const b of browser){
+    const c = b.slice(0,2).toLowerCase();
+    if(COPY[c]) return c;
+  }
+  return 'es';
+}
+
+function setLang(lang){
+  if(!COPY[lang]) lang='es';
+  const d = COPY[lang];
+  document.documentElement.lang = lang;
+  document.title = d.pageTitle;
+  document.getElementById('publicTitle').textContent = d.publicTitle;
+  document.getElementById('publicText').textContent = d.publicText;
+  document.getElementById('btnGoogle').textContent = d.publicBtn;
+  document.getElementById('publicNote').textContent = d.publicNote;
+  document.getElementById('privateTitle').textContent = d.privateTitle;
+  document.getElementById('privateText').textContent = d.privateText;
+  document.getElementById('btnPrivate').textContent = d.privateBtn;
+  document.getElementById('privateNote').textContent = d.privateNote;
+  document.getElementById('thanks').innerHTML = `<strong>${d.thanks}</strong>`;
+  document.getElementById('btnGoogle').href = GOOGLE_MAPS_SHORT;
+  document.getElementById('btnPrivate').href =
 
