@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-lang="title">Bienvenido</title>
+  <title data-lang="title">Bienvenido a PataMig</title>
 
   <style>
     :root {
-      --primary-green: #5aa37a;
+      /* verde claro actualizado */
+      --primary-green: #68B553;
       --accent-orange: #e89f4b;
       --text-dark: #333333;
       --bg-white: #ffffff;
@@ -33,25 +34,26 @@
 
     .landing-container {
       background-color: var(--bg-white);
-      border-radius: 14px;
+      border-radius: 12px;
       box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
       text-align: center;
       padding: 40px 28px;
-      max-width: 460px;
+      max-width: 480px;
       width: 100%;
       border-top: 6px solid var(--accent-orange);
     }
 
+    /* imagen grande tipo título */
     .logo {
-      width: 130px;
-      height: 130px;
-      margin: 0 auto 18px;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 22px;
       display: grid;
       place-items: center;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      background: linear-gradient(180deg, #ffffff 0%, rgba(90,163,122,0.07) 100%);
-      box-shadow: 0 8px 24px rgba(90,163,122,0.15);
+      background: linear-gradient(180deg, #ffffff 0%, rgba(104,181,83,0.07) 100%);
+      box-shadow: 0 10px 28px rgba(104,181,83,0.15);
     }
 
     .logo img {
@@ -96,12 +98,12 @@
       background-color: var(--primary-green);
       color: var(--bg-white);
       border-color: var(--primary-green);
-      box-shadow: 0 8px 20px rgba(90,163,122,0.12);
+      box-shadow: 0 8px 20px rgba(104,181,83,0.15);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(90,163,122,0.16);
+      box-shadow: 0 12px 28px rgba(104,181,83,0.2);
     }
 
     .btn-secondary {
@@ -146,19 +148,10 @@
       font-weight: 700;
     }
 
-    @media (max-width: 420px) {
-      .landing-container {
-        padding: 26px 18px;
-      }
-
-      .logo {
-        width: 100px;
-        height: 100px;
-      }
-
-      h2 {
-        font-size: 1.35em;
-      }
+    @media (max-width: 480px) {
+      .landing-container { padding: 26px 18px; }
+      .logo { width: 160px; height: 160px; }
+      h2 { font-size: 1.35em; }
     }
   </style>
 </head>
@@ -166,7 +159,7 @@
 <body>
   <main class="landing-container">
     <div class="logo" aria-hidden="true">
-      <img src="img/PataMig.png" alt="Logo" />
+      <img src="img/PataMig.png" alt="Logo de PataMig" />
     </div>
 
     <h2 data-lang="welcome">¡Bienvenido!</h2>
@@ -175,6 +168,7 @@
     <div class="button-group">
       <a id="menuLink" class="btn btn-primary" data-lang="view_menu" role="button">Acceder a la Carta</a>
       <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" role="button">Dejar Reseña</a>
+      <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" role="button">Compartir Experiencia con Amigos</a>
     </div>
   </main>
 
@@ -187,25 +181,28 @@
   <script>
     const translations = {
       es: {
-        title: "Bienvenido",
+        title: "Bienvenido a PataMig",
         welcome: "¡Bienvenido!",
         prompt: "¿Qué te gustaría hacer?",
         view_menu: "Acceder a la Carta",
-        leave_review: "Dejar Reseña"
+        leave_review: "Dejar Reseña",
+        share_with_friends: "Compartir Experiencia con Amigos"
       },
       en: {
-        title: "Welcome",
+        title: "Welcome to PataMig",
         welcome: "Welcome!",
         prompt: "What would you like to do?",
         view_menu: "View the Menu",
-        leave_review: "Leave a Review"
+        leave_review: "Leave a Review",
+        share_with_friends: "Share Experience with Friends"
       },
       de: {
-        title: "Willkommen",
+        title: "Willkommen bei PataMig",
         welcome: "Willkommen!",
         prompt: "Was möchten Sie tun?",
         view_menu: "Speisekarte ansehen",
-        leave_review: "Rezension hinterlassen"
+        leave_review: "Rezension hinterlassen",
+        share_with_friends: "Erlebnis mit Freunden teilen"
       }
     };
 
@@ -213,6 +210,7 @@
     const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
     const menuLink = document.getElementById('menuLink');
     const reviewLink = document.getElementById('reviewLink');
+    const shareLink = document.getElementById('shareLink');
     const defaultLang = 'es';
 
     function getPreferredLangFromUrl() {
@@ -229,7 +227,7 @@
       if (urlLang) return urlLang;
       const saved = localStorage.getItem('userLang');
       if (saved && translations[saved]) return saved;
-      const nav = (navigator.language || navigator.userLanguage || defaultLang).slice(0, 2);
+      const nav = (navigator.language || navigator.userLanguage || defaultLang).slice(0,2);
       return translations[nav] ? nav : defaultLang;
     }
 
@@ -249,6 +247,7 @@
 
       menuLink.href = `carta.html?lang=${lang}`;
       reviewLink.href = `restaurante_2.html?lang=${lang}`;
+      shareLink.href = `compartir_2.html?lang=${lang}`;
       document.title = translations[lang].title;
 
       if (pushState) {
