@@ -139,8 +139,8 @@
     <p data-lang="prompt">¿Qué te gustaría hacer?</p>
 
     <div class="button-group">
-      <a href="https://valoratuvisita.com/carta" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta</a>
-      <a href="https://valoratuvisita.com/restaurante_2" class="btn btn-secondary" data-lang="leave_review">Dejar Reseña</a>
+      <a id="menuLink" class="btn btn-primary" data-lang="view_menu">Acceder a la Carta</a>
+      <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review">Dejar Reseña</a>
       <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends">Compartir Experiencia con Amigos</a>
     </div>
   </main>
@@ -182,6 +182,8 @@
 
     const langSwitcher = document.getElementById('lang-switcher');
     const langButtons = langSwitcher.querySelectorAll('button[data-lang-switch]');
+    const menuLink = document.getElementById('menuLink');
+    const reviewLink = document.getElementById('reviewLink');
     const shareLink = document.getElementById('shareLink');
     const defaultLang = 'es';
 
@@ -198,8 +200,10 @@
         btn.classList.toggle('active', btn.dataset.langSwitch === lang);
       });
 
-      // Actualiza enlace a restaurante_2.html con idioma
-      shareLink.href = `restaurante_2.html?lang=${lang}`;
+      // Actualizamos enlaces según idioma
+      menuLink.href = `carta.html?lang=${lang}`;
+      reviewLink.href = `restaurante_2.html?lang=${lang}`;
+      shareLink.href = `compartir_2.html?lang=${lang}`;
       document.title = translations[lang].title;
     }
 
