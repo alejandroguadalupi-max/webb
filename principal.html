@@ -11,14 +11,14 @@
       --accent-orange: #e89f4b;
       --text-dark: #333333;
       --bg-white: #ffffff;
-      --bg-light: #f9f9f9;
+      --bg-light-green: #E8F5E1; /* Fondo uniforme */
     }
 
     html, body {
       height: 100%;
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(160deg, rgba(104,181,83,0.18) 0%, rgba(255,255,255,1) 100%);
+      background-color: var(--bg-light-green); /* Color verde suave */
       color: var(--text-dark);
       display: flex;
       justify-content: center;
@@ -28,13 +28,13 @@
     }
 
     .landing-container {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
       padding: 50px 50px 55px;
       width: 90%;
-      max-width: 640px; /* Más grande */
+      max-width: 640px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -44,9 +44,9 @@
     }
 
     .logo {
-      width: 160px;
-      height: 160px;
-      margin-bottom: 6px; /* más cerca del texto */
+      width: 200px;
+      height: 200px;
+      margin-bottom: 8px;
     }
 
     .logo img {
@@ -149,8 +149,8 @@
         max-width: 92%; 
       }
       .logo { 
-        width: 130px; 
-        height: 130px; 
+        width: 150px; 
+        height: 150px; 
       }
       h2 { 
         font-size: 1.6em; 
