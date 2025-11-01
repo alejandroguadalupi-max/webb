@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#68B553" />
 <title>¿Cómo fue tu experiencia?</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --primary-green: #68B553;
@@ -18,47 +22,63 @@
 
   *, *::before, *::after { box-sizing: border-box; }
 
+  /* 2. Animación de entrada */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   html, body {
     margin: 0;
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* 1. Aplicar la nueva fuente */
+    font-family: 'Poppins', sans-serif; 
     background-color: var(--bg-light);
     color: var(--text-dark);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .card {
     width: 100%;
     max-width: 480px;
     background-color: var(--bg-white);
-    border-radius: 18px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.12);
-    padding: 40px 24px;
+    /* 4. Bordes más redondeados y sombra más suave */
+    border-radius: 24px; 
+    box-shadow: 0 16px 40px rgba(0,0,0,0.08); 
+    /* 2. Padding aumentado para que no esté "pegado" */
+    padding: 40px 35px; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 25px; /* Espacio entre elementos ajustado */
+    text-align: center;
+    /* 5. Animación de entrada para la tarjeta */
+    animation: fadeInUp 0.5s ease-out;
   }
 
   #lang-selector {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 10px; /* Más espacio */
+    margin-bottom: 10px;
   }
 
   #lang-selector button {
-    background: none;
-    border: 1px solid #ccc;
-    color: #666;
+    /* 3. Diseño de botones de idioma más limpio */
+    background: var(--bg-light);
+    border: none;
+    color: #777;
     padding: 8px 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
-    cursor: default; /* No cambiar idioma */
+    font-family: 'Poppins', sans-serif;
+    cursor: default; 
+    transition: all 0.3s ease;
   }
 
   #lang-selector button.active {
@@ -66,68 +86,115 @@
     color: var(--bg-white);
     border-color: var(--primary-green);
     font-weight: 700;
+    /* 5. Sombra sutil al botón activo */
+    box-shadow: 0 4px 12px rgba(104, 181, 83, 0.3);
   }
 
-  h2 { font-size: 1.4em; margin-bottom: 8px; }
-  p { font-size: 1em; color: var(--muted); margin-bottom: 16px; }
+  h2 { 
+    font-size: 1.5em; 
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 8px; 
+  }
+  
+  p { 
+    font-size: 1.0em; 
+    color: var(--muted); 
+    margin-top: 0;
+    margin-bottom: 20px; /* Más espacio antes del botón */
+    line-height: 1.5; /* Más legible */
+  }
 
   .tile {
     background-color: var(--bg-white);
-    border-radius: 14px;
-    padding: 20px;
+    /* 4. Bordes más redondeados y sombra más suave */
+    border-radius: 20px; 
+    /* 2. Padding interno aumentado */
+    padding: 25px; 
     width: 100%;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-    transition: transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+    /* 5. Transición suave para el hover */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* 5. Animación de entrada con retraso */
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out 0.2s forwards;
+  }
+  
+  /* 5. Retraso para la segunda caja */
+  .tile:nth-of-type(2) {
+    animation-delay: 0.35s;
   }
 
   .tile:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    /* 5. Efecto hover más pronunciado */
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   }
 
   .btn {
     display: block;
     width: 100%;
     text-decoration: none;
-    padding: 14px 0;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 1.05em;
+    /* 2. Botones más altos */
+    padding: 16px 0; 
+    border-radius: 14px; 
+    font-weight: 700; /* Texto más grueso */
+    font-size: 1.0em;
     text-align: center;
     color: var(--bg-white);
-    transition: all 0.3s ease;
+    /* 5. Transición más suave y optimización */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform, box-shadow;
   }
 
   .btn-google {
     background-color: var(--primary-green);
     border: 2px solid var(--primary-green);
-    box-shadow: 0 8px 20px rgba(104,181,83,0.12);
+    /* 4. Sombra mejorada */
+    box-shadow: 0 8px 25px rgba(104,181,83,0.3);
   }
 
   .btn-google:hover {
-    background-color: #589748;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(104,181,83,0.16);
+    background-color: #5a9f4a;
+    /* 5. Efecto hover mejorado */
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(104,181,83,0.4);
   }
 
   .btn-private {
     background-color: var(--accent-orange);
+    border: 2px solid var(--accent-orange);
+    /* 4. Sombra añadida */
+    box-shadow: 0 8px 25px rgba(232, 159, 75, 0.3);
   }
 
   .btn-private:hover {
-    background-color: #d48833;
-    transform: translateY(-2px);
+    background-color: #d1812a;
+    /* 5. Efecto hover mejorado */
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(232, 159, 75, 0.4);
   }
 
   .note {
     font-size: 0.9em;
     color: var(--muted);
-    margin-top: 6px;
+    /* 2. Más espacio */
+    margin-top: 12px;
+  }
+  
+  /* 2. Clase para el texto de gracias final */
+  .final-thanks {
+    font-size: 1.0em;
+    color: var(--muted);
+    margin-top: 10px;
+    margin-bottom: 0;
   }
 
   @media (max-width: 360px) {
-    .card { padding: 25px 15px; gap: 20px; }
-    .btn { font-size: 0.95em; padding: 12px 0; }
+    .card { padding: 30px 20px; gap: 20px; }
+    .btn { font-size: 0.95em; padding: 14px 0; }
+    .tile { padding: 20px; }
   }
 </style>
 </head>
@@ -154,7 +221,7 @@
     <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
   </section>
 
-  <p class="note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  <p class="note final-thanks" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
 </main>
 
 <script>
