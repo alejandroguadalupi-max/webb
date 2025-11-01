@@ -31,25 +31,26 @@
       color: var(--text-dark);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow: hidden; /* Evita cualquier posible scroll en el body */
+      overflow: hidden; 
     }
 
     /* Caja principal */
     .landing-container {
       width: 90%; 
-      max-width: 700px; /* Aumentado ligeramente para el logo más grande */
-      height: 680px; /* Aumentado para acomodar el logo y mantener el espaciado */
+      max-width: 700px; 
+      /* 4. ALTO FIJO: Esto asegura que la caja no cambie de tamaño (no se haga "más fina") */
+      height: 680px; 
       background: var(--white);
-      border-radius: 28px; /* Ligeramente más redondeado */
-      box-shadow: 0 15px 50px rgba(0,0,0,0.1); /* Sombra más pronunciada */
+      border-radius: 28px; 
+      box-shadow: 0 15px 50px rgba(0,0,0,0.1); 
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between; /* Distribuye el espacio entre los elementos */
+      justify-content: space-between; 
       padding: 50px 40px;
       text-align: center;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
-      animation: fadeInScale 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animación más suave */
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+      animation: fadeInScale 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
     }
 
     @keyframes fadeInScale {
@@ -57,41 +58,50 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
     
-    @keyframes subtleFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); } /* Movimiento ligeramente más amplio */
-    }
+    /* 2. Keyframe de animación 'subtleFloat' eliminado */
 
     .logo {
-      /* 2. Logo más grande y centrado */
-      width: 200px; /* Ancho aumentado */
-      height: 200px; /* Alto aumentado */
-      margin-bottom: 20px; /* Espacio debajo del logo */
-      animation: subtleFloat 4s ease-in-out infinite; /* Animación ligeramente más lenta */
-      will-change: transform; /* Optimización */
+      width: 200px; 
+      height: 200px; 
+      margin-bottom: 20px; 
+      /* 2. Animación 'subtleFloat' eliminada */
+      will-change: transform; 
     }
 
     .logo img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      /* 1. Atributos width y height para evitar layout shift */
       width: 200; 
       height: 200;
-      /* loading="lazy" en el HTML para la imagen */
+      /* 2. Animación ligera añadida con transition */
+      transition: transform 0.3s ease;
+    }
+    
+    /* 2. Animación ligera de hover (no consume recursos) */
+    .logo:hover img {
+        transform: scale(1.05);
+    }
+    
+    /* 1. CORRECCIÓN: Contenedor de contenido centrado */
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%; /* Asegura que ocupe el espacio */
     }
 
     h2 {
-      font-size: 2.4em; /* Más grande */
+      font-size: 2.4em; 
       font-weight: 700;
-      margin: 15px 0 10px; /* Ajuste de márgenes */
-      letter-spacing: -0.5px; /* Ligera separación de letras */
+      margin: 15px 0 10px; 
+      letter-spacing: -0.5px; 
     }
 
     p {
-      font-size: 1.15em; /* Ligeramente más grande */
+      font-size: 1.15em; 
       color: #555;
-      margin-bottom: 30px; /* Más espacio */
+      margin-bottom: 30px; 
       line-height: 1.5;
     }
 
@@ -99,31 +109,31 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 18px; /* Más espacio entre botones */
-      margin-bottom: 30px; /* Espacio antes del footer de idiomas */
+      gap: 18px; 
+      margin-bottom: 30px; 
     }
 
     .btn {
       text-decoration: none;
       font-weight: 600;
-      font-size: 1.1em; /* Más grande */
+      font-size: 1.1em; 
       padding: 16px; 
-      border-radius: 16px; /* Más redondeado */
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
+      border-radius: 16px; 
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
       border: 2px solid transparent;
       display: block;
-      will-change: transform, box-shadow, background-color; /* Optimización */
+      will-change: transform, box-shadow, background-color; 
     }
 
     .btn-primary {
       background: var(--primary-green);
       color: var(--white);
       border-color: var(--primary-green);
-      box-shadow: 0 8px 25px rgba(104,181,83,0.3); /* Sombra más intensa */
+      box-shadow: 0 8px 25px rgba(104,181,83,0.3); 
     }
 
     .btn-primary:hover {
-      transform: translateY(-4px) scale(1.02); /* Animación más notoria */
+      transform: translateY(-4px) scale(1.02); 
       box-shadow: 0 12px 35px rgba(104,181,83,0.45);
     }
 
@@ -134,47 +144,49 @@
     }
 
     .btn-secondary:hover {
-      background: #f0fdf2; /* Fondo más claro en hover */
+      background: #f0fdf2; 
       transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.08); /* Sombra añadida */
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
     }
 
+    /* 3. SECCIÓN DE IDIOMAS MÁS PEQUEÑA */
     footer#lang-switcher {
       display: flex;
       justify-content: center;
-      gap: 15px; /* Más espacio */
-      width: 100%; /* Asegura que ocupe todo el ancho disponible */
-      max-width: 300px; /* Limita el ancho para que no se estiren demasiado en pantallas grandes */
-      margin-top: auto; /* Empuja el footer hacia abajo */
+      gap: 12px; /* Espacio reducido */
+      width: 100%; 
+      max-width: 260px; /* Ancho máximo reducido */
+      margin-top: auto; 
     }
 
     #lang-switcher button {
       background: #f0f0f0;
-      border: 1px solid #ddd; /* Borde más suave */
-      border-radius: 12px; 
-      padding: 9px 14px;
+      border: 1px solid #ddd; 
+      border-radius: 10px; /* Borde reducido */
+      padding: 7px 12px; /* Padding reducido */
       cursor: pointer;
-      font-weight: 700; 
+      font-weight: 600; /* Menos grueso */
+      font-size: 0.95em; /* Fuente reducida */
       font-family: 'Poppins', sans-serif;
       color: #777;
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       
-      flex-grow: 1; /* Permite que los botones crezcan para ocupar el espacio */
-      max-width: 100px; /* Límite para que no se hagan excesivamente anchos */
+      flex-grow: 1; 
+      max-width: 100px; 
       text-align: center;
-      will-change: transform, background-color, box-shadow, color; /* Optimización */
+      will-change: transform, background-color, box-shadow, color; 
     }
 
     #lang-switcher button.active {
       background: var(--primary-green);
       color: #fff;
       border-color: var(--primary-green);
-      transform: translateY(-4px) scale(1.08); /* Animación más pronunciada */
-      box-shadow: 0 6px 20px rgba(104,181,83,0.45);
+      transform: translateY(-3px) scale(1.06); /* Animación reducida */
+      box-shadow: 0 5px 15px rgba(104,181,83,0.4); /* Sombra reducida */
     }
 
     #lang-switcher button:not(.active):hover {
-      background: #e6e6e6; /* Fondo más oscuro en hover */
+      background: #e6e6e6; 
       color: #333;
       transform: translateY(-2px);
       box-shadow: 0 3px 10px rgba(0,0,0,0.07);
@@ -183,7 +195,7 @@
     /* Animación fade entre idiomas */
     .fade {
       opacity: 0;
-      transform: translateY(15px); /* Movimiento más amplio */
+      transform: translateY(15px); 
       transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     }
     .fade.show {
@@ -191,20 +203,21 @@
       transform: translateY(0);
     }
 
-    @media (max-width: 768px) { /* Ajuste para tablets y móviles */
+    @media (max-width: 768px) { 
       .landing-container {
         width: 90%;
-        max-width: 90%; /* Más flexible */
+        max-width: 90%; 
         height: auto; 
-        min-height: 580px; /* Altura mínima para asegurar espacio */
+        /* 4. ALTO MÍNIMO: Asegura estabilidad en móvil también */
+        min-height: 580px; 
         padding: 40px 25px;
-        border-radius: 20px; /* Menos redondeado en móvil */
+        border-radius: 20px; 
       }
       h2 {
         font-size: 2em;
       }
       .logo {
-        width: 160px; /* Más pequeño en móvil */
+        width: 160px; 
         height: 160px;
         margin-bottom: 15px;
       }
@@ -225,18 +238,20 @@
       }
       footer#lang-switcher {
         gap: 10px;
-        max-width: unset; /* Permite que los botones ocupen todo el ancho en móvil */
+        max-width: unset; 
       }
+      /* 3. Botones de idioma más pequeños en móvil */
       #lang-switcher button {
-        max-width: unset; /* Sin límite de ancho en móvil */
-        font-size: 0.95em;
-        padding: 8px 10px;
+        max-width: unset; 
+        font-size: 0.9em; 
+        padding: 7px 10px;
       }
     }
 
-    @media (max-width: 480px) { /* Ajuste para móviles pequeños */
+    @media (max-width: 480px) { 
       .landing-container {
         padding: 30px 20px;
+        min-height: 540px; /* Ajuste para pantallas muy pequeñas */
       }
       h2 {
         font-size: 1.8em;
@@ -319,7 +334,6 @@
 
       content.classList.remove('show'); 
       
-      // Ajuste del timeout para que coincida con la transición de 0.3s
       setTimeout(() => {
         document.title = translations[lang].title;
         document.querySelectorAll('[data-lang]').forEach(el => {
