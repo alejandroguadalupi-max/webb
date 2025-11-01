@@ -39,10 +39,12 @@
       
       display: flex;
       flex-direction: column;
-      justify-content: center; 
+      /* 1. ESPACIADO CORREGIDO: Empuja el contenido arriba y el footer abajo */
+      justify-content: space-between; 
       align-items: center;
       
-      padding: 20px 25px; 
+      /* 2. Padding ajustado (Arriba 40px, Abajo 30px) */
+      padding: 40px 25px 30px 25px; 
       
       box-sizing: border-box; 
       overflow: hidden; 
@@ -60,19 +62,28 @@
         from { opacity: 0; transform: translateY(15px); }
         to { opacity: 1; transform: translateY(0); }
     }
+    
+    /* 3. Keyframe para la animación del 'Welcome' */
+    @keyframes pulse-welcome {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.03); /* Sutilmente más grande (3%) */
+        }
+    }
 
-    /* 1. Estilo para el nombre del restaurante (reemplaza el logo) */
     h1.restaurant-name {
-      font-size: 3em; /* Tamaño grande para el nombre */
+      font-size: 3em; 
       font-weight: 700;
-      color: var(--primary-green); /* Color verde principal */
-      margin-bottom: 25px; /* Espacio debajo del nombre */
-      text-transform: uppercase; /* Opcional: mayúsculas para el nombre */
+      color: var(--primary-green); 
+      margin-bottom: 25px; 
+      text-transform: uppercase; 
       letter-spacing: 1px;
-      transition: transform 0.2s ease-out; /* Animación ligera */
+      transition: transform 0.2s ease-out; 
     }
     h1.restaurant-name:hover {
-        transform: scale(1.03); /* Efecto al pasar el ratón/tocar */
+        transform: scale(1.03); 
     }
 
     h2 {
@@ -80,6 +91,9 @@
       font-weight: 700;
       margin: 10px 0; 
       letter-spacing: -0.5px; 
+      /* 3. Aplicación de la animación */
+      animation: pulse-welcome 3.5s ease-in-out infinite;
+      will-change: transform; /* Optimización */
     }
 
     p {
@@ -106,9 +120,9 @@
       border-radius: 14px; 
       transition: all 0.25s ease-out; 
       border: 2px solid transparent;
-      display: flex; /* Usar flex para centrar texto */
-      justify-content: center; /* Centra el texto horizontalmente */
-      align-items: center; /* Centra el texto verticalmente (si el padding fuera diferente) */
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
       will-change: transform, box-shadow; 
     }
 
@@ -142,7 +156,8 @@
       gap: 10px; 
       width: 100%; 
       max-width: 280px; 
-      margin-top: 25px; 
+      /* 2. Margen superior eliminado para que space-between funcione */
+      margin-top: 0; 
     }
 
     #lang-switcher button {
@@ -190,6 +205,7 @@
   <main class="landing-container">
     
     <div class="content fade show" id="content">
+      
       <h1 class="restaurant-name">PataMig</h1>
       
       <h2 data-lang="welcome">¡Bienvenido!</h2>
@@ -211,10 +227,10 @@
   </main>
 
   <script>
+    // El JavaScript no necesita cambios
     const translations = {
       es: {
         title: "Bienvenido a PataMig",
-        // Añadir el nombre del restaurante si se quiere traducir también
         restaurant_name: "PataMig", 
         welcome: "¡Bienvenido!",
         prompt: "¿Qué te gustaría hacer?",
@@ -264,7 +280,6 @@
           }
         });
         
-        // Actualizar el nombre del restaurante si se quisiera traducir
         // document.querySelector('.restaurant-name').textContent = translations[lang].restaurant_name;
 
         menuLink.href = `carta.html?lang=${lang}`;
