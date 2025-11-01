@@ -39,12 +39,11 @@
       
       display: flex;
       flex-direction: column;
-      /* 1. ESPACIADO CORREGIDO: Empuja el contenido arriba y el footer abajo */
       justify-content: space-between; 
       align-items: center;
       
-      /* 2. Padding ajustado (Arriba 40px, Abajo 30px) */
-      padding: 40px 25px 30px 25px; 
+      /* 1. EL CAMBIO: Aumentado el padding inferior (de 30px a 70px) */
+      padding: 40px 25px 70px 25px; 
       
       box-sizing: border-box; 
       overflow: hidden; 
@@ -63,13 +62,12 @@
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* 3. Keyframe para la animación del 'Welcome' */
     @keyframes pulse-welcome {
         0%, 100% {
             transform: scale(1);
         }
         50% {
-            transform: scale(1.03); /* Sutilmente más grande (3%) */
+            transform: scale(1.03); 
         }
     }
 
@@ -91,9 +89,8 @@
       font-weight: 700;
       margin: 10px 0; 
       letter-spacing: -0.5px; 
-      /* 3. Aplicación de la animación */
       animation: pulse-welcome 3.5s ease-in-out infinite;
-      will-change: transform; /* Optimización */
+      will-change: transform; 
     }
 
     p {
@@ -156,7 +153,6 @@
       gap: 10px; 
       width: 100%; 
       max-width: 280px; 
-      /* 2. Margen superior eliminado para que space-between funcione */
       margin-top: 0; 
     }
 
@@ -286,7 +282,7 @@
         reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
         shareLink.href = `compartir_2.html?lang=${lang}`;
 
-        langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.langSwitch === lang));
+        langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.langSwith === lang));
         
         content.classList.add('show');
       }, 300); 
