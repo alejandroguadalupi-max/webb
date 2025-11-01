@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title data-lang="title">Bienvenido a PataMig</title>
   
+  <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCzJcQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCzJcQ.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -22,7 +24,6 @@
       height: 100%;
       margin: 0;
       background: var(--bg-light-green);
-      /* 2. Aplicar la fuente Poppins cargada */
       font-family: 'Poppins', sans-serif; 
       display: flex;
       align-items: center;
@@ -30,93 +31,100 @@
       color: var(--text-dark);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow: hidden; /* Evita cualquier posible scroll en el body */
     }
 
     /* Caja principal */
     .landing-container {
-      /* 3. Diseño más fluido: quitamos min-width y dejamos que max-width haga el trabajo */
       width: 90%; 
-      max-width: 650px; /* Reducido ligeramente para mejor proporción */
-      height: 640px; 
+      max-width: 700px; /* Aumentado ligeramente para el logo más grande */
+      height: 680px; /* Aumentado para acomodar el logo y mantener el espaciado */
       background: var(--white);
-      border-radius: 24px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      border-radius: 28px; /* Ligeramente más redondeado */
+      box-shadow: 0 15px 50px rgba(0,0,0,0.1); /* Sombra más pronunciada */
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-between; /* Distribuye el espacio entre los elementos */
       padding: 50px 40px;
       text-align: center;
-      transition: all 0.3s ease;
-      /* 4. Animación de entrada mejorada */
-      animation: fadeInScale 0.5s ease-out;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
+      animation: fadeInScale 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animación más suave */
     }
 
     @keyframes fadeInScale {
-      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      from { opacity: 0; transform: translateY(25px) scale(0.97); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
     
-    /* 5. Animación sutil para el logo */
     @keyframes subtleFloat {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+      50% { transform: translateY(-8px); } /* Movimiento ligeramente más amplio */
     }
 
     .logo {
-      /* 6. Logo ligeramente más pequeño y con animación */
-      width: 140px;
-      height: 140px;
-      animation: subtleFloat 3.5s ease-in-out infinite;
+      /* 2. Logo más grande y centrado */
+      width: 200px; /* Ancho aumentado */
+      height: 200px; /* Alto aumentado */
+      margin-bottom: 20px; /* Espacio debajo del logo */
+      animation: subtleFloat 4s ease-in-out infinite; /* Animación ligeramente más lenta */
+      will-change: transform; /* Optimización */
     }
 
     .logo img {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Esto ya centra la imagen dentro de su caja */
+      object-fit: contain;
+      /* 1. Atributos width y height para evitar layout shift */
+      width: 200; 
+      height: 200;
+      /* loading="lazy" en el HTML para la imagen */
     }
 
     h2 {
-      font-size: 2.1em; /* Un poco más grande */
+      font-size: 2.4em; /* Más grande */
       font-weight: 700;
-      margin: 10px 0;
+      margin: 15px 0 10px; /* Ajuste de márgenes */
+      letter-spacing: -0.5px; /* Ligera separación de letras */
     }
 
     p {
-      font-size: 1.1em;
+      font-size: 1.15em; /* Ligeramente más grande */
       color: #555;
-      margin-bottom: 25px;
+      margin-bottom: 30px; /* Más espacio */
+      line-height: 1.5;
     }
 
     .button-group {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 18px; /* Más espacio entre botones */
+      margin-bottom: 30px; /* Espacio antes del footer de idiomas */
     }
 
     .btn {
       text-decoration: none;
       font-weight: 600;
-      font-size: 1.05em; /* Ligeramente más grande */
-      padding: 15px; /* Padding uniforme */
-      border-radius: 14px;
-      transition: all 0.25s ease;
+      font-size: 1.1em; /* Más grande */
+      padding: 16px; 
+      border-radius: 16px; /* Más redondeado */
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
       border: 2px solid transparent;
       display: block;
-      will-change: transform, box-shadow; /* Optimización para animaciones */
+      will-change: transform, box-shadow, background-color; /* Optimización */
     }
 
     .btn-primary {
       background: var(--primary-green);
       color: var(--white);
       border-color: var(--primary-green);
-      box-shadow: 0 6px 18px rgba(104,181,83,0.25);
+      box-shadow: 0 8px 25px rgba(104,181,83,0.3); /* Sombra más intensa */
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02); /* Animación más notoria */
-      box-shadow: 0 10px 25px rgba(104,181,83,0.35);
+      transform: translateY(-4px) scale(1.02); /* Animación más notoria */
+      box-shadow: 0 12px 35px rgba(104,181,83,0.45);
     }
 
     .btn-secondary {
@@ -126,86 +134,123 @@
     }
 
     .btn-secondary:hover {
-      background: #f7fbf5;
+      background: #f0fdf2; /* Fondo más claro en hover */
       transform: translateY(-3px);
-      /* 7. Sombra añadida al hover del secundario para consistencia */
-      box-shadow: 0 8px 20px rgba(0,0,0,0.07); 
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08); /* Sombra añadida */
     }
 
     footer#lang-switcher {
       display: flex;
       justify-content: center;
-      gap: 12px; /* Más espacio */
+      gap: 15px; /* Más espacio */
+      width: 100%; /* Asegura que ocupe todo el ancho disponible */
+      max-width: 300px; /* Limita el ancho para que no se estiren demasiado en pantallas grandes */
+      margin-top: auto; /* Empuja el footer hacia abajo */
     }
 
     #lang-switcher button {
       background: #f0f0f0;
-      border: 1px solid #ccc;
-      border-radius: 10px; /* Más redondeado */
-      padding: 8px 12px;
+      border: 1px solid #ddd; /* Borde más suave */
+      border-radius: 12px; 
+      padding: 9px 14px;
       cursor: pointer;
-      font-weight: 700; /* Más grueso */
+      font-weight: 700; 
       font-family: 'Poppins', sans-serif;
       color: #777;
-      transition: all 0.25s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       
-      /* 8. ANCHO IGUAL: Se quita min-width y se fija un width */
-      width: 55px; 
-      text-align: center; /* Centra el texto (ej. "DE") */
-      
-      /* Optimización para animaciones fluidas */
-      will-change: transform, background-color, box-shadow;
+      flex-grow: 1; /* Permite que los botones crezcan para ocupar el espacio */
+      max-width: 100px; /* Límite para que no se hagan excesivamente anchos */
+      text-align: center;
+      will-change: transform, background-color, box-shadow, color; /* Optimización */
     }
 
-    /* 9. IDIOMA ACTIVO MÁS VISIBLE */
     #lang-switcher button.active {
       background: var(--primary-green);
       color: #fff;
       border-color: var(--primary-green);
-      /* Animación para que "salte" */
-      transform: translateY(-3px) scale(1.1); 
-      box-shadow: 0 5px 15px rgba(104,181,83,0.4);
+      transform: translateY(-4px) scale(1.08); /* Animación más pronunciada */
+      box-shadow: 0 6px 20px rgba(104,181,83,0.45);
     }
 
-    /* 10. Hover mejorado para botones NO activos */
     #lang-switcher button:not(.active):hover {
-      background: #e0e0e0;
+      background: #e6e6e6; /* Fondo más oscuro en hover */
       color: #333;
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
     }
 
     /* Animación fade entre idiomas */
     .fade {
       opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: translateY(15px); /* Movimiento más amplio */
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     }
     .fade.show {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* Media query mejorada para ser más flexible */
-    @media (max-width: 700px) {
-      body {
-        /* Permite scroll en pantallas pequeñas si el contenido crece */
-        height: auto; 
-        min-height: 100%;
-        padding: 20px 0; /* Espacio por si se pega al borde */
-      }
+    @media (max-width: 768px) { /* Ajuste para tablets y móviles */
       .landing-container {
         width: 90%;
-        height: auto; /* Altura automática para adaptarse al contenido */
-        min-height: 540px;
+        max-width: 90%; /* Más flexible */
+        height: auto; 
+        min-height: 580px; /* Altura mínima para asegurar espacio */
         padding: 40px 25px;
+        border-radius: 20px; /* Menos redondeado en móvil */
+      }
+      h2 {
+        font-size: 2em;
+      }
+      .logo {
+        width: 160px; /* Más pequeño en móvil */
+        height: 160px;
+        margin-bottom: 15px;
+      }
+      .logo img {
+        width: 160;
+        height: 160;
+      }
+      p {
+        font-size: 1.05em;
+        margin-bottom: 25px;
+      }
+      .button-group {
+        gap: 15px;
+      }
+      .btn {
+        padding: 14px;
+        font-size: 1em;
+      }
+      footer#lang-switcher {
+        gap: 10px;
+        max-width: unset; /* Permite que los botones ocupen todo el ancho en móvil */
+      }
+      #lang-switcher button {
+        max-width: unset; /* Sin límite de ancho en móvil */
+        font-size: 0.95em;
+        padding: 8px 10px;
+      }
+    }
+
+    @media (max-width: 480px) { /* Ajuste para móviles pequeños */
+      .landing-container {
+        padding: 30px 20px;
       }
       h2 {
         font-size: 1.8em;
       }
       .logo {
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
+      }
+       .logo img {
+        width: 140;
+        height: 140;
+      }
+      p {
+        font-size: 1em;
       }
     }
   </style>
@@ -214,7 +259,7 @@
   <main class="landing-container">
     <div class="content fade show" id="content">
       <div class="logo">
-        <img src="img/PataMig.png" alt="Logo de PataMig"> 
+        <img src="img/PataMig.png" alt="Logo de PataMig" loading="lazy" width="200" height="200"> 
       </div>
       <h2 data-lang="welcome">¡Bienvenido!</h2>
       <p data-lang="prompt">¿Qué te gustaría hacer?</p>
@@ -272,32 +317,26 @@
       document.documentElement.lang = lang;
       localStorage.setItem('userLang', lang);
 
-      // 1. Inicia el fade-out
       content.classList.remove('show'); 
       
-      // 2. CORRECCIÓN: Espera a que la animación de fade-out (300ms) termine
-      //    antes de cambiar el texto y hacer fade-in.
+      // Ajuste del timeout para que coincida con la transición de 0.3s
       setTimeout(() => {
-        // 3. Cambia todo el texto
         document.title = translations[lang].title;
         document.querySelectorAll('[data-lang]').forEach(el => {
           const key = el.dataset.lang;
-          if(translations[lang][key]) { // Comprobación extra
+          if(translations[lang][key]) {
              el.textContent = translations[lang][key];
           }
         });
 
-        // 4. Actualiza los enlaces
         menuLink.href = `carta.html?lang=${lang}`;
         reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
         shareLink.href = `compartir_2.html?lang=${lang}`;
 
-        // 5. Actualiza el botón activo
         langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.langSwitch === lang));
         
-        // 6. Inicia el fade-in con el nuevo contenido
         content.classList.add('show');
-      }, 300); // <-- TIEMPO AJUSTADO a la transición CSS (0.3s = 300ms)
+      }, 300); 
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -308,7 +347,6 @@
         const btn = e.target.closest('button[data-lang-switch]');
         if (!btn) return;
         
-        // Evita recargar si ya está activo
         if (btn.classList.contains('active')) return; 
         
         setLanguage(btn.dataset.langSwitch);
