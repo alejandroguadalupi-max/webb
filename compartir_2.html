@@ -6,12 +6,12 @@
 <title data-lang="title">Compartir experiencia · PataMig</title>
 <style>
 :root {
-  --primary-green: #4a7c59;
+  --primary-green: #68B553; /* mismo verde que la página principal */
   --accent-orange: #e89f4b;
   --text-dark: #333333;
   --bg-white: #ffffff;
-  --bg-light: #f9f9f9;
-  --border: #e0e0e0;
+  --bg-light-green: #E8F5E1; /* fondo igual que en la principal */
+  --border: #d9e4d2;
   --muted: #6b7280;
   --success: #22c55e;
 }
@@ -21,7 +21,7 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-light);
+  background-color: var(--bg-light-green);
   color: var(--text-dark);
   min-height: 100vh;
   display: flex;
@@ -32,13 +32,14 @@ body {
   position: relative;
 }
 
+/* Contenedor principal centrado */
 .wrap {
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20vh;
+  margin-top: 16vh;
   transition: margin-top 0.4s ease;
 }
 .wrap.centered { margin-top: 8vh; }
@@ -54,6 +55,7 @@ header {
   right: 16px;
 }
 
+/* Botón volver */
 .back {
   background: var(--primary-green);
   color: var(--bg-white);
@@ -62,70 +64,95 @@ header {
   text-decoration: none;
   font-weight: 700;
   font-size: 15px;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
-.back:hover { background: #3b6347; }
+.back:hover { background: #5ca54a; transform: translateY(-1px); }
 
 .share-card {
   background: var(--bg-white);
-  border-radius: 16px;
-  padding: 24px 20px;
+  border-radius: 20px;
+  padding: 28px 22px 30px;
   border: 1px solid var(--border);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.08);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 320px;
+  min-height: 340px;
 }
 
-h2 { margin: 0 0 8px; font-size: 20px; text-align: center; }
-p { margin: 0 0 12px; font-size: 14px; text-align: center; color: var(--muted); }
+h2 { 
+  margin: 0 0 8px; 
+  font-size: 1.4rem; 
+  text-align: center; 
+  color: var(--text-dark);
+}
+p { 
+  margin: 0 0 14px; 
+  font-size: 15px; 
+  text-align: center; 
+  color: var(--muted); 
+}
 
+/* Vista previa de foto */
 .photo-container {
   width: 100%;
   aspect-ratio: 4/3;
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--bg-white);
   overflow: hidden;
   display: none;
   margin-bottom: 14px;
   border: 1px solid var(--border);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
 }
-.photo-preview { width: 100%; height: 100%; object-fit: contain; transition: opacity 0.3s ease; }
+.photo-preview { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+  transition: opacity 0.3s ease; 
+}
 
 .row { display: flex; gap: 10px; justify-content: center; margin-bottom: 14px; width: 100%; }
 
+/* Botones */
 .btn {
   flex: 1;
   padding: 14px 0;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 0;
   font-weight: 700;
   cursor: pointer;
   font-size: 16px;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.25s ease;
 }
-.btn:active { transform: scale(0.96); }
+.btn:active { transform: scale(0.97); }
 
 .btn-yellow { background: var(--accent-orange); color: #fff; }
-.btn-yellow:hover { box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+.btn-yellow:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
 
-.btn-green { background: var(--primary-green); color: var(--bg-white); width: 100%; }
-.btn-green:hover { background: #3b6347; }
+.btn-green { 
+  background: var(--primary-green); 
+  color: var(--bg-white); 
+  width: 100%; 
+  box-shadow: 0 5px 14px rgba(104,181,83,0.15);
+}
+.btn-green:hover { background: #5ca54a; box-shadow: 0 8px 18px rgba(104,181,83,0.25); }
 
-.note { text-align: center; color: var(--muted); font-size: 13px; line-height: 1.3; margin-top: 4px; }
+.note { text-align: center; color: var(--muted); font-size: 13px; line-height: 1.3; margin-top: 6px; }
 
+/* Opción de marca de agua */
 .watermark-toggle {
-  margin: 8px 0 14px;
+  margin: 10px 0 16px;
   display: flex; align-items: center; gap: 8px;
   font-size: 14px;
   color: var(--muted);
 }
 
+/* Selector de idioma */
 #lang-selector { position: absolute; top: 16px; right: 16px; }
-#current-lang { cursor: pointer; background: rgba(0,0,0,.05); padding: 6px 8px; border-radius: 8px; }
+#current-lang { cursor: pointer; background: rgba(0,0,0,.05); padding: 6px 10px; border-radius: 8px; }
 #lang-options {
   display: none;
   position: absolute;
@@ -139,6 +166,7 @@ p { margin: 0 0 12px; font-size: 14px; text-align: center; color: var(--muted); 
 .lang-option { padding: 8px 10px; cursor: pointer; font-weight: 700; }
 .lang-option:hover { background: #f1f5f9; }
 
+/* Popup de éxito */
 .success-popup {
   position: fixed;
   inset: 0;
@@ -162,6 +190,13 @@ p { margin: 0 0 12px; font-size: 14px; text-align: center; color: var(--muted); 
 
 @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
 @keyframes scaleUp { from{transform:scale(.8);opacity:0;} to{transform:scale(1);opacity:1;} }
+
+/* Adaptación móvil */
+@media (max-width: 480px) {
+  .wrap { margin-top: 10vh; }
+  .share-card { padding: 22px 18px; }
+  h2 { font-size: 1.2rem; }
+}
 </style>
 </head>
 <body>
@@ -356,3 +391,4 @@ btnShare.onclick=shareExperience;
 
 </body>
 </html>
+
