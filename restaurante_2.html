@@ -16,67 +16,184 @@
     --accent-orange: #e89f4b;
     --text-dark: #333;
     --bg-white: #fff;
-    --bg-light: #f9f9f9;
+    --bg-light: #f6f7f9; /* Un gris muy suave para las cajas */
     --muted: #666;
+    --border-light: #e9e9e9;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
 
-  /* 2. Animación de entrada */
   @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   html, body {
     margin: 0;
     height: 100%;
-    /* 1. Aplicar la nueva fuente */
-    font-family: 'Poppins', sans-serif; 
-    background-color: var(--bg-light);
+    /* 1. Fondo blanco limpio, como una app */
+    background-color: var(--bg-white); 
     color: var(--text-dark);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    /* 1. Fuente Poppins para todo */
+    font-family: 'Poppins', sans-serif; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Evita el scroll si cabe todo (que debería) */
+    overflow: hidden; 
   }
 
-  .card {
+  /* 1. Contenedor principal 100% de la pantalla */
+  .review-container {
     width: 100%;
-    max-width: 480px;
-    background-color: var(--bg-white);
-    /* 4. Bordes más redondeados y sombra más suave */
-    border-radius: 24px; 
-    box-shadow: 0 16px 40px rgba(0,0,0,0.08); 
-    /* 2. Padding aumentado para que no esté "pegado" */
-    padding: 40px 35px; 
+    height: 100vh;
+    height: 100dvh; /* Se adapta a las barras del navegador */
+    
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 25px; /* Espacio entre elementos ajustado */
+    /* 2. Empuja el contenido principal arriba y el footer abajo */
+    justify-content: space-between; 
+    
+    /* 4. Padding generoso (arriba, lados, abajo) */
+    padding: 40px 25px 30px 25px; 
     text-align: center;
-    /* 5. Animación de entrada para la tarjeta */
-    animation: fadeInUp 0.5s ease-out;
+    box-sizing: border-box;
+  }
+  
+  /* 7. Wrapper para el contenido con animación */
+  .content-wrapper {
+    width: 100%;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  /* 2. Título principal */
+  h1 {
+    font-size: 1.9em;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 30px 0;
+    line-height: 1.3;
+  }
+
+  /* 4. Caja de opción (diseño limpio) */
+  .option-box {
+    width: 100%;
+    background: var(--bg-white);
+    /* 4. Borde suave en vez de sombra "tile" */
+    border: 1px solid var(--border-light); 
+    border-radius: 20px; /* Bordes suaves */
+    padding: 25px; /* Buen padding interno */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05); /* Sombra muy sutil */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .option-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+
+  .option-box h2 { 
+    font-size: 1.4em; 
+    font-weight: 700;
+    margin: 0 0 8px 0; 
+  }
+  
+  .option-box p { 
+    font-size: 0.95em; 
+    color: var(--muted); 
+    margin: 0 0 20px 0;
+    line-height: 1.5; 
+  }
+
+  /* 3. Divisor "O" */
+  .divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 25px 0; /* Espacio antes y después */
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9em;
+    animation: fadeInUp 0.6s ease-out 0.2s; /* Animación con retraso */
+    animation-fill-mode: backwards; /* Para que parta de invisible */
+  }
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+  }
+  .divider::before { margin-right: 15px; }
+  .divider::after { margin-left: 15px; }
+
+  /* 5. Botones */
+  .btn {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    padding: 15px 0; 
+    border-radius: 14px; 
+    font-weight: 700; 
+    font-size: 1.0em;
+    text-align: center;
+    color: var(--bg-white);
+    border: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .btn-google {
+    background-color: var(--primary-green);
+    box-shadow: 0 8px 25px rgba(104,181,83,0.3);
+  }
+  .btn-google:hover {
+    background-color: #5a9f4a;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(104,181,83,0.4);
+  }
+
+  .btn-private {
+    background-color: var(--accent-orange);
+    box-shadow: 0 8px 25px rgba(232, 159, 75, 0.3);
+  }
+  .btn-private:hover {
+    background-color: #d1812a;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(232, 159, 75, 0.4);
+  }
+
+  .note {
+    font-size: 0.85em; /* Más pequeño */
+    color: var(--muted);
+    margin-top: 15px; /* Más espacio */
+  }
+  
+  /* 6. Footer de página (fijo abajo) */
+  .page-footer {
+    width: 100%;
+  }
+
+  .final-thanks {
+    font-size: 0.9em;
+    color: var(--muted);
+    margin: 0 0 15px 0;
   }
 
   #lang-selector {
     display: flex;
     justify-content: center;
-    gap: 10px; /* Más espacio */
-    margin-bottom: 10px;
+    gap: 10px;
   }
 
   #lang-selector button {
-    /* 3. Diseño de botones de idioma más limpio */
-    background: var(--bg-light);
+    background: var(--bg-light); /* Fondo gris suave */
     border: none;
-    color: #777;
-    padding: 8px 14px;
-    border-radius: 10px;
+    color: #888;
+    padding: 7px 12px;
+    border-radius: 8px;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
+    font-size: 0.85em;
     cursor: default; 
     transition: all 0.3s ease;
   }
@@ -84,144 +201,52 @@
   #lang-selector button.active {
     background-color: var(--primary-green);
     color: var(--bg-white);
-    border-color: var(--primary-green);
     font-weight: 700;
-    /* 5. Sombra sutil al botón activo */
-    box-shadow: 0 4px 12px rgba(104, 181, 83, 0.3);
-  }
-
-  h2 { 
-    font-size: 1.5em; 
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 8px; 
   }
   
-  p { 
-    font-size: 1.0em; 
-    color: var(--muted); 
-    margin-top: 0;
-    margin-bottom: 20px; /* Más espacio antes del botón */
-    line-height: 1.5; /* Más legible */
+  /* Media query para móviles muy pequeños */
+  @media (max-height: 700px) {
+    .review-container { padding: 30px 25px 25px 25px; }
+    h1 { font-size: 1.7em; margin-bottom: 20px; }
+    .option-box { padding: 20px; }
+    .divider { margin: 20px 0; }
   }
 
-  .tile {
-    background-color: var(--bg-white);
-    /* 4. Bordes más redondeados y sombra más suave */
-    border-radius: 20px; 
-    /* 2. Padding interno aumentado */
-    padding: 25px; 
-    width: 100%;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
-    /* 5. Transición suave para el hover */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
-    /* 5. Animación de entrada con retraso */
-    opacity: 0;
-    animation: fadeInUp 0.5s ease-out 0.2s forwards;
-  }
-  
-  /* 5. Retraso para la segunda caja */
-  .tile:nth-of-type(2) {
-    animation-delay: 0.35s;
-  }
-
-  .tile:hover {
-    /* 5. Efecto hover más pronunciado */
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  }
-
-  .btn {
-    display: block;
-    width: 100%;
-    text-decoration: none;
-    /* 2. Botones más altos */
-    padding: 16px 0; 
-    border-radius: 14px; 
-    font-weight: 700; /* Texto más grueso */
-    font-size: 1.0em;
-    text-align: center;
-    color: var(--bg-white);
-    /* 5. Transición más suave y optimización */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    will-change: transform, box-shadow;
-  }
-
-  .btn-google {
-    background-color: var(--primary-green);
-    border: 2px solid var(--primary-green);
-    /* 4. Sombra mejorada */
-    box-shadow: 0 8px 25px rgba(104,181,83,0.3);
-  }
-
-  .btn-google:hover {
-    background-color: #5a9f4a;
-    /* 5. Efecto hover mejorado */
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(104,181,83,0.4);
-  }
-
-  .btn-private {
-    background-color: var(--accent-orange);
-    border: 2px solid var(--accent-orange);
-    /* 4. Sombra añadida */
-    box-shadow: 0 8px 25px rgba(232, 159, 75, 0.3);
-  }
-
-  .btn-private:hover {
-    background-color: #d1812a;
-    /* 5. Efecto hover mejorado */
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(232, 159, 75, 0.4);
-  }
-
-  .note {
-    font-size: 0.9em;
-    color: var(--muted);
-    /* 2. Más espacio */
-    margin-top: 12px;
-  }
-  
-  /* 2. Clase para el texto de gracias final */
-  .final-thanks {
-    font-size: 1.0em;
-    color: var(--muted);
-    margin-top: 10px;
-    margin-bottom: 0;
-  }
-
-  @media (max-width: 360px) {
-    .card { padding: 30px 20px; gap: 20px; }
-    .btn { font-size: 0.95em; padding: 14px 0; }
-    .tile { padding: 20px; }
-  }
 </style>
 </head>
 <body>
 
-<main class="card">
-  <div id="lang-selector">
-    <button data-lang-switch="es">ES</button>
-    <button data-lang-switch="en">EN</button>
-    <button data-lang-switch="de">DE</button>
+<main class="review-container">
+  
+  <div class="content-wrapper">
+    <h1 data-lang="mainTitle">¿Cómo fue tu experiencia?</h1>
+
+    <section class="option-box">
+      <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
+      <p data-lang="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
+      <a id="btnGoogle" class="btn btn-google" data-lang="publicBtn" href="#" rel="noopener">Dejar reseña en Google</a>
+      <div class="note" data-lang="publicNote">Queda visible para todos.</div>
+    </section>
+
+    <div class="divider">o</div>
+    
+    <section class="option-box">
+      <h2 data-lang="privateTitle">📝 Comentario privado</h2>
+      <p data-lang="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
+      <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" rel="noopener">Enviar comentario</a>
+      <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
+    </section>
   </div>
-
-  <section class="tile">
-    <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
-    <p data-lang="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
-    <a id="btnGoogle" class="btn btn-google" data-lang="publicBtn" href="#" rel="noopener">Dejar reseña en Google</a>
-    <div class="note" data-lang="publicNote">Queda visible para todos.</div>
-  </section>
-
-  <section class="tile">
-    <h2 data-lang="privateTitle">📝 Comentario privado</h2>
-    <p data-lang="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-    <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" rel="noopener">Enviar comentario</a>
-    <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
-  </section>
-
-  <p class="note final-thanks" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  
+  <footer class="page-footer">
+    <p class="final-thanks note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+    <div id="lang-selector">
+      <button data-lang-switch="es">ES</button>
+      <button data-lang-switch="en">EN</button>
+      <button data-lang-switch="de">DE</button>
+    </div>
+  </footer>
+  
 </main>
 
 <script>
@@ -234,6 +259,7 @@ const TALLY_LINKS = {
 
 const translations = {
   es: {
+    mainTitle: "¿Cómo fue tu experiencia?",
     publicTitle: "⭐ Reseña pública",
     publicText: "Si te gustó, tu reseña nos ayuda a crecer.",
     publicBtn: "Dejar reseña en Google",
@@ -245,6 +271,7 @@ const translations = {
     thanks: "¡Gracias por tu tiempo!"
   },
   en: {
+    mainTitle: "How was your experience?",
     publicTitle: "⭐ Public review",
     publicText: "Your review helps us on Google.",
     publicBtn: "Leave a review",
@@ -256,6 +283,7 @@ const translations = {
     thanks: "Thanks for your time!"
   },
   de: {
+    mainTitle: "Wie war Ihr Erlebnis?",
     publicTitle: "⭐ Öffentliche Bewertung",
     publicText: "Ihre Bewertung hilft uns bei Google.",
     publicBtn: "Bewertung abgeben",
