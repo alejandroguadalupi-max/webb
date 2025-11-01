@@ -16,7 +16,7 @@
     --accent-orange: #e89f4b;
     --text-dark: #333;
     --bg-white: #fff;
-    --bg-light: #f6f7f9; /* Un gris muy suave para las cajas */
+    --bg-light: #f6f7f9;
     --muted: #666;
     --border-light: #e9e9e9;
   }
@@ -31,58 +31,50 @@
   html, body {
     margin: 0;
     height: 100%;
-    /* 1. Fondo blanco limpio, como una app */
     background-color: var(--bg-white); 
     color: var(--text-dark);
-    /* 1. Fuente Poppins para todo */
     font-family: 'Poppins', sans-serif; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Evita el scroll si cabe todo (que debería) */
     overflow: hidden; 
   }
 
-  /* 1. Contenedor principal 100% de la pantalla */
+  /* 1. Contenedor principal 100% y centrado */
   .review-container {
     width: 100%;
     height: 100vh;
-    height: 100dvh; /* Se adapta a las barras del navegador */
+    height: 100dvh;
     
     display: flex;
     flex-direction: column;
-    /* 2. Empuja el contenido principal arriba y el footer abajo */
-    justify-content: space-between; 
+    /* 1. CENTRADO VERTICAL */
+    justify-content: center; 
+    /* 1. CENTRADO HORIZONTAL */
+    align-items: center;
     
-    /* 4. Padding generoso (arriba, lados, abajo) */
-    padding: 40px 25px 30px 25px; 
+    /* 1. Padding para que no se pegue a los bordes */
+    padding: 30px 25px; 
+    
     text-align: center;
     box-sizing: border-box;
   }
   
-  /* 7. Wrapper para el contenido con animación */
+  /* Contenido con animación */
   .content-wrapper {
     width: 100%;
+    /* 1. Limita el ancho en pantallas más grandes */
+    max-width: 450px; 
     animation: fadeInUp 0.6s ease-out;
   }
 
-  /* 2. Título principal */
-  h1 {
-    font-size: 1.9em;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin: 0 0 30px 0;
-    line-height: 1.3;
-  }
-
-  /* 4. Caja de opción (diseño limpio) */
+  /* Caja de opción (sin cambios) */
   .option-box {
     width: 100%;
     background: var(--bg-white);
-    /* 4. Borde suave en vez de sombra "tile" */
     border: 1px solid var(--border-light); 
-    border-radius: 20px; /* Bordes suaves */
-    padding: 25px; /* Buen padding interno */
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05); /* Sombra muy sutil */
+    border-radius: 20px; 
+    padding: 25px; 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05); 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
@@ -104,17 +96,17 @@
     line-height: 1.5; 
   }
 
-  /* 3. Divisor "O" */
+  /* Divisor "O" (sin cambios) */
   .divider {
     display: flex;
     align-items: center;
     width: 100%;
-    margin: 25px 0; /* Espacio antes y después */
+    margin: 25px 0; 
     color: var(--muted);
     font-weight: 600;
     font-size: 0.9em;
-    animation: fadeInUp 0.6s ease-out 0.2s; /* Animación con retraso */
-    animation-fill-mode: backwards; /* Para que parta de invisible */
+    animation: fadeInUp 0.6s ease-out 0.2s; 
+    animation-fill-mode: backwards; 
   }
   .divider::before,
   .divider::after {
@@ -126,7 +118,7 @@
   .divider::before { margin-right: 15px; }
   .divider::after { margin-left: 15px; }
 
-  /* 5. Botones */
+  /* Botones (sin cambios) */
   .btn {
     display: block;
     width: 100%;
@@ -163,55 +155,11 @@
   }
 
   .note {
-    font-size: 0.85em; /* Más pequeño */
+    font-size: 0.85em; 
     color: var(--muted);
-    margin-top: 15px; /* Más espacio */
+    margin-top: 15px; 
   }
   
-  /* 6. Footer de página (fijo abajo) */
-  .page-footer {
-    width: 100%;
-  }
-
-  .final-thanks {
-    font-size: 0.9em;
-    color: var(--muted);
-    margin: 0 0 15px 0;
-  }
-
-  #lang-selector {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  #lang-selector button {
-    background: var(--bg-light); /* Fondo gris suave */
-    border: none;
-    color: #888;
-    padding: 7px 12px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.85em;
-    cursor: default; 
-    transition: all 0.3s ease;
-  }
-
-  #lang-selector button.active {
-    background-color: var(--primary-green);
-    color: var(--bg-white);
-    font-weight: 700;
-  }
-  
-  /* Media query para móviles muy pequeños */
-  @media (max-height: 700px) {
-    .review-container { padding: 30px 25px 25px 25px; }
-    h1 { font-size: 1.7em; margin-bottom: 20px; }
-    .option-box { padding: 20px; }
-    .divider { margin: 20px 0; }
-  }
-
 </style>
 </head>
 <body>
@@ -219,8 +167,6 @@
 <main class="review-container">
   
   <div class="content-wrapper">
-    <h1 data-lang="mainTitle">¿Cómo fue tu experiencia?</h1>
-
     <section class="option-box">
       <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
       <p data-lang="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
@@ -238,16 +184,7 @@
     </section>
   </div>
   
-  <footer class="page-footer">
-    <p class="final-thanks note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-    <div id="lang-selector">
-      <button data-lang-switch="es">ES</button>
-      <button data-lang-switch="en">EN</button>
-      <button data-lang-switch="de">DE</button>
-    </div>
-  </footer>
-  
-</main>
+  </main>
 
 <script>
 const GOOGLE_LINK = "https://maps.app.goo.gl/CasablancaLasCanteras";
@@ -259,7 +196,7 @@ const TALLY_LINKS = {
 
 const translations = {
   es: {
-    mainTitle: "¿Cómo fue tu experiencia?",
+    // Título y Thanks eliminados
     publicTitle: "⭐ Reseña pública",
     publicText: "Si te gustó, tu reseña nos ayuda a crecer.",
     publicBtn: "Dejar reseña en Google",
@@ -268,10 +205,8 @@ const translations = {
     privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
     privateBtn: "Enviar comentario",
     privateNote: "Solo lo vemos nosotros.",
-    thanks: "¡Gracias por tu tiempo!"
   },
   en: {
-    mainTitle: "How was your experience?",
     publicTitle: "⭐ Public review",
     publicText: "Your review helps us on Google.",
     publicBtn: "Leave a review",
@@ -280,10 +215,8 @@ const translations = {
     privateText: "If something went wrong, tell us and we’ll fix it.",
     privateBtn: "Send feedback",
     privateNote: "Only we can see it.",
-    thanks: "Thanks for your time!"
   },
   de: {
-    mainTitle: "Wie war Ihr Erlebnis?",
     publicTitle: "⭐ Öffentliche Bewertung",
     publicText: "Ihre Bewertung hilft uns bei Google.",
     publicBtn: "Bewertung abgeben",
@@ -292,29 +225,25 @@ const translations = {
     privateText: "Wenn etwas schiefging, sagen Sie es uns bitte.",
     privateBtn: "Feedback senden",
     privateNote: "Nur wir können es sehen.",
-    thanks: "Vielen Dank für Ihre Zeit!"
   }
 };
 
-// Obtener idioma de la página principal
+// Obtener idioma de la página principal (sigue funcionando)
 const urlParams = new URLSearchParams(window.location.search);
 let pageLang = urlParams.get("lang") || "es";
 if (!translations[pageLang]) pageLang = "es";
 
 // Configurar la página
 document.addEventListener("DOMContentLoaded", () => {
-  // Seleccionar el idioma en la UI
-  document.querySelectorAll("#lang-selector button").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.langSwitch === pageLang);
-  });
+  // 1. Selector de idioma eliminado de la UI
 
-  // Aplicar traducciones
+  // Aplicar traducciones (sigue funcionando)
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
     if (translations[pageLang][key]) el.textContent = translations[pageLang][key];
   });
 
-  // Configurar enlaces
+  // Configurar enlaces (sigue funcionando)
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
   document.getElementById("btnPrivate").href = TALLY_LINKS[pageLang] || TALLY_LINKS["es"];
 });
