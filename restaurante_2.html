@@ -35,36 +35,30 @@
     width: 100%;
     max-width: 480px;
     background-color: var(--bg-white);
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    padding: 30px 24px;
+    border-radius: 18px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+    padding: 40px 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 25px;
+    gap: 30px;
   }
 
   #lang-selector {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   #lang-selector button {
     background: none;
     border: 1px solid #ccc;
     color: #666;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 7px;
+    padding: 8px 14px;
+    border-radius: 8px;
     font-weight: 600;
-    transition: all 0.18s ease-in-out;
-  }
-
-  #lang-selector button:hover {
-    background-color: #eee;
-    color: #333;
+    cursor: default; /* No cambiar idioma */
   }
 
   #lang-selector button.active {
@@ -74,15 +68,15 @@
     font-weight: 700;
   }
 
-  h2 { font-size: 1.3em; margin-bottom: 8px; }
+  h2 { font-size: 1.4em; margin-bottom: 8px; }
   p { font-size: 1em; color: var(--muted); margin-bottom: 16px; }
 
   .tile {
     background-color: var(--bg-white);
     border-radius: 14px;
-    padding: 18px;
+    padding: 20px;
     width: 100%;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
     transition: transform 0.1s ease, box-shadow 0.2s ease;
   }
 
@@ -132,7 +126,7 @@
   }
 
   @media (max-width: 360px) {
-    .card { padding: 20px 15px; gap: 20px; }
+    .card { padding: 25px 15px; gap: 20px; }
     .btn { font-size: 0.95em; padding: 12px 0; }
   }
 </style>
@@ -161,7 +155,6 @@
   </section>
 
   <p class="note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-  <p class="note" id="detectedLang" style="font-size:0.85em; color:#999;">Idioma detectado: </p>
 </main>
 
 <script>
@@ -208,37 +201,27 @@ const translations = {
   }
 };
 
-function detectLang() {
-  const navLang = (navigator.language || navigator.userLanguage || "es").slice(0,2);
-  return translations[navLang] ? navLang : "es";
-}
+// Obtener idioma de la página principal
+const urlParams = new URLSearchParams(window.location.search);
+let pageLang = urlParams.get("lang") || "es";
+if (!translations[pageLang]) pageLang = "es";
 
-function setLanguage(lang) {
-  if (!translations[lang]) lang = "es";
+// Configurar la página
+document.addEventListener("DOMContentLoaded", () => {
+  // Seleccionar el idioma en la UI
+  document.querySelectorAll("#lang-selector button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.langSwitch === pageLang);
+  });
+
+  // Aplicar traducciones
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
-    if (translations[lang][key]) el.textContent = translations[lang][key];
+    if (translations[pageLang][key]) el.textContent = translations[pageLang][key];
   });
 
+  // Configurar enlaces
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
-  document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS["es"];
-
-  document.querySelectorAll("#lang-selector button").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.langSwitch === lang);
-  });
-
-  document.getElementById("detectedLang").textContent = "Idioma detectado: " + lang.toUpperCase();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const detected = detectLang();
-  setLanguage(detected);
-
-  document.getElementById("lang-selector").addEventListener("click", e => {
-    const btn = e.target.closest("button[data-lang-switch]");
-    if (!btn) return;
-    setLanguage(btn.dataset.langSwitch);
-  });
+  document.getElementById("btnPrivate").href = TALLY_LINKS[pageLang] || TALLY_LINKS["es"];
 });
 </script>
 
