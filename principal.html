@@ -14,127 +14,122 @@
   <style>
     :root {
       --primary-green: #68B553;
-      --accent-orange: #e89f4b;
       --text-dark: #333;
-      --bg-light-green: #eaf7e3;
+      --bg-light-gray: #f4f4f4; /* Fondo más suave */
       --white: #fff;
     }
 
     html, body {
       height: 100%;
       margin: 0;
-      background: var(--bg-light-green);
+      /* 1. El fondo de la app es blanco, como una app nativa */
+      background: var(--white); 
       font-family: 'Poppins', sans-serif; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
       color: var(--text-dark);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow: hidden; 
     }
 
-    /* Caja principal */
+    /* 1. Contenedor principal a PANTALLA COMPLETA */
     .landing-container {
-      width: 90%; 
-      max-width: 700px; 
-      /* 4. ALTO FIJO: Esto asegura que la caja no cambie de tamaño (no se haga "más fina") */
-      height: 680px; 
+      width: 100%;
+      /* Ocupa al menos toda la altura de la pantalla */
+      min-height: 100vh; 
       background: var(--white);
-      border-radius: 28px; 
-      box-shadow: 0 15px 50px rgba(0,0,0,0.1); 
+      
       display: flex;
       flex-direction: column;
-      align-items: center;
+      /* space-between: Empuja el logo/contenido arriba y los idiomas abajo */
       justify-content: space-between; 
-      padding: 50px 40px;
+      align-items: center;
+      
+      /* Padding para que el contenido no toque los bordes */
+      padding: 40px 25px; 
       text-align: center;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-      animation: fadeInScale 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); 
+      
+      /* Importante para que el padding no rompa el 100vh */
+      box-sizing: border-box; 
     }
 
-    @keyframes fadeInScale {
-      from { opacity: 0; transform: translateY(25px) scale(0.97); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    /* 2. Contenedor de contenido (Logo, texto, botones) */
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        animation: fadeIn 0.5s ease-out;
     }
     
-    /* 2. Keyframe de animación 'subtleFloat' eliminado */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
     .logo {
-      width: 200px; 
-      height: 200px; 
-      margin-bottom: 20px; 
-      /* 2. Animación 'subtleFloat' eliminada */
-      will-change: transform; 
+      width: 180px; 
+      height: 180px; 
+      margin-bottom: 25px; 
     }
 
     .logo img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      width: 200; 
-      height: 200;
-      /* 2. Animación ligera añadida con transition */
-      transition: transform 0.3s ease;
+      width: 180; 
+      height: 180;
+      /* 2. Animación simple y rápida al tocar/hover */
+      transition: transform 0.2s ease-out;
     }
     
-    /* 2. Animación ligera de hover (no consume recursos) */
     .logo:hover img {
-        transform: scale(1.05);
+        transform: scale(1.05); /* Animación ligera */
     }
     
-    /* 1. CORRECCIÓN: Contenedor de contenido centrado */
-    .content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%; /* Asegura que ocupe el espacio */
-    }
-
     h2 {
-      font-size: 2.4em; 
+      font-size: 2.2em; /* Tamaño adaptado a móvil */
       font-weight: 700;
-      margin: 15px 0 10px; 
+      margin: 10px 0; 
       letter-spacing: -0.5px; 
     }
 
     p {
-      font-size: 1.15em; 
+      font-size: 1.1em; 
       color: #555;
       margin-bottom: 30px; 
       line-height: 1.5;
+      max-width: 350px; /* Evita que el texto sea muy ancho */
     }
 
     .button-group {
       width: 100%;
+      max-width: 400px; /* Limita el ancho de los botones */
       display: flex;
       flex-direction: column;
-      gap: 18px; 
-      margin-bottom: 30px; 
+      gap: 16px; 
     }
 
     .btn {
       text-decoration: none;
       font-weight: 600;
-      font-size: 1.1em; 
+      font-size: 1.05em; 
       padding: 16px; 
       border-radius: 16px; 
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+      transition: all 0.25s ease-out; 
       border: 2px solid transparent;
       display: block;
-      will-change: transform, box-shadow, background-color; 
+      will-change: transform, box-shadow; 
     }
 
     .btn-primary {
       background: var(--primary-green);
       color: var(--white);
       border-color: var(--primary-green);
-      box-shadow: 0 8px 25px rgba(104,181,83,0.3); 
+      box-shadow: 0 6px 20px rgba(104,181,83,0.25); 
     }
 
     .btn-primary:hover {
-      transform: translateY(-4px) scale(1.02); 
-      box-shadow: 0 12px 35px rgba(104,181,83,0.45);
+      transform: translateY(-3px); 
+      box-shadow: 0 10px 25px rgba(104,181,83,0.35);
     }
 
     .btn-secondary {
@@ -144,137 +139,72 @@
     }
 
     .btn-secondary:hover {
-      background: #f0fdf2; 
+      background: #f7fbf5; 
       transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
     }
 
-    /* 3. SECCIÓN DE IDIOMAS MÁS PEQUEÑA */
+    /* 3. SECCIÓN DE IDIOMAS (Pequeña y de ancho Fijo) */
     footer#lang-switcher {
       display: flex;
       justify-content: center;
-      gap: 12px; /* Espacio reducido */
+      gap: 10px; /* Espacio reducido */
       width: 100%; 
-      max-width: 260px; /* Ancho máximo reducido */
-      margin-top: auto; 
+      max-width: 280px; /* Ancho máximo reducido */
+      margin-top: 30px; /* Espacio de seguridad arriba */
     }
 
     #lang-switcher button {
-      background: #f0f0f0;
+      /* 3. FLEX: 1 HACE QUE LOS 3 BOTONES TENGAN EL MISMO ANCHO */
+      flex: 1; 
+      
+      background: var(--bg-light-gray);
       border: 1px solid #ddd; 
-      border-radius: 10px; /* Borde reducido */
-      padding: 7px 12px; /* Padding reducido */
+      border-radius: 10px; 
+      padding: 8px 10px; /* Padding reducido */
       cursor: pointer;
-      font-weight: 600; /* Menos grueso */
-      font-size: 0.95em; /* Fuente reducida */
+      font-weight: 600; 
+      font-size: 0.9em; /* Fuente reducida */
       font-family: 'Poppins', sans-serif;
       color: #777;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      
-      flex-grow: 1; 
-      max-width: 100px; 
+      transition: all 0.25s ease-out;
       text-align: center;
-      will-change: transform, background-color, box-shadow, color; 
+      will-change: transform, background-color, color; 
     }
 
     #lang-switcher button.active {
       background: var(--primary-green);
       color: #fff;
       border-color: var(--primary-green);
-      transform: translateY(-3px) scale(1.06); /* Animación reducida */
-      box-shadow: 0 5px 15px rgba(104,181,83,0.4); /* Sombra reducida */
+      transform: scale(1.05); /* Animación sutil */
+      box-shadow: 0 4px 12px rgba(104,181,83,0.3); 
     }
 
     #lang-switcher button:not(.active):hover {
       background: #e6e6e6; 
       color: #333;
-      transform: translateY(-2px);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
     }
 
     /* Animación fade entre idiomas */
     .fade {
       opacity: 0;
-      transform: translateY(15px); 
+      transform: translateY(10px); 
       transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     }
     .fade.show {
       opacity: 1;
       transform: translateY(0);
     }
+    
+    /* 4. SIN MEDIA QUERIES. El diseño es 100% fluido */
 
-    @media (max-width: 768px) { 
-      .landing-container {
-        width: 90%;
-        max-width: 90%; 
-        height: auto; 
-        /* 4. ALTO MÍNIMO: Asegura estabilidad en móvil también */
-        min-height: 580px; 
-        padding: 40px 25px;
-        border-radius: 20px; 
-      }
-      h2 {
-        font-size: 2em;
-      }
-      .logo {
-        width: 160px; 
-        height: 160px;
-        margin-bottom: 15px;
-      }
-      .logo img {
-        width: 160;
-        height: 160;
-      }
-      p {
-        font-size: 1.05em;
-        margin-bottom: 25px;
-      }
-      .button-group {
-        gap: 15px;
-      }
-      .btn {
-        padding: 14px;
-        font-size: 1em;
-      }
-      footer#lang-switcher {
-        gap: 10px;
-        max-width: unset; 
-      }
-      /* 3. Botones de idioma más pequeños en móvil */
-      #lang-switcher button {
-        max-width: unset; 
-        font-size: 0.9em; 
-        padding: 7px 10px;
-      }
-    }
-
-    @media (max-width: 480px) { 
-      .landing-container {
-        padding: 30px 20px;
-        min-height: 540px; /* Ajuste para pantallas muy pequeñas */
-      }
-      h2 {
-        font-size: 1.8em;
-      }
-      .logo {
-        width: 140px;
-        height: 140px;
-      }
-       .logo img {
-        width: 140;
-        height: 140;
-      }
-      p {
-        font-size: 1em;
-      }
-    }
   </style>
 </head>
 <body>
   <main class="landing-container">
+    
     <div class="content fade show" id="content">
       <div class="logo">
-        <img src="img/PataMig.png" alt="Logo de PataMig" loading="lazy" width="200" height="200"> 
+        <img src="img/PataMig.png" alt="Logo de PataMig" loading="lazy" width="180" height="180"> 
       </div>
       <h2 data-lang="welcome">¡Bienvenido!</h2>
       <p data-lang="prompt">¿Qué te gustaría hacer?</p>
@@ -291,9 +221,11 @@
       <button data-lang-switch="en">EN</button>
       <button data-lang-switch="de">DE</button>
     </footer>
+    
   </main>
 
   <script>
+    // El JavaScript sigue siendo el mismo, es correcto.
     const translations = {
       es: {
         title: "Bienvenido a PataMig",
