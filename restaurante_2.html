@@ -3,20 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#5aa37a" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#68B553" />
 <title>¿Cómo fue tu experiencia?</title>
 
 <style>
   :root {
-    --primary-green: #5aa37a;
     --primary-green: #68B553;
     --accent-orange: #e89f4b;
-    --text-dark: #333333;
-    --bg-white: #ffffff;
+    --text-dark: #333;
+    --bg-white: #fff;
     --bg-light: #f9f9f9;
-    --muted: #666666;
+    --muted: #666;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -27,9 +24,6 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-light);
     color: var(--text-dark);
-  }
-
-  body {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,10 +44,8 @@
     gap: 25px;
   }
 
-  /* Selector de idioma */
   #lang-selector {
     display: flex;
-    justify-content: flex-end;
     justify-content: center;
     gap: 8px;
     margin-bottom: 10px;
@@ -82,26 +74,16 @@
     font-weight: 700;
   }
 
-  h2 {
-    font-size: 1.3em;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-  }
-
-  p {
-    font-size: 1em;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
+  h2 { font-size: 1.3em; margin-bottom: 8px; }
+  p { font-size: 1em; color: var(--muted); margin-bottom: 16px; }
 
   .tile {
     background-color: var(--bg-white);
     border-radius: 14px;
     padding: 18px;
-    text-align: center;
+    width: 100%;
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     transition: transform 0.1s ease, box-shadow 0.2s ease;
-    width: 100%;
   }
 
   .tile:hover {
@@ -125,15 +107,12 @@
   .btn-google {
     background-color: var(--primary-green);
     border: 2px solid var(--primary-green);
-    box-shadow: 0 8px 20px rgba(90,163,122,0.12);
     box-shadow: 0 8px 20px rgba(104,181,83,0.12);
   }
 
   .btn-google:hover {
-    background-color: #4a8c68;
     background-color: #589748;
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(90,163,122,0.16);
     box-shadow: 0 12px 28px rgba(104,181,83,0.16);
   }
 
@@ -150,13 +129,6 @@
     font-size: 0.9em;
     color: var(--muted);
     margin-top: 6px;
-  }
-
-  .thanks {
-    margin-top: 10px;
-    font-size: 1em;
-    color: var(--muted);
-    text-align: center;
   }
 
   @media (max-width: 360px) {
@@ -189,7 +161,7 @@
   </section>
 
   <p class="note" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
-  <p class="thanks" data-lang="thanks"><strong>¡Gracias por tu tiempo!</strong></p>
+  <p class="note" id="detectedLang" style="font-size:0.85em; color:#999;">Idioma detectado: </p>
 </main>
 
 <script>
@@ -236,56 +208,36 @@ const translations = {
   }
 };
 
-function getPreferredLangFromUrl() {
-  try {
-    const urlParams = new URLSearchParams(window.location.search);
-    const p = urlParams.get("lang");
-    if (p && translations[p]) return p;
-  } catch {}
-  return null;
+function detectLang() {
+  const navLang = (navigator.language || navigator.userLanguage || "es").slice(0,2);
+  return translations[navLang] ? navLang : "es";
 }
 
-function getPreferredLang() {
-  const urlLang = getPreferredLangFromUrl();
-  if (urlLang) return urlLang;
-  const saved = localStorage.getItem("userLang");
-  if (saved && translations[saved]) return saved;
-  const nav = (navigator.language || navigator.userLanguage || "es").slice(0,2);
-  return translations[nav] ? nav : "es";
-}
-
-function setLanguage(lang, pushState = true) {
+function setLanguage(lang) {
   if (!translations[lang]) lang = "es";
-  localStorage.setItem("userLang", lang);
-  document.documentElement.lang = lang;
-
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
     if (translations[lang][key]) el.textContent = translations[lang][key];
   });
 
+  document.getElementById("btnGoogle").href = GOOGLE_LINK;
+  document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS["es"];
+
   document.querySelectorAll("#lang-selector button").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.langSwitch === lang);
   });
 
-  document.getElementById("btnGoogle").href = GOOGLE_LINK;
-  document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS["es"];
-
-  if (pushState) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("lang", lang);
-    history.replaceState({}, "", url);
-  }
+  document.getElementById("detectedLang").textContent = "Idioma detectado: " + lang.toUpperCase();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const initialLang = getPreferredLang();
-  setLanguage(initialLang, false);
+  const detected = detectLang();
+  setLanguage(detected);
 
   document.getElementById("lang-selector").addEventListener("click", e => {
     const btn = e.target.closest("button[data-lang-switch]");
     if (!btn) return;
-    setLanguage(btn.dataset.langSwitch, true);
+    setLanguage(btn.dataset.langSwitch);
   });
 });
 </script>
