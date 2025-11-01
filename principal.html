@@ -27,34 +27,27 @@
       color: var(--text-dark);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      /* 2. Bloqueo de Scroll a nivel de body */
       overflow: hidden; 
     }
 
-    /* 1. Contenedor principal a PANTALLA COMPLETA y sin scroll */
     .landing-container {
       width: 100%;
-      /* 1. Altura dinámica: se ajusta a la barra de direcciones del móvil */
-      height: 100vh; /* Fallback para navegadores antiguos */
+      height: 100vh; 
       height: 100dvh; 
       
       background: var(--white);
       
       display: flex;
       flex-direction: column;
-      /* 3. Centra todo el bloque de contenido verticalmente */
       justify-content: center; 
       align-items: center;
       
-      /* 4. Padding vertical reducido para ganar espacio */
       padding: 20px 25px; 
       
       box-sizing: border-box; 
-      /* 2. Bloqueo de Scroll a nivel de contenedor */
       overflow: hidden; 
     }
 
-    /* Contenedor de contenido (Logo, texto, botones) */
     .content {
         display: flex;
         flex-direction: column;
@@ -68,29 +61,21 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    .logo {
-      /* 4. Tamaño de logo reducido */
-      width: 150px; 
-      height: 150px; 
-      /* 4. Margen reducido */
-      margin-bottom: 20px; 
+    /* 1. Estilo para el nombre del restaurante (reemplaza el logo) */
+    h1.restaurant-name {
+      font-size: 3em; /* Tamaño grande para el nombre */
+      font-weight: 700;
+      color: var(--primary-green); /* Color verde principal */
+      margin-bottom: 25px; /* Espacio debajo del nombre */
+      text-transform: uppercase; /* Opcional: mayúsculas para el nombre */
+      letter-spacing: 1px;
+      transition: transform 0.2s ease-out; /* Animación ligera */
+    }
+    h1.restaurant-name:hover {
+        transform: scale(1.03); /* Efecto al pasar el ratón/tocar */
     }
 
-    .logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      width: 150; 
-      height: 150;
-      transition: transform 0.2s ease-out;
-    }
-    
-    .logo:hover img {
-        transform: scale(1.05);
-    }
-    
     h2 {
-      /* 4. Fuente reducida */
       font-size: 2.0em; 
       font-weight: 700;
       margin: 10px 0; 
@@ -98,10 +83,8 @@
     }
 
     p {
-      /* 4. Fuente reducida */
       font-size: 1.0em; 
       color: #555;
-      /* 4. Margen reducido */
       margin-bottom: 25px; 
       line-height: 1.5;
       max-width: 350px; 
@@ -112,7 +95,6 @@
       max-width: 400px; 
       display: flex;
       flex-direction: column;
-      /* 4. Espacio entre botones reducido */
       gap: 14px; 
     }
 
@@ -120,12 +102,13 @@
       text-decoration: none;
       font-weight: 600;
       font-size: 1.0em; 
-      /* 4. Padding de botón reducido */
       padding: 14px; 
       border-radius: 14px; 
       transition: all 0.25s ease-out; 
       border: 2px solid transparent;
-      display: block;
+      display: flex; /* Usar flex para centrar texto */
+      justify-content: center; /* Centra el texto horizontalmente */
+      align-items: center; /* Centra el texto verticalmente (si el padding fuera diferente) */
       will-change: transform, box-shadow; 
     }
 
@@ -159,7 +142,6 @@
       gap: 10px; 
       width: 100%; 
       max-width: 280px; 
-      /* 4. Margen superior reducido */
       margin-top: 25px; 
     }
 
@@ -168,7 +150,6 @@
       background: var(--bg-light-gray);
       border: 1px solid #ddd; 
       border-radius: 10px; 
-      /* 4. Padding reducido */
       padding: 7px 10px; 
       cursor: pointer;
       font-weight: 600; 
@@ -203,16 +184,14 @@
       opacity: 1;
       transform: translateY(0);
     }
-    
   </style>
 </head>
 <body>
   <main class="landing-container">
     
     <div class="content fade show" id="content">
-      <div class="logo">
-        <img src="img/PataMig.png" alt="Logo de PataMig" loading="lazy" width="150" height="150"> 
-      </div>
+      <h1 class="restaurant-name">PataMig</h1>
+      
       <h2 data-lang="welcome">¡Bienvenido!</h2>
       <p data-lang="prompt">¿Qué te gustaría hacer?</p>
 
@@ -232,10 +211,11 @@
   </main>
 
   <script>
-    // El JavaScript sigue siendo el mismo, es correcto.
     const translations = {
       es: {
         title: "Bienvenido a PataMig",
+        // Añadir el nombre del restaurante si se quiere traducir también
+        restaurant_name: "PataMig", 
         welcome: "¡Bienvenido!",
         prompt: "¿Qué te gustaría hacer?",
         view_menu: "Acceder a la Carta",
@@ -244,6 +224,7 @@
       },
       en: {
         title: "Welcome to PataMig",
+        restaurant_name: "PataMig",
         welcome: "Welcome!",
         prompt: "What would you like to do?",
         view_menu: "View the Menu",
@@ -252,6 +233,7 @@
       },
       de: {
         title: "Willkommen bei PataMig",
+        restaurant_name: "PataMig",
         welcome: "Willkommen!",
         prompt: "Was möchten Sie tun?",
         view_menu: "Speisekarte ansehen",
@@ -281,6 +263,9 @@
              el.textContent = translations[lang][key];
           }
         });
+        
+        // Actualizar el nombre del restaurante si se quisiera traducir
+        // document.querySelector('.restaurant-name').textContent = translations[lang].restaurant_name;
 
         menuLink.href = `carta.html?lang=${lang}`;
         reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
