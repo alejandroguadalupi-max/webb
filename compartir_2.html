@@ -109,7 +109,8 @@ p.subtitle {
 .photo-preview {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  /* 1. CAMBIO: La foto se verá entera, no recortada */
+  object-fit: contain; 
 }
 
 #btnRemovePhoto {
@@ -220,30 +221,7 @@ p.subtitle {
 
 #lang-selector { display: none; }
 
-.success-popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  animation: fadeIn 0.3s ease-out;
-}
-.success-box {
-  background: var(--white);
-  padding: 30px 40px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 10px 40px var(--shadow-medium);
-  transform: scale(0.9);
-  animation: successScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-@keyframes successScale {
-  to { transform: scale(1); }
-}
-.success-box h3 { color: var(--primary-green); margin: 0 0 8px; font-size: 1.5em; font-weight: 700; }
-.success-box p { color: var(--muted); font-size: 1em; margin: 0; }
+/* 3. Popup de éxito ELIMINADO del CSS (ya no se usa) */
 
 </style>
 </head>
@@ -291,9 +269,10 @@ p.subtitle {
 const DEFAULT_CARD="img/logo35.png"; 
 const LOGO_WATERMARK_URL = "img/PataMig.png"; 
 const COPY={
- es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",shareBtn:"Compartir",takePhoto:"Tomar foto",choosePhoto:"Elegir foto",watermark:"Incluir nombre del restaurante",success:"✅ Compartido con éxito", redirecting:"Redirigiendo..."},
- en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",shareBtn:"Share",takePhoto:"Take photo",choosePhoto:"Choose photo",watermark:"Include restaurant name",success:"✅ Shared successfully", redirecting:"Redirecting..."}
+ es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",shareBtn:"Compartir",takePhoto:"Tomar foto",choosePhoto:"Elegir foto",watermark:"Incluir nombre del restaurante"},
+ en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",shareBtn:"Share",takePhoto:"Take photo",choosePhoto:"Choose photo",watermark:"Include restaurant name"}
 };
+// 3. Traducciones de "success" eliminadas
 
 const urlParams = new URLSearchParams(window.location.search);
 let initialLang = urlParams.get("lang") || "es";
@@ -377,7 +356,7 @@ async function addWatermarkToImage(file){
 
         canvas.toBlob(b=>{
           resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
-        },"image/jpeg",0.9);
+F       },"image/jpeg",0.9);
       };
       logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
     };
@@ -385,25 +364,11 @@ async function addWatermarkToImage(file){
   });
 }
 
-function showSuccessMessage(){
-  const popup=document.createElement('div');
-  popup.className='success-popup';
-  popup.innerHTML=`<div class="success-box"><h3>${COPY[currentLang].success}</h3><p>${COPY[currentLang].redirecting}</p></div>`;
-  document.body.appendChild(popup);
-  setTimeout(()=>{ 
-    // Vuelve a la página anterior (la de inicio, que pasó el ?lang)
-    if (document.referrer) {
-        window.location.href = document.referrer;
-    } else {
-        // Fallback si no hay referrer (raro)
-        window.location.href = `index.html?lang=${currentLang}`;
-    }
-  }, 2000);
-}
+// 3. Función showSuccessMessage ELIMINADA
 
 async function shareExperience(e){
   e&&e.preventDefault();
-  const chkWatermark = document.getElementById('chkWatermark'); // Obtenerlo aquí
+  const chkWatermark = document.getElementById('chkWatermark'); 
   try{
     let baseFile;
     if(selectedFile){
@@ -420,15 +385,14 @@ async function shareExperience(e){
 
     if(navigator.canShare?.({files:[fileToShare]})){
       await navigator.share({
-        files:[fileToShare],
-        title: COPY[currentLang].shareTitle,
-        text: COPY[currentLang].shareSub
+        // 2. CAMBIO: Solo se envían los archivos, sin texto
+        files:[fileToShare]
       });
-      showSuccessMessage();
+      // 3. CAMBIO: Llamada a showSuccessMessage() eliminada
     } else {
       const url=URL.createObjectURL(fileToShare);
       window.open(url,"_blank");
-      showSuccessMessage(); 
+      // 3. CAMBIO: Llamada a showSuccessMessage() eliminada
     }
   }catch(err){ 
     if (err.name === 'AbortError') {
@@ -441,8 +405,6 @@ async function shareExperience(e){
 
 
 // --- INICIALIZACIÓN ---
-// *** ESTE ES EL CAMBIO PRINCIPAL ***
-// Todo el código que busca elementos y añade eventos AHORA ESTÁ DENTRO
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. OBTENER TODOS LOS ELEMENTOS DEL DOM
