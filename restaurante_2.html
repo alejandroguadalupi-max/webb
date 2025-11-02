@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#68B553" />
-<title>¿Cómo fue tu experiencia?</title>
+<title data-lang="pageTitle">¿Cómo fue tu experiencia?</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,31 +39,25 @@
     overflow: hidden; 
   }
 
-  /* Contenedor principal 100% y centrado */
   .review-container {
     width: 100%;
     height: 100vh;
     height: 100dvh;
-    
     display: flex;
     flex-direction: column;
     justify-content: center; 
     align-items: center;
-    
     padding: 30px 25px; 
-    
     text-align: center;
     box-sizing: border-box;
   }
   
-  /* Contenido con animación */
   .content-wrapper {
     width: 100%;
     max-width: 450px; 
     animation: fadeInUp 0.6s ease-out;
   }
 
-  /* Caja de opción */
   .option-box {
     width: 100%;
     background: var(--bg-white);
@@ -72,6 +66,7 @@
     padding: 25px; 
     box-shadow: 0 8px 25px rgba(0,0,0,0.05); 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 25px;
   }
   
   .option-box:hover {
@@ -92,7 +87,6 @@
     line-height: 1.5; 
   }
 
-  /* Divisor "O" */
   .divider {
     display: flex;
     align-items: center;
@@ -114,7 +108,6 @@
   .divider::before { margin-right: 15px; }
   .divider::after { margin-left: 15px; }
 
-  /* Botones */
   .btn {
     display: block;
     width: 100%;
@@ -128,6 +121,7 @@
     border: none;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     will-change: transform, box-shadow;
+    margin-bottom: 10px;
   }
 
   .btn-google {
@@ -153,9 +147,16 @@
   .note {
     font-size: 0.85em; 
     color: var(--muted);
-    margin-top: 15px; 
+    margin-top: 10px; 
   }
-  
+
+  .final-note {
+    font-size: 0.85em; 
+    color: var(--muted);
+    margin-top: 30px;
+    max-width: 450px;
+    line-height: 1.5;
+  }
 </style>
 </head>
 <body>
@@ -178,6 +179,11 @@
       <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" rel="noopener">Hablar con el equipo</a>
       <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
     </section>
+
+    <div class="final-note" data-lang="finalNote">
+      Tu opinión, ya sea positiva o negativa, nos ayuda a mejorar. Gracias por formar parte.
+    </div>
+
   </div>
   
 </main>
@@ -187,13 +193,16 @@ const GOOGLE_LINK = "https://maps.app.goo.gl/CasablancaLasCanteras";
 const TALLY_LINKS = {
   es: "https://tally.so/r/w2Qla9",
   en: "https://tally.so/r/w20k9D",
-  de: "https://tally.so/r/mBN1q1"
+  de: "https://tally.so/r/mBN1q1",
+  fr: "https://tally.so/r/w20k9D?lang=fr",
+  it: "https://tally.so/r/w20k9D?lang=it",
+  nl: "https://tally.so/r/w20k9D?lang=nl"
 };
 
-// --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
-// Los textos ya no filtran, solo "guían" (nudging)
+// Traducciones para todos los idiomas
 const translations = {
   es: {
+    pageTitle: "¿Cómo fue tu experiencia?",
     publicTitle: "⭐ Reseña pública",
     publicText: "Tu opinión ayuda a otros clientes a encontrarnos.",
     publicBtn: "Publicar en Google",
@@ -202,8 +211,10 @@ const translations = {
     privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.",
     privateBtn: "Hablar con el equipo",
     privateNote: "Solo lo vemos nosotros.",
+    finalNote: "Tu opinión, ya sea positiva o negativa, nos ayuda a mejorar. Gracias por formar parte."
   },
   en: {
+    pageTitle: "How was your experience?",
     publicTitle: "⭐ Public review",
     publicText: "Your review helps other customers find us.",
     publicBtn: "Post on Google",
@@ -212,8 +223,10 @@ const translations = {
     privateText: "Had an issue? Your feedback helps us improve directly.",
     privateBtn: "Tell the Team",
     privateNote: "Only we can see it.",
+    finalNote: "Your feedback, positive or negative, helps us improve. Thank you for being part of it."
   },
   de: {
+    pageTitle: "Wie war Ihre Erfahrung?",
     publicTitle: "⭐ Öffentliche Bewertung",
     publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.",
     publicBtn: "Auf Google posten",
@@ -222,24 +235,57 @@ const translations = {
     privateText: "Gab es ein Problem? Helfen Sie uns, uns direkt zu verbessern.",
     privateBtn: "Dem Team mitteilen",
     privateNote: "Nur wir können es sehen.",
+    finalNote: "Ihr Feedback, positiv oder negativ, hilft uns, uns zu verbessern. Vielen Dank, dass Sie dabei sind."
+  },
+  fr: {
+    pageTitle: "Comment était votre expérience ?",
+    publicTitle: "⭐ Avis public",
+    publicText: "Votre avis aide les autres clients à nous trouver.",
+    publicBtn: "Publier sur Google",
+    publicNote: "Visible pour tous.",
+    privateTitle: "📝 Retour privé",
+    privateText: "Quelque chose n'a pas bien fonctionné ? Aidez-nous à nous améliorer directement.",
+    privateBtn: "Parler à l'équipe",
+    privateNote: "Seul nous pouvons le voir.",
+    finalNote: "Votre avis, positif ou négatif, nous aide à nous améliorer. Merci d'en faire partie."
+  },
+  it: {
+    pageTitle: "Com'è stata la tua esperienza?",
+    publicTitle: "⭐ Recensione pubblica",
+    publicText: "La tua opinione aiuta altri clienti a trovarci.",
+    publicBtn: "Pubblica su Google",
+    publicNote: "Visibile a tutti.",
+    privateTitle: "📝 Feedback privato",
+    privateText: "Qualcosa non è andato bene? Aiutaci a migliorare direttamente.",
+    privateBtn: "Parla con il team",
+    privateNote: "Lo vediamo solo noi.",
+    finalNote: "La tua opinione, positiva o negativa, ci aiuta a migliorare. Grazie per farne parte."
+  },
+  nl: {
+    pageTitle: "Hoe was je ervaring?",
+    publicTitle: "⭐ Publieke beoordeling",
+    publicText: "Je beoordeling helpt andere klanten ons te vinden.",
+    publicBtn: "Plaats op Google",
+    publicNote: "Zichtbaar voor iedereen.",
+    privateTitle: "📝 Privé feedback",
+    privateText: "Was er iets niet goed? Help ons direct te verbeteren.",
+    privateBtn: "Vertel het team",
+    privateNote: "Alleen wij kunnen het zien.",
+    finalNote: "Je feedback, positief of negatief, helpt ons te verbeteren. Bedankt dat je erbij bent."
   }
 };
-// --- FIN DEL CAMBIO ---
 
-// Obtener idioma de la página principal (sigue funcionando)
-const urlParams = new URLSearchParams(window.location.search);
-let pageLang = urlParams.get("lang") || "es";
+// Detectar idioma del navegador
+let pageLang = navigator.language.slice(0,2).toLowerCase();
 if (!translations[pageLang]) pageLang = "es";
 
-// Configurar la página
+// Aplicar traducciones
 document.addEventListener("DOMContentLoaded", () => {
-  // Aplicar traducciones (sigue funcionando)
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
     if (translations[pageLang][key]) el.textContent = translations[pageLang][key];
   });
 
-  // Configurar enlaces (sigue funcionando)
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
   document.getElementById("btnPrivate").href = TALLY_LINKS[pageLang] || TALLY_LINKS["es"];
 });
@@ -247,3 +293,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
