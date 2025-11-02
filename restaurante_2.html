@@ -39,7 +39,7 @@
     overflow: hidden; 
   }
 
-  /* 1. Contenedor principal 100% y centrado */
+  /* Contenedor principal 100% y centrado */
   .review-container {
     width: 100%;
     height: 100vh;
@@ -47,12 +47,9 @@
     
     display: flex;
     flex-direction: column;
-    /* 1. CENTRADO VERTICAL */
     justify-content: center; 
-    /* 1. CENTRADO HORIZONTAL */
     align-items: center;
     
-    /* 1. Padding para que no se pegue a los bordes */
     padding: 30px 25px; 
     
     text-align: center;
@@ -62,12 +59,11 @@
   /* Contenido con animación */
   .content-wrapper {
     width: 100%;
-    /* 1. Limita el ancho en pantallas más grandes */
     max-width: 450px; 
     animation: fadeInUp 0.6s ease-out;
   }
 
-  /* Caja de opción (sin cambios) */
+  /* Caja de opción */
   .option-box {
     width: 100%;
     background: var(--bg-white);
@@ -96,7 +92,7 @@
     line-height: 1.5; 
   }
 
-  /* Divisor "O" (sin cambios) */
+  /* Divisor "O" */
   .divider {
     display: flex;
     align-items: center;
@@ -118,7 +114,7 @@
   .divider::before { margin-right: 15px; }
   .divider::after { margin-left: 15px; }
 
-  /* Botones (sin cambios) */
+  /* Botones */
   .btn {
     display: block;
     width: 100%;
@@ -169,8 +165,8 @@
   <div class="content-wrapper">
     <section class="option-box">
       <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
-      <p data-lang="publicText">Si te gustó, tu reseña nos ayuda a crecer.</p>
-      <a id="btnGoogle" class="btn btn-google" data-lang="publicBtn" href="#" rel="noopener">Dejar reseña en Google</a>
+      <p data-lang="publicText">Tu opinión ayuda a otros clientes a encontrarnos.</p>
+      <a id="btnGoogle" class="btn btn-google" data-lang="publicBtn" href="#" rel="noopener">Publicar en Google</a>
       <div class="note" data-lang="publicNote">Queda visible para todos.</div>
     </section>
 
@@ -178,13 +174,13 @@
     
     <section class="option-box">
       <h2 data-lang="privateTitle">📝 Comentario privado</h2>
-      <p data-lang="privateText">Si algo falló, cuéntanos y lo arreglamos contigo.</p>
-      <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" rel="noopener">Enviar comentario</a>
+      <p data-lang="privateText">¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.</p>
+      <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" rel="noopener">Hablar con el equipo</a>
       <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
     </section>
   </div>
   
-  </main>
+</main>
 
 <script>
 const GOOGLE_LINK = "https://maps.app.goo.gl/CasablancaLasCanteras";
@@ -194,39 +190,41 @@ const TALLY_LINKS = {
   de: "https://tally.so/r/mBN1q1"
 };
 
+// --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
+// Los textos ya no filtran, solo "guían" (nudging)
 const translations = {
   es: {
-    // Título y Thanks eliminados
     publicTitle: "⭐ Reseña pública",
-    publicText: "Si te gustó, tu reseña nos ayuda a crecer.",
-    publicBtn: "Dejar reseña en Google",
+    publicText: "Tu opinión ayuda a otros clientes a encontrarnos.",
+    publicBtn: "Publicar en Google",
     publicNote: "Queda visible para todos.",
     privateTitle: "📝 Comentario privado",
-    privateText: "Si algo falló, cuéntanos y lo arreglamos contigo.",
-    privateBtn: "Enviar comentario",
+    privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.",
+    privateBtn: "Hablar con el equipo",
     privateNote: "Solo lo vemos nosotros.",
   },
   en: {
     publicTitle: "⭐ Public review",
-    publicText: "Your review helps us on Google.",
-    publicBtn: "Leave a review",
+    publicText: "Your review helps other customers find us.",
+    publicBtn: "Post on Google",
     publicNote: "Visible to everyone.",
     privateTitle: "📝 Private feedback",
-    privateText: "If something went wrong, tell us and we’ll fix it.",
-    privateBtn: "Send feedback",
+    privateText: "Had an issue? Your feedback helps us improve directly.",
+    privateBtn: "Tell the Team",
     privateNote: "Only we can see it.",
   },
   de: {
     publicTitle: "⭐ Öffentliche Bewertung",
-    publicText: "Ihre Bewertung hilft uns bei Google.",
-    publicBtn: "Bewertung abgeben",
+    publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.",
+    publicBtn: "Auf Google posten",
     publicNote: "Für alle sichtbar.",
     privateTitle: "📝 Privates Feedback",
-    privateText: "Wenn etwas schiefging, sagen Sie es uns bitte.",
-    privateBtn: "Feedback senden",
+    privateText: "Gab es ein Problem? Helfen Sie uns, uns direkt zu verbessern.",
+    privateBtn: "Dem Team mitteilen",
     privateNote: "Nur wir können es sehen.",
   }
 };
+// --- FIN DEL CAMBIO ---
 
 // Obtener idioma de la página principal (sigue funcionando)
 const urlParams = new URLSearchParams(window.location.search);
@@ -235,8 +233,6 @@ if (!translations[pageLang]) pageLang = "es";
 
 // Configurar la página
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Selector de idioma eliminado de la UI
-
   // Aplicar traducciones (sigue funcionando)
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
