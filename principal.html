@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title data-lang="title">Bienvenido a PataMig</title>
 
-<!-- Fuente -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,7 +32,6 @@ html, body {
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  background: var(--white);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,6 +39,7 @@ html, body {
   padding: 50px 25px;
   box-sizing: border-box;
   text-align: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 h1.restaurant-name {
@@ -112,40 +111,42 @@ p {
   transform: translateY(-3px);
 }
 
-/* Selector de idioma limpio */
-.lang-select-container {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-.lang-select-container label {
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
+/* Selector de idioma mejorado */
 #lang-select {
-  padding: 10px 15px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
+  padding: 12px 18px;
+  font-size: 1em;
+  border-radius: 20px;
+  border: 1px solid #ccc;
   background: var(--bg-light-gray);
+  font-weight: 600;
   cursor: pointer;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  min-width: 200px;
+  text-align: center;
 }
-#lang-select:focus {
-  outline: none;
-  box-shadow: 0 0 8px rgba(104,181,83,0.4);
+
+#lang-select:hover {
+  box-shadow: 0 4px 15px rgba(104,181,83,0.3);
+  transform: translateY(-2px);
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 </style>
 </head>
 <body>
 
-<main class="landing-container">
+<main class="landing-container" id="landing">
   <h1 class="restaurant-name">PataMig</h1>
   <h2 data-lang="welcome">¡Bienvenido!</h2>
   <p data-lang="prompt">¿Qué te gustaría hacer?</p>
@@ -156,18 +157,14 @@ p {
     <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir Experiencia con Amigos</a>
   </div>
 
-  <!-- Selector de idioma limpio -->
-  <div class="lang-select-container">
-    <label for="lang-select">Selecciona tu idioma</label>
-    <select id="lang-select">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-      <option value="de">Deutsch</option>
-      <option value="fr">Français</option>
-      <option value="it">Italiano</option>
-      <option value="nl">Nederlands</option>
-    </select>
-  </div>
+  <select id="lang-select">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+    <option value="de">Deutsch</option>
+    <option value="fr">Français</option>
+    <option value="it">Italiano</option>
+    <option value="nl">Nederlands</option>
+  </select>
 </main>
 
 <script>
@@ -185,18 +182,29 @@ const menuLink = document.getElementById("menuLink");
 const reviewLink = document.getElementById("reviewLink");
 const shareLink = document.getElementById("shareLink");
 const langSelect = document.getElementById("lang-select");
+const landing = document.getElementById("landing");
 
 function setLanguage(lang){
   if(!translations[lang]) lang="es";
   document.documentElement.lang = lang;
   localStorage.setItem('userLang', lang);
-  contentElements.forEach(el=>{
-    const key = el.dataset.lang;
-    if(translations[lang][key]) el.textContent = translations[lang][key];
-  });
-  menuLink.href = `carta.html?lang=${lang}`;
-  reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
-  shareLink.href = `compartir_2.html?lang=${lang}`;
+
+  // Animación fade-out
+  landing.classList.add("fade-out");
+  setTimeout(()=>{
+    contentElements.forEach(el=>{
+      const key = el.dataset.lang;
+      if(translations[lang][key]) el.textContent = translations[lang][key];
+    });
+    menuLink.href = `carta.html?lang=${lang}`;
+    reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
+    shareLink.href = `compartir_2.html?lang=${lang}`;
+    document.title = translations[lang].title;
+    // Fade-in
+    landing.classList.remove("fade-out");
+    landing.classList.add("fade-in");
+    setTimeout(()=>landing.classList.remove("fade-in"), 400);
+  }, 300);
 }
 
 // Detectar idioma inicial
@@ -206,11 +214,11 @@ const initialLang = supportedLangs.includes(savedLang) ? savedLang : 'es';
 langSelect.value = initialLang;
 setLanguage(initialLang);
 
-// Cambiar idioma al seleccionar del menú
+// Cambiar idioma al seleccionar
 langSelect.addEventListener('change', ()=>{
   setLanguage(langSelect.value);
 });
 </script>
+
 </body>
 </html>
-
