@@ -57,8 +57,6 @@ body {
   animation: fadeIn 0.5s ease-out; 
 }
 
-/* 3. Botón de Volver ELIMINADO */
-
 .share-card {
   background: var(--white);
   border-radius: 20px; 
@@ -76,26 +74,25 @@ h2 {
   color: var(--text-dark);
 }
 
-p.subtitle { /* Clase añadida para el subtítulo */
+p.subtitle {
   margin: 0 0 20px;
   font-size: 0.95em; 
   color: var(--muted);
   line-height: 1.5;
 }
 
-/* --- 1. NUEVO DISEÑO DE FOTO --- */
 .photo-area {
   width: 100%;
   aspect-ratio: 4/3;
   border-radius: 16px; 
-  border: 2px dashed var(--border); /* Borde discontinuo para "placeholder" */
+  border: 2px dashed var(--border); 
   background: #fdfdfd; 
-  overflow: hidden; /* Clave para el botón de eliminar */
+  overflow: hidden; 
   display: flex; 
   align-items: center;
   justify-content: center;
   margin-bottom: 20px; 
-  position: relative; /* Clave para el botón de eliminar */
+  position: relative; 
   transition: border-color 0.2s ease;
 }
 
@@ -103,11 +100,10 @@ p.subtitle { /* Clase añadida para el subtítulo */
   border-color: var(--primary-green);
 }
 
-/* Contenedor de la vista previa de la foto */
 .photo-preview-container {
   width: 100%;
   height: 100%;
-  display: none; /* Oculto por defecto */
+  display: none; 
 }
 
 .photo-preview {
@@ -116,7 +112,6 @@ p.subtitle { /* Clase añadida para el subtítulo */
   object-fit: cover; 
 }
 
-/* Botón para eliminar la foto */
 #btnRemovePhoto {
   position: absolute;
   top: 12px;
@@ -134,14 +129,13 @@ p.subtitle { /* Clase añadida para el subtítulo */
   cursor: pointer;
   z-index: 5;
   transition: background 0.2s ease, transform 0.2s ease;
-  display: none; /* Oculto por defecto */
+  display: none; 
 }
 #btnRemovePhoto:hover {
   background: rgba(0,0,0,0.8);
   transform: scale(1.1);
 }
 
-/* Contenido del placeholder (botones Cámara/Galería) */
 .placeholder-content {
   display: flex;
   flex-direction: column;
@@ -174,13 +168,10 @@ p.subtitle { /* Clase añadida para el subtítulo */
   transform: scale(1.05);
 }
 .placeholder-btn span {
-  font-size: 1.5em; /* Icono grande */
+  font-size: 1.5em; 
   line-height: 1;
 }
-/* --- FIN NUEVO DISEÑO DE FOTO --- */
 
-
-/* 1. Botones de fila ELIMINADOS */
 .row { display: none; }
 
 .btn {
@@ -227,10 +218,8 @@ p.subtitle { /* Clase añadida para el subtítulo */
   margin-top: 10px;
 }
 
-/* 3. Selector de Idioma ELIMINADO */
 #lang-selector { display: none; }
 
-/* Popup de Éxito (sin cambios) */
 .success-popup {
   position: fixed;
   inset: 0;
@@ -283,6 +272,7 @@ p.subtitle { /* Clase añadida para el subtítulo */
       </div>
 
     </div>
+
     <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
     <input type="file" id="galleryInput" accept="image/*" style="display:none;">
 
@@ -297,6 +287,7 @@ p.subtitle { /* Clase añadida para el subtítulo */
 </div>
 
 <script>
+// --- CONSTANTES GLOBALES (NO DOM) ---
 const DEFAULT_CARD="img/logo35.png"; 
 const LOGO_WATERMARK_URL = "img/PataMig.png"; 
 const COPY={
@@ -304,93 +295,55 @@ const COPY={
  en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",shareBtn:"Share",takePhoto:"Take photo",choosePhoto:"Choose photo",watermark:"Include restaurant name",success:"✅ Shared successfully", redirecting:"Redirecting..."}
 };
 
-// --- 3. DETECCIÓN DE IDIOMA POR URL ---
 const urlParams = new URLSearchParams(window.location.search);
 let initialLang = urlParams.get("lang") || "es";
 if (!COPY[initialLang]) initialLang = "es";
 let currentLang = initialLang;
-// --- FIN DETECCIÓN DE IDIOMA ---
+let selectedFile=null;
 
-const cameraInput=document.getElementById('cameraInput');
-const galleryInput=document.getElementById('galleryInput');
-
-// --- 1. NUEVOS ELEMENTOS DE FOTO ---
-const photoArea = document.getElementById('photoArea');
-const photoPreviewContainer = document.getElementById('photoPreviewContainer');
-const photoPreview = document.getElementById('photoPreview');
-const placeholderContent = document.getElementById('placeholderContent');
-const btnCamera = document.getElementById('btnCamera');
-const btnGallery = document.getElementById('btnGallery');
-const btnRemovePhoto = document.getElementById('btnRemovePhoto');
-// --- FIN NUEVOS ELEMENTOS ---
-
-const btnShare=document.getElementById('btnShare');
-const noteEl=document.getElementById('note');
-const chkWatermark=document.getElementById('chkWatermark');
-const watermarkLabel=document.getElementById('watermarkLabel');
-
-// 3. Botón Volver y Selector de Idioma ELIMINADOS
-// const backBtn=document.getElementById('backBtn');
-// const currentLangDiv=document.getElementById('current-lang');
-// const optionsDiv=document.getElementById('lang-options');
+// --- FUNCIONES (definidas globalmente) ---
 
 function setLang(lang){
   const c=COPY[lang];
-  if (!c) return; // Salir si el idioma no existe
+  if (!c) return; 
 
   document.title=c.title;
   document.getElementById('shareTitle').textContent=c.shareTitle;
   document.getElementById('shareSub').textContent=c.shareSub;
-  btnShare.textContent=c.shareBtn;
-  noteEl.textContent=c.note;
-  // 1. Asegurarse de que los botones del placeholder se traducen
-  // (query inside setLang in case elements are not yet found on script start)
+  document.getElementById('btnShare').textContent=c.shareBtn;
+  document.getElementById('note').textContent=c.note;
   document.querySelector('[data-lang="takePhoto"]').textContent = c.takePhoto;
   document.querySelector('[data-lang="choosePhoto"]').textContent = c.choosePhoto;
-  watermarkLabel.textContent=c.watermark;
+  document.getElementById('watermarkLabel').textContent=c.watermark;
   currentLang = lang; 
 }
 
-// 3. initLangSelector() ELIMINADO
-
-// 1. Nuevos OnClick para botones de placeholder
-btnCamera.onclick=()=>cameraInput.click();
-btnGallery.onclick=()=>galleryInput.click();
-
-let selectedFile=null;
-function handleFileInput(input){
+function handleFileInput(input, photoPreview, placeholderContent, photoPreviewContainer, btnRemovePhoto, photoArea){
   const f=input.files?.[0];
   if(!f) return;
   selectedFile=f;
   photoPreview.src=URL.createObjectURL(f);
   
-  // 1. Mostrar/Ocultar elementos
   placeholderContent.style.display = 'none';
   photoPreviewContainer.style.display = 'block';
   btnRemovePhoto.style.display = 'block';
-  photoArea.style.borderColor = 'var(--primary-green)'; // Borde sólido
+  photoArea.style.borderColor = 'var(--primary-green)'; 
   photoArea.style.borderStyle = 'solid';
 }
-cameraInput.onchange=()=>handleFileInput(cameraInput);
-galleryInput.onchange=()=>handleFileInput(galleryInput);
 
-// 1. Lógica del botón Eliminar Foto
-btnRemovePhoto.onclick = () => {
+function removePhoto(cameraInput, galleryInput, photoPreview, placeholderContent, photoPreviewContainer, btnRemovePhoto, photoArea) {
   selectedFile = null;
-  photoPreview.src = ''; // Limpiar la imagen
-  cameraInput.value = null; // Resetear inputs
+  photoPreview.src = ''; 
+  cameraInput.value = null; 
   galleryInput.value = null;
 
-  // 1. Restaurar estado del placeholder
   placeholderContent.style.display = 'flex';
   photoPreviewContainer.style.display = 'none';
   btnRemovePhoto.style.display = 'none';
-  photoArea.style.borderColor = 'var(--border)'; // Borde discontinuo
+  photoArea.style.borderColor = 'var(--border)'; 
   photoArea.style.borderStyle = 'dashed';
 };
 
-
-// --- 2. MARCA DE AGUA (LOGO PEQUEÑO EN ESQUINA) ---
 async function addWatermarkToImage(file){
   return new Promise((resolve, reject)=>{
     const img = new Image();
@@ -411,22 +364,15 @@ async function addWatermarkToImage(file){
       logo.onload = () => {
         const logoNaturalWidth = logo.naturalWidth;
         const logoNaturalHeight = logo.naturalHeight;
-        
-        // 2. Logo más pequeño (8% de altura, min 25px)
         const targetLogoHeight = Math.max(25, canvas.height * 0.08); 
         const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
-        
-        // 2. Margen más pequeño (3% de altura, min 15px)
         const margin = Math.max(15, canvas.height * 0.03); 
         const x = canvas.width - targetLogoWidth - margin;
         const y = canvas.height - targetLogoHeight - margin;
-
-        // 2. Fondo semitransparente más pequeño
         ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; 
-        const padding = 5; // Padding más pequeño
-        ctx.roundRect(x - padding, y - padding, targetLogoWidth + (padding*2), targetLogoHeight + (padding*2), 5); // Radio de borde más pequeño
+        const padding = 5; 
+        ctx.roundRect(x - padding, y - padding, targetLogoWidth + (padding*2), targetLogoHeight + (padding*2), 5); 
         ctx.fill();
-
         ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
 
         canvas.toBlob(b=>{
@@ -439,23 +385,25 @@ async function addWatermarkToImage(file){
   });
 }
 
-
 function showSuccessMessage(){
   const popup=document.createElement('div');
   popup.className='success-popup';
   popup.innerHTML=`<div class="success-box"><h3>${COPY[currentLang].success}</h3><p>${COPY[currentLang].redirecting}</p></div>`;
   document.body.appendChild(popup);
-  // 3. El redirect a principal.html no existe, lo cambio a la página de inicio
-  // Asumiré que es 'index.html' o la página anterior. 
-  // Voy a usar history.back() para volver a la página que lo llamó.
   setTimeout(()=>{ 
-    // Redirige a la página que tenía el ?lang=es
-    window.location.href = `index.html?lang=${currentLang}`;
+    // Vuelve a la página anterior (la de inicio, que pasó el ?lang)
+    if (document.referrer) {
+        window.location.href = document.referrer;
+    } else {
+        // Fallback si no hay referrer (raro)
+        window.location.href = `index.html?lang=${currentLang}`;
+    }
   }, 2000);
 }
 
 async function shareExperience(e){
   e&&e.preventDefault();
+  const chkWatermark = document.getElementById('chkWatermark'); // Obtenerlo aquí
   try{
     let baseFile;
     if(selectedFile){
@@ -474,7 +422,7 @@ async function shareExperience(e){
       await navigator.share({
         files:[fileToShare],
         title: COPY[currentLang].shareTitle,
-SO:         text: COPY[currentLang].shareSub
+        text: COPY[currentLang].shareSub
       });
       showSuccessMessage();
     } else {
@@ -491,13 +439,50 @@ SO:         text: COPY[currentLang].shareSub
   }
 }
 
-btnShare.onclick=shareExperience;
 
-// 3. Aplicar el idioma detectado al cargar la página
+// --- INICIALIZACIÓN ---
+// *** ESTE ES EL CAMBIO PRINCIPAL ***
+// Todo el código que busca elementos y añade eventos AHORA ESTÁ DENTRO
 document.addEventListener('DOMContentLoaded', () => {
+
+  // 1. OBTENER TODOS LOS ELEMENTOS DEL DOM
+  const cameraInput = document.getElementById('cameraInput');
+  const galleryInput = document.getElementById('galleryInput');
+  const photoArea = document.getElementById('photoArea');
+  const photoPreviewContainer = document.getElementById('photoPreviewContainer');
+  const photoPreview = document.getElementById('photoPreview');
+  const placeholderContent = document.getElementById('placeholderContent');
+  const btnCamera = document.getElementById('btnCamera');
+  const btnGallery = document.getElementById('btnGallery');
+  const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+  const btnShare = document.getElementById('btnShare');
+  
+  // 2. APLICAR IDIOMA INICIAL
   setLang(currentLang);
 
-  // 1. Estado inicial del placeholder
+  // 3. ASIGNAR EVENTOS
+  btnCamera.onclick = () => cameraInput.click();
+  btnGallery.onclick = () => galleryInput.click();
+  
+  btnRemovePhoto.onclick = () => removePhoto(
+    cameraInput, galleryInput, photoPreview, 
+    placeholderContent, photoPreviewContainer, 
+    btnRemovePhoto, photoArea
+  );
+  
+  btnShare.onclick = shareExperience;
+
+  cameraInput.onchange = () => handleFileInput(
+    cameraInput, photoPreview, placeholderContent, 
+    photoPreviewContainer, btnRemovePhoto, photoArea
+  );
+  
+  galleryInput.onchange = () => handleFileInput(
+    galleryInput, photoPreview, placeholderContent, 
+    photoPreviewContainer, btnRemovePhoto, photoArea
+  );
+
+  // 4. ESTADO INICIAL DEL PLACEHOLDER
   if (!selectedFile) {
     placeholderContent.style.display = 'flex';
     photoPreviewContainer.style.display = 'none';
