@@ -1,304 +1,54 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title data-lang="title">Bienvenido a PataMig</title>
-
-<!-- Fuente -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- Selector de idioma mejorado -->
+<div class="lang-input">
+  <label for="lang-user">Selecciona tu idioma:</label>
+  <input type="text" id="lang-user" list="langs" placeholder="Escribe tu idioma">
+  <datalist id="langs">
+    <option value="Español" data-code="es">
+    <option value="English" data-code="en">
+    <option value="Deutsch" data-code="de">
+    <option value="Français" data-code="fr">
+    <option value="Italiano" data-code="it">
+    <option value="Nederlands" data-code="nl">
+  </datalist>
+</div>
 
 <style>
-  :root {
-    --primary-green: #68B553;
-    --text-dark: #333;
-    --bg-light-gray: #f4f4f4;
-    --white: #fff;
-  }
-
-  html, body {
-    height: 100%;
-    margin: 0;
-    background: var(--white);
-    font-family: 'Poppins', sans-serif;
-    color: var(--text-dark);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
-  }
-
-  .landing-container {
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    background: var(--white);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 50px 25px 100px 25px;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    animation: fadeIn 0.5s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes pulse-welcome {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-  }
-
-  h1.restaurant-name {
-    font-size: clamp(2em, 6vw, 3em);
-    font-weight: 700;
-    color: var(--primary-green);
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: transform 0.2s ease-out;
-  }
-
-  h1.restaurant-name:hover {
-    transform: scale(1.03);
-  }
-
-  h2 {
-    font-size: clamp(1.5em, 4vw, 2em);
-    font-weight: 700;
-    margin: 10px 0;
-    letter-spacing: -0.5px;
-    animation: pulse-welcome 3.5s ease-in-out infinite;
-  }
-
-  p {
-    font-size: 1em;
-    color: #555;
-    margin-bottom: 35px;
-    line-height: 1.5;
-    max-width: 350px;
-  }
-
-  .button-group {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 40px;
-  }
-
-  .btn {
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1em;
-    padding: 14px;
-    border-radius: 14px;
-    transition: all 0.25s ease-out;
-    border: 2px solid transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    will-change: transform, box-shadow;
-  }
-
-  .btn-primary {
-    background: var(--primary-green);
-    color: var(--white);
-    border-color: var(--primary-green);
-    box-shadow: 0 6px 20px rgba(104,181,83,0.25);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(104,181,83,0.35);
-  }
-
-  .btn-secondary {
-    background: var(--white);
-    color: var(--primary-green);
-    border: 2px solid var(--primary-green);
-  }
-
-  .btn-secondary:hover {
-    background: #f7fbf5;
-    transform: translateY(-3px);
-  }
-
-  /* Selector desplegable de idiomas */
-  .lang-dropdown {
-    position: relative;
-    display: inline-block;
-    font-family: 'Poppins', sans-serif;
-    margin-bottom: 20px;
-  }
-
-  #lang-current {
-    background: var(--bg-light-gray);
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 8px 15px;
-    font-weight: 600;
-    cursor: pointer;
-    min-width: 160px;
-    text-align: left;
-  }
-
-  #lang-list {
-    display: none;
-    position: absolute;
-    top: 120%;
-    left: 0;
-    background: var(--white);
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    z-index: 100;
-  }
-
-  #lang-list li {
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  #lang-list li:hover {
-    background: var(--bg-light-gray);
-  }
-
-  #lang-list li.active {
-    font-weight: 700;
-    color: var(--primary-green);
-  }
-
-  .fade {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  }
-
-  .fade.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @media (max-width: 500px) {
-    .landing-container { padding: 40px 20px 80px 20px; }
-    .button-group { margin-bottom: 50px; }
-  }
+.lang-input {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.lang-input label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+#lang-user {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  width: 160px;
+  text-align: left;
+  cursor: pointer;
+}
 </style>
-</head>
-<body>
-<main class="landing-container">
-  <div class="content fade show" id="content">
-    <h1 class="restaurant-name">PataMig</h1>
-    <h2 data-lang="welcome">¡Bienvenido!</h2>
-    <p data-lang="prompt">¿Qué te gustaría hacer?</p>
-
-    <div class="button-group">
-      <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la Carta</a>
-      <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" href="#">Dejar Reseña</a>
-      <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir Experiencia con Amigos</a>
-    </div>
-
-    <div class="lang-dropdown">
-      <button id="lang-current">🌐 Español</button>
-      <ul id="lang-list">
-        <li data-lang-switch="es">Español</li>
-        <li data-lang-switch="en">English</li>
-        <li data-lang-switch="de">Deutsch</li>
-        <li data-lang-switch="fr">Français</li>
-        <li data-lang-switch="it">Italiano</li>
-        <li data-lang-switch="nl">Nederlands</li>
-      </ul>
-    </div>
-  </div>
-</main>
 
 <script>
-const translations = {
-  es: { title:"Bienvenido a PataMig", welcome:"¡Bienvenido!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia con Amigos" },
-  en: { title:"Welcome to PataMig", welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Your Experience with Friends" },
-  de: { title:"Willkommen bei PataMig", welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Speisekarte ansehen", leave_review:"Bewertung abgeben", share_with_friends:"Erlebnis mit Freunden teilen" },
-  fr: { title:"Bienvenue chez PataMig", welcome:"Bienvenue !", prompt:"Que souhaitez-vous faire ?", view_menu:"Accéder au Menu", leave_review:"Laisser un Avis", share_with_friends:"Partager votre expérience avec vos amis" },
-  it: { title:"Benvenuto da PataMig", welcome:"Benvenuto!", prompt:"Cosa ti piacerebbe fare?", view_menu:"Accedi al Menu", leave_review:"Lascia una Recensione", share_with_friends:"Condividi l'esperienza con gli amici" },
-  nl: { title:"Welkom bij PataMig", welcome:"Welkom!", prompt:"Wat wil je doen?", view_menu:"Bekijk het Menu", leave_review:"Laat een Recensie achter", share_with_friends:"Deel je ervaring met vrienden" }
-};
+const langInput = document.getElementById("lang-user");
+const langOptions = Array.from(document.querySelectorAll("#langs option"));
 
-const langCurrent = document.getElementById("lang-current");
-const langList = document.getElementById("lang-list");
-const langItems = langList.querySelectorAll("li");
-const content = document.getElementById("content");
-const menuLink = document.getElementById("menuLink");
-const reviewLink = document.getElementById("reviewLink");
-const shareLink = document.getElementById("shareLink");
+// Detectar idioma inicial
+const savedLang = localStorage.getItem('userLang') || navigator.language.slice(0,2);
+const supported = ['es','en','de','fr','it','nl'];
+let initialLang = supported.includes(savedLang) ? savedLang : 'es';
+const initialOption = langOptions.find(o => o.dataset.code === initialLang);
+if(initialOption) langInput.value = initialOption.value;
 
-function setLanguage(lang){
-  if(!translations[lang]) lang="es";
-  document.documentElement.lang = lang;
-  localStorage.setItem('userLang', lang);
-  content.classList.remove('show');
-  setTimeout(()=>{
-    document.title = translations[lang].title;
-    document.querySelectorAll('[data-lang]').forEach(el=>{
-      const key=el.dataset.lang;
-      if(translations[lang][key]) el.textContent=translations[lang][key];
-    });
-    menuLink.href=`carta.html?lang=${lang}`;
-    reviewLink.href=`https://valoratuvisita.com/restaurante_2?lang=${lang}`;
-    shareLink.href=`compartir_2.html?lang=${lang}`;
-    content.classList.add('show');
-    // actualizar dropdown
-    const activeItem = Array.from(langItems).find(i=>i.dataset.langSwitch===lang);
-    if(activeItem){
-      langItems.forEach(i=>i.classList.remove('active'));
-      activeItem.classList.add('active');
-      langCurrent.textContent=activeItem.textContent;
-    }
-  },300);
-}
-
-document.addEventListener("DOMContentLoaded",()=>{
-  // detectar idioma inicial
-  const saved = localStorage.getItem('userLang');
-  const browserLang = navigator.language.slice(0,2);
-  const supported = ['es','en','de','fr','it','nl'];
-  const initial = saved || (supported.includes(browserLang)? browserLang:'es');
-  setLanguage(initial);
-
-  // Dropdown toggle
-  langCurrent.addEventListener("click",()=>{ langList.style.display = langList.style.display==='block'?'none':'block'; });
-  // Selección idioma
-  langItems.forEach(item=>{
-    item.addEventListener("click",()=>{
-      setLanguage(item.dataset.langSwitch);
-      langList.style.display='none';
-    });
-  });
-  // Cerrar al hacer click fuera
-  document.addEventListener("click",(e)=>{
-    if(!langCurrent.contains(e.target) && !langList.contains(e.target)){
-      langList.style.display='none';
-    }
-  });
+// Cambiar idioma al escribir o seleccionar
+langInput.addEventListener("change", ()=>{
+  const selectedOption = langOptions.find(o => o.value.toLowerCase() === langInput.value.toLowerCase());
+  const code = selectedOption ? selectedOption.dataset.code : 'es';
+  setLanguage(code);
 });
 </script>
-</body>
-</html>
