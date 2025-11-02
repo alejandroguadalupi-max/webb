@@ -38,7 +38,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 40px 25px 70px 25px;
+      padding: 50px 25px 100px 25px;
       box-sizing: border-box;
       overflow: hidden;
     }
@@ -47,9 +47,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: center;
       width: 100%;
       animation: fadeIn 0.5s ease-out;
-      text-align: center;
     }
 
     @keyframes fadeIn {
@@ -87,7 +87,7 @@
     p {
       font-size: 1em;
       color: #555;
-      margin-bottom: 25px;
+      margin-bottom: 35px;
       line-height: 1.5;
       max-width: 350px;
     }
@@ -98,6 +98,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      margin-bottom: 40px;
     }
 
     .btn {
@@ -141,9 +142,10 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       width: 100%;
-      max-width: 320px;
+      max-width: 350px;
+      padding-bottom: 20px;
     }
 
     #lang-switcher button {
@@ -151,7 +153,7 @@
       background: var(--bg-light-gray);
       border: 1px solid #ddd;
       border-radius: 10px;
-      padding: 7px 10px;
+      padding: 8px 10px;
       cursor: pointer;
       font-weight: 600;
       font-size: 0.9em;
@@ -185,14 +187,15 @@
       transform: translateY(0);
     }
 
-    @media (max-height: 600px) {
+    @media (max-width: 500px) {
       .landing-container {
-        padding: 20px;
+        padding: 40px 20px 80px 20px;
       }
-      footer#lang-switcher {
-        margin-top: 20px;
+      .button-group {
+        margin-bottom: 50px;
       }
     }
+
   </style>
 </head>
 <body>
@@ -215,8 +218,7 @@
       <button data-lang-switch="de">DE</button>
       <button data-lang-switch="fr">FR</button>
       <button data-lang-switch="it">IT</button>
-      <button data-lang-switch="pt">PT</button>
-      <button data-lang-switch="ca">CA</button>
+      <button data-lang-switch="nl">NL</button>
     </footer>
   </main>
 
@@ -262,21 +264,13 @@
         leave_review: "Lascia una Recensione",
         share_with_friends: "Condividi l'esperienza con gli amici"
       },
-      pt: {
-        title: "Bem-vindo ao PataMig",
-        welcome: "Bem-vindo!",
-        prompt: "O que gostaria de fazer?",
-        view_menu: "Aceder ao Menu",
-        leave_review: "Deixar Avaliação",
-        share_with_friends: "Partilhar Experiência com Amigos"
-      },
-      ca: {
-        title: "Benvingut a PataMig",
-        welcome: "Benvingut!",
-        prompt: "Què t'agradaria fer?",
-        view_menu: "Accedeix al Menú",
-        leave_review: "Deixa una Ressenya",
-        share_with_friends: "Comparteix l'experiència amb amics"
+      nl: {
+        title: "Welkom bij PataMig",
+        welcome: "Welkom!",
+        prompt: "Wat wil je doen?",
+        view_menu: "Bekijk het Menu",
+        leave_review: "Laat een Recensie achter",
+        share_with_friends: "Deel je ervaring met vrienden"
       }
     };
 
@@ -312,8 +306,12 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('userLang') || 'es';
-      setLanguage(saved);
+      const saved = localStorage.getItem('userLang');
+      const browserLang = navigator.language.slice(0, 2);
+      const supportedLangs = ['es', 'en', 'de', 'fr', 'it', 'nl'];
+      const initialLang = saved || (supportedLangs.includes(browserLang) ? browserLang : 'es');
+      setLanguage(initialLang);
+
       document.getElementById('lang-switcher').addEventListener('click', e => {
         const btn = e.target.closest('button[data-lang-switch]');
         if (!btn || btn.classList.contains('active')) return;
@@ -323,3 +321,4 @@
   </script>
 </body>
 </html>
+
