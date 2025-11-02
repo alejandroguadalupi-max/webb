@@ -119,7 +119,7 @@
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      will-change: transform, box-shadow;IA
+      will-change: transform, box-shadow; 
     }
 
     .btn-primary {
@@ -145,23 +145,23 @@
       transform: translateY(-3px);
     }
 
-    /* SECCIÓN DE IDIOMAS */
+    /* --- DISEÑO DE BOTONES DE IDIOMA RESTAURADO --- */
     footer#lang-switcher {
       display: flex;
       justify-content: center;
-      gap: 8px; /* Espacio reducido para 7 botones */
+      gap: 8px; /* Reducido para 7 botones */
       width: 100%; 
-      /* 1. Ancho ajustado para 7 idiomas */
-      max-width: 480px; 
-      margin-top: 0; 
+      max-width: 480px; /* Ajustado para 7 botones */
+      margin-top: 0;s
     }
 
+    /* 1. Botones inactivos (diseño que te gustó) */
     #lang-switcher button {
       flex: 1; 
       background: var(--bg-light-gray);
       border: 1px solid #ddd; 
       border-radius: 10px; 
-      padding: 7px 8px; /* Padding ligero */
+      padding: 7px 8px; /* Ajustado para 7 botones */
       cursor: pointer;
       font-weight: 600; 
       font-size: 0.9em; 
@@ -169,10 +169,10 @@
       color: #777;
       transition: all 0.25s ease-out;
       text-align: center;
-      will-change: transform, background-color, color;s
+      will-change: transform, background-color, color; 
     }
 
-    /* 3. Botón activo (más notorio) */
+    /* 2. Botón activo (más notorio, como pediste) */
     #lang-switcher button.active {
       background: var(--primary-green);
       color: #fff;
@@ -185,8 +185,9 @@
     #lang-switcher button:not(.active):hover {
       background: #e6e6e6; 
       color: #333;
-      transform: scale(1.05); /* Ligero "pop" al pasar el ratón */
+      transform: scale(1.05);
     }
+    /* --- FIN DEL CSS RESTAURADO --- */
 
     /* Animación fade entre idiomas */
     .fade {
@@ -217,7 +218,7 @@
       </div>
     </div>
 
-        <footer id="lang-switcher">
+    <footer id="lang-switcher">
       <button data-lang-switch="es">ES</button>
       <button data-lang-switch="en">EN</button>
       <button data-lang-switch="de">DE</button>
@@ -258,7 +259,6 @@
         leave_review: "Bewertung abgeben",
         share_with_friends: "Erlebnis mit Freunden teilen"
       },
-      // 1. Traducciones añadidas
       fr: {
         title: "Bienvenue à PataMig",
         restaurant_name: "PataMig",
@@ -304,33 +304,30 @@
     const shareLink = document.getElementById('shareLink');
 
     function setLanguage(lang) {
-      // Si el idioma no existe, vuelve a 'es'
       if (!translations[lang]) lang = 'es';
       
       document.documentElement.lang = lang;
-      // Guardar la elección del usuario para futuras visitas
       localStorage.setItem('userLang', lang);
 
-      content.classList.remove('show');s
+      content.classList.remove('show'); 
       
       setTimeout(() => {
         document.title = translations[lang].title;
         document.querySelectorAll('[data-lang]').forEach(el => {
-          const key = el.dataset.lang;
+  S       const key = el.dataset.lang;
           if(translations[lang][key]) {
              el.textContent = translations[lang][key];
           }
         });
         
-        // Actualizar los enlaces con el idioma seleccionado
         menuLink.href = `carta.html?lang=${lang}`;
-        reviewLink.href = `review.html?lang=${lang}`; // Asumo que esta es la página de reseña
-_       shareLink.href = `share.html?lang=${lang}`; // Asumo que esta es la página de compartir
+        reviewLink.href = `review.html?lang=${lang}`; 
+        shareLink.href = `share.html?lang=${lang}`; 
 
         // Actualizar visualmente el botón activo
         langButtons.forEach(btn => {
-          // 5. CORRECCIÓN del typo
-          btn.classList.toggle('active', btn.dataset.langSwitch === lang);
+          // CORRECCIÓN DEL BUG:
+*         btn.classList.toggle('active', btn.dataset.langSwitch === lang);
         });
         
         content.classList.add('show');
@@ -339,33 +336,26 @@ _       shareLink.href = `share.html?lang=${lang}`; // Asumo que esta es la p
 
     document.addEventListener('DOMContentLoaded', () => {
       
-      // --- 2. LÓGICA DE DETECCIÓN DE IDIOMA ---
+      // LÓGICA DE DETECCIÓN DE IDIOMA
       let initialLang = localStorage.getItem('userLang');
 
       if (!initialLang) {
-        // Si no hay idioma guardado, detectar el del navegador
         const browserLang = navigator.language.split('-')[0]; // "es-ES" -> "es"
-        
-        // Comprobar si soportamos el idioma del navegador
+EX       
         if (translations[browserLang]) {
-  D       initialLang = browserLang;
+          initialLang = browserLang;
         } else {
-          // Si no lo soportamos, usar 'es' como defecto
           initialLang = 'es';
-        }
+  ar     }
       }
-      // --- FIN DE LA LÓGICA ---
       
-      // Establecer el idioma detectado (o el guardado)
       setLanguage(initialLang);
 
-      // Añadir el listener para cambiar de idioma
       document.getElementById('lang-switcher').addEventListener('click', e => {
-s       const btn = e.target.closest('button[data-lang-switch]');
+        const btn = e.target.closest('button[data-lang-switch]');
         if (!btn) return;
         
-        // No hacer nada si ya está activo
-        if (btn.classList.contains('active')) return; 
+        if (btn.classList.contains('active')) return;g
         
         setLanguage(btn.dataset.langSwitch);
       });
@@ -373,4 +363,3 @@ s       const btn = e.target.closest('button[data-lang-switch]');
   </script>
 </body>
 </html>
-
