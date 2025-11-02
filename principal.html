@@ -240,4 +240,17 @@ function setLanguage(lang){
 const savedLang = localStorage.getItem('userLang') || navigator.language.slice(0,2);
 const supported = ['es','en','de','fr','it','nl'];
 let initialLang = supported.includes(savedLang) ? savedLang : 'es';
-const initialOption = langOptions.find(o => o.dataset.code === initialLang
+const initialOption = langOptions.find(o => o.dataset.code === initialLang);
+if(initialOption) langInput.value = initialOption.value;
+setLanguage(initialLang);
+
+// Cambiar idioma al escribir o seleccionar
+langInput.addEventListener("change", ()=>{
+  const selectedOption = langOptions.find(o => o.value.toLowerCase() === langInput.value.toLowerCase());
+  const code = selectedOption ? selectedOption.dataset.code : 'es';
+  setLanguage(code);
+});
+</script>
+</body>
+</html>
+
