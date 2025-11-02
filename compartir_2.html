@@ -13,7 +13,7 @@
 <style>
 :root {
   --primary-green: #68B553;
-  --bg-light-green: #E8F5E1; /* Fondo muy suave para la página */
+  --bg-light-green: #E8F5E1; 
   --text-dark: #333;
   --muted: #6b7280;
   --border: #d0e2c8;
@@ -28,10 +28,14 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif; /* Usar Poppins */
+  font-family: 'Poppins', sans-serif; 
   background: var(--bg-light-green);
   color: var(--text-dark);
   min-height: 100vh;
@@ -46,96 +50,148 @@ body {
 
 .wrap {
   width: 100%;
-  max-width: 450px; /* Ancho máximo un poco más grande */
+  max-width: 450px; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: fadeIn 0.5s ease-out; /* Animación de entrada */
+  animation: fadeIn 0.5s ease-out; 
 }
 
-/* 1. Botón de Volver ahora un poco más discreto */
-.back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: var(--primary-green);
-  color: var(--white);
-  padding: 8px 14px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9em;
-  box-shadow: 0 4px 10px rgba(104,181,83,0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.back-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(104,181,83,0.3);
-}
+/* 3. Botón de Volver ELIMINADO */
 
 .share-card {
   background: var(--white);
-  border-radius: 20px; /* Bordes más redondeados */
-  padding: 30px; /* Padding aumentado */
+  border-radius: 20px; 
+  padding: 30px; 
   border: 1px solid var(--border);
   width: 100%;
   text-align: center;
-  box-shadow: 0 10px 30px var(--shadow-light); /* Sombra más suave */
+  box-shadow: 0 10px 30px var(--shadow-light); 
 }
 
 h2 {
   margin: 0 0 10px;
-  font-size: 1.6em; /* Título más grande */
+  font-size: 1.6em; 
   font-weight: 700;
   color: var(--text-dark);
 }
 
-p {
-  margin: 0 0 18px;
-  font-size: 0.95em; /* Texto más legible */
+p.subtitle { /* Clase añadida para el subtítulo */
+  margin: 0 0 20px;
+  font-size: 0.95em; 
   color: var(--muted);
   line-height: 1.5;
 }
 
-.photo-container {
+/* --- 1. NUEVO DISEÑO DE FOTO --- */
+.photo-area {
   width: 100%;
   aspect-ratio: 4/3;
-  border-radius: 16px; /* Bordes más redondeados */
-  border: 2px solid var(--border); /* Borde más visible */
-  background: #fdfdfd; /* Fondo ligeramente más blanco */
-  overflow: hidden;
-  display: flex; /* Para centrar la imagen */
+  border-radius: 16px; 
+  border: 2px dashed var(--border); /* Borde discontinuo para "placeholder" */
+  background: #fdfdfd; 
+  overflow: hidden; /* Clave para el botón de eliminar */
+  display: flex; 
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px; /* Más espacio */
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
+  margin-bottom: 20px; 
+  position: relative; /* Clave para el botón de eliminar */
+  transition: border-color 0.2s ease;
+}
+
+.photo-area:hover {
+  border-color: var(--primary-green);
+}
+
+/* Contenedor de la vista previa de la foto */
+.photo-preview-container {
+  width: 100%;
+  height: 100%;
+  display: none; /* Oculto por defecto */
 }
 
 .photo-preview {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Recortar si es necesario para llenar el contenedor */
+  object-fit: cover; 
 }
 
-.row {
-  display: flex;
-  gap: 12px; /* Más espacio entre botones */
-  justify-content: center;
-  margin-bottom: 20px;
-  width: 100%;
+/* Botón para eliminar la foto */
+#btnRemovePhoto {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 1.2em;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s ease, transform 0.2s ease;
+  display: none; /* Oculto por defecto */
 }
+#btnRemovePhoto:hover {
+  background: rgba(0,0,0,0.8);
+  transform: scale(1.1);
+}
+
+/* Contenido del placeholder (botones Cámara/Galería) */
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  animation: zoomIn 0.3s ease-out;
+}
+
+.placeholder-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 200px;
+  padding: 12px 0;
+  border: 2px solid var(--primary-green);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.0em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: var(--primary-green);
+  background: var(--white);
+}
+.placeholder-btn:hover {
+  background: var(--primary-green);
+  color: var(--white);
+  transform: scale(1.05);
+}
+.placeholder-btn span {
+  font-size: 1.5em; /* Icono grande */
+  line-height: 1;
+}
+/* --- FIN NUEVO DISEÑO DE FOTO --- */
+
+
+/* 1. Botones de fila ELIMINADOS */
+.row { display: none; }
 
 .btn {
-  flex: 1;
-  padding: 14px 0; /* Botones más altos */
+  padding: 14px 0; 
   border: none;
-  border-radius: 12px; /* Bordes más redondeados */
+  border-radius: 12px; 
   font-weight: 600;
   font-size: 1.0em;
   cursor: pointer;
   transition: all 0.25s ease;
   will-change: transform, box-shadow;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-green {
@@ -150,74 +206,31 @@ p {
 }
 
 .watermark-toggle {
-  margin: 10px 0 20px; /* Más espacio */
+  margin: 10px 0 20px; 
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.9em;
   color: var(--muted);
   justify-content: center;
-  cursor: pointer; /* Indica que es clickeable */
+  cursor: pointer; 
 }
 
 .watermark-toggle input[type="checkbox"] {
-  transform: scale(1.2); /* Checkbox un poco más grande */
-  accent-color: var(--primary-green); /* Color del checkbox */
+  transform: scale(1.2); 
+  accent-color: var(--primary-green); 
 }
 
 .note {
-  font-size: 0.85em; /* Texto más discreto */
+  font-size: 0.85em; 
   color: var(--muted);
   margin-top: 10px;
 }
 
-/* 2. Selector de Idioma más integrado */
-#lang-selector {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
-}
+/* 3. Selector de Idioma ELIMINADO */
+#lang-selector { display: none; }
 
-#current-lang {
-  cursor: pointer;
-  background: var(--white);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  padding: 7px 10px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.9em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
-}
-#current-lang:hover {
-  background: #f9f9f9;
-  border-color: #c7d8bf;
-}
-
-#lang-options {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 45px; /* Más abajo para no chocar con el botón */
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px var(--shadow-light);
-  min-width: 100px;
-  overflow: hidden;
-}
-.lang-option {
-  padding: 10px 15px;
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--text-dark);
-  transition: background 0.15s ease;
-}
-.lang-option:hover { background: var(--bg-light-green); }
-
-/* 3. Popup de Éxito mejorado */
+/* Popup de Éxito (sin cambios) */
 .success-popup {
   position: fixed;
   inset: 0;
@@ -243,44 +256,35 @@ p {
 .success-box h3 { color: var(--primary-green); margin: 0 0 8px; font-size: 1.5em; font-weight: 700; }
 .success-box p { color: var(--muted); font-size: 1em; margin: 0; }
 
-/* Media queries para pantallas más pequeñas */
-@media (max-width: 380px) {
-  .share-card { padding: 25px; }
-  h2 { font-size: 1.4em; }
-  p { font-size: 0.9em; }
-  .btn { font-size: 0.95em; padding: 12px 0; }
-  .row { gap: 8px; }
-  .watermark-toggle { font-size: 0.85em; }
-}
-
 </style>
 </head>
 <body>
 
-<a id="backBtn" class="back-button" href="principal.html">⬅ Volver</a>
-
-<div id="lang-selector">
-  <div id="current-lang">🇪🇸</div>
-  <div id="lang-options"></div>
-</div>
-
 <div class="wrap">
   <div class="share-card">
     <h2 id="shareTitle">📸 Comparte tu momento</h2>
-    <p id="shareSub">Elige o toma una foto y compártela con tus amigos.</p>
+    <p id="shareSub" class="subtitle">Elige o toma una foto y compártela con tus amigos.</p>
 
-    <div class="photo-container" id="photoContainer">
-      <img id="photoPreview" class="photo-preview" alt="Vista previa">
-      <p id="placeholderText" style="color:var(--muted); font-size:0.9em;">Haz clic para añadir una foto</p>
+    <div class="photo-area" id="photoArea">
+      
+      <div class="photo-preview-container" id="photoPreviewContainer">
+        <img id="photoPreview" class="photo-preview" alt="Vista previa">
+      </div>
+      
+      <button id="btnRemovePhoto">×</button>
+
+      <div class="placeholder-content" id="placeholderContent">
+        <div class="placeholder-btn" id="btnCamera">
+          <span>📷</span> <span data-lang="takePhoto">Tomar foto</span>
+        </div>
+        <div class="placeholder-btn" id="btnGallery">
+          <span>🖼️</span> <span data-lang="choosePhoto">Elegir foto</span>
+        </div>
+      </div>
+
     </div>
-
     <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
     <input type="file" id="galleryInput" accept="image/*" style="display:none;">
-
-    <div class="row">
-      <button id="btnCamera" class="btn btn-green">📷 Tomar foto</button>
-      <button id="btnGallery" class="btn btn-green">🖼️ Elegir foto</button>
-    </div>
 
     <label class="watermark-toggle">
       <input type="checkbox" id="chkWatermark" checked>
@@ -293,71 +297,63 @@ p {
 </div>
 
 <script>
-const DEFAULT_CARD="img/logo35.png"; // Imagen por defecto si no se elige ninguna
-const LOGO_WATERMARK_URL = "img/PataMig.png"; // RUTA DE TU LOGO
-const FLAGS={es:"🇪🇸",en:"🇬🇧"}; // He simplificado a ES y EN, añade más si tienes traducciones completas
+const DEFAULT_CARD="img/logo35.png"; 
+const LOGO_WATERMARK_URL = "img/PataMig.png"; 
 const COPY={
- es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",watermark:"Incluir nombre del restaurante",success:"✅ Compartido con éxito", redirecting:"Redirigiendo..."},
- en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",watermark:"Include restaurant name",success:"✅ Shared successfully", redirecting:"Redirecting..."}
+ es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",shareBtn:"Compartir",takePhoto:"Tomar foto",choosePhoto:"Elegir foto",watermark:"Incluir nombre del restaurante",success:"✅ Compartido con éxito", redirecting:"Redirigiendo..."},
+ en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",shareBtn:"Share",takePhoto:"Take photo",choosePhoto:"Choose photo",watermark:"Include restaurant name",success:"✅ Shared successfully", redirecting:"Redirecting..."}
 };
 
-let currentLang='es';
+// --- 3. DETECCIÓN DE IDIOMA POR URL ---
+const urlParams = new URLSearchParams(window.location.search);
+let initialLang = urlParams.get("lang") || "es";
+if (!COPY[initialLang]) initialLang = "es";
+let currentLang = initialLang;
+// --- FIN DETECCIÓN DE IDIOMA ---
+
 const cameraInput=document.getElementById('cameraInput');
 const galleryInput=document.getElementById('galleryInput');
-const photoPreview=document.getElementById('photoPreview');
-const photoContainer=document.getElementById('photoContainer');
-const placeholderText = document.getElementById('placeholderText'); // Nuevo
-const btnCamera=document.getElementById('btnCamera');
-const btnGallery=document.getElementById('btnGallery');
+
+// --- 1. NUEVOS ELEMENTOS DE FOTO ---
+const photoArea = document.getElementById('photoArea');
+const photoPreviewContainer = document.getElementById('photoPreviewContainer');
+const photoPreview = document.getElementById('photoPreview');
+const placeholderContent = document.getElementById('placeholderContent');
+const btnCamera = document.getElementById('btnCamera');
+const btnGallery = document.getElementById('btnGallery');
+const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+// --- FIN NUEVOS ELEMENTOS ---
+
 const btnShare=document.getElementById('btnShare');
-const backBtn=document.getElementById('backBtn');
 const noteEl=document.getElementById('note');
-const currentLangDiv=document.getElementById('current-lang');
-const optionsDiv=document.getElementById('lang-options');
 const chkWatermark=document.getElementById('chkWatermark');
 const watermarkLabel=document.getElementById('watermarkLabel');
 
+// 3. Botón Volver y Selector de Idioma ELIMINADOS
+// const backBtn=document.getElementById('backBtn');
+// const currentLangDiv=document.getElementById('current-lang');
+// const optionsDiv=document.getElementById('lang-options');
+
 function setLang(lang){
   const c=COPY[lang];
+  if (!c) return; // Salir si el idioma no existe
+
   document.title=c.title;
   document.getElementById('shareTitle').textContent=c.shareTitle;
   document.getElementById('shareSub').textContent=c.shareSub;
   btnShare.textContent=c.shareBtn;
-  backBtn.textContent=c.back;
   noteEl.textContent=c.note;
-  btnCamera.textContent=c.takePhoto;
-  btnGallery.textContent=c.choosePhoto;
+  // 1. Asegurarse de que los botones del placeholder se traducen
+  // (query inside setLang in case elements are not yet found on script start)
+  document.querySelector('[data-lang="takePhoto"]').textContent = c.takePhoto;
+  document.querySelector('[data-lang="choosePhoto"]').textContent = c.choosePhoto;
   watermarkLabel.textContent=c.watermark;
-  currentLangDiv.textContent=FLAGS[lang];
-  currentLang = lang; // Actualizar el idioma actual
+  currentLang = lang; 
 }
 
-function initLangSelector(){
-  optionsDiv.innerHTML="";
-  Object.keys(COPY).forEach(code=>{
-    const opt=document.createElement('div');
-    opt.className='lang-option';
-    opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
-    opt.onclick=()=>{ setLang(code); optionsDiv.style.display='none'; };
-    optionsDiv.appendChild(opt);
-  });
-  currentLangDiv.onclick=e=>{
-    e.stopPropagation();
-    optionsDiv.style.display = optionsDiv.style.display==='block' ? 'none' : 'block';
-  };
-  document.addEventListener('click', e=>{
-    if(!document.getElementById('lang-selector').contains(e.target)){
-      optionsDiv.style.display='none';
-    }
-  });
-}
+// 3. initLangSelector() ELIMINADO
 
-initLangSelector();
-setLang(currentLang);
-
-// Abrir el selector de archivos al hacer clic en el contenedor de la foto
-photoContainer.onclick = () => galleryInput.click();
-
+// 1. Nuevos OnClick para botones de placeholder
 btnCamera.onclick=()=>cameraInput.click();
 btnGallery.onclick=()=>galleryInput.click();
 
@@ -367,60 +363,79 @@ function handleFileInput(input){
   if(!f) return;
   selectedFile=f;
   photoPreview.src=URL.createObjectURL(f);
-  photoContainer.style.display='flex'; // Asegurarse que se vea
-  placeholderText.style.display = 'none'; // Ocultar texto de placeholder
+  
+  // 1. Mostrar/Ocultar elementos
+  placeholderContent.style.display = 'none';
+  photoPreviewContainer.style.display = 'block';
+  btnRemovePhoto.style.display = 'block';
+  photoArea.style.borderColor = 'var(--primary-green)'; // Borde sólido
+  photoArea.style.borderStyle = 'solid';
 }
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
+// 1. Lógica del botón Eliminar Foto
+btnRemovePhoto.onclick = () => {
+  selectedFile = null;
+  photoPreview.src = ''; // Limpiar la imagen
+  cameraInput.value = null; // Resetear inputs
+  galleryInput.value = null;
 
-// --- FUNCIÓN PARA AÑADIR MARCA DE AGUA (CON LOGO) ---
+  // 1. Restaurar estado del placeholder
+  placeholderContent.style.display = 'flex';
+  photoPreviewContainer.style.display = 'none';
+  btnRemovePhoto.style.display = 'none';
+  photoArea.style.borderColor = 'var(--border)'; // Borde discontinuo
+  photoArea.style.borderStyle = 'dashed';
+};
+
+
+// --- 2. MARCA DE AGUA (LOGO PEQUEÑO EN ESQUINA) ---
 async function addWatermarkToImage(file){
   return new Promise((resolve, reject)=>{
-    const img = new Image();
-    img.crossOrigin = "anonymous"; // Importante para cargar imágenes de otros dominios
-    img.src = URL.createObjectURL(file);
+    const img = new Image();
+    img.crossOrigin = "anonymous"; 
+    img.src = URL.createObjectURL(file);
 
-    img.onload = async () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    img.onload = async () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      // Cargar el logo
-      const logo = new Image();
-      logo.crossOrigin = "anonymous";
-      logo.src = LOGO_WATERMARK_URL;
+      const logo = new Image();
+      logo.crossOrigin = "anonymous";
+      logo.src = LOGO_WATERMARK_URL;
 
-      logo.onload = () => {
-        // Calcular tamaño y posición del logo
-        const logoNaturalWidth = logo.naturalWidth;
-        const logoNaturalHeight = logo.naturalHeight;
-        
-        const targetLogoHeight = Math.max(50, canvas.height * 0.1); // Altura mínima de 50px o 10% del alto de la imagen
-        const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
-        
-        const margin = Math.max(30, canvas.height * 0.05); // Margen dinámico
-        const x = canvas.width - targetLogoWidth - margin;
-        const y = canvas.height - targetLogoHeight - margin;
+      logo.onload = () => {
+        const logoNaturalWidth = logo.naturalWidth;
+        const logoNaturalHeight = logo.naturalHeight;
+        
+        // 2. Logo más pequeño (8% de altura, min 25px)
+        const targetLogoHeight = Math.max(25, canvas.height * 0.08); 
+        const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
+        
+        // 2. Margen más pequeño (3% de altura, min 15px)
+        const margin = Math.max(15, canvas.height * 0.03); 
+        const x = canvas.width - targetLogoWidth - margin;
+        const y = canvas.height - targetLogoHeight - margin;
 
-        // Dibujar un fondo semitransparente detrás del logo (opcional, pero mejora la visibilidad)
-        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; // Fondo blanco semitransparente
-        ctx.roundRect(x - 10, y - 10, targetLogoWidth + 20, targetLogoHeight + 20, 10); // Un poco más grande para el padding
-        ctx.fill();
+        // 2. Fondo semitransparente más pequeño
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; 
+        const padding = 5; // Padding más pequeño
+        ctx.roundRect(x - padding, y - padding, targetLogoWidth + (padding*2), targetLogoHeight + (padding*2), 5); // Radio de borde más pequeño
+        ctx.fill();
 
-        // Dibujar el logo
-        ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
+        ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
 
-        canvas.toBlob(b=>{
+        canvas.toBlob(b=>{
           resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
         },"image/jpeg",0.9);
-      };
-
-      logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
-    };
-    img.onerror = () => reject(new Error("Error al cargar la imagen seleccionada para la marca de agua."));
+      };
+      logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
+    };
+    img.onerror = () => reject(new Error("Error al cargar la imagen seleccionada para la marca de agua."));
   });
 }
 
@@ -430,7 +445,13 @@ function showSuccessMessage(){
   popup.className='success-popup';
   popup.innerHTML=`<div class="success-box"><h3>${COPY[currentLang].success}</h3><p>${COPY[currentLang].redirecting}</p></div>`;
   document.body.appendChild(popup);
-  setTimeout(()=>{ window.location.href="principal.html"; },2000);
+  // 3. El redirect a principal.html no existe, lo cambio a la página de inicio
+  // Asumiré que es 'index.html' o la página anterior. 
+  // Voy a usar history.back() para volver a la página que lo llamó.
+  setTimeout(()=>{ 
+    // Redirige a la página que tenía el ?lang=es
+    window.location.href = `index.html?lang=${currentLang}`;
+  }, 2000);
 }
 
 async function shareExperience(e){
@@ -449,38 +470,40 @@ async function shareExperience(e){
       fileToShare=await addWatermarkToImage(baseFile);
     }
 
-    // Usar la API de Web Share si está disponible
     if(navigator.canShare?.({files:[fileToShare]})){
       await navigator.share({
-        files:[fileToShare],
-        title: COPY[currentLang].shareTitle,
-        text: COPY[currentLang].shareSub
-      });
+        files:[fileToShare],
+        title: COPY[currentLang].shareTitle,
+SO:         text: COPY[currentLang].shareSub
+      });
       showSuccessMessage();
     } else {
-      // Si no, intentar abrir en una nueva ventana (menos ideal para compartir)
       const url=URL.createObjectURL(fileToShare);
       window.open(url,"_blank");
-      showSuccessMessage(); // Mostrar mensaje de éxito aunque no sea una app de compartir nativa
+      showSuccessMessage(); 
     }
   }catch(err){ 
-    // Capturar si el usuario cancela la acción de compartir
-    if (err.name === 'AbortError') {
-        console.log("Compartir cancelado por el usuario.");
-    } else {
-        console.error("Error al compartir:", err);
-    }
-  }
+    if (err.name === 'AbortError') {
+        console.log("Compartir cancelado por el usuario.");
+    } else {
+        console.error("Error al compartir:", err);
+    }
+  }
 }
 
 btnShare.onclick=shareExperience;
 
-// Si no hay foto seleccionada al inicio, mostrar el placeholder
-if (!selectedFile) {
-    photoContainer.style.display = 'flex';
-    placeholderText.style.display = 'block';
-    photoPreview.style.display = 'none'; // Ocultar img si no hay src
-}
+// 3. Aplicar el idioma detectado al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  setLang(currentLang);
+
+  // 1. Estado inicial del placeholder
+  if (!selectedFile) {
+    placeholderContent.style.display = 'flex';
+    photoPreviewContainer.style.display = 'none';
+    btnRemovePhoto.style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
