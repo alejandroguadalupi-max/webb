@@ -1,324 +1,464 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-lang="title">Bienvenido a PataMig</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-lang="title">Bienvenido a PataMig</title>
 
-  <!-- Fuente -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --primary-green: #68B553;
-      --text-dark: #333;
-      --bg-light-gray: #f4f4f4;
-      --white: #fff;
-    }
+  <style>
+    :root {
+      --primary-green: #68B553;
+      --text-dark: #333;
+      --bg-light-gray: #f4f4f4;
+      --white: #fff;
+    }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: var(--white);
-      font-family: 'Poppins', sans-serif;
-      color: var(--text-dark);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow: hidden;
-    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--white);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow: hidden;
+    }
 
-    .landing-container {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      background: var(--white);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 50px 25px 100px 25px;
-      box-sizing: border-box;
-      overflow: hidden;
-    }
+    .landing-container {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Mantiene el footer abajo */
+      align-items: center;
+      padding: 40px 25px 40px 25px; /* Padding inferior ajustado */
+      box-sizing: border-box;
+      overflow: hidden;
+    }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-      animation: fadeIn 0.5s ease-out;
-    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      animation: fadeIn 0.5s ease-out;
+    }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    @keyframes pulse-welcome {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
+    @keyframes pulse-welcome {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
 
-    h1.restaurant-name {
-      font-size: clamp(2em, 6vw, 3em);
-      font-weight: 700;
-      color: var(--primary-green);
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: transform 0.2s ease-out;
-    }
+    h1.restaurant-name {
+      font-size: 3em;
+      font-weight: 700;
+      color: var(--primary-green);
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s ease-out;
+    }
 
-    h1.restaurant-name:hover {
-      transform: scale(1.03);
-    }
+    h1.restaurant-name:hover {
+      transform: scale(1.03);
+    }
 
-    h2 {
-      font-size: clamp(1.5em, 4vw, 2em);
-      font-weight: 700;
-      margin: 10px 0;
-      letter-spacing: -0.5px;
-      animation: pulse-welcome 3.5s ease-in-out infinite;
-    }
+    h2 {
+      font-size: 2.0em;
+      font-weight: 700;
+      margin: 10px 0;
+      letter-spacing: -0.5px;
+      animation: pulse-welcome 3.5s ease-in-out infinite;
+    }
 
-    p {
-      font-size: 1em;
-      color: #555;
-      margin-bottom: 35px;
-      line-height: 1.5;
-      max-width: 350px;
-    }
+    p {
+      font-size: 1.0em;
+      color: #555;
+      margin-bottom: 35px;
+      line-height: 1.5;
+      max-width: 350px;
+    }
 
-    .button-group {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 40px;
-    }
+    .button-group {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-    .btn {
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1em;
-      padding: 14px;
-      border-radius: 14px;
-      transition: all 0.25s ease-out;
-      border: 2px solid transparent;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      will-change: transform, box-shadow;
-    }
+    .btn {
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.0em;
+      padding: 14px;
+      border-radius: 14px;
+      transition: all 0.25s ease-out;
+      border: 2px solid transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      will-change: transform, box-shadow;
+    }
 
-    .btn-primary {
-      background: var(--primary-green);
-      color: var(--white);
-      border-color: var(--primary-green);
-      box-shadow: 0 6px 20px rgba(104,181,83,0.25);
-    }
+    .btn-primary {
+      background: var(--primary-green);
+      color: var(--white);
+      border-color: var(--primary-green);
+      box-shadow: 0 6px 20px rgba(104,181,83,0.25);
+    }
 
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(104,181,83,0.35);
-    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(104,181,83,0.35);
+    }
 
-    .btn-secondary {
-      background: var(--white);
-      color: var(--primary-green);
-      border: 2px solid var(--primary-green);
-    }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary-green);
+      border: 2px solid var(--primary-green);
+    }
 
-    .btn-secondary:hover {
-      background: #f7fbf5;
-      transform: translateY(-3px);
-    }
+    .btn-secondary:hover {
+      background: #f7fbf5;
+      transform: translateY(-3px);
+    }
 
-    footer#lang-switcher {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 350px;
-      padding-bottom: 20px;
-    }
+    /* --- 1. NUEVO FOOTER Y BOTÓN DE IDIOMA --- */
+    footer#lang-footer {
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      margin-top: 20px; /* Espacio para separarlo del contenido */
+    }
+    
+    .lang-trigger-btn {
+      background: var(--bg-light-gray);
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.0em;
+      font-family: 'Poppins', sans-serif;
+      color: #555;
+      transition: all 0.25s ease-out;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lang-trigger-btn:hover {
+      background: #e9e9e9;
+      border-color: #ccc;
+    }
+    .lang-trigger-btn .lang-flag {
+      font-size: 1.2em;
+    }
 
-    #lang-switcher button {
-      flex: 1 1 30%;
-      background: var(--bg-light-gray);
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 8px 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9em;
-      font-family: 'Poppins', sans-serif;
-      color: #777;
-      transition: all 0.25s ease-out;
-      text-align: center;
-    }
+    /* --- 2. MODAL DE IDIOMA --- */
+    .lang-modal-overlay {
+      position: fixed;
+      inset: 0; /* (top, right, bottom, left = 0) */
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: flex-end; /* Alinear al fondo */
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .lang-modal-content {
+      background: var(--white);
+      width: 100%;
+      max-width: 500px; /* Límite para tablets */
+      border-radius: 20px 20px 0 0;
+      padding: 20px 20px 30px 20px;
+      box-shadow: 0 -5px 30px rgba(0,0,0,0.15);
+      transform: translateY(100%);
+      transition: transform 0.3s ease-out;
+      max-height: 60vh; /* Límite de altura */
+      overflow-y: auto;
+    }
 
-    #lang-switcher button.active {
-      background: var(--primary-green);
-      color: #fff;
-      border-color: var(--primary-green);
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(104,181,83,0.3);
-    }
+    /* Estado activo del modal */
+    .lang-modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .lang-modal-overlay.show .lang-modal-content {
+      transform: translateY(0);
+    }
 
-    #lang-switcher button:not(.active):hover {
-      background: #e6e6e6;
-      color: #333;
-    }
+    .lang-modal-content h3 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: var(--text-dark);
+    }
 
-    .fade {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-    }
+    #lang-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #lang-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 10px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #444;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    #lang-list li .lang-flag {
+      font-size: 1.5em;
+    }
+    #lang-list li:hover {
+      background-color: var(--bg-light-gray);
+    }
+    #lang-list li.active {
+      background-color: var(--primary-green);
+      color: var(--white);
+      font-weight: 700;
+    }
 
-    .fade.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .btn-close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--bg-light-gray);
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      line-height: 30px;
+      padding: 0;
+    }
+    /* --- FIN CSS MODAL --- */
 
-    @media (max-width: 500px) {
-      .landing-container {
-        padding: 40px 20px 80px 20px;
-      }
-      .button-group {
-        margin-bottom: 50px;
-      }
-    }
+    .fade {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    }
 
-  </style>
+    .fade.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-  <main class="landing-container">
-    <div class="content fade show" id="content">
-      <h1 class="restaurant-name">PataMig</h1>
-      <h2 data-lang="welcome">¡Bienvenido!</h2>
-      <p data-lang="prompt">¿Qué te gustaría hacer?</p>
+  <main class="landing-container">
+    <div class="content fade show" id="content">
+      <h1 class="restaurant-name">PataMig</h1>
+      <h2 data-lang="welcome">¡Bienvenido!</h2>
+      <p data-lang="prompt">¿Qué te gustaría hacer?</p>
 
-      <div class="button-group">
-        <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la Carta</a>
-        <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" href="#">Dejar Reseña</a>
-        <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir Experiencia con Amigos</a>
-      </div>
-    </div>
+      <div class="button-group">
+        <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la Carta</a>
+        <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" href="#">Dejar Reseña</a>
+        <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir Experiencia con Amigos</a>
+      </div>
+    </div>
 
-    <footer id="lang-switcher">
-      <button data-lang-switch="es">ES</button>
-      <button data-lang-switch="en">EN</button>
-      <button data-lang-switch="de">DE</button>
-      <button data-lang-switch="fr">FR</button>
-      <button data-lang-switch="it">IT</button>
-      <button data-lang-switch="nl">NL</button>
-    </footer>
-  </main>
+        <footer id="lang-footer">
+      <button id="lang-modal-trigger" class="lang-trigger-btn">
+        <span class="lang-flag">🇪🇸</span>
+        <span class="lang-name">Español</span>
+      </button>
+    </footer>
+  </main>
 
-  <script>
-    const translations = {
-      es: {
-        title: "Bienvenido a PataMig",
-        welcome: "¡Bienvenido!",
-        prompt: "¿Qué te gustaría hacer?",
-        view_menu: "Acceder a la Carta",
-        leave_review: "Dejar Reseña",
-        share_with_friends: "Compartir Experiencia con Amigos"
-      },
-      en: {
-        title: "Welcome to PataMig",
-        welcome: "Welcome!",
-        prompt: "What would you like to do?",
-        view_menu: "View the Menu",
-        leave_review: "Leave a Review",
-        share_with_friends: "Share Your Experience with Friends"
-      },
-      de: {
-        title: "Willkommen bei PataMig",
-        welcome: "Willkommen!",
-        prompt: "Was möchten Sie tun?",
-        view_menu: "Speisekarte ansehen",
-        leave_review: "Bewertung abgeben",
-        share_with_friends: "Erlebnis mit Freunden teilen"
-      },
-      fr: {
-        title: "Bienvenue chez PataMig",
-        welcome: "Bienvenue !",
-        prompt: "Que souhaitez-vous faire ?",
-        view_menu: "Accéder au Menu",
-        leave_review: "Laisser un Avis",
-        share_with_friends: "Partager votre expérience avec vos amis"
-      },
-      it: {
-        title: "Benvenuto da PataMig",
-        welcome: "Benvenuto!",
-        prompt: "Cosa ti piacerebbe fare?",
-        view_menu: "Accedi al Menu",
-        leave_review: "Lascia una Recensione",
-        share_with_friends: "Condividi l'esperienza con gli amici"
-      },
-      nl: {
-        title: "Welkom bij PataMig",
-        welcome: "Welkom!",
-        prompt: "Wat wil je doen?",
-        view_menu: "Bekijk het Menu",
-        leave_review: "Laat een Recensie achter",
-        share_with_friends: "Deel je ervaring met vrienden"
-      }
-    };
+    <div id="lang-modal" class="lang-modal-overlay">
+    <div class="lang-modal-content">
+      <button id="lang-modal-close" class="btn-close-modal" aria-label="Cerrar">✕</button>
+      <h3 data-lang="select_language">Selecciona un idioma</h3>
+      <ul id="lang-list">
+              </ul>
+    </div>
+  </div>
 
-    const langButtons = document.querySelectorAll('#lang-switcher button');
-    const content = document.getElementById('content');
-    const menuLink = document.getElementById('menuLink');
-    const reviewLink = document.getElementById('reviewLink');
-    const shareLink = document.getElementById('shareLink');
+  <script>
+    const translations = {
+      // 2. Añadido 'flag', 'langName' y 'select_language'
+      es: {
+        flag: "🇪🇸",
+        langName: "Español",
+        title: "Bienvenido a PataMig",
+        welcome: "¡Bienvenido!",
+        prompt: "¿Qué te gustaría hacer?",
+        view_menu: "Acceder a la Carta",
+        leave_review: "Dejar Reseña",
+        share_with_friends: "Compartir Experiencia",
+        select_language: "Selecciona un idioma"
+      },
+      en: {
+        flag: "🇬🇧",
+        langName: "English",
+        title: "Welcome to PataMig",
+        welcome: "Welcome!",
+        prompt: "What would you like to do?",
+        view_menu: "View the Menu",
+        leave_review: "Leave a Review",
+        share_with_friends: "Share Your Experience",
+        select_language: "Select a language"
+      },
+      de: {
+        flag: "🇩🇪",
+        langName: "Deutsch",
+        title: "Willkommen bei PataMig",
+        welcome: "Willkommen!",
+        prompt: "Was möchten Sie tun?",
+        view_menu: "Speisekarte ansehen",
+        leave_review: "Bewertung abgeben",
+        share_with_friends: "Erlebnis mit Freunden teilen",
+        select_language: "Sprache auswählen"
+      },
+      fr: {
+        flag: "🇫🇷",
+        langName: "Français",
+        title: "Bienvenue chez PataMig",
+        welcome: "Bienvenue !",
+        prompt: "Que souhaitez-vous faire ?",
+        view_menu: "Accéder au Menu",
+        leave_review: "Laisser un Avis",
+        share_with_friends: "Partager l'expérience",
+        select_language: "Choisir la langue"
+      },
+      it: {
+        flag: "🇮🇹",
+        langName: "Italiano",
+        title: "Benvenuto da PataMig",
+        welcome: "Benvenuto!",
+        prompt: "Cosa ti piacerebbe fare?",
+        view_menu: "Accedi al Menu",
+        leave_review: "Lascia una Recensione",
+        share_with_friends: "Condividi l'esperienza",
+        select_language: "Seleziona la lingua"
+      },
+      nl: {
+        flag: "🇳🇱",
+        langName: "Nederlands",
+        title: "Welkom bij PataMig",
+        welcome: "Welkom!",
+        prompt: "Wat wil je doen?",
+        view_menu: "Bekijk het Menu",
+        leave_review: "Laat een Recensie achter",
+        share_with_friends: "Deel je ervaring",
+        select_language: "Kies een taal"
+      }
+    };
 
-    function setLanguage(lang) {
-      if (!translations[lang]) lang = 'es';
-      document.documentElement.lang = lang;
-      localStorage.setItem('userLang', lang);
+    // Elementos del DOM
+    const content = document.getElementById('content');
+    const menuLink = document.getElementById('menuLink');
+    const reviewLink = document.getElementById('reviewLink');
+    const shareLink = document.getElementById('shareLink');
+    
+    // 3. NUEVOS elementos del DOM para el modal
+    const langModal = document.getElementById('lang-modal');
+    const langModalTrigger = document.getElementById('lang-modal-trigger');
+    const langModalClose = document.getElementById('lang-modal-close');
+    const langList = document.getElementById('lang-list');
 
-      content.classList.remove('show');
-      setTimeout(() => {
-        document.title = translations[lang].title;
-        document.querySelectorAll('[data-lang]').forEach(el => {
-          const key = el.dataset.lang;
-          if (translations[lang][key]) {
-            el.textContent = translations[lang][key];
-          }
-        });
-        menuLink.href = `carta.html?lang=${lang}`;
-        reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
-        shareLink.href = `compartir_2.html?lang=${lang}`;
+    function setLanguage(lang) {
+      if (!translations[lang]) lang = 'es';
+      document.documentElement.lang = lang;
+      localStorage.setItem('userLang', lang);
 
-        langButtons.forEach(btn =>
-          btn.classList.toggle('active', btn.dataset.langSwitch === lang)
-        );
-        content.classList.add('show');
-      }, 300);
-    }
+      content.classList.remove('show');
+      setTimeout(() => {
+        document.title = translations[lang].title;
+        document.querySelectorAll('[data-lang]').forEach(el => {
+          const key = el.dataset.lang;
+          if (translations[lang][key]) {
+            el.textContent = translations[lang][key];
+          }
+        });
+        menuLink.href = `carta.html?lang=${lang}`;
+        reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
+        shareLink.href = `compartir_2.html?lang=${lang}`;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('userLang');
-      const browserLang = navigator.language.slice(0, 2);
-      const supportedLangs = ['es', 'en', 'de', 'fr', 'it', 'nl'];
-      const initialLang = saved || (supportedLangs.includes(browserLang) ? browserLang : 'es');
-      setLanguage(initialLang);
+        // 3. Actualizar el botón principal
+        if (langModalTrigger) {
+          langModalTrigger.querySelector('.lang-flag').textContent = translations[lang].flag;
+          langModalTrigger.querySelector('.lang-name').textContent = translations[lang].langName;
+        }
+        
+        // 3. Actualizar la clase .active en la lista del modal
+        document.querySelectorAll('#lang-list li').forEach(li => {
+          li.classList.toggle('active', li.dataset.langSwitch === lang);
+        });
+        
+        content.classList.add('show');
+      }, 300);
+    }
 
-      document.getElementById('lang-switcher').addEventListener('click', e => {
-        const btn = e.target.closest('button[data-lang-switch]');
-        if (!btn || btn.classList.contains('active')) return;
-        setLanguage(btn.dataset.langSwitch);
-      });
-    });
-  </script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 3. Lógica de detección de idioma (la misma de antes)
+      const saved = localStorage.getItem('userLang');
+      const browserLang = navigator.language.slice(0, 2);
+      const supportedLangs = Object.keys(translations); // ['es', 'en', 'de', ...]
+      const initialLang = saved || (supportedLangs.includes(browserLang) ? browserLang : 'es');
+
+      // 3. Lógica del Modal
+      // Rellenar la lista del modal
+      for (const [code, data] of Object.entries(translations)) {
+        const li = document.createElement('li');
+        li.dataset.langSwitch = code;
+        li.innerHTML = `<span class="lang-flag">${data.flag}</span> ${data.langName}`;
+        // Al hacer clic en un idioma de la lista
+        li.addEventListener('click', () => {
+          if (li.classList.contains('active')) {
+            langModal.classList.remove('show'); // Solo cerrar si ya está activo
+          } else {
+            setLanguage(code);
+            langModal.classList.remove('show'); // Poner idioma y cerrar
+          }
+        });
+        langList.appendChild(li);
+      }
+
+      // Establecer el idioma inicial (ahora rellena la lista también)
+      setLanguage(initialLang);
+
+      // Listeners para abrir y cerrar el modal
+      langModalTrigger.addEventListener('click', () => {
+        langModal.classList.add('show');
+      });
+      langModalClose.addEventListener('click', () => {
+        langModal.classList.remove('show');
+      });
+      // Cerrar al hacer clic fuera del contenido
+      langModal.addEventListener('click', (e) => {
+        if (e.target === langModal) {
+          langModal.classList.remove('show');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
 
