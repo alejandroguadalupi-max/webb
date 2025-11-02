@@ -3,22 +3,35 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#68B553" />
 <title data-lang="title">Compartir experiencia · PataMig</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root {
-  --primary-green: #68B553; /* mismo verde claro de la principal */
-  --bg-light-green: #E8F5E1;
+  --primary-green: #68B553;
+  --bg-light-green: #E8F5E1; /* Fondo muy suave para la página */
   --text-dark: #333;
   --muted: #6b7280;
   --border: #d0e2c8;
   --white: #fff;
+  --shadow-light: rgba(0,0,0,0.08);
+  --shadow-medium: rgba(0,0,0,0.12);
 }
 
-* { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Poppins', sans-serif; /* Usar Poppins */
   background: var(--bg-light-green);
   color: var(--text-dark);
   min-height: 100vh;
@@ -27,158 +40,224 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .wrap {
   width: 100%;
-  max-width: 420px;
+  max-width: 450px; /* Ancho máximo un poco más grande */
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: fadeIn 0.5s ease-out; /* Animación de entrada */
 }
 
-header {
+/* 1. Botón de Volver ahora un poco más discreto */
+.back-button {
   position: absolute;
-  top: 16px;
-  left: 16px;
-}
-
-.back {
+  top: 20px;
+  left: 20px;
   background: var(--primary-green);
   color: var(--white);
   padding: 8px 14px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 0.9em;
+  box-shadow: 0 4px 10px rgba(104,181,83,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(104,181,83,0.3);
 }
 
 .share-card {
   background: var(--white);
-  border-radius: 14px;
-  padding: 24px 20px;
+  border-radius: 20px; /* Bordes más redondeados */
+  padding: 30px; /* Padding aumentado */
   border: 1px solid var(--border);
   width: 100%;
   text-align: center;
+  box-shadow: 0 10px 30px var(--shadow-light); /* Sombra más suave */
 }
 
 h2 {
-  margin: 0 0 8px;
-  font-size: 1.25rem;
+  margin: 0 0 10px;
+  font-size: 1.6em; /* Título más grande */
+  font-weight: 700;
+  color: var(--text-dark);
 }
 
 p {
-  margin: 0 0 12px;
-  font-size: 14px;
+  margin: 0 0 18px;
+  font-size: 0.95em; /* Texto más legible */
   color: var(--muted);
+  line-height: 1.5;
 }
 
 .photo-container {
   width: 100%;
   aspect-ratio: 4/3;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--white);
+  border-radius: 16px; /* Bordes más redondeados */
+  border: 2px solid var(--border); /* Borde más visible */
+  background: #fdfdfd; /* Fondo ligeramente más blanco */
   overflow: hidden;
-  display: none;
-  margin-bottom: 12px;
+  display: flex; /* Para centrar la imagen */
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* Más espacio */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
 }
 
 .photo-preview {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover; /* Recortar si es necesario para llenar el contenedor */
 }
 
 .row {
   display: flex;
-  gap: 8px;
+  gap: 12px; /* Más espacio entre botones */
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   width: 100%;
 }
 
 .btn {
   flex: 1;
-  padding: 12px 0;
+  padding: 14px 0; /* Botones más altos */
   border: none;
-  border-radius: 10px;
+  border-radius: 12px; /* Bordes más redondeados */
   font-weight: 600;
-  font-size: 15px;
+  font-size: 1.0em;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.25s ease;
+  will-change: transform, box-shadow;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-green {
   background: var(--primary-green);
   color: var(--white);
+  box-shadow: 0 6px 20px rgba(104,181,83,0.25);
 }
-.btn-green:hover { background: #5ca54a; }
+.btn-green:hover { 
+  background: #5ca54a; 
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(104,181,83,0.35);
+}
 
 .watermark-toggle {
-  margin: 8px 0 14px;
+  margin: 10px 0 20px; /* Más espacio */
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  gap: 8px;
+  font-size: 0.9em;
   color: var(--muted);
   justify-content: center;
+  cursor: pointer; /* Indica que es clickeable */
+}
+
+.watermark-toggle input[type="checkbox"] {
+  transform: scale(1.2); /* Checkbox un poco más grande */
+  accent-color: var(--primary-green); /* Color del checkbox */
 }
 
 .note {
-  font-size: 13px;
+  font-size: 0.85em; /* Texto más discreto */
   color: var(--muted);
+  margin-top: 10px;
 }
 
+/* 2. Selector de Idioma más integrado */
 #lang-selector {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
 }
 
 #current-lang {
   cursor: pointer;
-  background: rgba(0,0,0,0.05);
-  padding: 6px 8px;
-  border-radius: 8px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+#current-lang:hover {
+  background: #f9f9f9;
+  border-color: #c7d8bf;
 }
 
 #lang-options {
   display: none;
   position: absolute;
   right: 0;
-  top: 40px;
+  top: 45px; /* Más abajo para no chocar con el botón */
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px var(--shadow-light);
+  min-width: 100px;
+  overflow: hidden;
 }
 .lang-option {
-  padding: 8px 10px;
+  padding: 10px 15px;
   cursor: pointer;
   font-weight: 600;
+  color: var(--text-dark);
+  transition: background 0.15s ease;
 }
-.lang-option:hover { background: #f1f5f9; }
+.lang-option:hover { background: var(--bg-light-green); }
 
+/* 3. Popup de Éxito mejorado */
 .success-popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.3s ease-out;
 }
 .success-box {
   background: var(--white);
-  padding: 20px 28px;
-  border-radius: 12px;
+  padding: 30px 40px;
+  border-radius: 16px;
   text-align: center;
+  box-shadow: 0 10px 40px var(--shadow-medium);
+  transform: scale(0.9);
+  animation: successScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
-.success-box h3 { color: var(--primary-green); margin: 0 0 4px; font-size: 18px; }
-.success-box p { color: var(--muted); font-size: 14px; margin: 0; }
+@keyframes successScale {
+  to { transform: scale(1); }
+}
+.success-box h3 { color: var(--primary-green); margin: 0 0 8px; font-size: 1.5em; font-weight: 700; }
+.success-box p { color: var(--muted); font-size: 1em; margin: 0; }
+
+/* Media queries para pantallas más pequeñas */
+@media (max-width: 380px) {
+  .share-card { padding: 25px; }
+  h2 { font-size: 1.4em; }
+  p { font-size: 0.9em; }
+  .btn { font-size: 0.95em; padding: 12px 0; }
+  .row { gap: 8px; }
+  .watermark-toggle { font-size: 0.85em; }
+}
 
 </style>
 </head>
 <body>
+
+<a id="backBtn" class="back-button" href="principal.html">⬅ Volver</a>
 
 <div id="lang-selector">
   <div id="current-lang">🇪🇸</div>
@@ -186,16 +265,13 @@ p {
 </div>
 
 <div class="wrap">
-  <header>
-    <a id="backBtn" class="back" href="principal.html">⬅ Volver</a>
-  </header>
-
   <div class="share-card">
     <h2 id="shareTitle">📸 Comparte tu momento</h2>
     <p id="shareSub">Elige o toma una foto y compártela con tus amigos.</p>
 
     <div class="photo-container" id="photoContainer">
       <img id="photoPreview" class="photo-preview" alt="Vista previa">
+      <p id="placeholderText" style="color:var(--muted); font-size:0.9em;">Haz clic para añadir una foto</p>
     </div>
 
     <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
@@ -217,11 +293,12 @@ p {
 </div>
 
 <script>
-const DEFAULT_CARD="img/logo35.png";
-const FLAGS={es:"🇪🇸",en:"🇬🇧",fr:"🇫🇷",de:"🇩🇪"};
+const DEFAULT_CARD="img/logo35.png"; // Imagen por defecto si no se elige ninguna
+const LOGO_WATERMARK_URL = "img/PataMig.png"; // RUTA DE TU LOGO
+const FLAGS={es:"🇪🇸",en:"🇬🇧"}; // He simplificado a ES y EN, añade más si tienes traducciones completas
 const COPY={
- es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",watermark:"Incluir nombre del restaurante",success:"Compartido con éxito"},
- en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",watermark:"Include restaurant name",success:"Shared successfully"}
+ es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",back:"⬅ Volver",shareBtn:"Compartir",takePhoto:"📷 Tomar foto",choosePhoto:"🖼️ Elegir foto",watermark:"Incluir nombre del restaurante",success:"✅ Compartido con éxito", redirecting:"Redirigiendo..."},
+ en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",back:"⬅ Back",shareBtn:"Share",takePhoto:"📷 Take photo",choosePhoto:"🖼️ Choose photo",watermark:"Include restaurant name",success:"✅ Shared successfully", redirecting:"Redirecting..."}
 };
 
 let currentLang='es';
@@ -229,6 +306,7 @@ const cameraInput=document.getElementById('cameraInput');
 const galleryInput=document.getElementById('galleryInput');
 const photoPreview=document.getElementById('photoPreview');
 const photoContainer=document.getElementById('photoContainer');
+const placeholderText = document.getElementById('placeholderText'); // Nuevo
 const btnCamera=document.getElementById('btnCamera');
 const btnGallery=document.getElementById('btnGallery');
 const btnShare=document.getElementById('btnShare');
@@ -240,121 +318,169 @@ const chkWatermark=document.getElementById('chkWatermark');
 const watermarkLabel=document.getElementById('watermarkLabel');
 
 function setLang(lang){
-  const c=COPY[lang];
-  document.title=c.title;
-  document.getElementById('shareTitle').textContent=c.shareTitle;
-  document.getElementById('shareSub').textContent=c.shareSub;
-  btnShare.textContent=c.shareBtn;
-  backBtn.textContent=c.back;
-  noteEl.textContent=c.note;
-  btnCamera.textContent=c.takePhoto;
-  btnGallery.textContent=c.choosePhoto;
-  watermarkLabel.textContent=c.watermark;
-  currentLangDiv.textContent=FLAGS[lang];
+  const c=COPY[lang];
+  document.title=c.title;
+  document.getElementById('shareTitle').textContent=c.shareTitle;
+  document.getElementById('shareSub').textContent=c.shareSub;
+  btnShare.textContent=c.shareBtn;
+  backBtn.textContent=c.back;
+  noteEl.textContent=c.note;
+  btnCamera.textContent=c.takePhoto;
+  btnGallery.textContent=c.choosePhoto;
+  watermarkLabel.textContent=c.watermark;
+  currentLangDiv.textContent=FLAGS[lang];
+  currentLang = lang; // Actualizar el idioma actual
 }
 
 function initLangSelector(){
-  optionsDiv.innerHTML="";
-  Object.keys(COPY).forEach(code=>{
-    const opt=document.createElement('div');
-    opt.className='lang-option';
-    opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
-    opt.onclick=()=>{ setLang(code); optionsDiv.style.display='none'; };
-    optionsDiv.appendChild(opt);
-  });
-  currentLangDiv.onclick=e=>{
-    e.stopPropagation();
-    optionsDiv.style.display = optionsDiv.style.display==='block' ? 'none' : 'block';
-  };
-  document.addEventListener('click', e=>{
-    if(!document.getElementById('lang-selector').contains(e.target)){
-      optionsDiv.style.display='none';
-    }
-  });
+  optionsDiv.innerHTML="";
+  Object.keys(COPY).forEach(code=>{
+    const opt=document.createElement('div');
+    opt.className='lang-option';
+    opt.textContent=`${FLAGS[code]} ${code.toUpperCase()}`;
+    opt.onclick=()=>{ setLang(code); optionsDiv.style.display='none'; };
+    optionsDiv.appendChild(opt);
+  });
+  currentLangDiv.onclick=e=>{
+    e.stopPropagation();
+    optionsDiv.style.display = optionsDiv.style.display==='block' ? 'none' : 'block';
+  };
+  document.addEventListener('click', e=>{
+    if(!document.getElementById('lang-selector').contains(e.target)){
+      optionsDiv.style.display='none';
+    }
+  });
 }
 
 initLangSelector();
 setLang(currentLang);
+
+// Abrir el selector de archivos al hacer clic en el contenedor de la foto
+photoContainer.onclick = () => galleryInput.click();
 
 btnCamera.onclick=()=>cameraInput.click();
 btnGallery.onclick=()=>galleryInput.click();
 
 let selectedFile=null;
 function handleFileInput(input){
-  const f=input.files?.[0];
-  if(!f) return;
-  selectedFile=f;
-  photoPreview.src=URL.createObjectURL(f);
-  photoContainer.style.display='block';
+  const f=input.files?.[0];
+  if(!f) return;
+  selectedFile=f;
+  photoPreview.src=URL.createObjectURL(f);
+  photoContainer.style.display='flex'; // Asegurarse que se vea
+  placeholderText.style.display = 'none'; // Ocultar texto de placeholder
 }
 cameraInput.onchange=()=>handleFileInput(cameraInput);
 galleryInput.onchange=()=>handleFileInput(galleryInput);
 
+
+// --- FUNCIÓN PARA AÑADIR MARCA DE AGUA (CON LOGO) ---
 async function addWatermarkToImage(file){
-  return new Promise(resolve=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      const ctx=canvas.getContext('2d');
-      canvas.width=img.width; canvas.height=img.height;
-      ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      const fontSize=Math.max(16,canvas.width*0.045);
-      const text="PataMig";
-      ctx.font=`700 ${fontSize}px 'Segoe UI', Roboto, sans-serif`;
-      ctx.fillStyle="rgba(255,255,255,0.8)";
-      const padding=fontSize*0.5;
-      const textWidth=ctx.measureText(text).width+padding*2;
-      const rectHeight=fontSize*1.8;
-      const x=canvas.width-textWidth-30;
-      const y=canvas.height-rectHeight-40;
-      ctx.fillRect(x,y,textWidth,rectHeight);
-      ctx.fillStyle="#1f2937";
-      ctx.textAlign="center"; ctx.textBaseline="middle";
-      ctx.fillText(text,x+textWidth/2,y+rectHeight/2.1);
-      canvas.toBlob(b=>{
-        resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
-      },"image/jpeg",0.9);
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Importante para cargar imágenes de otros dominios
+    img.src = URL.createObjectURL(file);
+
+    img.onload = async () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Cargar el logo
+      const logo = new Image();
+      logo.crossOrigin = "anonymous";
+      logo.src = LOGO_WATERMARK_URL;
+
+      logo.onload = () => {
+        // Calcular tamaño y posición del logo
+        const logoNaturalWidth = logo.naturalWidth;
+        const logoNaturalHeight = logo.naturalHeight;
+        
+        const targetLogoHeight = Math.max(50, canvas.height * 0.1); // Altura mínima de 50px o 10% del alto de la imagen
+        const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
+        
+        const margin = Math.max(30, canvas.height * 0.05); // Margen dinámico
+        const x = canvas.width - targetLogoWidth - margin;
+        const y = canvas.height - targetLogoHeight - margin;
+
+        // Dibujar un fondo semitransparente detrás del logo (opcional, pero mejora la visibilidad)
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; // Fondo blanco semitransparente
+        ctx.roundRect(x - 10, y - 10, targetLogoWidth + 20, targetLogoHeight + 20, 10); // Un poco más grande para el padding
+        ctx.fill();
+
+        // Dibujar el logo
+        ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
+
+        canvas.toBlob(b=>{
+          resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
+        },"image/jpeg",0.9);
+      };
+
+      logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
     };
-    img.src=URL.createObjectURL(file);
-  });
+    img.onerror = () => reject(new Error("Error al cargar la imagen seleccionada para la marca de agua."));
+  });
 }
 
+
 function showSuccessMessage(){
-  const popup=document.createElement('div');
-  popup.className='success-popup';
-  popup.innerHTML=`<div class="success-box"><h3>✅ Compartido con éxito</h3><p>Redirigiendo...</p></div>`;
-  document.body.appendChild(popup);
-  setTimeout(()=>{ window.location.href="principal.html"; },2000);
+  const popup=document.createElement('div');
+  popup.className='success-popup';
+  popup.innerHTML=`<div class="success-box"><h3>${COPY[currentLang].success}</h3><p>${COPY[currentLang].redirecting}</p></div>`;
+  document.body.appendChild(popup);
+  setTimeout(()=>{ window.location.href="principal.html"; },2000);
 }
 
 async function shareExperience(e){
-  e&&e.preventDefault();
-  try{
-    let baseFile;
-    if(selectedFile){
-      baseFile=selectedFile;
-    } else {
-      const res=await fetch(DEFAULT_CARD);
-      const blob=await res.blob();
-      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
-    }
-    let fileToShare=baseFile;
-    if(chkWatermark.checked){
-      fileToShare=await addWatermarkToImage(baseFile);
-    }
+  e&&e.preventDefault();
+  try{
+    let baseFile;
+    if(selectedFile){
+      baseFile=selectedFile;
+    } else {
+      const res=await fetch(DEFAULT_CARD);
+      const blob=await res.blob();
+      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
+    }
+    let fileToShare=baseFile;
+    if(chkWatermark.checked){
+      fileToShare=await addWatermarkToImage(baseFile);
+    }
 
-    if(navigator.canShare?.({files:[fileToShare]})){
-      await navigator.share({files:[fileToShare]});
-      showSuccessMessage();
+    // Usar la API de Web Share si está disponible
+    if(navigator.canShare?.({files:[fileToShare]})){
+      await navigator.share({
+        files:[fileToShare],
+        title: COPY[currentLang].shareTitle,
+        text: COPY[currentLang].shareSub
+      });
+      showSuccessMessage();
+    } else {
+      // Si no, intentar abrir en una nueva ventana (menos ideal para compartir)
+      const url=URL.createObjectURL(fileToShare);
+      window.open(url,"_blank");
+      showSuccessMessage(); // Mostrar mensaje de éxito aunque no sea una app de compartir nativa
+    }
+  }catch(err){ 
+    // Capturar si el usuario cancela la acción de compartir
+    if (err.name === 'AbortError') {
+        console.log("Compartir cancelado por el usuario.");
     } else {
-      const url=URL.createObjectURL(fileToShare);
-      window.open(url,"_blank");
-      showSuccessMessage();
+        console.error("Error al compartir:", err);
     }
-  }catch(err){ console.log("Error o cancelado:", err); }
+  }
 }
 
 btnShare.onclick=shareExperience;
+
+// Si no hay foto seleccionada al inicio, mostrar el placeholder
+if (!selectedFile) {
+    photoContainer.style.display = 'flex';
+    placeholderText.style.display = 'block';
+    photoPreview.style.display = 'none'; // Ocultar img si no hay src
+}
 </script>
 </body>
 </html>
