@@ -136,12 +136,12 @@
 
   .btn-private {
     background-color: var(--accent-orange);
-    box-shadow: 0 8px 25px rgba(232, 159, 75, 0.3);
+    box-shadow: 0 8px 25px rgba(232, 159, 75,0.3);
   }
   .btn-private:hover {
     background-color: #d1812a;
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(232, 159, 75, 0.4);
+    box-shadow: 0 12px 30px rgba(232,159,75,0.4);
   }
 
   .note {
@@ -183,7 +183,6 @@
     <div class="final-note" data-lang="finalNote">
       Tu opinión, ya sea positiva o negativa, nos ayuda a mejorar. Gracias por formar parte.
     </div>
-
   </div>
   
 </main>
@@ -201,83 +200,22 @@ const TALLY_LINKS = {
 
 // Traducciones para todos los idiomas
 const translations = {
-  es: {
-    pageTitle: "¿Cómo fue tu experiencia?",
-    publicTitle: "⭐ Reseña pública",
-    publicText: "Tu opinión ayuda a otros clientes a encontrarnos.",
-    publicBtn: "Publicar en Google",
-    publicNote: "Queda visible para todos.",
-    privateTitle: "📝 Comentario privado",
-    privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.",
-    privateBtn: "Hablar con el equipo",
-    privateNote: "Solo lo vemos nosotros.",
-    finalNote: "Tu opinión, ya sea positiva o negativa, nos ayuda a mejorar. Gracias por formar parte."
-  },
-  en: {
-    pageTitle: "How was your experience?",
-    publicTitle: "⭐ Public review",
-    publicText: "Your review helps other customers find us.",
-    publicBtn: "Post on Google",
-    publicNote: "Visible to everyone.",
-    privateTitle: "📝 Private feedback",
-    privateText: "Had an issue? Your feedback helps us improve directly.",
-    privateBtn: "Tell the Team",
-    privateNote: "Only we can see it.",
-    finalNote: "Your feedback, positive or negative, helps us improve. Thank you for being part of it."
-  },
-  de: {
-    pageTitle: "Wie war Ihre Erfahrung?",
-    publicTitle: "⭐ Öffentliche Bewertung",
-    publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.",
-    publicBtn: "Auf Google posten",
-    publicNote: "Für alle sichtbar.",
-    privateTitle: "📝 Privates Feedback",
-    privateText: "Gab es ein Problem? Helfen Sie uns, uns direkt zu verbessern.",
-    privateBtn: "Dem Team mitteilen",
-    privateNote: "Nur wir können es sehen.",
-    finalNote: "Ihr Feedback, positiv oder negativ, hilft uns, uns zu verbessern. Vielen Dank, dass Sie dabei sind."
-  },
-  fr: {
-    pageTitle: "Comment était votre expérience ?",
-    publicTitle: "⭐ Avis public",
-    publicText: "Votre avis aide les autres clients à nous trouver.",
-    publicBtn: "Publier sur Google",
-    publicNote: "Visible pour tous.",
-    privateTitle: "📝 Retour privé",
-    privateText: "Quelque chose n'a pas bien fonctionné ? Aidez-nous à nous améliorer directement.",
-    privateBtn: "Parler à l'équipe",
-    privateNote: "Seul nous pouvons le voir.",
-    finalNote: "Votre avis, positif ou négatif, nous aide à nous améliorer. Merci d'en faire partie."
-  },
-  it: {
-    pageTitle: "Com'è stata la tua esperienza?",
-    publicTitle: "⭐ Recensione pubblica",
-    publicText: "La tua opinione aiuta altri clienti a trovarci.",
-    publicBtn: "Pubblica su Google",
-    publicNote: "Visibile a tutti.",
-    privateTitle: "📝 Feedback privato",
-    privateText: "Qualcosa non è andato bene? Aiutaci a migliorare direttamente.",
-    privateBtn: "Parla con il team",
-    privateNote: "Lo vediamo solo noi.",
-    finalNote: "La tua opinione, positiva o negativa, ci aiuta a migliorare. Grazie per farne parte."
-  },
-  nl: {
-    pageTitle: "Hoe was je ervaring?",
-    publicTitle: "⭐ Publieke beoordeling",
-    publicText: "Je beoordeling helpt andere klanten ons te vinden.",
-    publicBtn: "Plaats op Google",
-    publicNote: "Zichtbaar voor iedereen.",
-    privateTitle: "📝 Privé feedback",
-    privateText: "Was er iets niet goed? Help ons direct te verbeteren.",
-    privateBtn: "Vertel het team",
-    privateNote: "Alleen wij kunnen het zien.",
-    finalNote: "Je feedback, positief of negatief, helpt ons te verbeteren. Bedankt dat je erbij bent."
-  }
+  es: { pageTitle:"¿Cómo fue tu experiencia?", publicTitle:"⭐ Reseña pública", publicText:"Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn:"Publicar en Google", publicNote:"Queda visible para todos.", privateTitle:"📝 Comentario privado", privateText:"¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn:"Hablar con el equipo", privateNote:"Solo lo vemos nosotros.", finalNote:"Tu opinión, ya sea positiva o negativa, nos ayuda a mejorar. Gracias por formar parte." },
+  en: { pageTitle:"How was your experience?", publicTitle:"⭐ Public review", publicText:"Your review helps other customers find us.", publicBtn:"Post on Google", publicNote:"Visible to everyone.", privateTitle:"📝 Private feedback", privateText:"Had an issue? Your feedback helps us improve directly.", privateBtn:"Tell the Team", privateNote:"Only we can see it.", finalNote:"Your feedback, positive or negative, helps us improve. Thank you for being part of it." },
+  de: { pageTitle:"Wie war Ihre Erfahrung?", publicTitle:"⭐ Öffentliche Bewertung", publicText:"Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn:"Auf Google posten", publicNote:"Für alle sichtbar.", privateTitle:"📝 Privates Feedback", privateText:"Gab es ein Problem? Helfen Sie uns, uns direkt zu verbessern.", privateBtn:"Dem Team mitteilen", privateNote:"Nur wir können es sehen.", finalNote:"Ihr Feedback, positiv oder negativ, hilft uns, uns zu verbessern. Vielen Dank, dass Sie dabei sind." },
+  fr: { pageTitle:"Comment était votre expérience ?", publicTitle:"⭐ Avis public", publicText:"Votre avis aide les autres clients à nous trouver.", publicBtn:"Publier sur Google", publicNote:"Visible pour tous.", privateTitle:"📝 Retour privé", privateText:"Quelque chose n'a pas bien fonctionné ? Aidez-nous à nous améliorer directement.", privateBtn:"Parler à l'équipe", privateNote:"Seul nous pouvons le voir.", finalNote:"Votre avis, positif ou négatif, nous aide à nous améliorer. Merci d'en faire partie." },
+  it: { pageTitle:"Com'è stata la tua esperienza?", publicTitle:"⭐ Recensione pubblica", publicText:"La tua opinione aiuta altri clienti a trovarci.", publicBtn:"Pubblica su Google", publicNote:"Visibile a tutti.", privateTitle:"📝 Feedback privato", privateText:"Qualcosa non è andato bene? Aiutaci a migliorare direttamente.", privateBtn:"Parla con il team", privateNote:"Lo vediamo solo noi.", finalNote:"La tua opinione, positiva o negativa, ci aiuta a migliorare. Grazie per farne parte." },
+  nl: { pageTitle:"Hoe was je ervaring?", publicTitle:"⭐ Publieke beoordeling", publicText:"Je beoordeling helpt andere klanten ons te vinden.", publicBtn:"Plaats op Google", publicNote:"Zichtbaar voor iedereen.", privateTitle:"📝 Privé feedback", privateText:"Was er iets niet goed? Help ons direct te verbeteren.", privateBtn:"Vertel het team", privateNote:"Alleen wij kunnen het zien.", finalNote:"Je feedback, positief of negatief, helpt ons te verbeteren. Bedankt dat je erbij bent." }
 };
 
-// Detectar idioma del navegador
-let pageLang = navigator.language.slice(0,2).toLowerCase();
-if (!translations[pageLang]) pageLang = "es";
+// Detectar idioma desde parámetro ?lang=xx
+const urlParams = new URLSearchParams(window.location.search);
+let pageLang = urlParams.get("lang");
+if (!pageLang || !translations[pageLang]) {
+  // Si no hay parámetro o no soportado, usar idioma del navegador
+  pageLang = navigator.language.slice(0,2).toLowerCase();
+  if (!translations[pageLang]) pageLang = "es";
+}
 
 // Aplicar traducciones
 document.addEventListener("DOMContentLoaded", () => {
@@ -285,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const key = el.dataset.lang;
     if (translations[pageLang][key]) el.textContent = translations[pageLang][key];
   });
-
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
   document.getElementById("btnPrivate").href = TALLY_LINKS[pageLang] || TALLY_LINKS["es"];
 });
