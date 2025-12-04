@@ -188,18 +188,41 @@
     </label>
   </div>
 
-  <!-- Añade esto dentro del <main class="landing-container">, por ejemplo justo después de los botones -->
-  <button id="kidsModeBtn" class="btn" style="background: #f4c742; color: #333; margin-top: 20px; border: 2px solid #e6b800; transition: transform 0.6s;">Modo Niño 🧒</button>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 20px;">
+      <!-- Selector de idioma -->
+      <select id="lang-select" style="
+        padding: 12px 16px;
+        height: 48px;
+        border-radius: 50px;
+        border: 2px solid var(--select-border);
+        background: var(--select-bg);
+        color: var(--text-color);
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s, color 0.3s, border 0.3s;
+      ">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+      </select>
 
-
-
-    <select id = lang-select>
-      <option value = "es">Español</option>
-      <option value = "en">English</option>
-      <option value="de">Deutsch</option>
-      <option value="fr">Français</option>
-      <option value="it">Italiano</option>
-    </select>
+      <!-- Botón Modo Niño -->
+      <button id="kidsModeBtn" style="
+        padding: 12px 20px;
+        height: 48px;
+        border-radius: 15px;
+        font-weight: bold;
+        border: 2px solid #e6b800;
+        background: #f4c742;
+        color: #333;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
+      ">
+        Modo Niño 🧒
+      </button>
+    </div>
 
   </main>
   
@@ -311,26 +334,37 @@
   </script>
 
   <script>
-    const kidsBtn = document.getElementById('kidsModeBtn');
-    kidsBtn.addEventListener('click', () => {
-      // Aplicar efecto de giro
-      document.body.style.transition = 'transform 0.8s';
-      document.body.style.transform = 'rotateY(180deg)';
+ const kidsBtn = document.getElementById('kidsModeBtn');
 
-      // Después de la animación, ir a juegos.html
-      setTimeout(() => {
-        window.location.href = 'juegos.html';
-      }, 800); // 800ms coincide con la duración del giro
-    });
+kidsBtn.addEventListener('click', () => {
+  const curtain = document.createElement('div');
+  curtain.style.position = 'fixed';
+  curtain.style.top = 0;
+  curtain.style.left = 0;
+  curtain.style.width = '100vw';
+  curtain.style.height = '100vh';
+  curtain.style.background = 'var(--bg-color)';
+  curtain.style.zIndex = 10000;
+  curtain.style.transform = 'rotateY(90deg)'; // giro inicial simulado
+  curtain.style.transformOrigin = 'center';
+  curtain.style.transition = 'transform 0.5s ease-in-out';
 
-    // Opcional: efecto hover divertido
-    kidsBtn.addEventListener('mouseover', () => {
-      kidsBtn.style.transform = 'scale(1.05)';
-    });
-    kidsBtn.addEventListener('mouseout', () => {
-      kidsBtn.style.transform = 'scale(1)';
-    });
+  document.body.appendChild(curtain);
+
+  // Forzar repaint
+  void curtain.offsetWidth;
+
+  // Girar hasta 0 grados (efecto de vuelta completa)
+  curtain.style.transform = 'rotateY(0deg)';
+
+  // Redirigir cuando casi termina la animación
+  setTimeout(() => {
+    window.location.href = 'juegos.html';
+  }, 400);
+});
+
   </script>
+
 
 
 </body>
