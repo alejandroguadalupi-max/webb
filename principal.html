@@ -34,14 +34,15 @@
     transition: background 0.3s, color 0.3s;
   }
 
+  /* Ajuste principal: más espacio arriba */
   .landing-container {
     width: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: flex-start; /* empuja hacia arriba para controlar padding-top */
+    padding: 80px 20px 20px 20px; /* más espacio arriba */
     box-sizing: border-box;
     text-align: center;
   }
@@ -85,9 +86,9 @@
     border: 2px solid var(--select-border);
     background: var(--select-bg);
     color: var(--text-color);
-    margin-top: 20px;
     cursor: pointer;
     transition: background 0.3s, color 0.3s, border 0.3s;
+    min-width: 180px;
   }
 
   h2 {
@@ -104,13 +105,12 @@
     line-height: 1.5;
   }
 
-  .theme-switch-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 15px 0;
-  font-family: Arial, sans-serif;
-}
+  .theme-switch-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
 
   .theme-switch {
     position: relative;
@@ -123,12 +123,6 @@
     opacity: 0;
     width: 0;
     height: 0;
-  }
-  .theme-switch-container {
-    position: fixed;    /* lo saca del flujo normal */
-    top: 20px;          /* margen desde arriba */
-    right: 20px;        /* margen desde la derecha */
-    z-index: 1000;      /* que esté encima de todo */
   }
 
   .slider {
@@ -152,63 +146,24 @@
     border-radius: 50%;
   }
 
-  /* activado: verde y circulo a la derecha */
   input:checked + .slider {
-    background-color: #4a8f3d; /* verde premium */
+    background-color: #4a8f3d;
   }
 
   input:checked + .slider:before {
     transform: translateX(26px);
   }
 
-</style>
+  /* Contenedor idioma + Modo Niño */
+  .lang-kids-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
 
-</head>
-<body>
-  
-  <main class = "landing-container" id = "landing">
-    <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
-    <h2 data-lang = "welcome">¡Bienvenid@!</h2>
-    <p data-lang = "prompt">¿Qué te gustaría hacer? </p>
-
-    <div class = "button-group">
-      <a id = "menuLink" class = "btn btn-primary" data-lang = "view_menu" href = "#">Acceder a la carta</a>
-      <a id = "reviewLink" class = "btn btn-secondary" data-lang = "leave_review" href = "#">Dejar reseña</a>
-      <a id = "shareLink" class = "btn btn-secondary" data-lang = "share_with_friends" href = "#">Compartir experiencia con amigos</a>
-    </div>
-
-    <div class="theme-switch-container">
-    <label class="theme-switch">
-      <input type="checkbox" id="theme-toggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-
-    <!-- Contenedor idioma + Modo Niño -->
-<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
-  
-  <!-- Selector de idioma -->
-  <select id="lang-select" style="
-    padding: 12px 16px;
-    height: 48px;
-    border-radius: 50px;
-    border: 2px solid var(--select-border);
-    background: var(--select-bg);
-    color: var(--text-color);
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s, color 0.3s, border 0.3s;
-    min-width: 180px;
-  ">
-    <option value="es">Español</option>
-    <option value="en">English</option>
-    <option value="de">Deutsch</option>
-    <option value="fr">Français</option>
-    <option value="it">Italiano</option>
-  </select>
-
-  <!-- Botón Modo Niño debajo, centrado -->
-  <button id="kidsModeBtn" style="
+  #kidsModeBtn {
     padding: 12px 20px;
     height: 48px;
     border-radius: 15px;
@@ -219,154 +174,117 @@
     cursor: pointer;
     transition: transform 0.2s, background 0.3s;
     min-width: 180px;
-  ">
-    Modo Niño 🧒
-  </button>
+  }
 
-</div>
+  </style>
+</head>
+<body>
 
-  </main>
-  
-  <script>
+<main class="landing-container" id="landing">
+  <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
+  <h2 data-lang="welcome">¡Bienvenid@!</h2>
+  <p data-lang="prompt">¿Qué te gustaría hacer?</p>
 
-    // textos en todos los idiomas
-    const translations = {
-      es: {
-            welcome: "¡Bienvenid@!",
-            prompt: "¿Qué te gustaría hacer?",
-            view_menu: "Acceder a la carta",
-            leave_review: "Dejar reseña",
-            share_with_friends: "Compartir experiencia con amigos",
-            title: "Bienvenido a PataMig"
-        },
-        en: {
-            welcome: "Welcome!",
-            prompt: "What would you like to do?",
-            view_menu: "View the Menu",
-            leave_review: "Leave a Review",
-            share_with_friends: "Share Your Experience",
-            title: "Welcome to PataMig"
-        },
-        de: {
-            welcome: "Willkommen!",
-            prompt: "Was möchten Sie tun?",
-            view_menu: "Menü anzeigen",
-            leave_review: "Eine Bewertung abgeben",
-            share_with_friends: "Erfahrung mit Freunden teilen",
-            title: "Willkommen bei PataMig"
-        },
-        fr: {
-            welcome: "Bienvenue!",
-            prompt: "Que souhaitez-vous faire ?",
-            view_menu: "Voir le menu",
-            leave_review: "Laisser un avis",
-            share_with_friends: "Partager votre expérience avec des amis",
-            title: "Bienvenue à PataMig"
-        },
-        it: {
-            welcome: "Benvenuto!",
-            prompt: "Cosa vuoi fare?",
-            view_menu: "Visualizza il menù",
-            leave_review: "Lascia una recensione",
-            share_with_friends: "Condividi la tua esperienza con gli amici",
-            title: "Benvenuto a PataMig"
-        }     
+  <div class="button-group">
+    <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la carta</a>
+    <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" href="#">Dejar reseña</a>
+    <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir experiencia con amigos</a>
+  </div>
+
+  <div class="theme-switch-container">
+    <label class="theme-switch">
+      <input type="checkbox" id="theme-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="lang-kids-container">
+    <select id="lang-select">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+    </select>
+
+    <button id="kidsModeBtn">Modo Niño 🧒</button>
+  </div>
+
+</main>
+
+<script>
+  // Traducciones
+  const translations = {
+    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia con amigos", title:"Bienvenido a PataMig" },
+    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Your Experience", title:"Welcome to PataMig" },
+    de: { welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Menü anzeigen", leave_review:"Eine Bewertung abgeben", share_with_friends:"Erfahrung mit Freunden teilen", title:"Willkommen bei PataMig" },
+    fr: { welcome:"Bienvenue!", prompt:"Que souhaitez-vous faire ?", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager votre expérience avec des amis", title:"Bienvenue à PataMig" },
+    it: { welcome:"Benvenuto!", prompt:"Cosa vuoi fare?", view_menu:"Visualizza il menù", leave_review:"Lascia una recensione", share_with_friends:"Condividi la tua esperienza con gli amici", title:"Benvenuto a PataMig" }
   };
 
-    const contentElements = document.querySelectorAll('[data-lang]');
+  const contentElements = document.querySelectorAll('[data-lang]');
+  const menuLink = document.getElementById("menuLink");
+  const reviewLink = document.getElementById("reviewLink");
+  const shareLink = document.getElementById("shareLink");
+  const langSelect = document.getElementById("lang-select");
 
-    //También queremos cambiar texto de los botones
-    const menuLink = document.getElementById("menuLink");
-    const reviewLink = document.getElementById("reviewLink");
-    const shareLink = document.getElementById("shareLink");
+  function setLanguage(lang){
+    if(!translations[lang]) lang="es";
+    contentElements.forEach(el => { el.textContent = translations[lang][el.dataset.lang]; });
+    menuLink.href = `carta.html?lang=${lang}`;
+    reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
+    shareLink.href = `compartir_2.html?lang=${lang}`;
+    document.title = translations[lang].title;
+  }
 
-    //Miramos que idioma eligieron
-    const langSelect = document.getElementById("lang-select")
+  const supportedLangs = ['es','en','de','fr','it','nl'];
+  const browserLang = navigator.language.slice(0,2);
+  const savedLang = localStorage.getItem('userLang') || (supportedLangs.includes(browserLang) ? browserLang : 'es');
+  langSelect.value = savedLang;
+  setLanguage(savedLang);
 
-    function setLanguage(lang) {
-      if (!translations[lang]) lang = "es";
-      contentElements.forEach(el => {
-        const key = el.dataset.lang;   //esto devuelve key del data-lang: welcome, prompt, view-menu...
-        el.textContent = translations[lang][key];
-      });
-      
-      menuLink.href = `carta.html?lang=${lang}`;
-      reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
-      shareLink.href = `compartir_2.html?lang=${lang}`;
+  langSelect.addEventListener('change', () => {
+    const selectedLang = langSelect.value;
+    setLanguage(selectedLang);
+    localStorage.setItem('userLang', selectedLang);
+  });
+</script>
 
-      document.title = translations[lang].title;
-    }
+<script>
+  // Tema
+  const toggle = document.getElementById('theme-toggle');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const savedTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  toggle.checked = savedTheme === 'dark';
+  toggle.addEventListener('change', () => {
+    const newTheme = toggle.checked ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+</script>
 
-    const supportedLangs = ['es','en','de','fr','it','nl'];
-    const browserLang = navigator.language || navigator.userLanguage;
-    const langCode = browserLang.slice(0,2);
-
-    const savedLang = localStorage.getItem('userLang') || (supportedLangs.includes(langCode) ? langCode : 'es');
-
-    langSelect.value = savedLang;
-    setLanguage(savedLang);
-
-    langSelect.addEventListener('change', () => {
-      const selectedLang = langSelect.value;
-      setLanguage(selectedLang);
-      localStorage.setItem('userLang', selectedLang);
-    });
-
-  </script>
-
-  <script>
-    // Detectar tema del sistema o guardado previamente
-    const toggle = document.getElementById('theme-toggle');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
-
-    // Aplicar tema
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
-    // Marcar toggle si tema es oscuro
-    toggle.checked = savedTheme === 'dark';
-
-    // Cambiar tema al deslizar
-    toggle.addEventListener('change', () => {
-      const newTheme = toggle.checked ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-    });
-  </script>
-
-  <script>
- const kidsBtn = document.getElementById('kidsModeBtn');
-
-kidsBtn.addEventListener('click', () => {
-  const curtain = document.createElement('div');
-  curtain.style.position = 'fixed';
-  curtain.style.top = 0;
-  curtain.style.left = 0;
-  curtain.style.width = '100vw';
-  curtain.style.height = '100vh';
-  curtain.style.background = 'var(--bg-color)';
-  curtain.style.zIndex = 10000;
-  curtain.style.transform = 'rotateY(90deg)'; // giro inicial simulado
-  curtain.style.transformOrigin = 'center';
-  curtain.style.transition = 'transform 0.5s ease-in-out';
-
-  document.body.appendChild(curtain);
-
-  // Forzar repaint
-  void curtain.offsetWidth;
-
-  // Girar hasta 0 grados (efecto de vuelta completa)
-  curtain.style.transform = 'rotateY(0deg)';
-
-  // Redirigir cuando casi termina la animación
-  setTimeout(() => {
-    window.location.href = 'juegos.html';
-  }, 400);
-});
-
-  </script>
-
-
+<script>
+  // Modo Niño
+  const kidsBtn = document.getElementById('kidsModeBtn');
+  kidsBtn.addEventListener('click', () => {
+    const curtain = document.createElement('div');
+    curtain.style.position = 'fixed';
+    curtain.style.top = 0;
+    curtain.style.left = 0;
+    curtain.style.width = '100vw';
+    curtain.style.height = '100vh';
+    curtain.style.background = 'var(--bg-color)';
+    curtain.style.zIndex = 10000;
+    curtain.style.transform = 'rotateY(90deg)';
+    curtain.style.transformOrigin = 'center';
+    curtain.style.transition = 'transform 0.5s ease-in-out';
+    document.body.appendChild(curtain);
+    void curtain.offsetWidth;
+    curtain.style.transform = 'rotateY(0deg)';
+    setTimeout(() => { window.location.href = 'juegos.html'; }, 400);
+  });
+</script>
 
 </body>
 </html>
