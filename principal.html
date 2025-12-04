@@ -56,10 +56,6 @@
     transition: transform 0.3s ease;
   }
 
-  .restaurant-logo:hover {
-    transform: scale(1.05);
-  }
-
   .button-group {
     display: flex;
     flex-direction: column;
@@ -188,41 +184,46 @@
     </label>
   </div>
 
-    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 20px;">
-      <!-- Selector de idioma -->
-      <select id="lang-select" style="
-        padding: 12px 16px;
-        height: 48px;
-        border-radius: 50px;
-        border: 2px solid var(--select-border);
-        background: var(--select-bg);
-        color: var(--text-color);
-        cursor: pointer;
-        font-weight: bold;
-        transition: background 0.3s, color 0.3s, border 0.3s;
-      ">
-        <option value="es">Español</option>
-        <option value="en">English</option>
-        <option value="de">Deutsch</option>
-        <option value="fr">Français</option>
-        <option value="it">Italiano</option>
-      </select>
+    <!-- Contenedor idioma + Modo Niño -->
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
+  
+  <!-- Selector de idioma -->
+  <select id="lang-select" style="
+    padding: 12px 16px;
+    height: 48px;
+    border-radius: 50px;
+    border: 2px solid var(--select-border);
+    background: var(--select-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s, border 0.3s;
+    min-width: 180px;
+  ">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+    <option value="de">Deutsch</option>
+    <option value="fr">Français</option>
+    <option value="it">Italiano</option>
+  </select>
 
-      <!-- Botón Modo Niño -->
-      <button id="kidsModeBtn" style="
-        padding: 12px 20px;
-        height: 48px;
-        border-radius: 15px;
-        font-weight: bold;
-        border: 2px solid #e6b800;
-        background: #f4c742;
-        color: #333;
-        cursor: pointer;
-        transition: transform 0.2s, background 0.3s;
-      ">
-        Modo Niño 🧒
-      </button>
-    </div>
+  <!-- Botón Modo Niño debajo, centrado -->
+  <button id="kidsModeBtn" style="
+    padding: 12px 20px;
+    height: 48px;
+    border-radius: 15px;
+    font-weight: bold;
+    border: 2px solid #e6b800;
+    background: #f4c742;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    min-width: 180px;
+  ">
+    Modo Niño 🧒
+  </button>
+
+</div>
 
   </main>
   
