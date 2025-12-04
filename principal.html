@@ -86,7 +86,7 @@
     display: block;
     padding: 15px;
     border-radius: 50px;
-    border: 2.5px solid var(--select-border);
+    border: 2px solid var(--select-border);
     background: var(--select-bg);
     color: var(--text-color);
     margin-top: 20px;
@@ -172,7 +172,7 @@
   
   <main class = "landing-container" id = "landing">
     <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
-    <h2 data-lang = "welcome">¡Bienvenido!</h2>
+    <h2 data-lang = "welcome">¡Bienvenid@!</h2>
     <p data-lang = "prompt">¿Qué te gustaría hacer? </p>
 
     <div class = "button-group">
@@ -187,6 +187,10 @@
       <span class="slider"></span>
     </label>
   </div>
+
+  <!-- Añade esto dentro del <main class="landing-container">, por ejemplo justo después de los botones -->
+  <button id="kidsModeBtn" class="btn" style="background: #f4c742; color: #333; margin-top: 20px; border: 2px solid #e6b800; transition: transform 0.6s;">Modo Niño 🧒</button>
+
 
 
     <select id = lang-select>
@@ -204,7 +208,7 @@
     // textos en todos los idiomas
     const translations = {
       es: {
-            welcome: "¡Bienvenido!",
+            welcome: "¡Bienvenid@!",
             prompt: "¿Qué te gustaría hacer?",
             view_menu: "Acceder a la carta",
             leave_review: "Dejar reseña",
@@ -228,7 +232,7 @@
             title: "Willkommen bei PataMig"
         },
         fr: {
-            welcome: "Bienvenue !",
+            welcome: "Bienvenue!",
             prompt: "Que souhaitez-vous faire ?",
             view_menu: "Voir le menu",
             leave_review: "Laisser un avis",
@@ -305,6 +309,29 @@
       localStorage.setItem('theme', newTheme);
     });
   </script>
+
+  <script>
+    const kidsBtn = document.getElementById('kidsModeBtn');
+    kidsBtn.addEventListener('click', () => {
+      // Aplicar efecto de giro
+      document.body.style.transition = 'transform 0.8s';
+      document.body.style.transform = 'rotateY(180deg)';
+
+      // Después de la animación, ir a juegos.html
+      setTimeout(() => {
+        window.location.href = 'juegos.html';
+      }, 800); // 800ms coincide con la duración del giro
+    });
+
+    // Opcional: efecto hover divertido
+    kidsBtn.addEventListener('mouseover', () => {
+      kidsBtn.style.transform = 'scale(1.05)';
+    });
+    kidsBtn.addEventListener('mouseout', () => {
+      kidsBtn.style.transform = 'scale(1)';
+    });
+  </script>
+
 
 </body>
 </html>
