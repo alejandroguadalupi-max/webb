@@ -1,224 +1,190 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title data-lang="title">Bienvenido a PataMig</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PataMig</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
 
-<style>
-:root {
-  --primary-green: #68B553;
-  --text-dark: #333;
-  --bg-light-gray: #f4f4f4;
-  --white: #fff;
-}
+    .landing-container {
+      width: 100%;
+      min-height: 100vh;   /* ocupa toda la pantalla */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  background: var(--white);
-  font-family: 'Poppins', sans-serif;
-  color: var(--text-dark);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
-}
+    .restarant-logo {
+        width: 200px;
+        max-width: 70%;
+        height: auto;
+        margin-bottom: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+    }
 
-.landing-container {
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 50px 25px;
-  box-sizing: border-box;
-  text-align: center;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
+  .restaurant-logo:hover {
+      transform: scale(1.05); /* efecto al pasar el dedo o mouse */
+  }
 
-h1.restaurant-name {
-  font-size: clamp(2em, 6vw, 3em);
-  font-weight: 700;
-  color: var(--primary-green);
-  margin-bottom: 25px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: transform 0.2s ease-out;
-}
-h1.restaurant-name:hover { transform: scale(1.03); }
+    .restaurant-name {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
 
-h2 {
-  font-size: clamp(1.5em, 4vw, 2em);
-  font-weight: 700;
-  margin: 10px 0;
-}
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 350px;
+      margin: 20px 0;
+    }
 
-p {
-  font-size: 1em;
-  color: #555;
-  margin-bottom: 35px;
-  line-height: 1.5;
-  max-width: 350px;
-}
+    .btn {
+      display: block;
+      padding: 15px;
+      border-radius: 15px;
+      text-decoration: none; /* esto hace que se quite el subrayado azul */
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #333;
+      color: #333;
+    }
 
-.button-group {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 40px;
-}
+    #lang-select {
+      display: block;
+      padding: 15px;   /* especie de borde interno */
+      border-radius: 50px;
+      border: 0.5px solid black;
+      margin-top: 20px;    /* espacio arriba para separar secciones*/
+    }
 
-.btn {
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1em;
-  padding: 14px;
-  border-radius: 14px;
-  transition: all 0.25s ease-out;
-  border: 2px solid transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  will-change: transform, box-shadow;
-}
-
-.btn-primary {
-  background: var(--primary-green);
-  color: var(--white);
-  border-color: var(--primary-green);
-  box-shadow: 0 6px 20px rgba(104,181,83,0.25);
-}
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(104,181,83,0.35);
-}
-
-.btn-secondary {
-  background: var(--white);
-  color: var(--primary-green);
-  border: 2px solid var(--primary-green);
-}
-.btn-secondary:hover {
-  background: #f7fbf5;
-  transform: translateY(-3px);
-}
-
-/* Selector de idioma mejorado */
-#lang-select {
-  padding: 12px 18px;
-  font-size: 1em;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  background: var(--bg-light-gray);
-  font-weight: 600;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-  min-width: 200px;
-  text-align: center;
-}
-
-#lang-select:hover {
-  box-shadow: 0 4px 15px rgba(104,181,83,0.3);
-  transform: translateY(-2px);
-}
-
-.fade-out {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-</style>
+  
+  </style>
 </head>
 <body>
+  
+  <main class = "landing-container" id = "landing">
+    <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
+    <h2 data-lang = "welcome">¡Bienvenido!</h2>
+    <p data-lang = "prompt">¿Qué te gustaría hacer? </p>
 
-<main class="landing-container" id="landing">
-  <h1 class="restaurant-name">PataMig</h1>
-  <h2 data-lang="welcome">¡Bienvenido!</h2>
-  <p data-lang="prompt">¿Qué te gustaría hacer?</p>
+    <div class = "button-group">
+      <a id = "menuLink" class = "btn btn-primary" data-lang = "view_menu" href = "#">Acceder a la carta</a>
+      <a id = "reviewLink" class = "btn btn-secondary" data-lang = "leave_review" href = "#">Dejar reseña</a>
+      <a id = "shareLink" class = "btn btn-secondary" data-lang = "share_with_friends" href = "#">Compartir experiencia con amigos</a>
+    </div>
 
-  <div class="button-group">
-    <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la Carta</a>
-    <a id="reviewLink" class="btn btn-secondary" data-lang="leave_review" href="#">Dejar Reseña</a>
-    <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir Experiencia con Amigos</a>
-  </div>
+    <select id = lang-select>
+      <option value = "es">Español</option>
+      <option value = "en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+    </select>
 
-  <select id="lang-select">
-    <option value="es">Español</option>
-    <option value="en">English</option>
-    <option value="de">Deutsch</option>
-    <option value="fr">Français</option>
-    <option value="it">Italiano</option>
-    <option value="nl">Nederlands</option>
-  </select>
-</main>
+  </main>
+  
+  <script>
 
-<script>
-const translations = {
-  es: { title:"Bienvenido a PataMig", welcome:"¡Bienvenido!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia con Amigos" },
-  en: { title:"Welcome to PataMig", welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Your Experience with Friends" },
-  de: { title:"Willkommen bei PataMig", welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Speisekarte ansehen", leave_review:"Bewertung abgeben", share_with_friends:"Erlebnis mit Freunden teilen" },
-  fr: { title:"Bienvenue chez PataMig", welcome:"Bienvenue !", prompt:"Que souhaitez-vous faire ?", view_menu:"Accéder au Menu", leave_review:"Laisser un Avis", share_with_friends:"Partager votre expérience avec vos amis" },
-  it: { title:"Benvenuto da PataMig", welcome:"Benvenuto!", prompt:"Cosa ti piacerebbe fare?", view_menu:"Accedi al Menu", leave_review:"Lascia una Recensione", share_with_friends:"Condividi l'esperienza con gli amici" },
-  nl: { title:"Welkom bij PataMig", welcome:"Welkom!", prompt:"Wat wil je doen?", view_menu:"Bekijk het Menu", leave_review:"Laat een Recensie achter", share_with_friends:"Deel je ervaring met vrienden" }
-};
+    // textos en todos los idiomas
+    const translations = {
+      es: {
+            welcome: "¡Bienvenido!",
+            prompt: "¿Qué te gustaría hacer?",
+            view_menu: "Acceder a la carta",
+            leave_review: "Dejar reseña",
+            share_with_friends: "Compartir experiencia con amigos",
+            title: "Bienvenido a PataMig"
+        },
+        en: {
+            welcome: "Welcome!",
+            prompt: "What would you like to do?",
+            view_menu: "View the Menu",
+            leave_review: "Leave a Review",
+            share_with_friends: "Share Your Experience",
+            title: "Welcome to PataMig"
+        },
+        de: {
+            welcome: "Willkommen!",
+            prompt: "Was möchten Sie tun?",
+            view_menu: "Menü anzeigen",
+            leave_review: "Eine Bewertung abgeben",
+            share_with_friends: "Erfahrung mit Freunden teilen",
+            title: "Willkommen bei PataMig"
+        },
+        fr: {
+            welcome: "Bienvenue !",
+            prompt: "Que souhaitez-vous faire ?",
+            view_menu: "Voir le menu",
+            leave_review: "Laisser un avis",
+            share_with_friends: "Partager votre expérience avec des amis",
+            title: "Bienvenue à PataMig"
+        },
+        it: {
+            welcome: "Benvenuto!",
+            prompt: "Cosa vuoi fare?",
+            view_menu: "Visualizza il menù",
+            leave_review: "Lascia una recensione",
+            share_with_friends: "Condividi la tua esperienza con gli amici",
+            title: "Benvenuto a PataMig"
+        }     
+  };
 
-const contentElements = document.querySelectorAll('[data-lang]');
-const menuLink = document.getElementById("menuLink");
-const reviewLink = document.getElementById("reviewLink");
-const shareLink = document.getElementById("shareLink");
-const langSelect = document.getElementById("lang-select");
-const landing = document.getElementById("landing");
+   
 
-function setLanguage(lang){
-  if(!translations[lang]) lang="es";
-  document.documentElement.lang = lang;
-  localStorage.setItem('userLang', lang);
+    const contentElements = document.querySelectorAll('[data-lang]');
 
-  // Animación fade-out
-  landing.classList.add("fade-out");
-  setTimeout(()=>{
-    contentElements.forEach(el=>{
-      const key = el.dataset.lang;
-      if(translations[lang][key]) el.textContent = translations[lang][key];
+    //También queremos cambiar texto de los botones
+    const menuLink = document.getElementById("menuLink");
+    const reviewLink = document.getElementById("reviewLink");
+    const shareLink = document.getElementById("shareLink");
+
+    //Miramos que idioma eligieron
+    const langSelect = document.getElementById("lang-select")
+
+    function setLanguage(lang) {
+      if (!translations[lang]) lang = "es";
+      contentElements.forEach(el => {
+        const key = el.dataset.lang;   //esto devuelve key del data-lang: welcome, prompt, view-menu...
+        el.textContent = translations[lang][key];
+      });
+      
+      menuLink.href = `carta.html?lang=${lang}`;
+      reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
+      shareLink.href = `compartir_2.html?lang=${lang}`;
+
+      document.title = translations[lang].title;
+    }
+
+    const supportedLangs = ['es','en','de','fr','it','nl'];
+    const browserLang = navigator.language || navigator.userLanguage;
+    const langCode = browserLang.slice(0,2);
+
+    const savedLang = localStorage.getItem('userLang') || (supportedLangs.includes(langCode) ? langCode : 'es');
+
+    langSelect.value = savedLang;
+    setLanguage(savedLang);
+
+    langSelect.addEventListener('change', () => {
+      const selectedLang = langSelect.value;
+      setLanguage(selectedLang);
+      localStorage.setItem('userLang', selectedLang);
     });
-    menuLink.href = `carta.html?lang=${lang}`;
-    reviewLink.href = `https://valoratuvisita.com/restaurante_2?lang=${lang}`;
-    shareLink.href = `compartir_2.html?lang=${lang}`;
-    document.title = translations[lang].title;
-    // Fade-in
-    landing.classList.remove("fade-out");
-    landing.classList.add("fade-in");
-    setTimeout(()=>landing.classList.remove("fade-in"), 400);
-  }, 300);
-}
 
-// Detectar idioma inicial
-const savedLang = localStorage.getItem('userLang') || navigator.language.slice(0,2);
-const supportedLangs = ['es','en','de','fr','it','nl'];
-const initialLang = supportedLangs.includes(savedLang) ? savedLang : 'es';
-langSelect.value = initialLang;
-setLanguage(initialLang);
-
-// Cambiar idioma al seleccionar
-langSelect.addEventListener('change', ()=>{
-  setLanguage(langSelect.value);
-});
-</script>
-
+  </script>
 </body>
 </html>
