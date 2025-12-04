@@ -6,6 +6,21 @@
   <title>PataMig</title>
 
   <style>
+    
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333;
+      --btn-bg: #92d668;
+      --btn-text: #fff;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1a1a;
+      --text-color: #f4f4f4;
+      --btn-bg: #4a8f3d;
+      --btn-text: #fff;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -88,7 +103,28 @@
       line-height: 1.5;
     }
 
-  
+    #theme-toggle {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 50px;
+      border: none;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    #lang-select {
+      background: rgba(255,255,255,0.85);
+      color: var(--text-color);
+      border: 0.5px solid var(--text-color);
+    }
+
   </style>
 </head>
 <body>
@@ -103,6 +139,8 @@
       <a id = "reviewLink" class = "btn btn-secondary" data-lang = "leave_review" href = "#">Dejar reseña</a>
       <a id = "shareLink" class = "btn btn-secondary" data-lang = "share_with_friends" href = "#">Compartir experiencia con amigos</a>
     </div>
+
+    <button id="theme-toggle">🌙 / ☀️</button>
 
     <select id = lang-select>
       <option value = "es">Español</option>
@@ -200,7 +238,20 @@
       setLanguage(selectedLang);
       localStorage.setItem('userLang', selectedLang);
     });
+  
+    // Detectar tema del sistema y guardado previamente
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', savedTheme);
 
+    // Botón para cambiar tema
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
   </script>
 </body>
 </html>
