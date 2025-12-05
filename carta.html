@@ -2,16 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Carta — PataMig</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+<title>Carta</title>
 
-<!-- Fuentes -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ================= VARIABLES ================= */
 :root{
   --bg:#f4f4f4;
   --card:#ffffff;
@@ -29,192 +27,52 @@
   --card:#1a1b1d;
   --text:#e8e8e8;
   --muted:#a5a5a5;
+  --accent:#5fa249;
   --shadow:0 8px 30px rgba(0,0,0,0.45);
 }
-
-/* ================= BASE ================= */
 *{box-sizing:border-box;}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:"Inter", sans-serif;
-  line-height:1.5;
-  font-size:var(--font-size);
-  -webkit-tap-highlight-color:transparent;
-}
-
-.wrap{
-  max-width:var(--maxw);
-  padding:18px;
-  margin:auto;
-}
-
-/* ================= HEADER ================= */
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:18px;
-}
-
-.back-btn{
-  text-decoration:none;
-  padding:10px 16px;
-  background:var(--card);
-  color:var(--text);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  font-weight:600;
-  transition:.25s;
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter", sans-serif;line-height:1.5;font-size:var(--font-size);-webkit-tap-highlight-color:transparent;}
+.wrap{max-width:var(--maxw);padding:18px;margin:auto;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.back-btn{text-decoration:none;padding:10px 16px;background:var(--card);color:var(--text);border-radius:var(--radius);box-shadow:var(--shadow);font-weight:600;transition:.25s;}
 .back-btn:hover{transform:scale(1.05);} 
-
 .controls{display:flex; gap:10px; align-items:center;}
-
-.font-btn{
-  background:var(--card);
-  padding:6px 10px;
-  border-radius:10px;
-  border:none;
-  box-shadow:var(--shadow);
-  font-weight:700;
-  cursor:pointer;
-}
-
+.font-btn{background:var(--card);padding:6px 10px;border-radius:10px;border:none;box-shadow:var(--shadow);font-weight:700;cursor:pointer;}
 .theme-switch{position:relative; width:52px; height:30px;}
 .theme-switch input{display:none}
-.slider{
-  width:100%; height:100%;
-  background:#bdbdbd;
-  border-radius:50px;
-  position:relative;
-}
-.slider:before{
-  content:"";
-  position:absolute;
-  width:24px; height:24px;
-  border-radius:50%;
-  background:#fff;
-  top:3px; left:3px;
-  transition:.25s;
-}
+.slider{width:100%; height:100%; background:#888; border-radius:50px; position:relative;}
+.slider:before{content:""; position:absolute; width:24px; height:24px; border-radius:50%; background:#fff; top:3px; left:3px; transition:.25s;}
 .theme-switch input:checked + .slider{background:var(--accent);} 
 .theme-switch input:checked + .slider:before{transform:translateX(22px);} 
-
-/* ================= CARD ================= */
-.card{
-  background:var(--card);
-  padding:22px;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-
-/* ================= LISTA ================= */
-h2{
-  margin:0 0 12px;
-  color:var(--accent);
-  font-size:1.2rem;
-  font-weight:700;
-}
-
-ul.menu{
-  list-style:none;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-li.item{
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  padding:14px;
-  background:rgba(255,255,255,0.06);
-  border-radius:var(--radius);
-  transition:.25s;
-}
-
+.card{background:var(--card); padding:22px; border-radius:var(--radius); box-shadow:var(--shadow);}
+h2{margin:0 0 12px; color:var(--accent); font-size:1.2rem; font-weight:700;}
+ul.menu{list-style:none; padding:0; display:flex; flex-direction:column; gap:16px;}
+li.item{display:flex; justify-content:space-between; gap:16px; padding:14px; background:rgba(255,255,255,0.06); border-radius:var(--radius); transition:.25s;}
 .name{font-size:1.05rem; font-weight:700;}
 .desc{font-size:0.95rem; color:var(--muted);} 
 .price{font-weight:700; white-space:nowrap;}
-
-.add-btn{
-  margin-top:8px;
-  background:var(--accent);
-  color:white;
-  padding:6px 12px;
-  border-radius:10px;
-  font-size:0.85rem;
-  cursor:pointer;
-  border:none;
-}
-
-/* ================= PANEL FLOTANTE ================= */
-#pedidoBtn{
-  position:fixed;
-  bottom:20px; right:20px;
-  background:var(--accent);
-  padding:14px 22px;
-  border-radius:50px;
-  color:white;
-  font-weight:700;
-  display:none;
-  box-shadow:var(--shadow);
-}
-
-/* ================= PANEL SELECCIÓN ================= */
-#panelPedido{
-  position:fixed;
-  bottom:0; left:0; right:0;
-  background:var(--card);
-  border-radius:22px 22px 0 0;
-  box-shadow:0 -10px 30px rgba(0,0,0,.35);
-  padding:24px;
-  display:none;
-}
-
-#panelPedido h3{text-align:center; margin-top:0;}
-
-.pedido-item{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 0;
-  border-bottom:1px solid rgba(0,0,0,0.15);
-}
-
-textarea.nota{
-  width:100%;
-  margin-top:6px;
-  border-radius:10px;
-  border:1px solid rgba(0,0,0,0.2);
-  padding:8px;
-  resize:none;
-  font-size:0.9rem;
-}
-
-.remove-btn{
-  color:var(--accent);
-  font-weight:700;
-  cursor:pointer;
-}
-
+.add-btn{margin-top:8px; background:var(--accent); color:white; padding:6px 12px; border-radius:10px; font-size:0.85rem; cursor:pointer; border:none;}
+#pedidoBtn{position:fixed; bottom:20px; right:20px; background:var(--accent); padding:14px 22px; border-radius:50px; color:white; font-weight:700; display:none; box-shadow:var(--shadow);}
+#panelPedido{position:fixed; bottom:0; left:0; right:0; background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -10px 30px rgba(0,0,0,.35); padding:24px; display:none; max-height:80vh; overflow-y:auto;}
+#panelPedido h3{text-align:center; margin-top:0; display:flex; justify-content:space-between; align-items:center;}
+#panelPedido h3 span.close-btn{cursor:pointer;font-size:1.2rem;color:var(--muted);}
+.pedido-item{display:flex; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.15);}
+textarea.nota-general{width:100%; margin-top:12px; border-radius:10px; border:1px solid rgba(0,0,0,0.2); padding:8px; resize:none; font-size:0.9rem;}
+.remove-btn{color:var(--accent); font-weight:700; cursor:pointer;}
+.filter-container{margin-bottom:14px; display:flex; gap:12px; flex-wrap:wrap;}
+.filter-btn{padding:6px 12px; border-radius:10px; border:1px solid var(--accent); cursor:pointer; background:var(--card); font-weight:600; transition:.2s;}
+.filter-btn.active{background:var(--accent); color:#fff;}
 </style>
 </head>
-
 <body>
 
 <div class="wrap">
   <header>
     <a class="back-btn" href="principal.html">← Inicio</a>
-    <h1 style="font-size:1.4rem; margin:0;">PataMig — Carta</h1>
-
+    <h1 style="font-size:1.4rem; margin:0;">Carta</h1>
     <div class="controls">
       <button class="font-btn" id="fontMinus">A–</button>
       <button class="font-btn" id="fontPlus">A+</button>
-
       <label class="theme-switch">
         <input id="themeToggle" type="checkbox">
         <span class="slider"></span>
@@ -222,31 +80,41 @@ textarea.nota{
     </div>
   </header>
 
+  <div class="filter-container">
+    <button class="filter-btn" data-allerg="gluten">Sin gluten</button>
+    <button class="filter-btn" data-allerg="lactosa">Sin lactosa</button>
+    <button class="filter-btn" data-allerg="none">Todos</button>
+  </div>
+
   <div class="card">
+
     <section>
       <h2>Entrantes / Tapas</h2>
       <ul class="menu">
-
-        <li class="item">
-          <div class="info">
-            <div class="name">Croquetas de la abuela</div>
-            <div class="desc">Cremosas, con jamón ibérico y queso manchego.</div>
-            <button class="add-btn" onclick="addPlato('Croquetas de la abuela')">Añadir</button>
-          </div>
-          <div class="price">6,50€</div>
-        </li>
-
-        <li class="item">
-          <div class="info">
-            <div class="name">Tostas de setas al ajillo</div>
-            <div class="desc">Shiitake y boletus salteados al ajo.</div>
-            <button class="add-btn" onclick="addPlato('Tostas de setas al ajillo')">Añadir</button>
-          </div>
-          <div class="price">7,00€</div>
-        </li>
-
+        <li class="item" data-allergies="lactosa"><div class="info"><div class="name">Croquetas de la abuela</div><div class="desc">Cremosas, con jamón ibérico y queso manchego.</div><button class="add-btn" onclick="addPlato('Croquetas de la abuela')">Añadir</button></div><div class="price">6,50€</div></li>
+        <li class="item" data-allergies="none"><div class="info"><div class="name">Tostas de setas al ajillo</div><div class="desc">Shiitake y boletus salteados al ajo.</div><button class="add-btn" onclick="addPlato('Tostas de setas al ajillo')">Añadir</button></div><div class="price">7,00€</div></li>
+        <li class="item" data-allergies="gluten"><div class="info"><div class="name">Pulpo a la brasa</div><div class="desc">Pulpo tierno con papa panadera y pimentón.</div><button class="add-btn" onclick="addPlato('Pulpo a la brasa')">Añadir</button></div><div class="price">12,50€</div></li>
       </ul>
     </section>
+
+    <section>
+      <h2>Platos Principales</h2>
+      <ul class="menu">
+        <li class="item"><div class="info"><div class="name">Arroz meloso de mar</div><div class="desc">Calamar, gambas y verduras.</div><button class="add-btn" onclick="addPlato('Arroz meloso de mar')">Añadir</button></div><div class="price">14,50€</div></li>
+        <li class="item"><div class="info"><div class="name">Solomillo al vino</div><div class="desc">Puré trufado y verduras asadas.</div><button class="add-btn" onclick="addPlato('Solomillo al vino')">Añadir</button></div><div class="price">13,00€</div></li>
+        <li class="item"><div class="info"><div class="name">Berenjena rellena</div><div class="desc">Quinoa, tomates confitados y especias.</div><button class="add-btn" onclick="addPlato('Berenjena rellena')">Añadir</button></div><div class="price">11,00€</div></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Postres</h2>
+      <ul class="menu">
+        <li class="item"><div class="info"><div class="name">Tarta chocolate</div><div class="desc">Servida con helado de vainilla.</div><button class="add-btn" onclick="addPlato('Tarta chocolate')">Añadir</button></div><div class="price">5,50€</div></li>
+        <li class="item"><div class="info"><div class="name">Yogur con miel</div><div class="desc">Ligero y casero.</div><button class="add-btn" onclick="addPlato('Yogur con miel')">Añadir</button></div><div class="price">4,50€</div></li>
+        <li class="item"><div class="info"><div class="name">Helado artesanal</div><div class="desc">Varios sabores.</div><button class="add-btn" onclick="addPlato('Helado artesanal')">Añadir</button></div><div class="price">3,50€</div></li>
+      </ul>
+    </section>
+
   </div>
 
   <footer style="margin-top:20px; text-align:center; opacity:0.7;">
@@ -254,98 +122,70 @@ textarea.nota{
   </footer>
 </div>
 
-<div id="pedidoBtn" onclick="abrirPedido()">Ver selección (0)</div>
+<div id="pedidoBtn" onclick="abrirPedido()">Ver pedido (0)</div>
 
 <div id="panelPedido">
-  <h3>Tu selección</h3>
+  <h3>Tu pedido <span class="close-btn" onclick="cerrarPanel()">✕</span></h3>
   <div id="listaPedido"></div>
+  <textarea class="nota-general" placeholder="Añadir nota general del pedido..."></textarea>
 </div>
 
 <script>
-/* ================= THEME ================= */
 (function(){
-  const toggle = document.getElementById('themeToggle');
-  const current = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', current);
-  toggle.checked = current === 'dark';
-
+  const toggle=document.getElementById('themeToggle');
+  const current=localStorage.getItem('theme')||'light';
+  document.documentElement.setAttribute('data-theme',current);
+  toggle.checked=current==='dark';
   toggle.addEventListener('change',()=>{
-    const t = toggle.checked ? 'dark':'light';
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('theme', t);
+    const t=toggle.checked?'dark':'light';
+    document.documentElement.setAttribute('data-theme',t);
+    localStorage.setItem('theme',t);
   });
 })();
 
-/* ================= FONT SIZE ================= */
-let fontSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font-size'));
+let fontSize=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font-size'));
+fontPlus.onclick=()=>{fontSize+=.05;document.documentElement.style.setProperty('--font-size',fontSize+'rem');};
+fontMinus.onclick=()=>{if(fontSize>.7){fontSize-=.05;document.documentElement.style.setProperty('--font-size',fontSize+'rem');}};
 
-fontPlus.onclick = ()=>{
-  fontSize += .05;
-  document.documentElement.style.setProperty('--font-size', fontSize + 'rem');
-};
+let pedido=JSON.parse(localStorage.getItem('pedido')||'[]');
+let notaGeneral=localStorage.getItem('notaGeneral')||'';
 
-fontMinus.onclick = ()=>{
-  if(fontSize > .7){
-    fontSize -= .05;
-    document.documentElement.style.setProperty('--font-size', fontSize + 'rem');
-  }
-};
+function actualizarBtn(){const btn=document.getElementById('pedidoBtn');if(pedido.length===0)btn.style.display='none';else{btn.style.display='block';btn.textContent=`Ver pedido (${pedido.length})`;}}actualizarBtn();
 
-/* ================= PEDIDO ================= */
-let pedido = JSON.parse(localStorage.getItem('pedido') || '[]');
-let notas = JSON.parse(localStorage.getItem('notas') || '[]');
-
-function actualizarBtn(){
-  const btn = document.getElementById('pedidoBtn');
-  if(pedido.length === 0) btn.style.display='none';
-  else{
-    btn.style.display='block';
-    btn.textContent = `Ver selección (${pedido.length})`;
-  }
-}
-actualizarBtn();
-
-function addPlato(nombre){
-  pedido.push(nombre);
-  notas.push("");
-  localStorage.setItem('pedido', JSON.stringify(pedido));
-  localStorage.setItem('notas', JSON.stringify(notas));
-  actualizarBtn();
-}
+function addPlato(nombre){pedido.push(nombre);localStorage.setItem('pedido',JSON.stringify(pedido));actualizarBtn();}
 
 function abrirPedido(){
-  const panel = document.getElementById('panelPedido');
-  panel.style.display='block';
-
-  const cont = document.getElementById('listaPedido');
-  cont.innerHTML='';
-
-  pedido.forEach((p,i)=>{
-    cont.innerHTML += `
-      <div class="pedido-item">
-        <div style="flex:1;">
-          <strong>${p}</strong>
-          <textarea class="nota" placeholder="Añadir nota..." oninput="guardarNota(${i}, this.value)">${notas[i]||''}</textarea>
-        </div>
-        <span class="remove-btn" onclick="removePlato(${i})">✕</span>
-      </div>
-    `;
-  });
+  const panel=document.getElementById('panelPedido');panel.style.display='block';
+  const cont=document.getElementById('listaPedido');cont.innerHTML='';
+  const countMap = {};
+  pedido.forEach(p => {countMap[p] = (countMap[p] || 0) + 1;});
+  for (const [name, count] of Object.entries(countMap)) {
+    cont.innerHTML += `<div class="pedido-item"><span>${count} × ${name}</span><span class="remove-btn" onclick="removePlato('${name}')">✕</span></div>`;
+  }
+  const notaArea=document.querySelector('.nota-general');notaArea.value=notaGeneral;notaArea.oninput=(e)=>{notaGeneral=e.target.value;localStorage.setItem('notaGeneral',notaGeneral);}
 }
 
-function guardarNota(i, texto){
-  notas[i] = texto;
-  localStorage.setItem('notas', JSON.stringify(notas));
-}
-
-function removePlato(i){
-  pedido.splice(i,1);
-  notas.splice(i,1);
-  localStorage.setItem('pedido', JSON.stringify(pedido));
-  localStorage.setItem('notas', JSON.stringify(notas));
+function removePlato(name){
+  const index = pedido.indexOf(name);
+  if(index !== -1) pedido.splice(index,1);
+  localStorage.setItem('pedido',JSON.stringify(pedido));
   abrirPedido();
   actualizarBtn();
 }
+function cerrarPanel(){document.getElementById('panelPedido').style.display='none';}
+
+const filterBtns=document.querySelectorAll('.filter-btn');
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const value=btn.dataset.allerg;
+    document.querySelectorAll('li.item').forEach(li=>{
+      if(value==='none'||li.dataset.allergies.includes(value)) li.style.display='flex';
+      else li.style.display='none';
+    });
+  });
+});
 </script>
 
 </body>
