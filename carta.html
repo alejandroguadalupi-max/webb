@@ -5,115 +5,113 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Carta — PataMig</title>
 
-<!-- 1) script pequeño ANTES del CSS para aplicar el tema guardado inmediatamente
-     así evitamos un "flash" de color contrario al cargar la página -->
 <script>
   (function(){
     try {
-      const saved = localStorage.getItem('theme'); // 'dark' o 'light'
+      const saved = localStorage.getItem('theme');
       if(saved) document.documentElement.setAttribute('data-theme', saved);
       else {
-        // respetar preferencia del sistema si no hay guardado
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
       }
-    } catch(e){
-      // si localStorage falla, no hacemos nada
-    }
+    } catch(e){}
   })();
 </script>
 
 <style>
   :root{
-    --bg:#fff; --card:#fff; --text:#222; --muted:#666; --accent:#68B553;
-    --maxw:900px; --gap:12px;
+    --bg:#f7f7f7;
+    --card:#ffffff;
+    --text:#1a1a1a;
+    --muted:#6c6c6c;
+    --accent:#68B553;
+    --maxw:900px;
+    --gap:14px;
+    --radius:18px;
+    --shadow:0 12px 28px rgba(0,0,0,0.08);
   }
   [data-theme="dark"]{
-    --bg:#0f0f10; --card:#121315; --text:#eee; --muted:#aaa; --accent:#5a9b3f;
+    --bg:#0d0e0f;
+    --card:#141517;
+    --text:#f3f3f3;
+    --muted:#9a9a9a;
+    --accent:#5fa249;
+    --shadow:0 12px 32px rgba(0,0,0,0.4);
   }
 
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;}
   body{
     margin:0;
     background:var(--bg);
     color:var(--text);
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    line-height:1.45;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
+    font-family:"Inter", system-ui, sans-serif;
+    line-height:1.55;
   }
 
   .wrap{
     max-width:var(--maxw);
-    margin:18px auto;
-    padding:18px;
+    margin:30px auto;
+    padding:20px;
   }
 
-  /* HEADER - con botón volver a la izquierda, título centrado y toggle a la derecha */
   header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:12px;
-    margin-bottom:14px;
-  }
-
-  .left {
-    display:flex;
-    align-items:center;
-    gap:10px;
+    margin-bottom:24px;
   }
 
   .back-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 12px;
-    border-radius:10px;
     text-decoration:none;
+    padding:10px 16px;
+    background:linear-gradient(145deg, #ffffffaa, #f0f0f0aa);
     color:var(--text);
-    background:transparent;
-    border:1px solid rgba(0,0,0,0.06);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
     font-weight:600;
+    backdrop-filter:blur(6px);
+    transition:.25s;
   }
-  .back-btn:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+  .back-btn:hover{
+    transform:translateY(-3px);
+  }
 
   h1{
     margin:0;
-    font-size:1.15rem;
+    font-size:1.6rem;
+    font-weight:700;
+    letter-spacing:-0.5px;
     text-align:center;
-    flex:1;
   }
 
   .controls{
     display:flex;
     align-items:center;
-    gap:10px;
   }
 
-  /* switch theme estilo "slider" */
   .theme-switch{
     position:relative;
     width:52px; height:30px;
   }
   .theme-switch input{display:none}
+
   .slider{
-    display:block;
     width:100%; height:100%;
-    background:#ddd;
-    border-radius:30px;
+    background:rgba(0,0,0,0.15);
+    border-radius:50px;
     position:relative;
-    transition:background .25s;
+    transition:.25s;
+    backdrop-filter:blur(4px);
   }
   .slider:before{
     content:"";
     position:absolute;
-    left:4px; top:4px;
     width:22px; height:22px;
-    background:#fff;
     border-radius:50%;
-    transition:transform .25s;
-    box-shadow:0 2px 6px rgba(0,0,0,0.12);
+    background:#fff;
+    top:4px; left:4px;
+    transition:.25s;
+    box-shadow:0 3px 6px rgba(0,0,0,0.2);
   }
   .theme-switch input:checked + .slider{
     background:var(--accent);
@@ -122,58 +120,67 @@
     transform:translateX(22px);
   }
 
-  /* tarjeta principal */
   .card{
     background:var(--card);
-    border-radius:12px;
-    padding:16px;
-    box-shadow:0 8px 26px rgba(0,0,0,0.04);
+    border-radius:var(--radius);
+    padding:26px;
+    box-shadow:var(--shadow);
   }
 
-  .section{ margin-top:18px }
-  .section h2{ font-size:0.98rem; margin:6px 0 12px; color:var(--accent) }
+  h2{
+    margin:6px 0 14px;
+    font-size:1.15rem;
+    color:var(--accent);
+    letter-spacing:-0.3px;
+  }
 
-  ul.menu{ list-style:none; padding:0; margin:0; display:grid; gap:10px }
+  ul.menu{
+    list-style:none;
+    padding:0;
+    display:grid;
+    gap:14px;
+  }
   li.item{
-    display:flex; justify-content:space-between; gap:12px; align-items:flex-start;
-    padding:10px; border-radius:10px;
-    transition: background .12s, transform .08s;
+    display:flex;
+    justify-content:space-between;
+    padding:16px;
+    border-radius:var(--radius);
+    background:rgba(255,255,255,0.04);
+    transition:.25s;
   }
-  li.item:hover{ background: rgba(0,0,0,0.03); transform:translateY(-2px) }
+  li.item:hover{
+    background:rgba(0,0,0,0.06);
+    transform:translateY(-2px);
+  }
 
-  .info{ max-width:68% }
-  .name{ font-weight:700 }
-  .desc{ font-size:0.92rem; color:var(--muted); margin-top:6px }
-  .price{ white-space:nowrap; font-weight:700 }
+  .name{font-weight:700;font-size:1.05rem;}
+  .desc{color:var(--muted); margin-top:6px; font-size:0.95rem;}
+  .price{font-weight:700; white-space:nowrap; font-size:1.05rem;}
 
-  .tags{ font-size:0.78rem; color:var(--muted); margin-top:8px; display:flex; gap:6px; flex-wrap:wrap }
-  .tags span{ padding:5px 8px; border-radius:8px; background:rgba(0,0,0,0.03) }
+  .tags{margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; font-size:0.82rem;}
+  .tags span{
+    padding:6px 10px;
+    background:rgba(0,0,0,0.08);
+    border-radius:10px;
+  }
 
-  footer{ margin-top:14px; color:var(--muted); font-size:0.9rem; text-align:center }
-
-  /* small responsive tweaks */
-  @media (min-width:700px){
-    .wrap{padding:28px}
-    h1{font-size:1.25rem}
+  footer{
+    margin-top:24px;
+    text-align:center;
+    color:var(--muted);
+    font-size:0.9rem;
   }
 </style>
 </head>
 
 <body>
   <div class="wrap">
-
     <header>
-      <div class="left">
-        <!-- Volver a la página principal -->
-        <a class="back-btn" href="index.html" id="backBtn">← Inicio</a>
-      </div>
-
+      <a class="back-btn" href="principal.html" id="backBtn">← Inicio</a>
       <h1>PataMig — Carta</h1>
-
-      <div class="controls" aria-hidden="false">
-        <!-- switch tema -->
-        <label class="theme-switch" title="Cambiar tema" aria-label="Cambiar tema">
-          <input id="themeToggle" type="checkbox" aria-checked="false">
+      <div class="controls">
+        <label class="theme-switch">
+          <input id="themeToggle" type="checkbox">
           <span class="slider"></span>
         </label>
       </div>
@@ -181,7 +188,7 @@
 
     <div class="card">
       <!-- ENTRANTES -->
-      <section class="section">
+      <section>
         <h2>Entrantes / Tapas</h2>
         <ul class="menu">
           <li class="item">
@@ -196,7 +203,7 @@
           <li class="item">
             <div class="info">
               <div class="name">Tostas de setas al ajillo</div>
-              <div class="desc">Pan crujiente con shiitake y boletus salteados al ajo. (V)</div>
+              <div class="desc">Shiitake y boletus salteados al ajo. (V)</div>
               <div class="tags"><span>V vegetariano</span></div>
             </div>
             <div class="price">7,00€</div>
@@ -205,127 +212,60 @@
           <li class="item">
             <div class="info">
               <div class="name">Pulpo a la brasa</div>
-              <div class="desc">Pulpo tierno, papa panadera y pimentón — nuestra recomendación.</div>
+              <div class="desc">Pulpo tierno con papa panadera y pimentón.</div>
               <div class="tags"><span>⭑ recomendado</span></div>
             </div>
             <div class="price">12,50€</div>
-          </li>
-
-          <li class="item">
-            <div class="info">
-              <div class="name">Ensalada fresca PataMig</div>
-              <div class="desc">Lechugas, manzana, queso de cabra y vinagreta de miel.</div>
-              <div class="tags"><span>V</span><span>Ⓖ opción sin frutos secos</span></div>
-            </div>
-            <div class="price">6,00€</div>
           </li>
         </ul>
       </section>
 
       <!-- PRINCIPALES -->
-      <section class="section">
+      <section>
         <h2>Platos principales</h2>
         <ul class="menu">
           <li class="item">
             <div class="info">
               <div class="name">Arroz meloso de mar y huerta</div>
-              <div class="desc">Arroz meloso con calamar, gambas y verduras de temporada.</div>
+              <div class="desc">Calamar, gambas y verduras de temporada.</div>
             </div>
             <div class="price">14,50€</div>
-          </li>
-
-          <li class="item">
-            <div class="info">
-              <div class="name">Solomillo en reducción de vino</div>
-              <div class="desc">Puré trufado y verduras asadas.</div>
-            </div>
-            <div class="price">13,00€</div>
-          </li>
-
-          <li class="item">
-            <div class="info">
-              <div class="name">Berenjena rellena con quinoa</div>
-              <div class="desc">Quinoa, tomates confitados y especias — opción vegetariana.</div>
-              <div class="tags"><span>V</span><span>Ⓖ sin gluten</span></div>
-            </div>
-            <div class="price">11,00€</div>
           </li>
         </ul>
       </section>
 
       <!-- POSTRES -->
-      <section class="section">
+      <section>
         <h2>Postres</h2>
         <ul class="menu">
           <li class="item">
             <div class="info">
-              <div class="name">Tarta tibia de chocolate y naranja</div>
+              <div class="name">Tarta tibia de chocolate</div>
               <div class="desc">Servida con helado de vainilla.</div>
             </div>
             <div class="price">5,50€</div>
           </li>
-
-          <li class="item">
-            <div class="info">
-              <div class="name">Yogur cremoso con miel y nueces</div>
-              <div class="desc">Ligero y casero.</div>
-              <div class="tags"><span>Ⓖ sin gluten</span></div>
-            </div>
-            <div class="price">4,50€</div>
-          </li>
         </ul>
       </section>
-
-      <!-- BEBIDAS -->
-      <section class="section">
-        <h2>Bebidas</h2>
-        <ul class="menu">
-          <li class="item"><div class="info"><div class="name">Agua 0,5L</div></div><div class="price">2,00€</div></li>
-          <li class="item"><div class="info"><div class="name">Limonada casera</div></div><div class="price">3,50€</div></li>
-          <li class="item"><div class="info"><div class="name">Cerveza artesana</div></div><div class="price">4,50€</div></li>
-          <li class="item"><div class="info"><div class="name">Copa de vino</div></div><div class="price">4,00€</div></li>
-        </ul>
-      </section>
-
-      <!-- MENU INFANTIL -->
-      <section class="section">
-        <h2>PequePata (infantil)</h2>
-        <ul class="menu">
-          <li class="item">
-            <div class="info">
-              <div class="name">Mini macarrones + croqueta + helado</div>
-              <div class="desc">Ración pequeña, baja en sal y pensada para peques.</div>
-            </div>
-            <div class="price">6,50€</div>
-          </li>
-        </ul>
-      </section>
-
     </div>
 
     <footer>
-      <small>Si tiene alergias, pregunte al personal. Los precios incluyen IVA.</small>
+      <small>Si tiene alergias, consulte al personal. Precios con IVA incluido.</small>
     </footer>
-
   </div>
 
 <script>
-  // 2) Lógica del switch: sincroniza el checkbox con localStorage y aplica data-theme
-  (function(){
-    const toggle = document.getElementById('themeToggle');
+(function(){
+  const toggle = document.getElementById('themeToggle');
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  toggle.checked = current === 'dark';
 
-    // leer tema actual desde documentElement (se puso por el script de arriba)
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
-    toggle.checked = current === 'dark';
-    toggle.setAttribute('aria-checked', toggle.checked);
-
-    toggle.addEventListener('change', () => {
-      const newTheme = toggle.checked ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      try { localStorage.setItem('theme', newTheme); } catch(e){}
-      toggle.setAttribute('aria-checked', toggle.checked);
-    });
-  })();
+  toggle.addEventListener('change', () => {
+    const newTheme = toggle.checked ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    try{ localStorage.setItem('theme', newTheme); }catch(e){}
+  });
+})();
 </script>
 </body>
 </html>
