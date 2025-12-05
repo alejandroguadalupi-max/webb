@@ -2,11 +2,296 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minijuegos - PataMig</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Modo Niño — Carta con Juegos</title>
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFAE3;
+  --card: #fff;
+  --text: #333;
+  --accent: #FF6F61;
+  --shadow: 0 8px 25px rgba(0,0,0,0.15);
+  --radius: 20px;
+  --font-main: 'Comic Neue', sans-serif;
+}
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+}
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+}
+header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+header h1 {
+  font-size: 2.4rem;
+  color: var(--accent);
+  margin: 0;
+}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+h2 {
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+ul.menu {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+li.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFF0F5;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  position: relative;
+  transition: transform 0.2s;
+}
+li.item:hover { transform: scale(1.02); }
+.name { font-size: 1.2rem; font-weight: 700; }
+.desc { font-size: 0.95rem; color: #555; }
+.price { font-weight: 700; font-size: 1.1rem; }
+.add-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-btn:hover { transform: scale(1.1); }
+/* PANEL PEDIDO */
+#panelPedido {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.25);
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  display: none;
+  z-index: 999;
+}
+#panelPedido h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0;
+  color: var(--accent);
+}
+#panelPedido h3 .close-btn { cursor: pointer; font-size: 1.3rem; font-weight: 700; }
+.pedido-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ccc;
+  font-size: 1.1rem;
+}
+.remove-btn { color: var(--accent); cursor: pointer; font-weight: 700; }
+#pedidoBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+/* Confeti animación */
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: gold;
+  top: 0;
+  left: 50%;
+  animation: drop 0.8s ease forwards;
+}
+@keyframes drop {
+  0% { transform: translateY(0) rotate(0deg); opacity:1;}
+  100% { transform: translateY(80px) rotate(360deg); opacity:0;}
+}
+.nota-general {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-top: 12px;
+  resize: none;
+  font-size: 1rem;
+}
+/* SECCIÓN JUEGOS */
+.juegos-section {
+  margin-top: 30px;
+  padding: 16px;
+  background: #E0F7FA;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.juegos-section h2 { color: #00796B; }
+.juego-btn {
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 18px;
+  background: #00796B;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.juego-btn:hover { transform: scale(1.05); }
+/* OVERLAY MINI-JUEGO */
+#miniJuego {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(255,255,255,0.95);
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#miniJuego h3 { font-size: 1.8rem; color: var(--accent);}
+#miniJuego button { margin-top:20px; padding:10px 20px; border:none; border-radius:12px; background:var(--accent); color:white; font-size:1.1rem; cursor:pointer;}
+</style>
 </head>
 <body>
-<a href = "principal.html">Ir a inicioo</a>
+<div class="wrap">
+  <header>
+    <h1>Modo Niño</h1>
+  </header>
+
+  <!-- SECCIÓN PLATOS -->
+  <div class="card">
+    <h2>Platos PequePata</h2>
+    <ul class="menu">
+      <li class="item" data-name="Mini macarrones">
+        <div><div class="name">Mini macarrones</div><div class="desc">Ración con croqueta y helado.</div></div>
+        <div><div class="price">6,50€</div><button class="add-btn" onclick="addPlato('Mini macarrones', this)">Añadir</button></div>
+      </li>
+      <li class="item" data-name="Mini pizza">
+        <div><div class="name">Mini pizza</div><div class="desc">Queso, tomate y diversión.</div></div>
+        <div><div class="price">7,00€</div><button class="add-btn" onclick="addPlato('Mini pizza', this)">Añadir</button></div>
+      </li>
+      <li class="item" data-name="Mini hamburguesa">
+        <div><div class="name">Mini hamburguesa</div><div class="desc">Pequeña y deliciosa.</div></div>
+        <div><div class="price">7,50€</div><button class="add-btn" onclick="addPlato('Mini hamburguesa', this)">Añadir</button></div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN JUEGOS -->
+  <div class="card juegos-section">
+    <h2>¡Elige un juego para divertirte!</h2>
+    <button class="juego-btn" onclick="abrirMiniJuego('puzzle')">Puzzle de Ingredientes</button>
+    <button class="juego-btn" onclick="abrirMiniJuego('memory')">Memory de Comida</button>
+    <button class="juego-btn" onclick="abrirMiniJuego('trivia')">Mini Trivia</button>
+  </div>
+</div>
+
+<div id="pedidoBtn" onclick="abrirPedido()">Ver pedido (0)</div>
+
+<div id="panelPedido">
+  <h3>Tu pedido <span class="close-btn" onclick="cerrarPanel()">✕</span></h3>
+  <div id="listaPedido"></div>
+  <textarea class="nota-general" placeholder="Añadir nota general del pedido..."></textarea>
+</div>
+
+<!-- MINI-JUEGO OVERLAY -->
+<div id="miniJuego">
+  <h3 id="tituloJuego">Mini Juego</h3>
+  <div id="contenidoJuego" style="margin-top:12px;"></div>
+  <button onclick="cerrarMiniJuego()">Cerrar juego</button>
+</div>
+
+<script>
+let pedido = JSON.parse(localStorage.getItem('pedido')||'[]');
+let notaGeneral = localStorage.getItem('notaGeneral')||'';
+
+function actualizarBtn(){
+  const btn = document.getElementById('pedidoBtn');
+  btn.style.display = pedido.length===0?'none':'block';
+  btn.textContent = `Ver pedido (${pedido.length})`;
+}
+actualizarBtn();
+
+function renderPedido(){
+  const cont = document.getElementById('listaPedido');
+  cont.innerHTML='';
+  const countMap={};
+  pedido.forEach(p=>countMap[p]=(countMap[p]||0)+1);
+  for(const [name,count] of Object.entries(countMap)){
+    cont.innerHTML+=`<div class="pedido-item"><span>${count} × ${name}</span><span class="remove-btn" onclick="removePlato('${name}')">✕</span></div>`;
+  }
+  const notaArea = document.querySelector('.nota-general');
+  notaArea.value = notaGeneral;
+  notaArea.oninput=(e)=>{notaGeneral=e.target.value; localStorage.setItem('notaGeneral', notaGeneral);}
+}
+
+function addPlato(nombre, btn){
+  pedido.push(nombre);
+  localStorage.setItem('pedido', JSON.stringify(pedido));
+  actualizarBtn();
+  if(document.getElementById('panelPedido').style.display==='block') renderPedido();
+
+  // Confeti
+  const confetti = document.createElement('div');
+  confetti.classList.add('confetti');
+  btn.parentElement.parentElement.appendChild(confetti);
+  setTimeout(()=>confetti.remove(),800);
+}
+
+function abrirPedido(){document.getElementById('panelPedido').style.display='block'; renderPedido();}
+function cerrarPanel(){document.getElementById('panelPedido').style.display='none';}
+function removePlato(nombre){
+  const index = pedido.indexOf(nombre);
+  if(index!==-1) pedido.splice(index,1);
+  localStorage.setItem('pedido', JSON.stringify(pedido));
+  renderPedido();
+  actualizarBtn();
+}
+
+// MINI-JUEGOS
+function abrirMiniJuego(tipo){
+  const overlay = document.getElementById('miniJuego');
+  const titulo = document.getElementById('tituloJuego');
+  const contenido = document.getElementById('contenidoJuego');
+  contenido.innerHTML='';
+  if(tipo==='puzzle') contenido.innerHTML='🎨 Puzzle de ingredientes: arrastra las piezas al plato correcto.';
+  if(tipo==='memory') contenido.innerHTML='🧩 Memory: encuentra los pares de alimentos.';
+  if(tipo==='trivia') contenido.innerHTML='❓ Trivia: responde la pregunta sobre comida.';
+  titulo.textContent = tipo==='puzzle'?'Puzzle de Ingredientes':tipo==='memory'?'Memory de Comida':'Mini Trivia';
+  overlay.style.display='flex';
+}
+function cerrarMiniJuego(){document.getElementById('miniJuego').style.display='none';}
+</script>
 </body>
 </html>
