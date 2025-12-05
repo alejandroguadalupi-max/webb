@@ -20,7 +20,6 @@
   --gap:16px;
   --radius:20px;
   --shadow:0 8px 26px rgba(0,0,0,0.08);
-  --font-size:1rem;
 }
 [data-theme="dark"]{
   --bg:#111213;
@@ -31,23 +30,25 @@
   --shadow:0 8px 30px rgba(0,0,0,0.45);
 }
 *{box-sizing:border-box;}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter", sans-serif;line-height:1.5;font-size:var(--font-size);-webkit-tap-highlight-color:transparent;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter", sans-serif;line-height:1.5;}
 .wrap{max-width:var(--maxw);padding:18px;margin:auto;}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
 .back-btn{text-decoration:none;padding:10px 16px;background:var(--card);color:var(--text);border-radius:var(--radius);box-shadow:var(--shadow);font-weight:600;transition:.25s;}
 .back-btn:hover{transform:scale(1.05);} 
 .controls{display:flex; gap:10px; align-items:center;}
-.font-btn{background:var(--card);padding:6px 10px;border-radius:10px;border:none;box-shadow:var(--shadow);font-weight:700;cursor:pointer;}
+.theme-switch-container{display:flex;align-items:center;}
 .theme-switch{position:relative; width:52px; height:30px;}
-.theme-switch input{display:none}
-.slider{width:100%; height:100%; background:#888; border-radius:50px; position:relative;}
+.theme-switch input{display:none;}
+.slider{width:100%; height:100%; border-radius:50px; position:relative; background:#ccc;}
 .slider:before{content:""; position:absolute; width:24px; height:24px; border-radius:50%; background:#fff; top:3px; left:3px; transition:.25s;}
-.theme-switch input:checked + .slider{background:var(--accent);} 
+[data-theme="dark"] .slider{background:#68B553;}
 .theme-switch input:checked + .slider:before{transform:translateX(22px);} 
 .card{background:var(--card); padding:22px; border-radius:var(--radius); box-shadow:var(--shadow);}
-h2{margin:0 0 12px; color:var(--accent); font-size:1.2rem; font-weight:700;}
+h1{font-size:2rem; margin:0; font-weight:700; text-align:center; flex:1;}
+h2{margin:0 0 12px; color:var(--accent); font-size:1.3rem; font-weight:700;}
 ul.menu{list-style:none; padding:0; display:flex; flex-direction:column; gap:16px;}
-li.item{display:flex; justify-content:space-between; gap:16px; padding:14px; background:rgba(255,255,255,0.06); border-radius:var(--radius); transition:.25s;}
+li.item{display:flex; justify-content:space-between; gap:16px; padding:14px; background:rgba(255,255,255,0.08); border-radius:var(--radius); transition:.25s;}
+[data-theme="dark"] li.item{background:rgba(255,255,255,0.05);}
 .name{font-size:1.05rem; font-weight:700;}
 .desc{font-size:0.95rem; color:var(--muted);} 
 .price{font-weight:700; white-space:nowrap;}
@@ -69,14 +70,14 @@ textarea.nota-general{width:100%; margin-top:12px; border-radius:10px; border:1p
 <div class="wrap">
   <header>
     <a class="back-btn" href="principal.html">← Inicio</a>
-    <h1 style="font-size:1.4rem; margin:0;">Carta</h1>
+    <h1>Carta</h1>
     <div class="controls">
-      <button class="font-btn" id="fontMinus">A–</button>
-      <button class="font-btn" id="fontPlus">A+</button>
-      <label class="theme-switch">
-        <input id="themeToggle" type="checkbox">
-        <span class="slider"></span>
-      </label>
+      <div class="theme-switch-container">
+        <label class="theme-switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
     </div>
   </header>
 
@@ -97,24 +98,6 @@ textarea.nota-general{width:100%; margin-top:12px; border-radius:10px; border:1p
       </ul>
     </section>
 
-    <section>
-      <h2>Platos Principales</h2>
-      <ul class="menu">
-        <li class="item"><div class="info"><div class="name">Arroz meloso de mar</div><div class="desc">Calamar, gambas y verduras.</div><button class="add-btn" onclick="addPlato('Arroz meloso de mar')">Añadir</button></div><div class="price">14,50€</div></li>
-        <li class="item"><div class="info"><div class="name">Solomillo al vino</div><div class="desc">Puré trufado y verduras asadas.</div><button class="add-btn" onclick="addPlato('Solomillo al vino')">Añadir</button></div><div class="price">13,00€</div></li>
-        <li class="item"><div class="info"><div class="name">Berenjena rellena</div><div class="desc">Quinoa, tomates confitados y especias.</div><button class="add-btn" onclick="addPlato('Berenjena rellena')">Añadir</button></div><div class="price">11,00€</div></li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Postres</h2>
-      <ul class="menu">
-        <li class="item"><div class="info"><div class="name">Tarta chocolate</div><div class="desc">Servida con helado de vainilla.</div><button class="add-btn" onclick="addPlato('Tarta chocolate')">Añadir</button></div><div class="price">5,50€</div></li>
-        <li class="item"><div class="info"><div class="name">Yogur con miel</div><div class="desc">Ligero y casero.</div><button class="add-btn" onclick="addPlato('Yogur con miel')">Añadir</button></div><div class="price">4,50€</div></li>
-        <li class="item"><div class="info"><div class="name">Helado artesanal</div><div class="desc">Varios sabores.</div><button class="add-btn" onclick="addPlato('Helado artesanal')">Añadir</button></div><div class="price">3,50€</div></li>
-      </ul>
-    </section>
-
   </div>
 
   <footer style="margin-top:20px; text-align:center; opacity:0.7;">
@@ -131,47 +114,56 @@ textarea.nota-general{width:100%; margin-top:12px; border-radius:10px; border:1p
 </div>
 
 <script>
-(function(){
-  const toggle=document.getElementById('themeToggle');
-  const current=localStorage.getItem('theme')||'light';
-  document.documentElement.setAttribute('data-theme',current);
-  toggle.checked=current==='dark';
-  toggle.addEventListener('change',()=>{
-    const t=toggle.checked?'dark':'light';
-    document.documentElement.setAttribute('data-theme',t);
-    localStorage.setItem('theme',t);
-  });
-})();
-
-let fontSize=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font-size'));
-fontPlus.onclick=()=>{fontSize+=.05;document.documentElement.style.setProperty('--font-size',fontSize+'rem');};
-fontMinus.onclick=()=>{if(fontSize>.7){fontSize-=.05;document.documentElement.style.setProperty('--font-size',fontSize+'rem');}};
+// Tema estilo Apple
+const toggle=document.getElementById('theme-toggle');
+const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+const savedTheme=localStorage.getItem('theme')||(prefersDark?'dark':'light');
+document.documentElement.setAttribute('data-theme',savedTheme);
+toggle.checked=savedTheme==='dark';
+toggle.addEventListener('change',()=>{
+  const newTheme=toggle.checked?'dark':'light';
+  document.documentElement.setAttribute('data-theme',newTheme);
+  localStorage.setItem('theme',newTheme);
+});
 
 let pedido=JSON.parse(localStorage.getItem('pedido')||'[]');
 let notaGeneral=localStorage.getItem('notaGeneral')||'';
 
 function actualizarBtn(){const btn=document.getElementById('pedidoBtn');if(pedido.length===0)btn.style.display='none';else{btn.style.display='block';btn.textContent=`Ver pedido (${pedido.length})`;}}actualizarBtn();
 
-function addPlato(nombre){pedido.push(nombre);localStorage.setItem('pedido',JSON.stringify(pedido));actualizarBtn();}
+function renderPedido(){
+  const cont=document.getElementById('listaPedido');
+  cont.innerHTML='';
+  const countMap={};
+  pedido.forEach(p=>{countMap[p]=(countMap[p]||0)+1;});
+  for(const [name,count] of Object.entries(countMap)){
+    cont.innerHTML+=`<div class="pedido-item" data-name="${name}"><span>${count} × ${name}</span><span class="remove-btn" onclick="removePlato('${name}')">✕</span></div>`;
+  }
+  const notaArea=document.querySelector('.nota-general');
+  notaArea.value=notaGeneral;
+  notaArea.oninput=(e)=>{notaGeneral=e.target.value;localStorage.setItem('notaGeneral',notaGeneral);}
+}
+
+function addPlato(nombre){
+  pedido.push(nombre);
+  localStorage.setItem('pedido',JSON.stringify(pedido));
+  actualizarBtn();
+  if(document.getElementById('panelPedido').style.display==='block') renderPedido();
+}
 
 function abrirPedido(){
-  const panel=document.getElementById('panelPedido');panel.style.display='block';
-  const cont=document.getElementById('listaPedido');cont.innerHTML='';
-  const countMap = {};
-  pedido.forEach(p => {countMap[p] = (countMap[p] || 0) + 1;});
-  for (const [name, count] of Object.entries(countMap)) {
-    cont.innerHTML += `<div class="pedido-item"><span>${count} × ${name}</span><span class="remove-btn" onclick="removePlato('${name}')">✕</span></div>`;
-  }
-  const notaArea=document.querySelector('.nota-general');notaArea.value=notaGeneral;notaArea.oninput=(e)=>{notaGeneral=e.target.value;localStorage.setItem('notaGeneral',notaGeneral);}
+  document.getElementById('panelPedido').style.display='block';
+  renderPedido();
 }
 
 function removePlato(name){
-  const index = pedido.indexOf(name);
-  if(index !== -1) pedido.splice(index,1);
+  const index=pedido.indexOf(name);
+  if(index!==-1)pedido.splice(index,1);
   localStorage.setItem('pedido',JSON.stringify(pedido));
-  abrirPedido();
+  renderPedido();
   actualizarBtn();
 }
+
 function cerrarPanel(){document.getElementById('panelPedido').style.display='none';}
 
 const filterBtns=document.querySelectorAll('.filter-btn');
