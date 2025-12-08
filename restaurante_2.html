@@ -183,15 +183,20 @@
 </main>
 
 <script>
+// --- CONFIGURACIÓN DE ENLACES ---
 const GOOGLE_LINK = "https://maps.app.goo.gl/CasablancaLasCanteras";
+
+// Enlaces a formularios Tally por idioma
+// Nota: 'fr' e 'it' usan el enlace en inglés ('en') como fallback
 const TALLY_LINKS = {
   es: "https://tally.so/r/w2Qla9",
   en: "https://tally.so/r/w20k9D",
-  de: "https://tally.so/r/mBN1q1"
+  de: "https://tally.so/r/mBN1q1",
+  fr: "https://tally.so/r/w20k9D", // Fallback a EN
+  it: "https://tally.so/r/w20k9D"  // Fallback a EN
 };
 
-// --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
-// Los textos ya no filtran, solo "guían" (nudging)
+// --- DICCIONARIO DE TRADUCCIONES (5 IDIOMAS) ---
 const translations = {
   es: {
     publicTitle: "⭐ Reseña pública",
@@ -222,27 +227,86 @@ const translations = {
     privateText: "Gab es ein Problem? Helfen Sie uns, uns direkt zu verbessern.",
     privateBtn: "Dem Team mitteilen",
     privateNote: "Nur wir können es sehen.",
+  },
+  fr: {
+    publicTitle: "⭐ Avis public",
+    publicText: "Votre avis aide les autres clients à nous trouver.",
+    publicBtn: "Publier sur Google",
+    publicNote: "Visible pour tous.",
+    privateTitle: "📝 Retour privé",
+    privateText: "Un problème ? Aidez-nous à nous améliorer directement.",
+    privateBtn: "Parler à l'équipe",
+    privateNote: "Seulement visible par nous.",
+  },
+  it: {
+    publicTitle: "⭐ Recensione pubblica",
+    publicText: "La tua opinione aiuta gli altri clienti a trovarci.",
+    publicBtn: "Pubblica su Google",
+    publicNote: "Visibile a tutti.",
+    privateTitle: "📝 Feedback privato",
+    privateText: "Qualcosa non è andato? Aiutaci a migliorare parlandone con noi.",
+    privateBtn: "Parla con il team",
+    privateNote: "Visibile solo a noi.",
   }
 };
-// --- FIN DEL CAMBIO ---
 
-// Obtener idioma de la página principal (sigue funcionando)
-const urlParams = new URLSearchParams(window.location.search);
-let pageLang = urlParams.get("lang") || "es";
-if (!translations[pageLang]) pageLang = "es";
+const supportedLangs = ['es', 'en', 'de', 'fr', 'it'];
 
-// Configurar la página
-document.addEventListener("DOMContentLoaded", () => {
-  // Aplicar traducciones (sigue funcionando)
+// --- LÓGICA DE DETECCIÓN DE IDIOMA ---
+function detectAndSetLanguage() {
+  // 1. Mirar si viene en la URL (?lang=xx)
+  const urlParams = new URLSearchParams(window.location.search);
+  let lang = urlParams.get('lang');
+
+  // 2. Si no, mirar si el usuario ya lo guardó antes en LocalStorage
+  if (!lang) {
+    lang = localStorage.getItem('userLang');
+  }
+
+  // 3. Si no, mirar el idioma del navegador del usuario
+  if (!lang) {
+    const browserLang = navigator.language.slice(0, 2); // 'en-US' -> 'en'
+    if (supportedLangs.includes(browserLang)) {
+      lang = browserLang;
+    }
+  }
+
+  // 4. Si el idioma detectado no existe en nuestro diccionario, usar español
+  if (!lang || !translations[lang]) {
+    lang = 'es';
+  }
+
+  // Guardar preferencia y aplicar
+  localStorage.setItem('userLang', lang);
+  
+  // Actualizar etiqueta HTML
+  document.documentElement.lang = lang; 
+  
+  applyLanguageToDOM(lang);
+}
+
+function applyLanguageToDOM(lang) {
+  // Aplicar textos
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
-    if (translations[pageLang][key]) el.textContent = translations[pageLang][key];
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
   });
 
-  // Configurar enlaces (sigue funcionando)
+  // Configurar enlace Google (estático)
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
-  document.getElementById("btnPrivate").href = TALLY_LINKS[pageLang] || TALLY_LINKS["es"];
+
+  // Configurar enlace Tally (dinámico según idioma)
+  const tallyLink = TALLY_LINKS[lang] || TALLY_LINKS['en']; // Si falla, usa inglés
+  document.getElementById("btnPrivate").href = tallyLink;
+}
+
+// Inicializar cuando carga la página
+document.addEventListener("DOMContentLoaded", () => {
+  detectAndSetLanguage();
 });
+
 </script>
 
 </body>

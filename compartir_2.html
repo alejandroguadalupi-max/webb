@@ -109,7 +109,6 @@ p.subtitle {
 .photo-preview {
   width: 100%;
   height: 100%;
-  /* 1. CAMBIO: La foto se verá entera, no recortada */
   object-fit: contain; 
 }
 
@@ -173,8 +172,6 @@ p.subtitle {
   line-height: 1;
 }
 
-.row { display: none; }
-
 .btn {
   padding: 14px 0; 
   border: none;
@@ -218,11 +215,6 @@ p.subtitle {
   color: var(--muted);
   margin-top: 10px;
 }
-
-#lang-selector { display: none; }
-
-/* 3. Popup de éxito ELIMINADO del CSS (ya no se usa) */
-
 </style>
 </head>
 <body>
@@ -268,40 +260,127 @@ p.subtitle {
 // --- CONSTANTES GLOBALES (NO DOM) ---
 const DEFAULT_CARD="img/logo35.png"; 
 const LOGO_WATERMARK_URL = "img/PataMig.png"; 
-const COPY={
- es:{title:"Compartir experiencia · PataMig",shareTitle:"📸 Comparte tu momento",shareSub:"Elige o toma una foto y compártela con tus amigos.",note:"Si no eliges foto, se compartirá una tarjeta del restaurante.",shareBtn:"Compartir",takePhoto:"Tomar foto",choosePhoto:"Elegir foto",watermark:"Incluir nombre del restaurante"},
- en:{title:"Share Experience · PataMig",shareTitle:"📸 Share your moment",shareSub:"Take or choose a photo and share with friends.",note:"If you don't choose a photo, a restaurant card will be shared.",shareBtn:"Share",takePhoto:"Take photo",choosePhoto:"Choose photo",watermark:"Include restaurant name"}
+
+// Diccionario de traducciones
+const COPY = {
+  es: {
+    title: "Compartir experiencia · PataMig",
+    shareTitle: "📸 Comparte tu momento",
+    shareSub: "Elige o toma una foto y compártela con tus amigos.",
+    note: "Si no eliges foto, se compartirá una tarjeta del restaurante.",
+    shareBtn: "Compartir",
+    takePhoto: "Tomar foto",
+    choosePhoto: "Elegir foto",
+    watermark: "Incluir nombre del restaurante"
+  },
+  en: {
+    title: "Share Experience · PataMig",
+    shareTitle: "📸 Share your moment",
+    shareSub: "Take or choose a photo and share with friends.",
+    note: "If you don't choose a photo, a restaurant card will be shared.",
+    shareBtn: "Share",
+    takePhoto: "Take photo",
+    choosePhoto: "Choose photo",
+    watermark: "Include restaurant name"
+  },
+  de: {
+    title: "Erfahrung teilen · PataMig",
+    shareTitle: "📸 Teilen Sie Ihren Moment",
+    shareSub: "Machen Sie ein Foto und teilen Sie es mit Freunden.",
+    note: "Wenn Sie kein Foto wählen, wird eine Restaurantkarte geteilt.",
+    shareBtn: "Teilen",
+    takePhoto: "Foto aufnehmen",
+    choosePhoto: "Foto wählen",
+    watermark: "Restaurantnamen einfügen"
+  },
+  fr: {
+    title: "Partager l'expérience · PataMig",
+    shareTitle: "📸 Partagez votre moment",
+    shareSub: "Prenez ou choisissez une photo et partagez-la.",
+    note: "Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",
+    shareBtn: "Partager",
+    takePhoto: "Prendre photo",
+    choosePhoto: "Choisir photo",
+    watermark: "Inclure le nom du restaurant"
+  },
+  it: {
+    title: "Condividi esperienza · PataMig",
+    shareTitle: "📸 Condividi il tuo momento",
+    shareSub: "Scatta o scegli una foto e condividila con gli amici.",
+    note: "Se non scegli una foto, verrà condivisa una scheda del ristorante.",
+    shareBtn: "Condividi",
+    takePhoto: "Scatta foto",
+    choosePhoto: "Scegli foto",
+    watermark: "Includi nome del ristorante"
+  }
 };
-// 3. Traducciones de "success" eliminadas
 
-const urlParams = new URLSearchParams(window.location.search);
-let initialLang = urlParams.get("lang") || "es";
-if (!COPY[initialLang]) initialLang = "es";
-let currentLang = initialLang;
-let selectedFile=null;
+const supportedLangs = ['es', 'en', 'de', 'fr', 'it'];
+let currentLang = 'es'; // Valor por defecto
+let selectedFile = null;
 
-// --- FUNCIONES (definidas globalmente) ---
+// --- LÓGICA DE DETECCIÓN DE IDIOMA ---
+function detectAndSetLanguage() {
+  // 1. Mirar si viene en la URL (?lang=xx)
+  const urlParams = new URLSearchParams(window.location.search);
+  let lang = urlParams.get('lang');
 
-function setLang(lang){
-  const c=COPY[lang];
-  if (!c) return; 
+  // 2. Si no, mirar si el usuario ya lo guardó antes en LocalStorage
+  if (!lang) {
+    lang = localStorage.getItem('userLang');
+  }
 
-  document.title=c.title;
-  document.getElementById('shareTitle').textContent=c.shareTitle;
-  document.getElementById('shareSub').textContent=c.shareSub;
-  document.getElementById('btnShare').textContent=c.shareBtn;
-  document.getElementById('note').textContent=c.note;
-  document.querySelector('[data-lang="takePhoto"]').textContent = c.takePhoto;
-  document.querySelector('[data-lang="choosePhoto"]').textContent = c.choosePhoto;
-  document.getElementById('watermarkLabel').textContent=c.watermark;
-  currentLang = lang; 
+  // 3. Si no, mirar el idioma del navegador del usuario
+  if (!lang) {
+    const browserLang = navigator.language.slice(0, 2); // 'en-US' -> 'en'
+    if (supportedLangs.includes(browserLang)) {
+      lang = browserLang;
+    }
+  }
+
+  // 4. Si el idioma detectado no existe en nuestro diccionario, usar español
+  if (!lang || !COPY[lang]) {
+    lang = 'es';
+  }
+
+  // Guardar preferencia y aplicar
+  localStorage.setItem('userLang', lang);
+  currentLang = lang;
+  
+  // Actualizar etiqueta HTML para accesibilidad
+  document.documentElement.lang = lang; 
+  
+  applyLanguageToDOM(lang);
 }
 
+function applyLanguageToDOM(lang) {
+  const c = COPY[lang];
+  if (!c) return;
+
+  // Actualizar textos por ID
+  document.title = c.title;
+  document.getElementById('shareTitle').textContent = c.shareTitle;
+  document.getElementById('shareSub').textContent = c.shareSub;
+  document.getElementById('btnShare').textContent = c.shareBtn;
+  document.getElementById('note').textContent = c.note;
+  document.getElementById('watermarkLabel').textContent = c.watermark;
+
+  // Actualizar textos por data-attribute (botones placeholder)
+  const takePhotoElem = document.querySelector('[data-lang="takePhoto"]');
+  if (takePhotoElem) takePhotoElem.textContent = c.takePhoto;
+  
+  const choosePhotoElem = document.querySelector('[data-lang="choosePhoto"]');
+  if (choosePhotoElem) choosePhotoElem.textContent = c.choosePhoto;
+}
+
+
+// --- FUNCIONES DE IMAGEN ---
+
 function handleFileInput(input, photoPreview, placeholderContent, photoPreviewContainer, btnRemovePhoto, photoArea){
-  const f=input.files?.[0];
-  if(!f) return;
-  selectedFile=f;
-  photoPreview.src=URL.createObjectURL(f);
+  const f=input.files?.[0];
+  if(!f) return;
+  selectedFile=f;
+  photoPreview.src=URL.createObjectURL(f);
   
   placeholderContent.style.display = 'none';
   photoPreviewContainer.style.display = 'block';
@@ -324,90 +403,87 @@ function removePhoto(cameraInput, galleryInput, photoPreview, placeholderContent
 };
 
 async function addWatermarkToImage(file){
-  return new Promise((resolve, reject)=>{
-    const img = new Image();
-    img.crossOrigin = "anonymous"; 
-    img.src = URL.createObjectURL(file);
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    img.crossOrigin = "anonymous"; 
+    img.src = URL.createObjectURL(file);
 
-    img.onload = async () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    img.onload = async () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      const logo = new Image();
-      logo.crossOrigin = "anonymous";
-      logo.src = LOGO_WATERMARK_URL;
+      const logo = new Image();
+      logo.crossOrigin = "anonymous";
+      logo.src = LOGO_WATERMARK_URL;
 
-      logo.onload = () => {
-        const logoNaturalWidth = logo.naturalWidth;
-        const logoNaturalHeight = logo.naturalHeight;
-        const targetLogoHeight = Math.max(25, canvas.height * 0.08); 
-        const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
-        const margin = Math.max(15, canvas.height * 0.03); 
-        const x = canvas.width - targetLogoWidth - margin;
-        const y = canvas.height - targetLogoHeight - margin;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; 
+      logo.onload = () => {
+        const logoNaturalWidth = logo.naturalWidth;
+        const logoNaturalHeight = logo.naturalHeight;
+        const targetLogoHeight = Math.max(25, canvas.height * 0.08); 
+        const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
+        const margin = Math.max(15, canvas.height * 0.03); 
+        const x = canvas.width - targetLogoWidth - margin;
+        const y = canvas.height - targetLogoHeight - margin;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; 
         const padding = 5; 
-        ctx.roundRect(x - padding, y - padding, targetLogoWidth + (padding*2), targetLogoHeight + (padding*2), 5); 
-        ctx.fill();
-        ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
+        ctx.roundRect(x - padding, y - padding, targetLogoWidth + (padding*2), targetLogoHeight + (padding*2), 5); 
+        ctx.fill();
+        ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
 
-        canvas.toBlob(b=>{
-          resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
-F       },"image/jpeg",0.9);
-      };
-      logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
-    };
-    img.onerror = () => reject(new Error("Error al cargar la imagen seleccionada para la marca de agua."));
-  });
+        canvas.toBlob(b=>{
+          resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
+        },"image/jpeg",0.9);
+      };
+      logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
+    };
+    img.onerror = () => reject(new Error("Error al cargar la imagen seleccionada para la marca de agua."));
+  });
 }
-
-// 3. Función showSuccessMessage ELIMINADA
 
 async function shareExperience(e){
-  e&&e.preventDefault();
+  e&&e.preventDefault();
   const chkWatermark = document.getElementById('chkWatermark'); 
-  try{
-    let baseFile;
-    if(selectedFile){
-      baseFile=selectedFile;
-    } else {
-      const res=await fetch(DEFAULT_CARD);
-      const blob=await res.blob();
-      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
-    }
-    let fileToShare=baseFile;
-    if(chkWatermark.checked){
-      fileToShare=await addWatermarkToImage(baseFile);
-    }
+  try{
+    let baseFile;
+    if(selectedFile){
+      baseFile=selectedFile;
+    } else {
+      const res=await fetch(DEFAULT_CARD);
+      const blob=await res.blob();
+      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
+    }
+    let fileToShare=baseFile;
+    if(chkWatermark.checked){
+      fileToShare=await addWatermarkToImage(baseFile);
+    }
 
-    if(navigator.canShare?.({files:[fileToShare]})){
-      await navigator.share({
-        // 2. CAMBIO: Solo se envían los archivos, sin texto
-        files:[fileToShare]
-      });
-      // 3. CAMBIO: Llamada a showSuccessMessage() eliminada
-    } else {
-      const url=URL.createObjectURL(fileToShare);
-      window.open(url,"_blank");
-      // 3. CAMBIO: Llamada a showSuccessMessage() eliminada
-    }
-  }catch(err){ 
-    if (err.name === 'AbortError') {
-        console.log("Compartir cancelado por el usuario.");
-    } else {
-        console.error("Error al compartir:", err);
-    }
-  }
+    if(navigator.canShare?.({files:[fileToShare]})){
+      await navigator.share({
+        files:[fileToShare]
+      });
+    } else {
+      const url=URL.createObjectURL(fileToShare);
+      window.open(url,"_blank");
+    }
+  }catch(err){ 
+    if (err.name === 'AbortError') {
+        console.log("Compartir cancelado por el usuario.");
+    } else {
+        console.error("Error al compartir:", err);
+    }
+  }
 }
-
 
 // --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. OBTENER TODOS LOS ELEMENTOS DEL DOM
+  // 1. DETECTAR Y APLICAR IDIOMA AUTOMÁTICAMENTE
+  detectAndSetLanguage();
+
+  // 2. OBTENER ELEMENTOS DEL DOM
   const cameraInput = document.getElementById('cameraInput');
   const galleryInput = document.getElementById('galleryInput');
   const photoArea = document.getElementById('photoArea');
@@ -419,9 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRemovePhoto = document.getElementById('btnRemovePhoto');
   const btnShare = document.getElementById('btnShare');
   
-  // 2. APLICAR IDIOMA INICIAL
-  setLang(currentLang);
-
   // 3. ASIGNAR EVENTOS
   btnCamera.onclick = () => cameraInput.click();
   btnGallery.onclick = () => galleryInput.click();
@@ -444,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
     photoPreviewContainer, btnRemovePhoto, photoArea
   );
 
-  // 4. ESTADO INICIAL DEL PLACEHOLDER
+  // 4. ESTADO INICIAL
   if (!selectedFile) {
     placeholderContent.style.display = 'flex';
     photoPreviewContainer.style.display = 'none';
