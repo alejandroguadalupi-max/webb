@@ -12,14 +12,39 @@
 
 <style>
 :root {
+  /* --- Variables Base (Modo Claro) --- */
   --primary-green: #68B553;
-  --bg-light-green: #E8F5E1; 
-  --text-dark: #333;
-  --muted: #6b7280;
+  --bg-body: #E8F5E1; 
+  --bg-card: #ffffff;
+  --bg-photo: #fdfdfd;
+  
+  --text-main: #333333;
+  --text-sec: #6b7280;
+  
   --border: #d0e2c8;
-  --white: #fff;
-  --shadow-light: rgba(0,0,0,0.08);
-  --shadow-medium: rgba(0,0,0,0.12);
+  --shadow: rgba(0,0,0,0.08);
+  
+  --btn-placeholder-bg: #ffffff;
+  --btn-placeholder-text: #68B553;
+}
+
+[data-theme="dark"] {
+  /* --- Variables Modo Oscuro --- */
+  --bg-body: #121212; 
+  --bg-card: #1e1e1e;
+  --bg-photo: #2a2a2a;
+  
+  --text-main: #f0f0f0;
+  --text-sec: #a0a0a0;
+  
+  --border: #333333;
+  --shadow: rgba(0,0,0,0.4);
+  
+  --btn-placeholder-bg: #2a2a2a;
+  --btn-placeholder-text: #68B553;
+  
+  /* Ajuste de color primario para contraste */
+  --primary-green: #5ca54a;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -36,8 +61,8 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif; 
-  background: var(--bg-light-green);
-  color: var(--text-dark);
+  background: var(--bg-body);
+  color: var(--text-main);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -45,9 +70,49 @@ body {
   justify-content: center;
   padding: 20px;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* --- Controles Superiores (Idioma/Tema) --- */
+.top-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.lang-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-sec);
+  padding: 6px 12px;
+  border-radius: 50px;
+  box-shadow: 0 2px 5px var(--shadow);
+}
+
+.theme-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px var(--shadow);
+  transition: transform 0.2s;
+}
+.theme-btn:active { transform: scale(0.9); }
+
+/* --- Layout Principal --- */
 .wrap {
   width: 100%;
   max-width: 450px; 
@@ -58,42 +123,44 @@ body {
 }
 
 .share-card {
-  background: var(--white);
+  background: var(--bg-card);
   border-radius: 20px; 
   padding: 30px; 
   border: 1px solid var(--border);
   width: 100%;
   text-align: center;
-  box-shadow: 0 10px 30px var(--shadow-light); 
+  box-shadow: 0 10px 30px var(--shadow); 
+  transition: background 0.3s ease, border 0.3s ease;
 }
 
 h2 {
   margin: 0 0 10px;
   font-size: 1.6em; 
   font-weight: 700;
-  color: var(--text-dark);
+  color: var(--text-main);
 }
 
 p.subtitle {
   margin: 0 0 20px;
   font-size: 0.95em; 
-  color: var(--muted);
+  color: var(--text-sec);
   line-height: 1.5;
 }
 
+/* Área de Foto */
 .photo-area {
   width: 100%;
   aspect-ratio: 4/3;
   border-radius: 16px; 
   border: 2px dashed var(--border); 
-  background: #fdfdfd; 
+  background: var(--bg-photo); 
   overflow: hidden; 
   display: flex; 
   align-items: center;
   justify-content: center;
   margin-bottom: 20px; 
   position: relative; 
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background 0.3s ease;
 }
 
 .photo-area:hover {
@@ -128,13 +195,10 @@ p.subtitle {
   text-align: center;
   cursor: pointer;
   z-index: 5;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: transform 0.2s ease;
   display: none; 
 }
-#btnRemovePhoto:hover {
-  background: rgba(0,0,0,0.8);
-  transform: scale(1.1);
-}
+#btnRemovePhoto:hover { transform: scale(1.1); }
 
 .placeholder-content {
   display: flex;
@@ -159,12 +223,12 @@ p.subtitle {
   font-size: 1.0em;
   cursor: pointer;
   transition: all 0.25s ease;
-  color: var(--primary-green);
-  background: var(--white);
+  color: var(--btn-placeholder-text);
+  background: var(--btn-placeholder-bg);
 }
 .placeholder-btn:hover {
   background: var(--primary-green);
-  color: var(--white);
+  color: #fff;
   transform: scale(1.05);
 }
 .placeholder-btn span {
@@ -180,16 +244,15 @@ p.subtitle {
   font-size: 1.0em;
   cursor: pointer;
   transition: all 0.25s ease;
-  will-change: transform, box-shadow;
 }
 
 .btn-green {
   background: var(--primary-green);
-  color: var(--white);
+  color: #fff;
   box-shadow: 0 6px 20px rgba(104,181,83,0.25);
 }
 .btn-green:hover { 
-  background: #5ca54a; 
+  opacity: 0.9;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(104,181,83,0.35);
 }
@@ -200,7 +263,7 @@ p.subtitle {
   align-items: center;
   gap: 8px;
   font-size: 0.9em;
-  color: var(--muted);
+  color: var(--text-sec);
   justify-content: center;
   cursor: pointer; 
 }
@@ -212,12 +275,17 @@ p.subtitle {
 
 .note {
   font-size: 0.85em; 
-  color: var(--muted);
+  color: var(--text-sec);
   margin-top: 10px;
 }
 </style>
 </head>
 <body>
+
+<div class="top-controls">
+  <div class="lang-badge" id="langDisplay">ES</div>
+  <button class="theme-btn" id="themeBtn"></button>
+</div>
 
 <div class="wrap">
   <div class="share-card">
@@ -257,11 +325,11 @@ p.subtitle {
 </div>
 
 <script>
-// --- CONSTANTES GLOBALES (NO DOM) ---
+// --- CONSTANTES ---
 const DEFAULT_CARD="img/logo35.png"; 
 const LOGO_WATERMARK_URL = "img/PataMig.png"; 
 
-// Diccionario de traducciones
+// --- DICCIONARIO ---
 const COPY = {
   es: {
     title: "Compartir experiencia · PataMig",
@@ -316,39 +384,28 @@ const COPY = {
 };
 
 const supportedLangs = ['es', 'en', 'de', 'fr', 'it'];
-let currentLang = 'es'; // Valor por defecto
+let currentLang = 'es';
 let selectedFile = null;
 
-// --- LÓGICA DE DETECCIÓN DE IDIOMA ---
+/* --- 1. LÓGICA DE IDIOMA --- */
 function detectAndSetLanguage() {
-  // 1. Mirar si viene en la URL (?lang=xx)
   const urlParams = new URLSearchParams(window.location.search);
   let lang = urlParams.get('lang');
 
-  // 2. Si no, mirar si el usuario ya lo guardó antes en LocalStorage
+  // Detectar persistencia (igual que principal y carta)
+  if (!lang) lang = localStorage.getItem('userLang');
   if (!lang) {
-    lang = localStorage.getItem('userLang');
+    const browserLang = navigator.language.slice(0, 2);
+    if (supportedLangs.includes(browserLang)) lang = browserLang;
   }
+  if (!lang || !COPY[lang]) lang = 'es';
 
-  // 3. Si no, mirar el idioma del navegador del usuario
-  if (!lang) {
-    const browserLang = navigator.language.slice(0, 2); // 'en-US' -> 'en'
-    if (supportedLangs.includes(browserLang)) {
-      lang = browserLang;
-    }
-  }
-
-  // 4. Si el idioma detectado no existe en nuestro diccionario, usar español
-  if (!lang || !COPY[lang]) {
-    lang = 'es';
-  }
-
-  // Guardar preferencia y aplicar
   localStorage.setItem('userLang', lang);
   currentLang = lang;
   
-  // Actualizar etiqueta HTML para accesibilidad
+  // Actualizar UI
   document.documentElement.lang = lang; 
+  document.getElementById('langDisplay').textContent = lang;
   
   applyLanguageToDOM(lang);
 }
@@ -357,7 +414,6 @@ function applyLanguageToDOM(lang) {
   const c = COPY[lang];
   if (!c) return;
 
-  // Actualizar textos por ID
   document.title = c.title;
   document.getElementById('shareTitle').textContent = c.shareTitle;
   document.getElementById('shareSub').textContent = c.shareSub;
@@ -365,17 +421,39 @@ function applyLanguageToDOM(lang) {
   document.getElementById('note').textContent = c.note;
   document.getElementById('watermarkLabel').textContent = c.watermark;
 
-  // Actualizar textos por data-attribute (botones placeholder)
-  const takePhotoElem = document.querySelector('[data-lang="takePhoto"]');
-  if (takePhotoElem) takePhotoElem.textContent = c.takePhoto;
-  
-  const choosePhotoElem = document.querySelector('[data-lang="choosePhoto"]');
-  if (choosePhotoElem) choosePhotoElem.textContent = c.choosePhoto;
+  document.querySelector('[data-lang="takePhoto"]').textContent = c.takePhoto;
+  document.querySelector('[data-lang="choosePhoto"]').textContent = c.choosePhoto;
 }
 
+/* --- 2. LÓGICA DE TEMA (SINCRONIZADO) --- */
+const themeBtn = document.getElementById('themeBtn');
 
-// --- FUNCIONES DE IMAGEN ---
+function applyTheme() {
+  // 1. Detectar tema guardado en localStorage (el mismo que usa principal.html)
+  let savedTheme = localStorage.getItem('theme');
+  
+  // 2. Si no hay, detectar preferencia del sistema
+  if (!savedTheme) {
+    savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  
+  // 3. Aplicar al HTML
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  // 4. Cambiar icono
+  themeBtn.innerHTML = savedTheme === 'dark'
+    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+}
 
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const newTheme = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme);
+  applyTheme();
+});
+
+// --- LÓGICA DE FOTOS ---
 function handleFileInput(input, photoPreview, placeholderContent, photoPreviewContainer, btnRemovePhoto, photoArea){
   const f=input.files?.[0];
   if(!f) return;
@@ -480,10 +558,11 @@ async function shareExperience(e){
 // --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. DETECTAR Y APLICAR IDIOMA AUTOMÁTICAMENTE
+  // 1. Configuración Inicial (Sincronización)
+  applyTheme();
   detectAndSetLanguage();
 
-  // 2. OBTENER ELEMENTOS DEL DOM
+  // 2. Elementos DOM
   const cameraInput = document.getElementById('cameraInput');
   const galleryInput = document.getElementById('galleryInput');
   const photoArea = document.getElementById('photoArea');
@@ -495,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRemovePhoto = document.getElementById('btnRemovePhoto');
   const btnShare = document.getElementById('btnShare');
   
-  // 3. ASIGNAR EVENTOS
+  // 3. Event Listeners
   btnCamera.onclick = () => cameraInput.click();
   btnGallery.onclick = () => galleryInput.click();
   
@@ -517,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
     photoPreviewContainer, btnRemovePhoto, photoArea
   );
 
-  // 4. ESTADO INICIAL
+  // 4. Estado inicial foto
   if (!selectedFile) {
     placeholderContent.style.display = 'flex';
     photoPreviewContainer.style.display = 'none';

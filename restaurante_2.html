@@ -12,13 +12,36 @@
 
 <style>
   :root {
+    /* --- Variables Base (Modo Claro) --- */
     --primary-green: #68B553;
     --accent-orange: #e89f4b;
-    --text-dark: #333;
-    --bg-white: #fff;
-    --bg-light: #f6f7f9;
-    --muted: #666;
-    --border-light: #e9e9e9;
+    
+    --bg-body: #f6f7f9;
+    --bg-card: #ffffff;
+    
+    --text-main: #333333;
+    --text-sec: #666666;
+    
+    --border: #e9e9e9;
+    --shadow: rgba(0,0,0,0.05);
+    
+    --btn-text: #ffffff;
+  }
+
+  [data-theme="dark"] {
+    /* --- Variables Modo Oscuro --- */
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    
+    --text-main: #f0f0f0;
+    --text-sec: #a0a0a0;
+    
+    --border: #333333;
+    --shadow: rgba(0,0,0,0.3);
+    
+    /* Ajustes de contraste para botones */
+    --primary-green: #5ca54a; 
+    --accent-orange: #d98d3f;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -31,32 +54,66 @@
   html, body {
     margin: 0;
     height: 100%;
-    background-color: var(--bg-white); 
-    color: var(--text-dark);
+    background-color: var(--bg-body); 
+    color: var(--text-main);
     font-family: 'Poppins', sans-serif; 
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
     overflow: hidden; 
   }
 
-  /* Contenedor principal 100% y centrado */
+  /* --- Controles Superiores (Idioma/Tema) --- */
+  .top-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .lang-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-sec);
+    padding: 6px 12px;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px var(--shadow);
+  }
+
+  .theme-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px var(--shadow);
+    transition: transform 0.2s;
+  }
+  .theme-btn:active { transform: scale(0.9); }
+
+  /* Contenedor principal */
   .review-container {
     width: 100%;
     height: 100vh;
     height: 100dvh;
-    
     display: flex;
     flex-direction: column;
     justify-content: center; 
     align-items: center;
-    
     padding: 30px 25px; 
-    
     text-align: center;
-    box-sizing: border-box;
   }
   
-  /* Contenido con animación */
   .content-wrapper {
     width: 100%;
     max-width: 450px; 
@@ -66,28 +123,29 @@
   /* Caja de opción */
   .option-box {
     width: 100%;
-    background: var(--bg-white);
-    border: 1px solid var(--border-light); 
+    background: var(--bg-card);
+    border: 1px solid var(--border); 
     border-radius: 20px; 
     padding: 25px; 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 25px var(--shadow); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
   }
   
   .option-box:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
   }
 
   .option-box h2 { 
     font-size: 1.4em; 
     font-weight: 700;
     margin: 0 0 8px 0; 
+    color: var(--text-main);
   }
   
   .option-box p { 
     font-size: 0.95em; 
-    color: var(--muted); 
+    color: var(--text-sec); 
     margin: 0 0 20px 0;
     line-height: 1.5; 
   }
@@ -98,7 +156,7 @@
     align-items: center;
     width: 100%;
     margin: 25px 0; 
-    color: var(--muted);
+    color: var(--text-sec);
     font-weight: 600;
     font-size: 0.9em;
     animation: fadeInUp 0.6s ease-out 0.2s; 
@@ -109,7 +167,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--border-light);
+    background: var(--border);
   }
   .divider::before { margin-right: 15px; }
   .divider::after { margin-left: 15px; }
@@ -124,7 +182,7 @@
     font-weight: 700; 
     font-size: 1.0em;
     text-align: center;
-    color: var(--bg-white);
+    color: var(--btn-text);
     border: none;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     will-change: transform, box-shadow;
@@ -152,13 +210,18 @@
 
   .note {
     font-size: 0.85em; 
-    color: var(--muted);
+    color: var(--text-sec);
     margin-top: 15px; 
   }
   
 </style>
 </head>
 <body>
+
+<div class="top-controls">
+  <div class="lang-badge" id="langDisplay">ES</div>
+  <button class="theme-btn" id="themeBtn"></button>
+</div>
 
 <main class="review-container">
   
@@ -186,17 +249,15 @@
 // --- CONFIGURACIÓN DE ENLACES ---
 const GOOGLE_LINK = "https://maps.app.goo.gl/CasablancaLasCanteras";
 
-// Enlaces a formularios Tally por idioma
-// Nota: 'fr' e 'it' usan el enlace en inglés ('en') como fallback
 const TALLY_LINKS = {
   es: "https://tally.so/r/w2Qla9",
   en: "https://tally.so/r/w20k9D",
   de: "https://tally.so/r/mBN1q1",
-  fr: "https://tally.so/r/w20k9D", // Fallback a EN
-  it: "https://tally.so/r/w20k9D"  // Fallback a EN
+  fr: "https://tally.so/r/w20k9D",
+  it: "https://tally.so/r/w20k9D"
 };
 
-// --- DICCIONARIO DE TRADUCCIONES (5 IDIOMAS) ---
+// --- TRADUCCIONES ---
 const translations = {
   es: {
     publicTitle: "⭐ Reseña pública",
@@ -251,36 +312,32 @@ const translations = {
 };
 
 const supportedLangs = ['es', 'en', 'de', 'fr', 'it'];
+let currentLang = 'es';
 
-// --- LÓGICA DE DETECCIÓN DE IDIOMA ---
+/* --- 1. LÓGICA DE IDIOMA (Sincronizada con Principal/Carta) --- */
 function detectAndSetLanguage() {
-  // 1. Mirar si viene en la URL (?lang=xx)
   const urlParams = new URLSearchParams(window.location.search);
   let lang = urlParams.get('lang');
 
-  // 2. Si no, mirar si el usuario ya lo guardó antes en LocalStorage
-  if (!lang) {
-    lang = localStorage.getItem('userLang');
-  }
-
-  // 3. Si no, mirar el idioma del navegador del usuario
-  if (!lang) {
-    const browserLang = navigator.language.slice(0, 2); // 'en-US' -> 'en'
-    if (supportedLangs.includes(browserLang)) {
-      lang = browserLang;
-    }
-  }
-
-  // 4. Si el idioma detectado no existe en nuestro diccionario, usar español
-  if (!lang || !translations[lang]) {
-    lang = 'es';
-  }
-
-  // Guardar preferencia y aplicar
-  localStorage.setItem('userLang', lang);
+  // Si no viene en URL, buscar en localStorage (guardado por página principal)
+  if (!lang) lang = localStorage.getItem('userLang');
   
-  // Actualizar etiqueta HTML
+  // Si no hay, usar navegador
+  if (!lang) {
+    const browserLang = navigator.language.slice(0, 2);
+    if (supportedLangs.includes(browserLang)) lang = browserLang;
+  }
+  
+  // Fallback a español
+  if (!lang || !translations[lang]) lang = 'es';
+
+  // Guardar para persistencia en otras páginas
+  localStorage.setItem('userLang', lang);
+  currentLang = lang;
+  
+  // Actualizar UI
   document.documentElement.lang = lang; 
+  document.getElementById('langDisplay').textContent = lang;
   
   applyLanguageToDOM(lang);
 }
@@ -289,21 +346,46 @@ function applyLanguageToDOM(lang) {
   // Aplicar textos
   document.querySelectorAll("[data-lang]").forEach(el => {
     const key = el.dataset.lang;
-    if (translations[lang][key]) {
-      el.textContent = translations[lang][key];
-    }
+    if (translations[lang][key]) el.textContent = translations[lang][key];
   });
 
-  // Configurar enlace Google (estático)
+  // Configurar enlaces
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
-
-  // Configurar enlace Tally (dinámico según idioma)
-  const tallyLink = TALLY_LINKS[lang] || TALLY_LINKS['en']; // Si falla, usa inglés
+  const tallyLink = TALLY_LINKS[lang] || TALLY_LINKS['en'];
   document.getElementById("btnPrivate").href = tallyLink;
 }
 
-// Inicializar cuando carga la página
+/* --- 2. LÓGICA DE TEMA (Sincronizada con Principal/Carta) --- */
+const themeBtn = document.getElementById('themeBtn');
+
+function applyTheme() {
+  // 1. Leer tema guardado en localStorage
+  let savedTheme = localStorage.getItem('theme');
+  
+  // 2. Si no existe, detectar preferencia del sistema
+  if (!savedTheme) {
+    savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  
+  // 3. Aplicar tema
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  // 4. Actualizar icono
+  themeBtn.innerHTML = savedTheme === 'dark'
+    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+}
+
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const newTheme = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme); // Guardar para otras páginas
+  applyTheme();
+});
+
+// Inicializar
 document.addEventListener("DOMContentLoaded", () => {
+  applyTheme();
   detectAndSetLanguage();
 });
 
