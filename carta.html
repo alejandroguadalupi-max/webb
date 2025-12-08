@@ -24,7 +24,7 @@
   --radius: 18px;
   --font: 'Manrope', sans-serif;
   --spanish-btn: #FFC107; 
-  --audio-btn: #3B82F6; /* Azul para el audio */
+  --audio-btn: #3B82F6; 
 }
 
 [data-theme="dark"] {
@@ -310,7 +310,7 @@ function render() {
   list.innerHTML = '';
   const txt = i18n[lang];
 
-  // Actualizar Textos
+  // Actualizar Textos UI
   document.getElementById('f-ent').innerText = txt.ent;
   document.getElementById('f-main').innerText = txt.main;
   document.getElementById('f-des').innerText = txt.des;
@@ -323,7 +323,7 @@ function render() {
   document.getElementById('transText').innerText = txt.trans;
   document.getElementById('audioText').innerText = txt.audio;
 
-  // Visualización del botón traducir (Solo si NO es español)
+  // Visualización del botón traducir
   const transBtn = document.getElementById('translateBtn');
   if (lang !== 'es') {
     transBtn.style.display = 'flex';
@@ -400,7 +400,7 @@ function toggleWaiterMode() {
   renderList(); 
 }
 
-/* --- REPRODUCIR AUDIO DEL PEDIDO --- */
+/* --- REPRODUCIR AUDIO DEL PEDIDO (MODIFICADO) --- */
 function playAudioOrder() {
   const synth = window.speechSynthesis;
   const audioBtn = document.getElementById('audioBtn');
@@ -412,14 +412,14 @@ function playAudioOrder() {
     return;
   }
 
-  // Construir el texto en ESPAÑOL
-  let speechText = "Hola, quería pedir: ";
+  // Construir el texto en ESPAÑOL (Solo Cantidad + Nombre)
+  let speechText = ""; // Vacío al principio, sin introducciones
   
   Object.keys(cart).forEach(id => {
     const p = menu.find(x => x.id == id);
     const qty = cart[id];
-    // Forzamos el nombre en español p.name['es']
-    speechText += `${qty} de ${p.name['es']}. `; 
+    // Formato directo: "2 Cervezas. 1 Hamburguesa"
+    speechText += `${qty} ${p.name['es']}. `; 
   });
 
   const notes = document.getElementById('notesField').value;
@@ -429,8 +429,8 @@ function playAudioOrder() {
 
   // Configurar la voz
   const utter = new SpeechSynthesisUtterance(speechText);
-  utter.lang = 'es-ES'; // Forzar español de España o Latino
-  utter.rate = 0.9; // Un poco más lento para que se entienda bien
+  utter.lang = 'es-ES'; 
+  utter.rate = 0.5; // LENTO para dictado claro
 
   // Evento al terminar de hablar
   utter.onend = () => {
@@ -443,6 +443,7 @@ function playAudioOrder() {
 }
 
 
+/* --- RENDERIZADO LISTA DEL MODAL (MODIFICADO: SIN PRECIOS) --- */
 function renderList() {
   const cont = document.getElementById('orderList');
   cont.innerHTML = '';
@@ -459,8 +460,7 @@ function renderList() {
       cont.innerHTML += `
         <div class="order-item">
           <div>
-            <div style="font-weight:700; font-size:1rem; transition:0.3s">${p.name[displayLang]}</div>
-            <div style="font-size:0.85rem; color:var(--text-sec)">${p.price.toFixed(2)}€ x ${qty}</div>
+            <div style="font-weight:700; font-size:1.1rem; transition:0.3s">${p.name[displayLang]}</div>
           </div>
           <div class="qty-controls">
             <button class="qty-btn" onclick="remove(${id})">-</button>
@@ -488,7 +488,6 @@ function clearCart() {
   if(confirm(i18n[lang].clear + '?')) {
     cart = {}; document.getElementById('notesField').value = '';
     waiterMode = false; 
-    // Detener audio si estaba sonando
     window.speechSynthesis.cancel();
     document.getElementById('audioBtn').classList.remove('playing');
     
@@ -503,7 +502,6 @@ function openSheet() {
   document.getElementById('overlay').classList.add('open'); 
 }
 function closeSheet() { 
-  // Detener audio al cerrar
   window.speechSynthesis.cancel();
   document.getElementById('audioBtn').classList.remove('playing');
   document.getElementById('overlay').classList.remove('open'); 
