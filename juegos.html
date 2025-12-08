@@ -1,297 +1,476 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Modo Niño — Carta con Juegos</title>
-<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
+<title>Game Zone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
 <style>
 :root {
-  --bg: #FFFAE3;
-  --card: #fff;
-  --text: #333;
-  --accent: #FF6F61;
-  --shadow: 0 8px 25px rgba(0,0,0,0.15);
-  --radius: 20px;
-  --font-main: 'Comic Neue', sans-serif;
+  --bg-dark: #121212;
+  --card-bg: #1e1e24;
+  --neon-red: #ff4757;
+  --neon-blue: #2ed573;
+  --neon-yellow: #ffa502;
+  --neon-purple: #5352ed;
+  --text: #ffffff;
 }
+
 body {
   margin: 0;
-  font-family: var(--font-main);
-  background: var(--bg);
+  background: var(--bg-dark);
   color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  overflow: hidden; 
+  touch-action: none;
+  display: flex; flex-direction: column; height: 100vh;
 }
-.wrap {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 16px;
-}
+
+/* --- HEADER GAMER --- */
 header {
-  text-align: center;
-  margin-bottom: 24px;
+  padding: 15px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(30, 30, 36, 0.95);
+  border-bottom: 2px solid var(--neon-purple);
+  box-shadow: 0 0 15px rgba(83, 82, 237, 0.3);
+  z-index: 100;
 }
-header h1 {
-  font-size: 2.4rem;
-  color: var(--accent);
-  margin: 0;
+
+h1 { 
+  margin: 0; 
+  font-family: 'Press Start 2P', cursive; /* Fuente pixelada */
+  color: var(--neon-purple); 
+  font-size: 1rem; 
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0px #000;
 }
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  margin-bottom: 20px;
+
+.exit-btn {
+  background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red);
+  padding: 6px 14px; border-radius: 4px; font-weight: 700; cursor: pointer;
+  font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+  transition: 0.2s;
 }
-h2 {
-  font-size: 1.5rem;
-  color: var(--accent);
-  margin-bottom: 12px;
+.exit-btn:hover { background: var(--neon-red); color: #000; box-shadow: 0 0 10px var(--neon-red); }
+
+/* --- MENÚ PRINCIPAL --- */
+.game-selector {
+  flex: 1; display: flex; flex-direction: column; 
+  justify-content: center; align-items: center; gap: 20px;
+  padding: 20px; transition: 0.3s;
+  background: radial-gradient(circle at center, #1e1e24 0%, #121212 100%);
 }
-ul.menu {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+
+.game-card {
+  background: rgba(255,255,255,0.05); 
+  width: 100%; max-width: 340px; padding: 25px;
+  border-radius: 12px; text-align: left; cursor: pointer;
+  border-left: 5px solid transparent;
+  display: flex; align-items: center; gap: 20px;
+  transition: 0.2s; position: relative; overflow: hidden;
 }
-li.item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #FFF0F5;
-  border-radius: var(--radius);
-  padding: 12px 16px;
-  position: relative;
-  transition: transform 0.2s;
+
+.game-card:active { transform: scale(0.98); }
+
+.card-impostor { border-color: var(--neon-red); }
+.card-draw { border-color: var(--neon-blue); }
+.card-memo { border-color: var(--neon-yellow); }
+
+.game-icon { font-size: 2.5rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); }
+.game-info h3 { margin: 0; font-size: 1.4rem; text-transform: uppercase; font-weight: 800; }
+.game-info p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.7; }
+
+/* --- CONTENEDORES DE JUEGOS --- */
+.game-container {
+  display: none; flex: 1; position: relative;
+  background: var(--bg-dark); 
+  overflow: hidden;
 }
-li.item:hover { transform: scale(1.02); }
-.name { font-size: 1.2rem; font-weight: 700; }
-.desc { font-size: 0.95rem; color: #555; }
-.price { font-weight: 700; font-size: 1.1rem; }
-.add-btn {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
+.game-container.active { display: flex; flex-direction: column; }
+
+.back-menu {
+  position: absolute; top: 15px; left: 15px; z-index: 20;
+  background: rgba(0,0,0,0.5); color: white; border: 1px solid white;
+  width: 40px; height: 40px; border-radius: 50%; font-weight: bold; cursor: pointer;
 }
-.add-btn:hover { transform: scale(1.1); }
-/* PANEL PEDIDO */
-#panelPedido {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--card);
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 -8px 30px rgba(0,0,0,0.25);
-  padding: 20px;
-  max-height: 70vh;
-  overflow-y: auto;
-  display: none;
-  z-index: 999;
+
+/* --- JUEGO 1: IMPOSTOR HUNT (Whack-a-Mole Style) --- */
+.impostor-hud {
+  display: flex; justify-content: space-around; padding: 15px;
+  font-family: 'Press Start 2P', cursive; font-size: 0.8rem; color: var(--neon-red);
+  margin-top: 40px;
 }
-#panelPedido h3 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0;
-  color: var(--accent);
+.vent-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+  max-width: 400px; margin: 20px auto; padding: 20px;
 }
-#panelPedido h3 .close-btn { cursor: pointer; font-size: 1.3rem; font-weight: 700; }
-.pedido-item {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px 0;
-  padding: 6px 0;
-  border-bottom: 1px dashed #ccc;
-  font-size: 1.1rem;
+.vent {
+  aspect-ratio: 1; background: #333; border-radius: 50%;
+  position: relative; overflow: hidden; border: 4px solid #555;
+  box-shadow: inset 0 0 20px black; cursor: pointer;
 }
-.remove-btn { color: var(--accent); cursor: pointer; font-weight: 700; }
-#pedidoBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--accent);
-  color: #fff;
-  padding: 14px 24px;
-  border-radius: 50px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: var(--shadow);
+.vent::after { /* Rejilla */
+  content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 10px, #222 10px, #222 15px);
+  opacity: 0.5; pointer-events: none;
 }
-/* Confeti animación */
-.confetti {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: gold;
-  top: 0;
-  left: 50%;
-  animation: drop 0.8s ease forwards;
+.mole {
+  width: 80%; height: 80%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20 90 Q20 20 50 20 Q80 20 80 90' fill='%23ff4757' stroke='black' stroke-width='3'/%3E%3Cellipse cx='65' cy='40' rx='10' ry='7' fill='%2381ecec' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+  position: absolute; top: 100%; left: 10%;
+  transition: top 0.1s;
 }
-@keyframes drop {
-  0% { transform: translateY(0) rotate(0deg); opacity:1;}
-  100% { transform: translateY(80px) rotate(360deg); opacity:0;}
+.vent.up .mole { top: 10%; }
+
+.start-btn-container {
+  position: absolute; top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.8); display: flex; flex-direction: column;
+  justify-content: center; align-items: center; z-index: 10;
 }
-.nota-general {
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  padding: 8px;
-  margin-top: 12px;
-  resize: none;
-  font-size: 1rem;
+.arcade-btn {
+  background: var(--neon-red); color: white; border: none; padding: 15px 40px;
+  font-family: 'Press Start 2P'; font-size: 1rem; cursor: pointer;
+  box-shadow: 0 5px 0 #b33939; transition: 0.1s;
 }
-/* SECCIÓN JUEGOS */
-.juegos-section {
-  margin-top: 30px;
-  padding: 16px;
-  background: #E0F7FA;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
+.arcade-btn:active { transform: translateY(5px); box-shadow: 0 0 0; }
+
+/* --- JUEGO 2: PIZARRA NEON --- */
+#canvas { touch-action: none; background: #111; cursor: crosshair; flex: 1; }
+.tools {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);
+  padding: 10px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2);
 }
-.juegos-section h2 { color: #00796B; }
-.juego-btn {
-  display: inline-block;
-  margin: 10px;
-  padding: 12px 18px;
-  background: #00796B;
-  color: #fff;
-  font-weight: 700;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.2s;
+.color-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.2s;}
+.color-btn:active { transform: scale(0.9); }
+
+/* --- JUEGO 3: MEMORIA FUTURISTA --- */
+.memory-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  padding: 20px; margin: auto; max-width: 400px;
 }
-.juego-btn:hover { transform: scale(1.05); }
-/* OVERLAY MINI-JUEGO */
-#miniJuego {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(255,255,255,0.95);
-  z-index: 9999;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.m-card {
+  aspect-ratio: 1; background: #2f3542; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; color: transparent; cursor: pointer;
+  transition: transform 0.4s, background 0.3s;
+  border: 1px solid #57606f;
 }
-#miniJuego h3 { font-size: 1.8rem; color: var(--accent);}
-#miniJuego button { margin-top:20px; padding:10px 20px; border:none; border-radius:12px; background:var(--accent); color:white; font-size:1.1rem; cursor:pointer;}
+.m-card.flipped { 
+  background: var(--neon-yellow); color: black; 
+  transform: rotateY(180deg); 
+  box-shadow: 0 0 15px var(--neon-yellow);
+}
+
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Modo Niño</h1>
-  </header>
 
-  <!-- SECCIÓN PLATOS -->
-  <div class="card">
-    <h2>Platos PequePata</h2>
-    <ul class="menu">
-      <li class="item" data-name="Mini macarrones">
-        <div><div class="name">Mini macarrones</div><div class="desc">Ración con croqueta y helado.</div></div>
-        <div><div class="price">6,50€</div><button class="add-btn" onclick="addPlato('Mini macarrones', this)">Añadir</button></div>
-      </li>
-      <li class="item" data-name="Mini pizza">
-        <div><div class="name">Mini pizza</div><div class="desc">Queso, tomate y diversión.</div></div>
-        <div><div class="price">7,00€</div><button class="add-btn" onclick="addPlato('Mini pizza', this)">Añadir</button></div>
-      </li>
-      <li class="item" data-name="Mini hamburguesa">
-        <div><div class="name">Mini hamburguesa</div><div class="desc">Pequeña y deliciosa.</div></div>
-        <div><div class="price">7,50€</div><button class="add-btn" onclick="addPlato('Mini hamburguesa', this)">Añadir</button></div>
-      </li>
-    </ul>
+<header>
+  <h1>Arcade Zone 👾</h1>
+  <button class="exit-btn" onclick="exitKidsMode()" data-lang="exit">SALIR</button>
+</header>
+
+<div class="game-selector" id="menu">
+  
+  <div class="game-card card-impostor" onclick="startGame('impostor')">
+    <div class="game-icon">🚀</div>
+    <div class="game-info">
+      <h3 data-lang="impTitle">Impostor Hunt</h3>
+      <p data-lang="impDesc">Reflejos y velocidad</p>
+    </div>
   </div>
 
-  <!-- SECCIÓN JUEGOS -->
-  <div class="card juegos-section">
-    <h2>¡Elige un juego para divertirte!</h2>
-    <button class="juego-btn" onclick="abrirMiniJuego('puzzle')">Puzzle de Ingredientes</button>
-    <button class="juego-btn" onclick="abrirMiniJuego('memory')">Memory de Comida</button>
-    <button class="juego-btn" onclick="abrirMiniJuego('trivia')">Mini Trivia</button>
+  <div class="game-card card-draw" onclick="startGame('draw')">
+    <div class="game-icon">🎨</div>
+    <div class="game-info">
+      <h3 data-lang="drawTitle">Neon Draw</h3>
+      <p data-lang="drawDesc">Pizarra luminosa</p>
+    </div>
+  </div>
+
+  <div class="game-card card-memo" onclick="startGame('memo')">
+    <div class="game-icon">🧠</div>
+    <div class="game-info">
+      <h3 data-lang="memoTitle">Cyber Memory</h3>
+      <p data-lang="memoDesc">Entrena tu cerebro</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="game-container" id="game-impostor">
+  <button class="back-menu" onclick="showMenu()">✕</button>
+  
+  <div class="impostor-hud">
+    <div>SCORE: <span id="score">0</span></div>
+    <div>TIME: <span id="time-left">30</span></div>
+  </div>
+
+  <div class="vent-grid">
+    <div class="vent" id="vent1"><div class="mole"></div></div>
+    <div class="vent" id="vent2"><div class="mole"></div></div>
+    <div class="vent" id="vent3"><div class="mole"></div></div>
+    <div class="vent" id="vent4"><div class="mole"></div></div>
+    <div class="vent" id="vent5"><div class="mole"></div></div>
+    <div class="vent" id="vent6"><div class="mole"></div></div>
+    <div class="vent" id="vent7"><div class="mole"></div></div>
+    <div class="vent" id="vent8"><div class="mole"></div></div>
+    <div class="vent" id="vent9"><div class="mole"></div></div>
+  </div>
+
+  <div class="start-btn-container" id="impostorStartScreen">
+    <button class="arcade-btn" onclick="startImpostorGame()">START</button>
+    <p style="margin-top:20px; color:#ccc; font-size:0.8rem">Toca al impostor rápido!</p>
   </div>
 </div>
 
-<div id="pedidoBtn" onclick="abrirPedido()">Ver pedido (0)</div>
-
-<div id="panelPedido">
-  <h3>Tu pedido <span class="close-btn" onclick="cerrarPanel()">✕</span></h3>
-  <div id="listaPedido"></div>
-  <textarea class="nota-general" placeholder="Añadir nota general del pedido..."></textarea>
+<div class="game-container" id="game-draw">
+  <button class="back-menu" onclick="showMenu()">✕</button>
+  <canvas id="canvas"></canvas>
+  <div class="tools">
+    <div class="color-btn" style="background:#ff4757; box-shadow:0 0 10px #ff4757" onclick="setColor('#ff4757')"></div>
+    <div class="color-btn" style="background:#2ed573; box-shadow:0 0 10px #2ed573" onclick="setColor('#2ed573')"></div>
+    <div class="color-btn" style="background:#ffa502; box-shadow:0 0 10px #ffa502" onclick="setColor('#ffa502')"></div>
+    <div class="color-btn" style="background:#5352ed; box-shadow:0 0 10px #5352ed" onclick="setColor('#5352ed')"></div>
+    <div class="color-btn" style="background:#fff; color:#000; display:flex; align-items:center; justify-content:center; font-size:1.2rem" onclick="setColor('#111')">✖</div>
+  </div>
 </div>
 
-<!-- MINI-JUEGO OVERLAY -->
-<div id="miniJuego">
-  <h3 id="tituloJuego">Mini Juego</h3>
-  <div id="contenidoJuego" style="margin-top:12px;"></div>
-  <button onclick="cerrarMiniJuego()">Cerrar juego</button>
+<div class="game-container" id="game-memo">
+  <button class="back-menu" onclick="showMenu()">✕</button>
+  <div class="memory-grid" id="memoryGrid"></div>
 </div>
 
 <script>
-let pedido = JSON.parse(localStorage.getItem('pedido')||'[]');
-let notaGeneral = localStorage.getItem('notaGeneral')||'';
+// --- IDIOMAS ---
+const t = {
+  es: { exit:"SALIR", impTitle:"Caza al Impostor", impDesc:"Toca rápido antes de que escapen", drawTitle:"Pizarra Neón", drawDesc:"Dibuja con luz", memoTitle:"Cyber Memory", memoDesc:"Encuentra las parejas", sure:"¿Salir de la Zona Arcade?" },
+  en: { exit:"EXIT", impTitle:"Impostor Hunt", impDesc:"Tap fast before they vent", drawTitle:"Neon Draw", drawDesc:"Draw with light", memoTitle:"Cyber Memory", memoDesc:"Find the pairs", sure:"Exit Arcade Zone?" }
+};
 
-function actualizarBtn(){
-  const btn = document.getElementById('pedidoBtn');
-  btn.style.display = pedido.length===0?'none':'block';
-  btn.textContent = `Ver pedido (${pedido.length})`;
+// Detectar idioma
+const savedLang = localStorage.getItem('userLang') || 'es';
+const lang = t[savedLang] ? savedLang : 'es';
+const txt = t[lang];
+
+// Aplicar textos UI
+document.querySelector('[data-lang="exit"]').innerText = txt.exit;
+document.querySelector('[data-lang="impTitle"]').innerText = txt.impTitle;
+document.querySelector('[data-lang="impDesc"]').innerText = txt.impDesc;
+document.querySelector('[data-lang="drawTitle"]').innerText = txt.drawTitle;
+document.querySelector('[data-lang="drawDesc"]').innerText = txt.drawDesc;
+document.querySelector('[data-lang="memoTitle"]').innerText = txt.memoTitle;
+document.querySelector('[data-lang="memoDesc"]').innerText = txt.memoDesc;
+
+function exitKidsMode() {
+  if(confirm(txt.sure)) window.location.href = 'principal.html';
 }
-actualizarBtn();
 
-function renderPedido(){
-  const cont = document.getElementById('listaPedido');
-  cont.innerHTML='';
-  const countMap={};
-  pedido.forEach(p=>countMap[p]=(countMap[p]||0)+1);
-  for(const [name,count] of Object.entries(countMap)){
-    cont.innerHTML+=`<div class="pedido-item"><span>${count} × ${name}</span><span class="remove-btn" onclick="removePlato('${name}')">✕</span></div>`;
+function showMenu() {
+  document.getElementById('menu').style.display = 'flex';
+  document.querySelectorAll('.game-container').forEach(el => el.classList.remove('active'));
+  stopImpostorGame(); // Parar si estaba activo
+}
+
+function startGame(game) {
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('game-' + game).classList.add('active');
+  
+  if(game === 'draw') initDraw();
+  if(game === 'memo') initMemo();
+  if(game === 'impostor') {
+    document.getElementById('impostorStartScreen').style.display = 'flex';
   }
-  const notaArea = document.querySelector('.nota-general');
-  notaArea.value = notaGeneral;
-  notaArea.oninput=(e)=>{notaGeneral=e.target.value; localStorage.setItem('notaGeneral', notaGeneral);}
 }
 
-function addPlato(nombre, btn){
-  pedido.push(nombre);
-  localStorage.setItem('pedido', JSON.stringify(pedido));
-  actualizarBtn();
-  if(document.getElementById('panelPedido').style.display==='block') renderPedido();
+/* --- JUEGO IMPOSTOR --- */
+const vents = document.querySelectorAll('.vent');
+const scoreDisplay = document.querySelector('#score');
+const timeDisplay = document.querySelector('#time-left');
+let result = 0;
+let hitPosition;
+let currentTime = 30;
+let timerId = null;
+let countDownTimerId = null;
 
-  // Confeti
-  const confetti = document.createElement('div');
-  confetti.classList.add('confetti');
-  btn.parentElement.parentElement.appendChild(confetti);
-  setTimeout(()=>confetti.remove(),800);
+function randomVent() {
+  vents.forEach(vent => vent.classList.remove('up'));
+  let randomVent = vents[Math.floor(Math.random() * 9)];
+  randomVent.classList.add('up');
+  hitPosition = randomVent.id;
 }
 
-function abrirPedido(){document.getElementById('panelPedido').style.display='block'; renderPedido();}
-function cerrarPanel(){document.getElementById('panelPedido').style.display='none';}
-function removePlato(nombre){
-  const index = pedido.indexOf(nombre);
-  if(index!==-1) pedido.splice(index,1);
-  localStorage.setItem('pedido', JSON.stringify(pedido));
-  renderPedido();
-  actualizarBtn();
+vents.forEach(vent => {
+  vent.addEventListener('mousedown', () => {
+    if (vent.id === hitPosition) {
+      result++;
+      scoreDisplay.textContent = result;
+      hitPosition = null;
+      vent.classList.remove('up');
+      // Efecto de sonido o vibración
+      if(navigator.vibrate) navigator.vibrate(50);
+    }
+  });
+  // Touch support
+  vent.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Evitar scroll
+    if (vent.id === hitPosition) {
+      result++;
+      scoreDisplay.textContent = result;
+      hitPosition = null;
+      vent.classList.remove('up');
+      if(navigator.vibrate) navigator.vibrate(50);
+    }
+  });
+});
+
+function moveMole() {
+  // Velocidad aumenta según el score
+  let speed = 700;
+  if(result > 5) speed = 600;
+  if(result > 10) speed = 500;
+  if(result > 20) speed = 400;
+  
+  timerId = setInterval(randomVent, speed);
 }
 
-// MINI-JUEGOS
-function abrirMiniJuego(tipo){
-  const overlay = document.getElementById('miniJuego');
-  const titulo = document.getElementById('tituloJuego');
-  const contenido = document.getElementById('contenidoJuego');
-  contenido.innerHTML='';
-  if(tipo==='puzzle') contenido.innerHTML='🎨 Puzzle de ingredientes: arrastra las piezas al plato correcto.';
-  if(tipo==='memory') contenido.innerHTML='🧩 Memory: encuentra los pares de alimentos.';
-  if(tipo==='trivia') contenido.innerHTML='❓ Trivia: responde la pregunta sobre comida.';
-  titulo.textContent = tipo==='puzzle'?'Puzzle de Ingredientes':tipo==='memory'?'Memory de Comida':'Mini Trivia';
-  overlay.style.display='flex';
+function countDown() {
+  currentTime--;
+  timeDisplay.textContent = currentTime;
+  if (currentTime == 0) {
+    stopImpostorGame();
+    alert('GAME OVER! Score: ' + result);
+    document.getElementById('impostorStartScreen').style.display = 'flex';
+  }
 }
-function cerrarMiniJuego(){document.getElementById('miniJuego').style.display='none';}
+
+function startImpostorGame() {
+  document.getElementById('impostorStartScreen').style.display = 'none';
+  result = 0;
+  currentTime = 30;
+  scoreDisplay.textContent = 0;
+  timeDisplay.textContent = 30;
+  moveMole();
+  countDownTimerId = setInterval(countDown, 1000);
+}
+
+function stopImpostorGame() {
+  clearInterval(countDownTimerId);
+  clearInterval(timerId);
+  vents.forEach(vent => vent.classList.remove('up'));
+}
+
+
+/* --- JUEGO PIZARRA NEON --- */
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let painting = false;
+
+function initDraw() {
+  resizeCanvas();
+  // Efecto neon
+  ctx.strokeStyle = '#2ed573';
+  ctx.lineWidth = 4;
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = '#2ed573';
+  ctx.lineCap = 'round';
+}
+
+function resizeCanvas() {
+  const p = document.getElementById('game-draw');
+  canvas.width = p.offsetWidth;
+  canvas.height = p.offsetHeight;
+}
+
+function startPosition(e) { painting = true; draw(e); }
+function endPosition() { painting = false; ctx.beginPath(); }
+function draw(e) {
+  if (!painting) return;
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX || e.touches[0].clientX) - rect.left;
+  const y = (e.clientY || e.touches[0].clientY) - rect.top;
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+}
+
+canvas.addEventListener('mousedown', startPosition);
+canvas.addEventListener('mouseup', endPosition);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('touchstart', startPosition);
+canvas.addEventListener('touchend', endPosition);
+canvas.addEventListener('touchmove', draw);
+
+function setColor(c) { 
+  if(c==='#111') { 
+    ctx.globalCompositeOperation = 'destination-out'; 
+    ctx.lineWidth = 20; 
+  } else {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.strokeStyle = c; 
+    ctx.shadowColor = c; 
+    ctx.lineWidth = 4;
+  }
+}
+
+
+/* --- JUEGO MEMORIA --- */
+const cardsArray = ['👽','🚀','🪐','☄️','🛸','👾','🤖','🌌'];
+let cards = [];
+let hasFlipped = false, lockBoard = false, first, second;
+
+function initMemo() {
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML = '';
+  cards = [...cardsArray, ...cardsArray].sort(() => 0.5 - Math.random());
+  
+  cards.forEach(item => {
+    const c = document.createElement('div');
+    c.classList.add('m-card');
+    c.dataset.val = item;
+    c.innerText = item;
+    c.addEventListener('click', flipCard);
+    grid.appendChild(c);
+  });
+}
+
+function flipCard() {
+  if (lockBoard) return;
+  if (this === first) return;
+
+  this.classList.add('flipped');
+
+  if (!hasFlipped) {
+    hasFlipped = true;
+    first = this;
+    return;
+  }
+  second = this;
+  if(first.dataset.val === second.dataset.val) {
+    first.removeEventListener('click', flipCard);
+    second.removeEventListener('click', flipCard);
+    resetBoard();
+  } else {
+    lockBoard = true;
+    setTimeout(() => {
+      first.classList.remove('flipped');
+      second.classList.remove('flipped');
+      resetBoard();
+    }, 1000);
+  }
+}
+function resetBoard() {
+  [hasFlipped, lockBoard] = [false, false];
+  [first, second] = [null, null];
+}
+
+window.addEventListener('resize', resizeCanvas);
 </script>
 </body>
 </html>

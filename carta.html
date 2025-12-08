@@ -23,7 +23,8 @@
   --border: rgba(0,0,0,0.06);
   --radius: 18px;
   --font: 'Manrope', sans-serif;
-  --spanish-btn: #FFC107; /* Amarillo sutil para destacar el botón de español */
+  --spanish-btn: #FFC107; 
+  --audio-btn: #3B82F6; /* Azul para el audio */
 }
 
 [data-theme="dark"] {
@@ -36,6 +37,7 @@
   --shadow-card: 0 4px 24px rgba(0,0,0,0.2);
   --border: rgba(255,255,255,0.08);
   --spanish-btn: #FFD54F;
+  --audio-btn: #60A5FA;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -120,21 +122,39 @@ body {
 .overlay.open .sheet { transform: translateY(0); }
 
 .sheet-header { 
-  display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px dashed var(--border); 
+  display: flex; flex-direction: column; gap: 15px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px dashed var(--border); 
 }
 .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
-/* BOTÓN DE TRADUCCIÓN MÁGICO */
-.translate-btn {
-  display: none; /* Oculto por defecto */
-  align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 12px; border-radius: 12px;
+/* --- CONTROLES MODO CAMARERO (GRID DE BOTONES) --- */
+.waiter-controls {
+  display: flex; gap: 10px; width: 100%;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px; border-radius: 12px;
   background: rgba(0,0,0,0.03); border: 1px solid var(--border);
   font-weight: 700; font-size: 0.9rem; cursor: pointer; color: var(--text-sec);
   transition: 0.2s;
 }
+
+/* Botón Traducir */
 .translate-btn.active {
   background: var(--spanish-btn); color: black; border-color: var(--spanish-btn);
+}
+
+/* Botón Audio */
+.audio-btn.playing {
+  background: var(--audio-btn); color: white; border-color: var(--audio-btn);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
 }
 
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
@@ -185,9 +205,15 @@ textarea.notes {
         <div onclick="closeSheet()" style="cursor:pointer; padding:5px; opacity:0.5; font-size:1.5rem">×</div>
       </div>
       
-      <button id="translateBtn" class="translate-btn" onclick="toggleWaiterMode()">
-        <span id="transIcon">🇪🇸</span> <span id="transText">Mostrar en Español (Camarero)</span>
-      </button>
+      <div class="waiter-controls">
+        <button id="translateBtn" class="action-btn translate-btn" onclick="toggleWaiterMode()">
+          <span>🇪🇸</span> <span id="transText">Texto ES</span>
+        </button>
+        
+        <button id="audioBtn" class="action-btn audio-btn" onclick="playAudioOrder()">
+          <span>🔊</span> <span id="audioText">Audio</span>
+        </button>
+      </div>
     </div>
     
     <div class="order-list" id="orderList"></div>
@@ -210,11 +236,11 @@ textarea.notes {
 <script>
 /* --- DICCIONARIO --- */
 const i18n = {
-  es: { ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", btn: "Ver Lista", title: "Tu Pedido", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", empty: "Lista vacía", ph: "Notas (ej. sin hielo...)", trans: "Ya estás en español" },
-  en: { ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", btn: "View List", title: "Your Order", msg: "💡 Read this list to the waiter.", clear: "Clear all", empty: "Empty list", ph: "Notes (e.g. no ice...)", trans: "🇪🇸 Show in Spanish (Waiter)" },
-  de: { ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", btn: "Liste", title: "Bestellung", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", empty: "Leer", ph: "Notizen...", trans: "🇪🇸 Auf Spanisch anzeigen (Kellner)" },
-  fr: { ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", btn: "Voir liste", title: "Commande", msg: "💡 Lire au serveur.", clear: "Effacer", empty: "Vide", ph: "Notes...", trans: "🇪🇸 Voir en Espagnol (Serveur)" },
-  it: { ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", btn: "Vedi lista", title: "Ordine", msg: "💡 Leggi al cameriere.", clear: "Cancella", empty: "Vuota", ph: "Note...", trans: "🇪🇸 Mostra in Spagnolo (Cameriere)" }
+  es: { ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", btn: "Ver Lista", title: "Tu Pedido", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", empty: "Lista vacía", ph: "Notas (ej. sin hielo...)", trans: "Texto ES", audio: "Oír pedido" },
+  en: { ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", btn: "View List", title: "Your Order", msg: "💡 Read this list to the waiter.", clear: "Clear all", empty: "Empty list", ph: "Notes (e.g. no ice...)", trans: "Text ES", audio: "Listen" },
+  de: { ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", btn: "Liste", title: "Bestellung", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", empty: "Leer", ph: "Notizen...", trans: "Text ES", audio: "Hören" },
+  fr: { ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", btn: "Voir liste", title: "Commande", msg: "💡 Lire au serveur.", clear: "Effacer", empty: "Vide", ph: "Notes...", trans: "Texte ES", audio: "Écouter" },
+  it: { ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", btn: "Vedi lista", title: "Ordine", msg: "💡 Leggi al cameriere.", clear: "Cancella", empty: "Vuota", ph: "Note...", trans: "Testo ES", audio: "Ascolta" }
 };
 
 /* --- DATOS --- */
@@ -262,7 +288,7 @@ const menu = [
 let cart = {};
 let filterCat = 'bebidas';
 let lang = 'es';
-let waiterMode = false; // Estado del interruptor
+let waiterMode = false; // Estado del texto traducido
 
 /* --- LOGICA --- */
 function init() {
@@ -295,13 +321,14 @@ function render() {
   document.getElementById('clearTxt').innerText = txt.clear;
   document.getElementById('notesField').placeholder = txt.ph;
   document.getElementById('transText').innerText = txt.trans;
+  document.getElementById('audioText').innerText = txt.audio;
 
-  // Lógica de visualización del botón traducir
+  // Visualización del botón traducir (Solo si NO es español)
   const transBtn = document.getElementById('translateBtn');
   if (lang !== 'es') {
-    transBtn.style.display = 'flex'; // Mostrar si no es ES
+    transBtn.style.display = 'flex';
   } else {
-    transBtn.style.display = 'none'; // Ocultar si ya es ES
+    transBtn.style.display = 'none';
   }
 
   menu.forEach(p => {
@@ -364,27 +391,62 @@ function updateFloat() {
   if(count > 0) btn.classList.add('visible'); else btn.classList.remove('visible');
 }
 
-/* --- LOGICA MODO CAMARERO --- */
+/* --- MODO CAMARERO (TEXTO) --- */
 function toggleWaiterMode() {
-  waiterMode = !waiterMode; // Alternar estado
+  waiterMode = !waiterMode; 
   const btn = document.getElementById('translateBtn');
-  
-  if (waiterMode) {
-    btn.classList.add('active');
-    // Cambiar texto del botón para indicar que está activo
-    // (Opcional, pero ayuda visualmente)
-  } else {
-    btn.classList.remove('active');
-  }
-  renderList(); // Re-renderizar la lista del modal
+  if (waiterMode) btn.classList.add('active');
+  else btn.classList.remove('active');
+  renderList(); 
 }
+
+/* --- REPRODUCIR AUDIO DEL PEDIDO --- */
+function playAudioOrder() {
+  const synth = window.speechSynthesis;
+  const audioBtn = document.getElementById('audioBtn');
+
+  // Si ya está hablando, cancelar
+  if (synth.speaking) {
+    synth.cancel();
+    audioBtn.classList.remove('playing');
+    return;
+  }
+
+  // Construir el texto en ESPAÑOL
+  let speechText = "Hola, quería pedir: ";
+  
+  Object.keys(cart).forEach(id => {
+    const p = menu.find(x => x.id == id);
+    const qty = cart[id];
+    // Forzamos el nombre en español p.name['es']
+    speechText += `${qty} de ${p.name['es']}. `; 
+  });
+
+  const notes = document.getElementById('notesField').value;
+  if (notes.trim() !== "") {
+    speechText += `Nota: ${notes}.`;
+  }
+
+  // Configurar la voz
+  const utter = new SpeechSynthesisUtterance(speechText);
+  utter.lang = 'es-ES'; // Forzar español de España o Latino
+  utter.rate = 0.9; // Un poco más lento para que se entienda bien
+
+  // Evento al terminar de hablar
+  utter.onend = () => {
+    audioBtn.classList.remove('playing');
+  };
+
+  // Hablar
+  audioBtn.classList.add('playing');
+  synth.speak(utter);
+}
+
 
 function renderList() {
   const cont = document.getElementById('orderList');
   cont.innerHTML = '';
   
-  // Determinar idioma a usar en la lista del modal
-  // Si waiterMode es true -> forzar 'es'. Si no -> usar 'lang' (idioma del usuario)
   const displayLang = waiterMode ? 'es' : lang;
 
   if(Object.keys(cart).length === 0) {
@@ -394,7 +456,6 @@ function renderList() {
       const p = menu.find(x => x.id == id);
       const qty = cart[id];
       
-      // Animación de cambio de texto
       cont.innerHTML += `
         <div class="order-item">
           <div>
@@ -426,19 +487,27 @@ function filter(cat) {
 function clearCart() {
   if(confirm(i18n[lang].clear + '?')) {
     cart = {}; document.getElementById('notesField').value = '';
-    waiterMode = false; // Resetear modo camarero
+    waiterMode = false; 
+    // Detener audio si estaba sonando
+    window.speechSynthesis.cancel();
+    document.getElementById('audioBtn').classList.remove('playing');
+    
     render(); updateFloat(); closeSheet();
   }
 }
 
 function openSheet() { 
-  // Al abrir siempre mostramos el idioma del usuario primero
   waiterMode = false;
   document.getElementById('translateBtn').classList.remove('active');
   renderList(); 
   document.getElementById('overlay').classList.add('open'); 
 }
-function closeSheet() { document.getElementById('overlay').classList.remove('open'); }
+function closeSheet() { 
+  // Detener audio al cerrar
+  window.speechSynthesis.cancel();
+  document.getElementById('audioBtn').classList.remove('playing');
+  document.getElementById('overlay').classList.remove('open'); 
+}
 
 /* --- THEME --- */
 const themeBtn = document.getElementById('themeBtn');
