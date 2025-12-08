@@ -126,7 +126,7 @@ body {
 }
 .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
-/* --- CONTROLES MODO CAMARERO (GRID DE BOTONES) --- */
+/* --- CONTROLES MODO CAMARERO --- */
 .waiter-controls {
   display: flex; gap: 10px; width: 100%;
 }
@@ -205,7 +205,7 @@ textarea.notes {
         <div onclick="closeSheet()" style="cursor:pointer; padding:5px; opacity:0.5; font-size:1.5rem">×</div>
       </div>
       
-      <div class="waiter-controls">
+      <div class="waiter-controls" id="waiterControls">
         <button id="translateBtn" class="action-btn translate-btn" onclick="toggleWaiterMode()">
           <span>🇪🇸</span> <span id="transText">Texto ES</span>
         </button>
@@ -288,7 +288,7 @@ const menu = [
 let cart = {};
 let filterCat = 'bebidas';
 let lang = 'es';
-let waiterMode = false; // Estado del texto traducido
+let waiterMode = false; 
 
 /* --- LOGICA --- */
 function init() {
@@ -323,12 +323,13 @@ function render() {
   document.getElementById('transText').innerText = txt.trans;
   document.getElementById('audioText').innerText = txt.audio;
 
-  // Visualización del botón traducir
-  const transBtn = document.getElementById('translateBtn');
-  if (lang !== 'es') {
-    transBtn.style.display = 'flex';
+  // --- LOGICA DE BOTONES PARA ESPAÑOL ---
+  // Si es español, ocultamos el contenedor entero de controles (Audio y Traducción)
+  const wControls = document.getElementById('waiterControls');
+  if (lang === 'es') {
+    wControls.style.display = 'none';
   } else {
-    transBtn.style.display = 'none';
+    wControls.style.display = 'flex';
   }
 
   menu.forEach(p => {
@@ -391,7 +392,7 @@ function updateFloat() {
   if(count > 0) btn.classList.add('visible'); else btn.classList.remove('visible');
 }
 
-/* --- MODO CAMARERO (TEXTO) --- */
+/* --- MODO CAMARERO --- */
 function toggleWaiterMode() {
   waiterMode = !waiterMode; 
   const btn = document.getElementById('translateBtn');
@@ -400,25 +401,24 @@ function toggleWaiterMode() {
   renderList(); 
 }
 
-/* --- REPRODUCIR AUDIO DEL PEDIDO (MODIFICADO) --- */
+/* --- REPRODUCIR AUDIO (DICTADO) --- */
 function playAudioOrder() {
   const synth = window.speechSynthesis;
   const audioBtn = document.getElementById('audioBtn');
 
-  // Si ya está hablando, cancelar
   if (synth.speaking) {
     synth.cancel();
     audioBtn.classList.remove('playing');
     return;
   }
 
-  // Construir el texto en ESPAÑOL (Solo Cantidad + Nombre)
-  let speechText = ""; // Vacío al principio, sin introducciones
+  // Dictado directo sin introducciones
+  let speechText = ""; 
   
   Object.keys(cart).forEach(id => {
     const p = menu.find(x => x.id == id);
     const qty = cart[id];
-    // Formato directo: "2 Cervezas. 1 Hamburguesa"
+    // Formato: "2 Cervezas. 1 Hamburguesa."
     speechText += `${qty} ${p.name['es']}. `; 
   });
 
@@ -427,23 +427,20 @@ function playAudioOrder() {
     speechText += `Nota: ${notes}.`;
   }
 
-  // Configurar la voz
   const utter = new SpeechSynthesisUtterance(speechText);
   utter.lang = 'es-ES'; 
-  utter.rate = 0.5; // LENTO para dictado claro
+  utter.rate = 0.4; // 0.4 = Muy lento y claro
 
-  // Evento al terminar de hablar
   utter.onend = () => {
     audioBtn.classList.remove('playing');
   };
 
-  // Hablar
   audioBtn.classList.add('playing');
   synth.speak(utter);
 }
 
 
-/* --- RENDERIZADO LISTA DEL MODAL (MODIFICADO: SIN PRECIOS) --- */
+/* --- LISTA DEL MODAL (SIN PRECIOS) --- */
 function renderList() {
   const cont = document.getElementById('orderList');
   cont.innerHTML = '';
@@ -459,12 +456,12 @@ function renderList() {
       
       cont.innerHTML += `
         <div class="order-item">
-          <div>
+          <div style="flex:1">
             <div style="font-weight:700; font-size:1.1rem; transition:0.3s">${p.name[displayLang]}</div>
           </div>
           <div class="qty-controls">
             <button class="qty-btn" onclick="remove(${id})">-</button>
-            <span style="font-weight:700; width:20px; text-align:center">${qty}</span>
+            <span style="font-weight:700; width:25px; text-align:center">${qty}</span>
             <button class="qty-btn" onclick="add(${id})">+</button>
           </div>
         </div>
@@ -497,6 +494,11 @@ function clearCart() {
 
 function openSheet() { 
   waiterMode = false;
+  // Asegurar que controles ocultos en español sigan ocultos/visibles
+  const wControls = document.getElementById('waiterControls');
+  if (lang === 'es') wControls.style.display = 'none';
+  else wControls.style.display = 'flex';
+
   document.getElementById('translateBtn').classList.remove('active');
   renderList(); 
   document.getElementById('overlay').classList.add('open'); 
