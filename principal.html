@@ -34,24 +34,24 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  /* Ajuste principal: más espacio arriba */
   .landing-container {
     width: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* empuja hacia arriba para controlar padding-top */
-    padding: 80px 20px 20px 20px; /* más espacio arriba */
+    /* Un poco más de espacio arriba para móviles con notch */
+    padding: 90px 20px 40px 20px; 
     box-sizing: border-box;
     text-align: center;
   }
 
   .restaurant-logo {
     width: 100%;
-    max-width: 80%;
+    /* Ajustado para que no ocupe demasiada pantalla en móviles pequeños */
+    max-width: 280px; 
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-radius: 10px;
     box-shadow: 0 10px 12px rgba(0,0,0,0.2);
     transition: transform 0.3s ease;
@@ -60,63 +60,79 @@
   .button-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
-    max-width: 350px;
-    margin: 20px 0;
+    /* Ancho máximo ideal para lectura en móvil */
+    max-width: 340px; 
+    margin: 10px 0 30px 0;
   }
 
   .btn {
     display: block;
-    padding: 15px;
+    padding: 16px; /* Zona de toque amplia para el dedo */
     border-radius: 15px;
     text-decoration: none;
     font-weight: bold;
+    font-size: 1.05em;
     text-align: center;
     border: 1px solid var(--btn-border);
     background: var(--btn-bg);
     color: var(--btn-text);
     transition: background 0.3s, color 0.3s, border 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Contenedor solo para el idioma */
+  .lang-container {
+    margin-top: auto; /* Empuja el selector hacia abajo si hay espacio sobrante */
+    margin-bottom: 10px;
   }
 
   #lang-select {
     display: block;
-    padding: 15px;
+    padding: 12px;
     border-radius: 50px;
     border: 2px solid var(--select-border);
     background: var(--select-bg);
     color: var(--text-color);
     cursor: pointer;
+    font-size: 1em;
+    text-align: center;
     transition: background 0.3s, color 0.3s, border 0.3s;
     min-width: 180px;
   }
 
   h2 {
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: var(--text-color);
   }
 
   p {
     font-size: 1.1em;
     color: var(--text-color);
-    margin-bottom: 25px;
-    line-height: 1.5;
+    margin-bottom: 20px;
+    line-height: 1.4;
   }
 
+  /* Switch de tema */
   .theme-switch-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    position: absolute;
+    top: 25px;
+    right: 25px;
     z-index: 1000;
   }
 
   .theme-switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 55px;
+    height: 30px;
   }
 
   .theme-switch input {
@@ -137,8 +153,8 @@
   .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 22px;
+    width: 22px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -151,29 +167,7 @@
   }
 
   input:checked + .slider:before {
-    transform: translateX(26px);
-  }
-
-  /* Contenedor idioma + Modo Niño */
-  .lang-kids-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  #kidsModeBtn {
-    padding: 12px 20px;
-    height: 48px;
-    border-radius: 15px;
-    font-weight: bold;
-    border: 2px solid #e6b800;
-    background: #f4c742;
-    color: #333;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
-    min-width: 180px;
+    transform: translateX(25px);
   }
 
   </style>
@@ -181,6 +175,14 @@
 <body>
 
 <main class="landing-container" id="landing">
+  
+  <div class="theme-switch-container">
+    <label class="theme-switch">
+      <input type="checkbox" id="theme-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
   <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
   <h2 data-lang="welcome">¡Bienvenid@!</h2>
   <p data-lang="prompt">¿Qué te gustaría hacer?</p>
@@ -191,14 +193,7 @@
     <a id="shareLink" class="btn btn-secondary" data-lang="share_with_friends" href="#">Compartir experiencia con amigos</a>
   </div>
 
-  <div class="theme-switch-container">
-    <label class="theme-switch">
-      <input type="checkbox" id="theme-toggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-
-  <div class="lang-kids-container">
+  <div class="lang-container">
     <select id="lang-select">
       <option value="es">Español</option>
       <option value="en">English</option>
@@ -206,8 +201,6 @@
       <option value="fr">Français</option>
       <option value="it">Italiano</option>
     </select>
-
-    <button id="kidsModeBtn">Modo Niño 🧒</button>
   </div>
 
 </main>
@@ -262,29 +255,6 @@
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
   });
-</script>
-
-<script>
-  // Modo Niño
-  const kidsBtn = document.getElementById('kidsModeBtn');
-  kidsBtn.addEventListener('click', () => {
-    const curtain = document.createElement('div');
-    curtain.style.position = 'fixed';
-    curtain.style.top = 0;
-    curtain.style.left = 0;
-    curtain.style.width = '100vw';
-    curtain.style.height = '100vh';
-    curtain.style.background = 'var(--bg-color)';
-    curtain.style.zIndex = 10000;
-    curtain.style.transform = 'rotateY(90deg)';
-    curtain.style.transformOrigin = 'center';
-    curtain.style.transition = 'transform 0.5s ease-in-out';
-    document.body.appendChild(curtain);
-    void curtain.offsetWidth;
-    curtain.style.transform = 'rotateY(0deg)';
-    setTimeout(() => { window.location.href = 'juegos.html'; }, 400);
-  });
-
 </script>
 
 </body>
