@@ -108,7 +108,7 @@ body {
 #cart-float {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px) scale(0.9);
   background: var(--text-main); color: var(--bg-card); 
-  padding: 16px 28px; border-radius: 100px; display: flex; align-items: center; gap: 16px;
+  padding: 16px 28px; border-radius: 100px; display: flex; align-items: center; gap: 16px; justify-content: center;
   box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   font-weight: 700; font-size: 1rem;
 }
@@ -199,7 +199,6 @@ textarea.notes:focus { border-color: var(--primary); }
 <div id="cart-float" onclick="openSheet()">
   <span class="badge-count" id="countBadge">0</span>
   <span id="btnText">Ver mi Lista</span>
-  <span id="totalPriceFloat" style="margin-left:auto; opacity:0.8; font-weight:400">0.00€</span>
 </div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
@@ -446,15 +445,7 @@ function remove(id) {
 
 function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
-  let total = 0;
-  Object.keys(cart).forEach(id => {
-    const p = menu.find(x => x.id == id);
-    if(p) total += p.price * cart[id];
-  });
-
   document.getElementById('countBadge').innerText = count;
-  document.getElementById('totalPriceFloat').innerText = total.toFixed(2) + '€';
-  
   const btn = document.getElementById('cart-float');
   if(count > 0) btn.classList.add('visible'); else btn.classList.remove('visible');
 }
