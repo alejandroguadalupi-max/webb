@@ -52,36 +52,44 @@ body {
   transition: background 0.3s ease; padding-bottom: 120px;
 }
 
-/* Header */
+/* --- HEADER --- */
 .header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(var(--bg-card), 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(var(--bg-card), 0.95); backdrop-filter: blur(12px);
+  padding: 12px 20px; 
+  display: flex; justify-content: space-between; align-items: center;
   border-bottom: 1px solid var(--border);
 }
-.brand { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); }
-.controls { display: flex; align-items: center; gap: 8px; }
 
-/* Badges y Botones Header */
-.lang-badge { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background: var(--border); color: var(--text-sec); padding: 8px 12px; border-radius: 50px; }
-.theme-btn { background: none; border: none; cursor: pointer; padding: 4px; color: var(--text-main); display: flex; }
+.header-left .brand {
+  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); margin: 0;
+}
 
-/* Selector de Alergias */
+.header-right { display: flex; align-items: center; gap: 8px; }
+
+/* Selector Alergias */
 .allergy-select {
   appearance: none; -webkit-appearance: none;
-  background: var(--bg-body);
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  font-family: inherit; font-size: 0.75rem; font-weight: 800; /* Más negrita */
+  background: var(--bg-body); border: 1px solid var(--border);
+  color: var(--text-main); font-family: inherit; font-size: 0.75rem; font-weight: 700;
   padding: 8px 12px; border-radius: 50px;
-  cursor: pointer; outline: none;
-  text-align: center;
-  transition: 0.2s;
+  cursor: pointer; outline: none; text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  text-transform: uppercase; /* Mayúsculas forzadas */
-  letter-spacing: 0.5px;
+  max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.allergy-select:focus { border-color: var(--primary); }
+
+/* Botones Header */
+.lang-btn {
+  font-size: 0.75rem; font-weight: 800; border: 1px solid var(--border); 
+  background: var(--bg-body); color: var(--text-sec); 
+  padding: 8px 10px; border-radius: 50px; cursor: default;
+}
+.theme-btn { 
+  background: none; border: none; cursor: pointer; padding: 4px; 
+  color: var(--text-main); display: flex; align-items: center; 
+}
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 
 /* Subheader educativo */
 .info-bar {
@@ -91,8 +99,8 @@ body {
 
 /* Filtros */
 .filters-wrap {
-  position: sticky; top: 73px; z-index: 90; padding: 12px 0; margin-bottom: 10px;
-  background: linear-gradient(to bottom, var(--bg-body) 80%, transparent);
+  position: sticky; top: 65px; z-index: 90; padding: 12px 0; margin-bottom: 10px;
+  background: linear-gradient(to bottom, var(--bg-body) 85%, transparent);
 }
 .filters-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 24px; scrollbar-width: none; }
 .filters-scroll::-webkit-scrollbar { display: none; }
@@ -135,7 +143,7 @@ body {
 #cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
 .badge-count { background: var(--primary); color: white; padding: 2px 8px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
 
-/* Modal Sheet */
+/* --- MODAL / SHEET --- */
 .overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
   z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; justify-content: center; align-items: flex-end;
@@ -171,14 +179,10 @@ body {
 .qty-controls { display: flex; align-items: center; gap: 12px; }
 .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
-/* Estado vacío educativo */
-.empty-state {
-  text-align: center; padding: 40px 20px; color: var(--text-sec);
-}
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-sec); }
 .empty-icon { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
 .empty-text { font-size: 0.95rem; line-height: 1.6; }
 
-/* Caja de Notas */
 .notes-container { margin-top: auto; }
 textarea.notes {
   width: 100%; padding: 16px; border-radius: 16px; background: var(--bg-body); border: 2px solid var(--border);
@@ -186,24 +190,73 @@ textarea.notes {
   transition: 0.3s;
 }
 textarea.notes:focus { border-color: var(--primary); }
-
 .clear-btn { margin-top:15px; width: 100%; background:none; border:none; color:var(--text-sec); text-decoration:underline; cursor:pointer; font-size:0.9rem; opacity: 0.7;}
+
+/* --- ESTILOS MODO CAMARERO (PANTALLA COMPLETA) --- */
+/* Se activa añadiendo la clase .waiter-mode al .sheet */
+.sheet.waiter-mode {
+  height: 100% !important; max-height: 100vh !important;
+  border-radius: 0; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+  transform: translateY(0);
+  z-index: 3000;
+  padding-top: 80px; /* Espacio para el botón de cerrar */
+}
+
+/* Ocultar cosas innecesarias en modo camarero */
+.sheet.waiter-mode .sheet-header,
+.sheet.waiter-mode .notes-container #waiterMsg, 
+.sheet.waiter-mode .clear-btn, 
+.sheet.waiter-mode .qty-controls {
+  display: none !important;
+}
+
+/* Estilo de los items en modo camarero */
+.sheet.waiter-mode .order-item {
+  border-bottom: 2px solid var(--border);
+  padding: 20px;
+}
+.sheet.waiter-mode .order-item div {
+  font-size: 1.6rem !important; /* Texto muy grande */
+  font-weight: 800 !important;
+  color: var(--text-main);
+}
+
+/* Estilo de la nota en modo camarero */
+.sheet.waiter-mode textarea.notes {
+  font-size: 1.3rem; font-weight: 700; color: var(--spanish-btn);
+  border-color: var(--spanish-btn);
+}
+
+/* Botón flotante para SALIR del modo camarero */
+#closeWaiterBtn {
+  display: none; /* Oculto por defecto */
+  position: absolute; top: 20px; right: 20px; z-index: 3001;
+  background: var(--text-main); color: var(--bg-card);
+  border: none; padding: 12px 24px; border-radius: 50px;
+  font-weight: 700; font-size: 1rem; cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
 
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="brand">Carta</div>
-  <div class="controls">
+  <div class="header-left">
+    <h1 class="brand">Carta</h1>
+  </div>
+
+  <div class="header-right">
+    <label for="allergyFilter" class="visually-hidden">Filtro de alergias</label>
     <select id="allergyFilter" class="allergy-select" onchange="applyAllergyFilter()">
-      <option value="">No tengo alergias ▾</option> <option value="gf">🌾 Sin Gluten</option>
+      <option value="">ALERGIAS ▾</option>
+      <option value="gf">🌾 Sin Gluten</option>
       <option value="lf">🥛 Sin Lactosa</option>
       <option value="v">🌱 Vegano</option>
     </select>
 
-    <div class="lang-badge" id="langDisplay">ES</div>
-    <button class="theme-btn" id="themeBtn"></button>
+    <button class="lang-btn" id="langDisplay" aria-label="Idioma actual">ES</button>
+    <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema"></button>
   </div>
 </header>
 
@@ -228,7 +281,10 @@ textarea.notes:focus { border-color: var(--primary); }
 </div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
-  <div class="sheet">
+  
+  <button id="closeWaiterBtn" onclick="exitWaiterMode()">❌ Cerrar Vista Camarero</button>
+
+  <div class="sheet" id="orderSheet">
     <div class="sheet-header">
       <div class="header-top">
         <h3 style="margin:0; font-size:1.5rem; letter-spacing:-0.5px" id="modalTitle">Tu Lista</h3>
@@ -236,8 +292,8 @@ textarea.notes:focus { border-color: var(--primary); }
       </div>
       
       <div class="waiter-controls" id="waiterControls">
-        <button id="translateBtn" class="translate-btn" onclick="toggleWaiterMode()">
-          <span>🇪🇸</span> <span id="transText">Mostrar en Español</span>
+        <button id="translateBtn" class="translate-btn" onclick="enterWaiterMode()">
+          <span>🇪🇸</span> <span id="transText">Mostrar al Camarero (ES)</span>
         </button>
       </div>
     </div>
@@ -259,54 +315,47 @@ const i18n = {
   es: { 
     ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", 
     btn: "Ver mi Lista", title: "Tu Lista", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", 
-    empty: "Tu lista está vacía.<br>Añade platos para organizarte.", ph: "Notas (ej. sin hielo...)", trans: "Texto ES", 
-    infoBar: "📝 Ve añadiendo platos a tu lista para preparar tu pedido y decírselo luego al camarero."
+    empty: "Tu lista está vacía.<br>Añade platos para organizarte.", ph: "Notas (ej. sin hielo...)", trans: "Modo Camarero", 
+    infoBar: "📝 Ve añadiendo platos a tu lista para preparar tu pedido."
   },
   en: { 
     ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", 
     btn: "View my List", title: "Your List", msg: "💡 Read this list to the waiter.", clear: "Clear all", 
-    empty: "Your list is empty.<br>Add dishes to organize your order.", ph: "Notes (e.g. no ice...)", trans: "Show in Spanish", 
-    infoBar: "📝 Add dishes here to prepare your order and tell the waiter later."
+    empty: "Your list is empty.", ph: "Notes (e.g. no ice...)", trans: "Show Waiter (ES)", 
+    infoBar: "📝 Add dishes here to prepare your order."
   },
   de: { 
     ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", 
     btn: "Meine Liste", title: "Deine Liste", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", 
-    empty: "Deine Liste ist leer.<br>Füge Gerichte hinzu.", ph: "Notizen...", trans: "Auf Spanisch", 
-    infoBar: "📝 Füge hier Gerichte hinzu, um deine Bestellung vorzubereiten und sie später dem Kellner mitzuteilen."
+    empty: "Deine Liste ist leer.", ph: "Notizen...", trans: "Dem Kellner zeigen (ES)", 
+    infoBar: "📝 Füge hier Gerichte hinzu."
   },
   fr: { 
     ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", 
     btn: "Ma Liste", title: "Votre Liste", msg: "💡 Lire au serveur.", clear: "Effacer", 
-    empty: "Votre liste est vide.<br>Ajoutez des plats pour organiser.", ph: "Notes...", trans: "En Espagnol", 
-    infoBar: "📝 Ajoutez des plats ici pour préparer votre commande et la transmettre ensuite au serveur."
+    empty: "Votre liste est vide.", ph: "Notes...", trans: "Montrer au serveur (ES)", 
+    infoBar: "📝 Ajoutez des plats ici."
   },
   it: { 
     ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", 
     btn: "La mia Lista", title: "La tua Lista", msg: "💡 Leggi al cameriere.", clear: "Cancella", 
-    empty: "La tua lista è vuota.<br>Aggiungi piatti per organizzare.", ph: "Note...", trans: "In Spagnolo", 
-    infoBar: "📝 Aggiungi qui i piatti per preparare il tuo ordine e comunicarlo poi al cameriere."
+    empty: "La tua lista è vuota.", ph: "Note...", trans: "Mostra al cameriere (ES)", 
+    infoBar: "📝 Aggiungi qui i piatti."
   }
 };
 
-/* --- DICCIONARIO TRADUCCIÓN NOTAS --- */
+/* --- TRADUCCIÓN DE NOTAS --- */
 const foodDictionary = {
-  "no": "sin", "without": "sin", "with": "con", "ice": "hielo", "water": "agua", "hot": "caliente", "cold": "frío", "spicy": "picante", "sauce": "salsa", "onion": "cebolla", "cheese": "queso", "meat": "carne", "chicken": "pollo", "well done": "muy hecho", "rare": "poco hecho", "please": "por favor", "allergy": "alergia", "gluten": "gluten", "lactose": "lactosa", "sugar": "azúcar",
-  "ohne": "sin", "mit": "con", "eis": "hielo", "wasser": "agua", "heiss": "caliente", "kalt": "frío", "scharf": "picante", "sosse": "salsa", "zwiebel": "cebolla", "kase": "queso", "fleisch": "carne", "hahnchen": "pollo", "bitte": "por favor",
-  "sans": "sin", "avec": "con", "glace": "hielo", "eau": "agua", "chaud": "caliente", "froid": "frío", "epice": "picante", "sauce": "salsa", "oignon": "cebolla", "fromage": "queso", "viande": "carne", "poulet": "pollo", "svp": "por favor"
+  "no": "sin", "without": "sin", "with": "con", "ice": "hielo", "water": "agua", "hot": "caliente", "cold": "frío", "spicy": "picante", "sauce": "salsa", "onion": "cebolla", "cheese": "queso", "meat": "carne", "chicken": "pollo", "please": "por favor", "allergy": "alergia", "gluten": "gluten"
 };
 
-/* --- DATOS (Con Tags de Alergias) --- */
+/* --- DATOS --- */
 const menu = [
-  // BEBIDAS (Todas son safe en este ejemplo salvo indicación)
   { id: 201, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola", en: "Coca-Cola", de: "Coca-Cola", fr: "Coca-Cola", it: "Coca-Cola" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
   { id: 202, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola Zero", en: "Coke Zero", de: "Cola Zero", fr: "Coca Zéro", it: "Coca Zero" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
   { id: 203, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Naranja", en: "Fanta Orange", de: "Fanta Orange", fr: "Fanta Orange", it: "Fanta Arancia" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
   { id: 204, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Limón", en: "Fanta Lemon", de: "Fanta Zitrone", fr: "Fanta Citron", it: "Fanta Limone" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 205, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Sprite", en: "Sprite", de: "Sprite", fr: "Sprite", it: "Sprite" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 206, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Nestea", en: "Iced Tea", de: "Eistee", fr: "Thé glacé", it: "Tè freddo" }, desc: { es: "Limón", en: "Lemon", de: "Zitrone", fr: "Citron", it: "Limone" } },
   { id: 207, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.00, name: { es: "Agua", en: "Water", de: "Wasser", fr: "Eau", it: "Acqua" }, desc: { es: "50cl", en: "50cl", de: "50cl", fr: "50cl", it: "50cl" } },
-  
-  // COMIDA (Etiquetado básico de ejemplo)
   { id: 1, tags: ['gf','lf'], cat: 'entrantes', price: 9.50, name: { es: "Huevos Rotos", en: "Broken Eggs", de: "Zerbrochene Eier", fr: "Œufs cassés", it: "Uova rotte" }, desc: { es: "Con jamón ibérico.", en: "With Iberian ham.", de: "Mit iberischem Schinken.", fr: "Au jambon ibérique.", it: "Con prosciutto iberico." } },
   { id: 2, tags: [], cat: 'entrantes', price: 6.50, name: { es: "Croquetas (4ud)", en: "Croquettes (4pcs)", de: "Kroketten (4 Stk)", fr: "Croquettes (4pcs)", it: "Crocchette (4pz)" }, desc: { es: "Boletus y Trufa.", en: "Boletus & Truffle.", de: "Steinpilz & Trüffel.", fr: "Cèpes et Truffe.", it: "Porcini e Tartufo." } },
   { id: 3, tags: ['gf','lf'], cat: 'principales', price: 16.00, name: { es: "Entrecot Vaca", en: "Beef Entrecote", de: "Rinderentrecote", fr: "Entrecôte de bœuf", it: "Entrecote di manzo" }, desc: { es: "300g a la parrilla.", en: "300g grilled.", de: "300g gegrillt.", fr: "300g grillé.", it: "300g alla griglia." } },
@@ -322,19 +371,16 @@ let waiterMode = false;
 let originalNote = ""; 
 let currentAllergy = ""; 
 
-// Cargar carrito guardado
 function loadCart() {
   const saved = localStorage.getItem('pataMig_cart');
   if(saved) cart = JSON.parse(saved);
-  
   const savedNotes = localStorage.getItem('pataMig_notes');
   if(savedNotes) document.getElementById('notesField').value = savedNotes;
 }
-
 function saveCart() { localStorage.setItem('pataMig_cart', JSON.stringify(cart)); }
 function saveNotes() { localStorage.setItem('pataMig_notes', document.getElementById('notesField').value); }
 
-/* --- LOGICA INICIALIZACIÓN --- */
+/* --- LOGICA INICIAL --- */
 function init() {
   const urlP = new URLSearchParams(window.location.search).get('lang');
   const saved = localStorage.getItem('userLang');
@@ -345,14 +391,14 @@ function init() {
   else if(i18n[browser]) lang = browser;
   
   localStorage.setItem('userLang', lang);
-  document.getElementById('langDisplay').innerText = lang;
+  document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
   loadCart(); 
   render();
   updateFloat(); 
 }
 
-/* --- FILTRO ALERGIAS --- */
+/* --- FILTROS --- */
 function applyAllergyFilter() {
   currentAllergy = document.getElementById('allergyFilter').value;
   render(); 
@@ -363,7 +409,6 @@ function render() {
   list.innerHTML = '';
   const txt = i18n[lang];
 
-  // Textos UI
   document.getElementById('f-ent').innerText = txt.ent;
   document.getElementById('f-main').innerText = txt.main;
   document.getElementById('f-des').innerText = txt.des;
@@ -381,27 +426,18 @@ function render() {
   else wControls.style.display = 'flex';
 
   menu.forEach(p => {
-    // 1. Filtro Categoría
     if(p.cat !== filterCat) return;
-
-    // 2. Filtro Alergias
     if(currentAllergy !== "" && !p.tags.includes(currentAllergy)) return;
 
     const qty = cart[p.id] || 0;
     let btnTxt = '+';
     let btnClass = 'add-btn';
-    
-    if(qty > 0) {
-      btnTxt = `${qty} +`;
-      btnClass += ' active';
-    }
+    if(qty > 0) { btnTxt = `${qty} +`; btnClass += ' active'; }
 
     list.innerHTML += `
       <div class="dish-card">
         <div class="dish-info">
-          <div class="dish-header">
-            <span class="dish-name">${p.name[lang]}</span>
-          </div>
+          <div class="dish-header"><span class="dish-name">${p.name[lang]}</span></div>
           <div class="dish-desc">${p.desc[lang]}</div>
         </div>
         <div class="dish-actions">
@@ -413,22 +449,8 @@ function render() {
   });
 }
 
-function add(id) {
-  cart[id] = (cart[id] || 0) + 1;
-  saveCart(); 
-  render(); updateFloat();
-  if(document.getElementById('overlay').classList.contains('open')) renderList();
-  if(navigator.vibrate) navigator.vibrate(10);
-}
-
-function remove(id) {
-  if(cart[id]) {
-    cart[id]--;
-    if(cart[id] <= 0) delete cart[id];
-  }
-  saveCart(); 
-  render(); updateFloat(); renderList();
-}
+function add(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); render(); updateFloat(); if(document.getElementById('overlay').classList.contains('open')) renderList(); }
+function remove(id) { if(cart[id]) { cart[id]--; if(cart[id] <= 0) delete cart[id]; } saveCart(); render(); updateFloat(); renderList(); }
 
 function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
@@ -437,7 +459,7 @@ function updateFloat() {
   if(count > 0) btn.classList.add('visible'); else btn.classList.remove('visible');
 }
 
-/* --- LOGICA TRADUCTOR NOTAS --- */
+/* --- MODO CAMARERO --- */
 function translateNoteText(text) {
   if (!text) return "";
   let translated = text.toLowerCase();
@@ -448,42 +470,41 @@ function translateNoteText(text) {
   return translated;
 }
 
-function toggleWaiterMode() {
-  waiterMode = !waiterMode; 
-  const btn = document.getElementById('translateBtn');
-  const noteField = document.getElementById('notesField');
-
-  if (waiterMode) {
-    btn.classList.add('active');
-    originalNote = noteField.value;
-    noteField.value = translateNoteText(originalNote);
-    noteField.style.borderColor = "var(--spanish-btn)";
-  } else {
-    btn.classList.remove('active');
-    if(originalNote !== "") noteField.value = originalNote;
-    noteField.style.borderColor = "var(--border)";
-  }
-  renderList(); 
+function enterWaiterMode() {
+  waiterMode = true;
+  document.getElementById('orderSheet').classList.add('waiter-mode');
+  document.getElementById('closeWaiterBtn').style.display = 'block';
+  
+  // Traducir nota
+  originalNote = document.getElementById('notesField').value;
+  document.getElementById('notesField').value = translateNoteText(originalNote);
+  
+  renderList();
 }
 
-/* --- RENDER LISTA MODAL --- */
+function exitWaiterMode() {
+  waiterMode = false;
+  document.getElementById('orderSheet').classList.remove('waiter-mode');
+  document.getElementById('closeWaiterBtn').style.display = 'none';
+  
+  // Restaurar nota
+  if(originalNote !== "") document.getElementById('notesField').value = originalNote;
+  
+  renderList();
+}
+
 function renderList() {
   const cont = document.getElementById('orderList');
   cont.innerHTML = '';
-  
-  const displayLang = waiterMode ? 'es' : lang;
+  const displayLang = waiterMode ? 'es' : lang; 
 
   if(Object.keys(cart).length === 0) {
-    cont.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div class="empty-text">${i18n[lang].empty}</div>
-      </div>`;
+    cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">${i18n[lang].empty}</div></div>`;
   } else {
     Object.keys(cart).forEach(id => {
       const p = menu.find(x => x.id == id);
       const qty = cart[id];
-      
+      // Si estamos en modo camarero, solo mostramos nombre y cantidad gigante
       cont.innerHTML += `
         <div class="order-item">
           <div style="flex:1">
@@ -494,6 +515,7 @@ function renderList() {
             <span style="font-weight:700; width:25px; text-align:center">${qty}</span>
             <button class="qty-btn" onclick="add(${id})">+</button>
           </div>
+          <div class="waiter-only-qty" style="display:none; font-weight:800; margin-left:10px;">x${qty}</div>
         </div>
       `;
     });
@@ -504,54 +526,39 @@ function filter(cat) {
   filterCat = cat;
   document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
   let id='f-drk';
-  if(cat==='entrantes') id='f-ent';
-  if(cat==='principales') id='f-main';
-  if(cat==='postres') id='f-des';
+  if(cat==='entrantes') id='f-ent'; if(cat==='principales') id='f-main'; if(cat==='postres') id='f-des';
   document.getElementById(id).classList.add('active');
   render();
 }
 
 function clearCart() {
   if(confirm(i18n[lang].clear + '?')) {
-    cart = {}; 
-    document.getElementById('notesField').value = '';
-    saveCart(); saveNotes(); 
-    waiterMode = false; 
+    cart = {}; document.getElementById('notesField').value = '';
+    saveCart(); saveNotes(); exitWaiterMode();
     render(); updateFloat(); closeSheet();
   }
 }
 
 function openSheet() { 
-  waiterMode = false;
-  const wControls = document.getElementById('waiterControls');
-  if (lang === 'es') wControls.style.display = 'none';
-  else wControls.style.display = 'flex';
-
-  document.getElementById('translateBtn').classList.remove('active');
-  document.getElementById('notesField').style.borderColor = "var(--border)";
-  
+  exitWaiterMode(); // Siempre abrir en modo normal
   renderList(); 
   document.getElementById('overlay').classList.add('open'); 
 }
 function closeSheet() { 
+  exitWaiterMode();
   document.getElementById('overlay').classList.remove('open'); 
 }
 
-/* --- THEME SYNC --- */
+/* --- THEME --- */
 const themeBtn = document.getElementById('themeBtn');
-
 function applyTheme() {
   let savedTheme = localStorage.getItem('theme');
-  if (!savedTheme) {
-    savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
+  if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
-  
   themeBtn.innerHTML = savedTheme === 'dark'
     ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
     : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 }
-
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
   const newTheme = current === 'dark' ? 'light' : 'dark';
