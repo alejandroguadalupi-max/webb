@@ -182,7 +182,7 @@
 
 <main class="landing-container" id="landing">
   
-  <a href="peques.html" class="game-pill">
+  <a href="juegos.html" class="game-pill">
     <span data-lang="kidsMode">Arcade Zone</span>
   </a>
 
@@ -212,14 +212,55 @@
 </main>
 
 <script>
-  /* --- 1. IDIOMAS --- */
-  const translations = {
-    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", kidsMode:"Zona Arcade", title:"Bienvenido a PataMig" },
-    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", kidsMode:"Arcade Zone", title:"Welcome to PataMig" },
-    de: { welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Menü anzeigen", leave_review:"Bewertung abgeben", share_with_friends:"Erfahrung teilen", kidsMode:"Arcade Zone", title:"Willkommen bei PataMig" },
-    fr: { welcome:"Bienvenue!", prompt:"Que souhaitez-vous faire ?", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager l'expérience", kidsMode:"Zone Arcade", title:"Bienvenue à PataMig" },
-    it: { welcome:"Benvenuto!", prompt:"Cosa vuoi fare?", view_menu:"Vedi il menù", leave_review:"Lascia recensione", share_with_friends:"Condividi esperienza", kidsMode:"Zona Arcade", title:"Benvenuto a PataMig" }
-  };
+/* --- 1. IDIOMAS --- */
+const translations = {
+  es: { 
+    welcome:"¡Bienvenid@!", 
+    prompt:"¿Qué te gustaría hacer?", 
+    view_menu:"Acceder a la carta", 
+    leave_review:"Dejar reseña", 
+    share_with_friends:"Compartir experiencia", 
+    kidsMode:"Juegos",          // ← actualizado
+    title:"Bienvenido a PataMig" 
+  },
+  en: { 
+    welcome:"Welcome!", 
+    prompt:"What would you like to do?", 
+    view_menu:"View the Menu", 
+    leave_review:"Leave a Review", 
+    share_with_friends:"Share Experience", 
+    kidsMode:"Arcade Zone", 
+    title:"Welcome to PataMig" 
+  },
+  de: { 
+    welcome:"Willkommen!", 
+    prompt:"Was möchten Sie tun?", 
+    view_menu:"Menü anzeigen", 
+    leave_review:"Bewertung abgeben", 
+    share_with_friends:"Erfahrung teilen", 
+    kidsMode:"Arcade Zone", 
+    title:"Willkommen bei PataMig" 
+  },
+  fr: { 
+    welcome:"Bienvenue!", 
+    prompt:"Que souhaitez-vous faire ?", 
+    view_menu:"Voir le menu", 
+    leave_review:"Laisser un avis", 
+    share_with_friends:"Partager l'expérience", 
+    kidsMode:"Zone Arcade", 
+    title:"Bienvenue à PataMig" 
+  },
+  it: { 
+    welcome:"Benvenuto!", 
+    prompt:"Cosa vuoi fare?", 
+    view_menu:"Vedi il menù", 
+    leave_review:"Lascia recensione", 
+    share_with_friends:"Condividi esperienza", 
+    kidsMode:"Zona Arcade", 
+    title:"Benvenuto a PataMig" 
+  }
+};
+
 
   const contentElements = document.querySelectorAll('[data-lang]');
   const menuLink = document.getElementById("menuLink");
