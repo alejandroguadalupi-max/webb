@@ -42,17 +42,42 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centrado vertical */
-    padding: 20px;
+    justify-content: center; /* Centrado vertical perfecto */
+    padding: 40px 20px; /* Más padding arriba/abajo */
     box-sizing: border-box;
     text-align: center;
     position: relative;
   }
 
-  /* --- ZONA SUPERIOR (ICONOS) --- */
-  .top-btn {
+  /* --- BOTONES SUPERIORES --- */
+  
+  /* Botón Juegos (Rectangular Alargado) */
+  .game-pill {
+    position: absolute;
+    top: 30px;
+    left: 25px;
+    background: var(--bg-color);
+    border: 1px solid var(--select-border);
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .game-pill:active { transform: scale(0.95); }
+
+  /* Botón Tema (Circular) */
+  .theme-btn {
     position: absolute;
     top: 25px;
+    right: 25px;
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -64,67 +89,60 @@
     border: 1px solid var(--select-border);
     color: var(--text-color);
     box-shadow: var(--shadow);
-    transition: transform 0.2s, background 0.3s;
-    text-decoration: none;
-    font-size: 1.5rem;
+    transition: transform 0.2s;
     z-index: 100;
   }
-  .top-btn:active { transform: scale(0.9); }
-
-  /* Botón Juegos (Izquierda) */
-  .game-btn { left: 25px; }
-  
-  /* Botón Tema (Derecha) */
-  .theme-btn { right: 25px; }
+  .theme-btn:active { transform: scale(0.9); }
 
   /* --- LOGO Y TEXTO --- */
   .restaurant-logo {
     width: 100%;
     max-width: 280px; 
     height: auto;
-    margin-bottom: 25px;
+    margin-top: 40px; /* Empuja un poco hacia abajo desde el top */
+    margin-bottom: 30px;
     border-radius: 10px;
-    box-shadow: 0 10px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15); /* Sombra mejorada */
     transition: transform 0.3s ease;
   }
 
   h2 {
-    font-size: 1.8em;
-    font-weight: 700;
-    margin: 0 0 10px 0;
+    font-size: 2em; /* Un poco más grande */
+    font-weight: 800;
+    margin: 0 0 15px 0;
     color: var(--text-color);
   }
 
   p {
-    font-size: 1.1em;
+    font-size: 1.15em;
     color: var(--text-color);
-    margin: 0 0 30px 0;
-    line-height: 1.4;
-    opacity: 0.8;
+    margin: 0 0 40px 0; /* Más espacio antes de los botones */
+    line-height: 1.5;
+    opacity: 0.85;
   }
 
   /* --- BOTONES PRINCIPALES --- */
   .button-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px; /* Más separación entre botones */
     width: 100%;
-    max-width: 340px; 
-    margin-bottom: 30px;
+    max-width: 320px; 
+    margin-bottom: 50px;
   }
 
   .btn {
     display: block;
-    padding: 16px;
-    border-radius: 15px;
+    padding: 18px; /* Botones más altos */
+    border-radius: 16px;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.05em;
+    font-size: 1.1em;
     text-align: center;
     border: 1px solid var(--btn-border);
     background: var(--bg-color);
     color: var(--text-color);
-    transition: all 0.3s;
+    transition: all 0.2s ease;
     box-shadow: var(--shadow);
   }
 
@@ -133,18 +151,19 @@
     background: var(--btn-bg);
     color: var(--btn-text);
     border: 1px solid var(--btn-bg);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
   }
 
   .btn:active { transform: scale(0.98); }
 
   /* --- SELECTOR IDIOMA --- */
   .lang-container {
-    margin-top: 20px;
+    margin-top: 10px;
   }
 
   #lang-select {
     display: block;
-    padding: 12px;
+    padding: 12px 24px;
     border-radius: 50px;
     border: 2px solid var(--select-border);
     background: var(--select-bg);
@@ -152,8 +171,8 @@
     cursor: pointer;
     font-size: 1em;
     text-align: center;
-    transition: background 0.3s, color 0.3s, border 0.3s;
-    min-width: 180px;
+    transition: background 0.3s, color 0.3s;
+    min-width: 160px;
     outline: none;
   }
 
@@ -163,9 +182,11 @@
 
 <main class="landing-container" id="landing">
   
-  <a href="juegos.html" class="top-btn game-btn" aria-label="Games">🎮</a>
+  <a href="peques.html" class="game-pill">
+    <span data-lang="kidsMode">Arcade Zone</span>
+  </a>
 
-  <button id="themeBtn" class="top-btn theme-btn" aria-label="Cambiar tema"></button>
+  <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
 
   <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
   
@@ -193,11 +214,11 @@
 <script>
   /* --- 1. IDIOMAS --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", title:"Bienvenido a PataMig" },
-    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", title:"Welcome to PataMig" },
-    de: { welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Menü anzeigen", leave_review:"Bewertung abgeben", share_with_friends:"Erfahrung teilen", title:"Willkommen bei PataMig" },
-    fr: { welcome:"Bienvenue!", prompt:"Que souhaitez-vous faire ?", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager l'expérience", title:"Bienvenue à PataMig" },
-    it: { welcome:"Benvenuto!", prompt:"Cosa vuoi fare?", view_menu:"Vedi il menù", leave_review:"Lascia recensione", share_with_friends:"Condividi esperienza", title:"Benvenuto a PataMig" }
+    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", kidsMode:"Zona Arcade", title:"Bienvenido a PataMig" },
+    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", kidsMode:"Arcade Zone", title:"Welcome to PataMig" },
+    de: { welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Menü anzeigen", leave_review:"Bewertung abgeben", share_with_friends:"Erfahrung teilen", kidsMode:"Arcade Zone", title:"Willkommen bei PataMig" },
+    fr: { welcome:"Bienvenue!", prompt:"Que souhaitez-vous faire ?", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager l'expérience", kidsMode:"Zone Arcade", title:"Bienvenue à PataMig" },
+    it: { welcome:"Benvenuto!", prompt:"Cosa vuoi fare?", view_menu:"Vedi il menù", leave_review:"Lascia recensione", share_with_friends:"Condividi esperienza", kidsMode:"Zona Arcade", title:"Benvenuto a PataMig" }
   };
 
   const contentElements = document.querySelectorAll('[data-lang]');
@@ -212,8 +233,8 @@
     
     // Rutas (Asegúrate de que coincidan con tus archivos)
     menuLink.href = `carta.html?lang=${lang}`;
-    reviewLink.href = `resena.html?lang=${lang}`;
-    shareLink.href = `compartir.html?lang=${lang}`;
+    reviewLink.href = `restaurante_2.html?lang=${lang}`;
+    shareLink.href = `compartir_2.html?lang=${lang}`;
     
     document.title = translations[lang].title;
   }
