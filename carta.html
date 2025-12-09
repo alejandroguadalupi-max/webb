@@ -56,13 +56,32 @@ body {
 .header {
   position: sticky; top: 0; z-index: 100;
   background: rgba(var(--bg-card), 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
   border-bottom: 1px solid var(--border);
 }
-.brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); }
-.controls { display: flex; align-items: center; gap: 12px; }
-.lang-badge { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; background: var(--border); color: var(--text-sec); padding: 6px 12px; border-radius: 50px; }
+.brand { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); }
+.controls { display: flex; align-items: center; gap: 8px; }
+
+/* Badges y Botones Header */
+.lang-badge { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background: var(--border); color: var(--text-sec); padding: 8px 12px; border-radius: 50px; }
 .theme-btn { background: none; border: none; cursor: pointer; padding: 4px; color: var(--text-main); display: flex; }
+
+/* Selector de Alergias */
+.allergy-select {
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg-body);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  font-family: inherit; font-size: 0.75rem; font-weight: 800; /* Más negrita */
+  padding: 8px 12px; border-radius: 50px;
+  cursor: pointer; outline: none;
+  text-align: center;
+  transition: 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  text-transform: uppercase; /* Mayúsculas forzadas */
+  letter-spacing: 0.5px;
+}
+.allergy-select:focus { border-color: var(--primary); }
 
 /* Subheader educativo */
 .info-bar {
@@ -177,6 +196,12 @@ textarea.notes:focus { border-color: var(--primary); }
 <header class="header">
   <div class="brand">Carta</div>
   <div class="controls">
+    <select id="allergyFilter" class="allergy-select" onchange="applyAllergyFilter()">
+      <option value="">No tengo alergias ▾</option> <option value="gf">🌾 Sin Gluten</option>
+      <option value="lf">🥛 Sin Lactosa</option>
+      <option value="v">🌱 Vegano</option>
+    </select>
+
     <div class="lang-badge" id="langDisplay">ES</div>
     <button class="theme-btn" id="themeBtn"></button>
   </div>
@@ -232,81 +257,36 @@ textarea.notes:focus { border-color: var(--primary); }
 /* --- DICCIONARIO --- */
 const i18n = {
   es: { 
-    ent: "Entrantes", 
-    main: "Principales", 
-    des: "Postres", 
-    drk: "Bebidas", 
-    btn: "Ver mi Lista", 
-    title: "Tu Lista", 
-    msg: "💡 Lee esta lista al camarero/a.", 
-    clear: "Borrar todo", 
-    empty: "Tu lista está vacía.<br>Añade platos para organizarte.", 
-    ph: "Notas (ej. sin hielo...)", 
-    trans: "Texto ES", 
+    ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", 
+    btn: "Ver mi Lista", title: "Tu Lista", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", 
+    empty: "Tu lista está vacía.<br>Añade platos para organizarte.", ph: "Notas (ej. sin hielo...)", trans: "Texto ES", 
     infoBar: "📝 Ve añadiendo platos a tu lista para preparar tu pedido y decírselo luego al camarero."
   },
-
   en: { 
-    ent: "Starters", 
-    main: "Mains", 
-    des: "Desserts", 
-    drk: "Drinks", 
-    btn: "View my List", 
-    title: "Your List", 
-    msg: "💡 Read this list to the waiter.", 
-    clear: "Clear all", 
-    empty: "Your list is empty.<br>Add dishes to organize your order.", 
-    ph: "Notes (e.g. no ice...)", 
-    trans: "Show in Spanish", 
+    ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", 
+    btn: "View my List", title: "Your List", msg: "💡 Read this list to the waiter.", clear: "Clear all", 
+    empty: "Your list is empty.<br>Add dishes to organize your order.", ph: "Notes (e.g. no ice...)", trans: "Show in Spanish", 
     infoBar: "📝 Add dishes here to prepare your order and tell the waiter later."
   },
-
   de: { 
-    ent: "Vorspeisen", 
-    main: "Hauptspeisen", 
-    des: "Desserts", 
-    drk: "Getränke", 
-    btn: "Meine Liste", 
-    title: "Deine Liste", 
-    msg: "💡 Dem Kellner vorlesen.", 
-    clear: "Löschen", 
-    empty: "Deine Liste ist leer.<br>Füge Gerichte hinzu.", 
-    ph: "Notizen...", 
-    trans: "Auf Spanisch", 
+    ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", 
+    btn: "Meine Liste", title: "Deine Liste", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", 
+    empty: "Deine Liste ist leer.<br>Füge Gerichte hinzu.", ph: "Notizen...", trans: "Auf Spanisch", 
     infoBar: "📝 Füge hier Gerichte hinzu, um deine Bestellung vorzubereiten und sie später dem Kellner mitzuteilen."
   },
-
   fr: { 
-    ent: "Entrées", 
-    main: "Plats", 
-    des: "Desserts", 
-    drk: "Boissons", 
-    btn: "Ma Liste", 
-    title: "Votre Liste", 
-    msg: "💡 Lire au serveur.", 
-    clear: "Effacer", 
-    empty: "Votre liste est vide.<br>Ajoutez des plats pour organiser.", 
-    ph: "Notes...", 
-    trans: "En Espagnol", 
+    ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", 
+    btn: "Ma Liste", title: "Votre Liste", msg: "💡 Lire au serveur.", clear: "Effacer", 
+    empty: "Votre liste est vide.<br>Ajoutez des plats pour organiser.", ph: "Notes...", trans: "En Espagnol", 
     infoBar: "📝 Ajoutez des plats ici pour préparer votre commande et la transmettre ensuite au serveur."
   },
-
   it: { 
-    ent: "Antipasti", 
-    main: "Primi/Secondi", 
-    des: "Dolci", 
-    drk: "Bevande", 
-    btn: "La mia Lista", 
-    title: "La tua Lista", 
-    msg: "💡 Leggi al cameriere.", 
-    clear: "Cancella", 
-    empty: "La tua lista è vuota.<br>Aggiungi piatti per organizzare.", 
-    ph: "Note...", 
-    trans: "In Spagnolo", 
+    ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", 
+    btn: "La mia Lista", title: "La tua Lista", msg: "💡 Leggi al cameriere.", clear: "Cancella", 
+    empty: "La tua lista è vuota.<br>Aggiungi piatti per organizzare.", ph: "Note...", trans: "In Spagnolo", 
     infoBar: "📝 Aggiungi qui i piatti per preparare il tuo ordine e comunicarlo poi al cameriere."
   }
 };
-
 
 /* --- DICCIONARIO TRADUCCIÓN NOTAS --- */
 const foodDictionary = {
@@ -315,28 +295,32 @@ const foodDictionary = {
   "sans": "sin", "avec": "con", "glace": "hielo", "eau": "agua", "chaud": "caliente", "froid": "frío", "epice": "picante", "sauce": "salsa", "oignon": "cebolla", "fromage": "queso", "viande": "carne", "poulet": "pollo", "svp": "por favor"
 };
 
-/* --- DATOS --- */
+/* --- DATOS (Con Tags de Alergias) --- */
 const menu = [
-  { id: 201, cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola", en: "Coca-Cola", de: "Coca-Cola", fr: "Coca-Cola", it: "Coca-Cola" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 202, cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola Zero", en: "Coke Zero", de: "Cola Zero", fr: "Coca Zéro", it: "Coca Zero" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 203, cat: 'bebidas', price: 2.50, name: { es: "Fanta Naranja", en: "Fanta Orange", de: "Fanta Orange", fr: "Fanta Orange", it: "Fanta Arancia" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 204, cat: 'bebidas', price: 2.50, name: { es: "Fanta Limón", en: "Fanta Lemon", de: "Fanta Zitrone", fr: "Fanta Citron", it: "Fanta Limone" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 205, cat: 'bebidas', price: 2.50, name: { es: "Sprite", en: "Sprite", de: "Sprite", fr: "Sprite", it: "Sprite" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 206, cat: 'bebidas', price: 2.50, name: { es: "Nestea", en: "Iced Tea", de: "Eistee", fr: "Thé glacé", it: "Tè freddo" }, desc: { es: "Limón", en: "Lemon", de: "Zitrone", fr: "Citron", it: "Limone" } },
-  { id: 207, cat: 'bebidas', price: 2.00, name: { es: "Agua", en: "Water", de: "Wasser", fr: "Eau", it: "Acqua" }, desc: { es: "50cl", en: "50cl", de: "50cl", fr: "50cl", it: "50cl" } },
-  { id: 1, cat: 'entrantes', price: 9.50, name: { es: "Huevos Rotos", en: "Broken Eggs", de: "Zerbrochene Eier", fr: "Œufs cassés", it: "Uova rotte" }, desc: { es: "Con jamón ibérico.", en: "With Iberian ham.", de: "Mit iberischem Schinken.", fr: "Au jambon ibérique.", it: "Con prosciutto iberico." } },
-  { id: 2, cat: 'entrantes', price: 6.50, name: { es: "Croquetas (4ud)", en: "Croquettes (4pcs)", de: "Kroketten (4 Stk)", fr: "Croquettes (4pcs)", it: "Crocchette (4pz)" }, desc: { es: "Boletus y Trufa.", en: "Boletus & Truffle.", de: "Steinpilz & Trüffel.", fr: "Cèpes et Truffe.", it: "Porcini e Tartufo." } },
-  { id: 3, cat: 'principales', price: 16.00, name: { es: "Entrecot Vaca", en: "Beef Entrecote", de: "Rinderentrecote", fr: "Entrecôte de bœuf", it: "Entrecote di manzo" }, desc: { es: "300g a la parrilla.", en: "300g grilled.", de: "300g gegrillt.", fr: "300g grillé.", it: "300g alla griglia." } },
-  { id: 4, cat: 'principales', price: 12.50, name: { es: "Burger Premium", en: "Premium Burger", de: "Premium Burger", fr: "Burger Premium", it: "Burger Premium" }, desc: { es: "Queso de cabra y cebolla.", en: "Goat cheese & onion.", de: "Ziegenkäse & Zwiebel.", fr: "Chèvre et oignon.", it: "Formaggio di capra e cipolla." } },
-  { id: 5, cat: 'postres', price: 6.00, name: { es: "Coulant Choco", en: "Choco Coulant", de: "Schoko-Coulant", fr: "Coulant au chocolat", it: "Coulant al cioccolato" }, desc: { es: "Con helado.", en: "With ice cream.", de: "Mit Eis.", fr: "Avec glace.", it: "Con gelato." } }
+  // BEBIDAS (Todas son safe en este ejemplo salvo indicación)
+  { id: 201, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola", en: "Coca-Cola", de: "Coca-Cola", fr: "Coca-Cola", it: "Coca-Cola" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
+  { id: 202, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola Zero", en: "Coke Zero", de: "Cola Zero", fr: "Coca Zéro", it: "Coca Zero" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
+  { id: 203, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Naranja", en: "Fanta Orange", de: "Fanta Orange", fr: "Fanta Orange", it: "Fanta Arancia" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
+  { id: 204, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Limón", en: "Fanta Lemon", de: "Fanta Zitrone", fr: "Fanta Citron", it: "Fanta Limone" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
+  { id: 205, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Sprite", en: "Sprite", de: "Sprite", fr: "Sprite", it: "Sprite" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
+  { id: 206, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Nestea", en: "Iced Tea", de: "Eistee", fr: "Thé glacé", it: "Tè freddo" }, desc: { es: "Limón", en: "Lemon", de: "Zitrone", fr: "Citron", it: "Limone" } },
+  { id: 207, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.00, name: { es: "Agua", en: "Water", de: "Wasser", fr: "Eau", it: "Acqua" }, desc: { es: "50cl", en: "50cl", de: "50cl", fr: "50cl", it: "50cl" } },
+  
+  // COMIDA (Etiquetado básico de ejemplo)
+  { id: 1, tags: ['gf','lf'], cat: 'entrantes', price: 9.50, name: { es: "Huevos Rotos", en: "Broken Eggs", de: "Zerbrochene Eier", fr: "Œufs cassés", it: "Uova rotte" }, desc: { es: "Con jamón ibérico.", en: "With Iberian ham.", de: "Mit iberischem Schinken.", fr: "Au jambon ibérique.", it: "Con prosciutto iberico." } },
+  { id: 2, tags: [], cat: 'entrantes', price: 6.50, name: { es: "Croquetas (4ud)", en: "Croquettes (4pcs)", de: "Kroketten (4 Stk)", fr: "Croquettes (4pcs)", it: "Crocchette (4pz)" }, desc: { es: "Boletus y Trufa.", en: "Boletus & Truffle.", de: "Steinpilz & Trüffel.", fr: "Cèpes et Truffe.", it: "Porcini e Tartufo." } },
+  { id: 3, tags: ['gf','lf'], cat: 'principales', price: 16.00, name: { es: "Entrecot Vaca", en: "Beef Entrecote", de: "Rinderentrecote", fr: "Entrecôte de bœuf", it: "Entrecote di manzo" }, desc: { es: "300g a la parrilla.", en: "300g grilled.", de: "300g gegrillt.", fr: "300g grillé.", it: "300g alla griglia." } },
+  { id: 4, tags: [], cat: 'principales', price: 12.50, name: { es: "Burger Premium", en: "Premium Burger", de: "Premium Burger", fr: "Burger Premium", it: "Burger Premium" }, desc: { es: "Queso de cabra y cebolla.", en: "Goat cheese & onion.", de: "Ziegenkäse & Zwiebel.", fr: "Chèvre et oignon.", it: "Formaggio di capra e cipolla." } },
+  { id: 5, tags: ['v'], cat: 'postres', price: 6.00, name: { es: "Coulant Choco", en: "Choco Coulant", de: "Schoko-Coulant", fr: "Coulant au chocolat", it: "Coulant al cioccolato" }, desc: { es: "Con helado.", en: "With ice cream.", de: "Mit Eis.", fr: "Avec glace.", it: "Con gelato." } }
 ];
 
-/* --- ESTADO Y PERSISTENCIA --- */
+/* --- ESTADO --- */
 let cart = {};
 let filterCat = 'bebidas';
 let lang = 'es';
 let waiterMode = false; 
 let originalNote = ""; 
+let currentAllergy = ""; 
 
 // Cargar carrito guardado
 function loadCart() {
@@ -347,16 +331,8 @@ function loadCart() {
   if(savedNotes) document.getElementById('notesField').value = savedNotes;
 }
 
-// Guardar carrito
-function saveCart() {
-  localStorage.setItem('pataMig_cart', JSON.stringify(cart));
-}
-
-// Guardar notas
-function saveNotes() {
-  const val = document.getElementById('notesField').value;
-  localStorage.setItem('pataMig_notes', val);
-}
+function saveCart() { localStorage.setItem('pataMig_cart', JSON.stringify(cart)); }
+function saveNotes() { localStorage.setItem('pataMig_notes', document.getElementById('notesField').value); }
 
 /* --- LOGICA INICIALIZACIÓN --- */
 function init() {
@@ -371,9 +347,15 @@ function init() {
   localStorage.setItem('userLang', lang);
   document.getElementById('langDisplay').innerText = lang;
   
-  loadCart(); // Cargar lo guardado
+  loadCart(); 
   render();
-  updateFloat(); // Actualizar botón
+  updateFloat(); 
+}
+
+/* --- FILTRO ALERGIAS --- */
+function applyAllergyFilter() {
+  currentAllergy = document.getElementById('allergyFilter').value;
+  render(); 
 }
 
 function render() {
@@ -381,7 +363,7 @@ function render() {
   list.innerHTML = '';
   const txt = i18n[lang];
 
-  // Actualizar Textos
+  // Textos UI
   document.getElementById('f-ent').innerText = txt.ent;
   document.getElementById('f-main').innerText = txt.main;
   document.getElementById('f-des').innerText = txt.des;
@@ -399,7 +381,11 @@ function render() {
   else wControls.style.display = 'flex';
 
   menu.forEach(p => {
+    // 1. Filtro Categoría
     if(p.cat !== filterCat) return;
+
+    // 2. Filtro Alergias
+    if(currentAllergy !== "" && !p.tags.includes(currentAllergy)) return;
 
     const qty = cart[p.id] || 0;
     let btnTxt = '+';
@@ -429,7 +415,7 @@ function render() {
 
 function add(id) {
   cart[id] = (cart[id] || 0) + 1;
-  saveCart(); // Persistencia
+  saveCart(); 
   render(); updateFloat();
   if(document.getElementById('overlay').classList.contains('open')) renderList();
   if(navigator.vibrate) navigator.vibrate(10);
@@ -440,7 +426,7 @@ function remove(id) {
     cart[id]--;
     if(cart[id] <= 0) delete cart[id];
   }
-  saveCart(); // Persistencia
+  saveCart(); 
   render(); updateFloat(); renderList();
 }
 
@@ -488,7 +474,6 @@ function renderList() {
   const displayLang = waiterMode ? 'es' : lang;
 
   if(Object.keys(cart).length === 0) {
-    // ESTADO VACÍO EDUCATIVO
     cont.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">📋</div>
@@ -530,7 +515,7 @@ function clearCart() {
   if(confirm(i18n[lang].clear + '?')) {
     cart = {}; 
     document.getElementById('notesField').value = '';
-    saveCart(); saveNotes(); // Limpiar persistencia
+    saveCart(); saveNotes(); 
     waiterMode = false; 
     render(); updateFloat(); closeSheet();
   }
@@ -556,14 +541,10 @@ function closeSheet() {
 const themeBtn = document.getElementById('themeBtn');
 
 function applyTheme() {
-  // Detectar tema guardado en localStorage (desde página principal)
   let savedTheme = localStorage.getItem('theme');
-  
-  // Si no hay, detectar preferencia sistema
   if (!savedTheme) {
     savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
-  
   document.documentElement.setAttribute('data-theme', savedTheme);
   
   themeBtn.innerHTML = savedTheme === 'dark'
