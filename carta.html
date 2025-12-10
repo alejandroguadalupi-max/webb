@@ -52,52 +52,70 @@ body {
   transition: background 0.3s ease; padding-bottom: 120px;
 }
 
-/* --- HEADER --- */
+/* --- HEADER REORGANIZADO --- */
 .header {
-  position: sticky; top: 0; z-index: 1000; /* Z-index alto para estar siempre encima */
+  position: sticky; top: 0; z-index: 1000;
   background: rgba(var(--bg-card), 0.95); backdrop-filter: blur(12px);
-  padding: 18px 24px; 
+  padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
   border-bottom: 1px solid var(--border);
-  gap: 15px; /* Espacio si se doblan las líneas */
-  flex-wrap: wrap; /* Evita que se rompa en pantallas muy pequeñas */
-  min-height: 85px; /* Altura mínima reservada */
 }
 
-.header-left .brand {
-  font-size: 2.2rem; /* Tamaño grande */
+/* Grupo Izquierdo: Título y Alergias juntos */
+.header-left-group {
+  display: flex; 
+  flex-direction: column; /* Apilados en vertical para dar fuerza */
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.brand {
+  font-size: 2.4rem; /* Título grande */
   font-weight: 800; letter-spacing: -1px; color: var(--primary); margin: 0;
   line-height: 1;
 }
 
-.header-right { display: flex; align-items: center; gap: 10px; }
+/* Grupo Derecho: Idioma y Tema */
+.header-right-tools { 
+  display: flex; align-items: center; gap: 8px; 
+  align-self: flex-start; /* Alineados arriba */
+  padding-top: 5px;
+}
 
-/* Selector Alergias - Estilo Corregido */
+/* Selector Alergias - Estilo mejorado */
 .allergy-select {
   appearance: none; -webkit-appearance: none;
-  background: var(--bg-body); border: 1px solid var(--border);
+  background: var(--bg-body); 
+  
+  /* Borde visible en Modo Claro (Petición usuario) */
+  border: 2px solid #ced6e0; 
+  
   color: var(--text-main); font-family: inherit;
-  font-size: 1rem; 
+  font-size: 0.95rem; 
   font-weight: 700;
-  padding: 12px 20px; 
+  padding: 8px 16px; 
   border-radius: 50px;
-  cursor: pointer; outline: none; text-align: center;
+  cursor: pointer; outline: none; text-align: left;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  max-width: 160px; 
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 140px;
+}
+
+/* Quitar el borde fuerte en modo oscuro */
+[data-theme="dark"] .allergy-select {
+  border: 1px solid var(--border);
 }
 
 .lang-badge {
-  font-size: 0.9rem; font-weight: 800; border: 1px solid var(--border); 
+  font-size: 0.8rem; font-weight: 800; border: 1px solid var(--border); 
   background: var(--bg-body); color: var(--text-sec); 
-  padding: 10px 14px; border-radius: 50px; cursor: default;
+  padding: 8px 10px; border-radius: 50px; cursor: default;
 }
 
 .theme-btn { 
   background: none; border: none; cursor: pointer; padding: 4px; 
   color: var(--text-main); display: flex; align-items: center; justify-content: center;
 }
-.theme-btn svg { width: 28px; height: 28px; }
+.theme-btn svg { width: 24px; height: 24px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 
@@ -107,10 +125,10 @@ body {
   font-size: 0.85rem; font-weight: 600; text-align: center;
 }
 
-/* Filtros - CORRECCIÓN: Ajustado el top para no chocar con el header grande */
+/* Filtros */
 .filters-wrap {
   position: sticky; 
-  top: 86px; /* Ajustado para librar la cabecera más alta */
+  top: 95px; /* Ajustado a la nueva altura del header */
   z-index: 900; 
   padding: 12px 0; margin-bottom: 10px;
   background: linear-gradient(to bottom, var(--bg-body) 85%, transparent);
@@ -220,28 +238,36 @@ textarea.notes:focus { border-color: var(--primary); }
 .sheet.waiter-mode .waiter-qty { display: block !important; font-size: 2rem !important; font-weight: 900; color: var(--primary); margin-right: 20px; }
 .sheet.waiter-mode textarea.notes { font-size: 1.3rem; font-weight: 700; color: var(--spanish-btn); border-color: var(--spanish-btn); }
 
+/* Botón "X" de cerrar modo camarero */
 #closeWaiterBtn {
-  display: none; position: absolute; top: 20px; right: 20px; z-index: 3001;
-  background: var(--text-main); color: var(--bg-card);
-  border: none; padding: 12px 24px; border-radius: 50px;
-  font-weight: 700; font-size: 1rem; cursor: pointer;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  display: none; position: absolute; top: 25px; right: 25px; z-index: 3001;
+  background: rgba(0,0,0,0.6); /* Fondo semi-transparente */
+  color: white;
+  width: 44px; height: 44px; /* Redondo */
+  border: none; border-radius: 50%;
+  font-weight: 400; font-size: 1.5rem; line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center;
 }
+/* Ocultamos el botón por defecto, solo visible via JS en modo camarero */
+body:not(.waiter-active) #closeWaiterBtn { display: none !important; }
 </style>
 </head>
-<body>
+<body id="bodyTag">
 
 <header class="header">
-  <div class="header-left">
+  <div class="header-left-group">
     <h1 class="brand">Carta</h1>
-  </div>
-  <div class="header-right">
     <select id="allergyFilter" class="allergy-select" onchange="applyAllergyFilter()">
       <option value="">ALERGIAS ▾</option>
       <option value="gf">🌾 Sin Gluten</option>
       <option value="lf">🥛 Sin Lactosa</option>
       <option value="v">🌱 Vegano</option>
     </select>
+  </div>
+  
+  <div class="header-right-tools">
     <div class="lang-badge" id="langDisplay">ES</div>
     <button class="theme-btn" id="themeBtn"></button>
   </div>
@@ -268,7 +294,7 @@ textarea.notes:focus { border-color: var(--primary); }
 </div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
-  <button id="closeWaiterBtn" onclick="exitWaiterMode()">❌ Cerrar Vista Camarero</button>
+  <button id="closeWaiterBtn" onclick="exitWaiterMode()">✕</button>
 
   <div class="sheet" id="orderSheet">
     <div class="sheet-header">
@@ -359,7 +385,7 @@ let currentAllergy = "";
 
 function loadCart() {
   const saved = localStorage.getItem('pataMig_cart');
-  if(saved) cart = JSON.parse(saved) || {}; // Corrección: Evitar null
+  if(saved) cart = JSON.parse(saved) || {};
   const savedNotes = localStorage.getItem('pataMig_notes');
   if(savedNotes) document.getElementById('notesField').value = savedNotes;
 }
@@ -459,7 +485,9 @@ function translateNoteText(text) {
 function enterWaiterMode() {
   waiterMode = true;
   document.getElementById('orderSheet').classList.add('waiter-mode');
-  document.getElementById('closeWaiterBtn').style.display = 'block';
+  // Usamos una clase en body para controlar visibilidad del botón X
+  document.body.classList.add('waiter-active');
+  document.getElementById('closeWaiterBtn').style.display = 'flex';
   
   // Guardar original y traducir
   originalNote = document.getElementById('notesField').value;
@@ -471,6 +499,7 @@ function enterWaiterMode() {
 function exitWaiterMode() {
   waiterMode = false;
   document.getElementById('orderSheet').classList.remove('waiter-mode');
+  document.body.classList.remove('waiter-active');
   document.getElementById('closeWaiterBtn').style.display = 'none';
   
   // Restaurar nota original
@@ -545,10 +574,9 @@ function applyTheme() {
   if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   
-  // SVG en una sola línea para evitar errores de salto de línea
   themeBtn.innerHTML = savedTheme === 'dark'
-    ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
-    : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+    ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+    : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 }
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
