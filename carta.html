@@ -52,25 +52,28 @@ body {
   transition: background 0.3s ease; padding-bottom: 120px;
 }
 
-/* --- HEADER REORGANIZADO --- */
+/* --- HEADER --- */
 .header {
-  position: sticky; top: 0; z-index: 1000;
-  background: rgba(var(--bg-card), 0.95); backdrop-filter: blur(12px);
+  /* Se desplaza con el scroll */
+  background: rgba(var(--bg-card), 0.95);
+  backdrop-filter: blur(12px);
   padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid var(--border);
+  
+  /* CAMBIO: Eliminado el border-bottom para quitar la línea molesta */
+  border-bottom: none; 
 }
 
 /* Grupo Izquierdo: Título y Alergias juntos */
 .header-left-group {
   display: flex; 
-  flex-direction: column; /* Apilados en vertical para dar fuerza */
+  flex-direction: column; 
   gap: 8px;
   align-items: flex-start;
 }
 
 .brand {
-  font-size: 2.4rem; /* Título grande */
+  font-size: 2.4rem; 
   font-weight: 800; letter-spacing: -1px; color: var(--primary); margin: 0;
   line-height: 1;
 }
@@ -78,7 +81,7 @@ body {
 /* Grupo Derecho: Idioma y Tema */
 .header-right-tools { 
   display: flex; align-items: center; gap: 8px; 
-  align-self: flex-start; /* Alineados arriba */
+  align-self: flex-start; 
   padding-top: 5px;
 }
 
@@ -87,7 +90,7 @@ body {
   appearance: none; -webkit-appearance: none;
   background: var(--bg-body); 
   
-  /* Borde visible en Modo Claro (Petición usuario) */
+  /* Borde visible en Modo Claro */
   border: 2px solid #ced6e0; 
   
   color: var(--text-main); font-family: inherit;
@@ -126,10 +129,10 @@ body {
   font-size: 0.85rem; font-weight: 600; text-align: center;
 }
 
-/* Filtros */
+/* Filtros: Ahora solo esto es sticky */
 .filters-wrap {
   position: sticky; 
-  top: 95px; /* Ajustado a la nueva altura del header */
+  top: 0px; /* Pegado justo debajo de donde estaba el header, que ahora desaparece */
   z-index: 900; 
   padding: 12px 0; margin-bottom: 10px;
   background: linear-gradient(to bottom, var(--bg-body) 85%, transparent);
@@ -274,11 +277,11 @@ body:not(.waiter-active) #closeWaiterBtn { display: none !important; }
   </div>
 </header>
 
-<hr style="border: 0.5px solid white;">
+<hr style="border: 1.5px solid rgb(162, 151, 151)">
 <div class="info-bar" data-lang="infoBar">
   📝 Añade platos aquí para dictarlos luego.
 </div>
-<hr style="border: 0.5px solid white">
+<hr style="border: 1.5px solid rgb(162, 151, 151)">
 
 <div class="filters-wrap">
   <div class="filters-scroll">
