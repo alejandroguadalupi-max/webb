@@ -12,7 +12,7 @@
 <style>
 :root {
   /* --- Paleta PataMig --- */
-  --bg-body: #fdfdfd;
+  --bg-body: #E8F5E1;
   --bg-card: #ffffff;
   
   --text-main: #2d3436;
@@ -54,40 +54,50 @@ body {
 
 /* --- HEADER --- */
 .header {
-  position: sticky; top: 0; z-index: 100;
+  position: sticky; top: 0; z-index: 1000; /* Z-index alto para estar siempre encima */
   background: rgba(var(--bg-card), 0.95); backdrop-filter: blur(12px);
-  padding: 12px 20px; 
+  padding: 18px 24px; 
   display: flex; justify-content: space-between; align-items: center;
   border-bottom: 1px solid var(--border);
+  gap: 15px; /* Espacio si se doblan las líneas */
+  flex-wrap: wrap; /* Evita que se rompa en pantallas muy pequeñas */
+  min-height: 85px; /* Altura mínima reservada */
 }
 
 .header-left .brand {
-  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); margin: 0;
+  font-size: 2.2rem; /* Tamaño grande */
+  font-weight: 800; letter-spacing: -1px; color: var(--primary); margin: 0;
+  line-height: 1;
 }
 
-.header-right { display: flex; align-items: center; gap: 8px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
 
-/* Selector Alergias */
+/* Selector Alergias - Estilo Corregido */
 .allergy-select {
   appearance: none; -webkit-appearance: none;
   background: var(--bg-body); border: 1px solid var(--border);
-  color: var(--text-main); font-family: inherit; font-size: 0.75rem; font-weight: 700;
-  padding: 8px 12px; border-radius: 50px;
+  color: var(--text-main); font-family: inherit;
+  font-size: 1rem; 
+  font-weight: 700;
+  padding: 12px 20px; 
+  border-radius: 50px;
   cursor: pointer; outline: none; text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 160px; 
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* Botones Header */
-.lang-btn {
-  font-size: 0.75rem; font-weight: 800; border: 1px solid var(--border); 
+.lang-badge {
+  font-size: 0.9rem; font-weight: 800; border: 1px solid var(--border); 
   background: var(--bg-body); color: var(--text-sec); 
-  padding: 8px 10px; border-radius: 50px; cursor: default;
+  padding: 10px 14px; border-radius: 50px; cursor: default;
 }
+
 .theme-btn { 
   background: none; border: none; cursor: pointer; padding: 4px; 
-  color: var(--text-main); display: flex; align-items: center; 
+  color: var(--text-main); display: flex; align-items: center; justify-content: center;
 }
+.theme-btn svg { width: 28px; height: 28px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 
@@ -97,11 +107,15 @@ body {
   font-size: 0.85rem; font-weight: 600; text-align: center;
 }
 
-/* Filtros */
+/* Filtros - CORRECCIÓN: Ajustado el top para no chocar con el header grande */
 .filters-wrap {
-  position: sticky; top: 65px; z-index: 90; padding: 12px 0; margin-bottom: 10px;
+  position: sticky; 
+  top: 86px; /* Ajustado para librar la cabecera más alta */
+  z-index: 900; 
+  padding: 12px 0; margin-bottom: 10px;
   background: linear-gradient(to bottom, var(--bg-body) 85%, transparent);
 }
+
 .filters-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 24px; scrollbar-width: none; }
 .filters-scroll::-webkit-scrollbar { display: none; }
 .filter-pill {
@@ -161,7 +175,6 @@ body {
 }
 .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
-/* Botones dentro del modal */
 .waiter-controls { display: flex; gap: 10px; width: 100%; }
 .translate-btn {
   width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -177,7 +190,6 @@ body {
 .qty-controls { display: flex; align-items: center; gap: 12px; }
 .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
-/* CANTIDAD EN MODO CAMARERO (Oculta por defecto) */
 .waiter-qty { display: none; }
 
 .empty-state { text-align: center; padding: 40px 20px; color: var(--text-sec); }
@@ -192,7 +204,7 @@ textarea.notes {
 textarea.notes:focus { border-color: var(--primary); }
 .clear-btn { margin-top:15px; width: 100%; background:none; border:none; color:var(--text-sec); text-decoration:underline; cursor:pointer; font-size:0.9rem; opacity: 0.7;}
 
-/* --- ESTILOS MODO CAMARERO (PANTALLA COMPLETA) --- */
+/* --- MODO CAMARERO --- */
 .sheet.waiter-mode {
   height: 100% !important; max-height: 100vh !important;
   border-radius: 0; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
@@ -203,13 +215,11 @@ textarea.notes:focus { border-color: var(--primary); }
 .sheet.waiter-mode .clear-btn, 
 .sheet.waiter-mode .qty-controls { display: none !important; }
 
-/* Hacer visible la cantidad gigante y el texto grande */
 .sheet.waiter-mode .order-item { border-bottom: 2px solid var(--border); padding: 25px 20px; justify-content: flex-start; }
 .sheet.waiter-mode .order-item div { font-size: 1.6rem !important; font-weight: 800 !important; color: var(--text-main); }
 .sheet.waiter-mode .waiter-qty { display: block !important; font-size: 2rem !important; font-weight: 900; color: var(--primary); margin-right: 20px; }
 .sheet.waiter-mode textarea.notes { font-size: 1.3rem; font-weight: 700; color: var(--spanish-btn); border-color: var(--spanish-btn); }
 
-/* Botón cerrar modo camarero */
 #closeWaiterBtn {
   display: none; position: absolute; top: 20px; right: 20px; z-index: 3001;
   background: var(--text-main); color: var(--bg-card);
@@ -258,7 +268,6 @@ textarea.notes:focus { border-color: var(--primary); }
 </div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
-  
   <button id="closeWaiterBtn" onclick="exitWaiterMode()">❌ Cerrar Vista Camarero</button>
 
   <div class="sheet" id="orderSheet">
@@ -350,7 +359,7 @@ let currentAllergy = "";
 
 function loadCart() {
   const saved = localStorage.getItem('pataMig_cart');
-  if(saved) cart = JSON.parse(saved);
+  if(saved) cart = JSON.parse(saved) || {}; // Corrección: Evitar null
   const savedNotes = localStorage.getItem('pataMig_notes');
   if(savedNotes) document.getElementById('notesField').value = savedNotes;
 }
@@ -535,9 +544,11 @@ function applyTheme() {
   let savedTheme = localStorage.getItem('theme');
   if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  // SVG en una sola línea para evitar errores de salto de línea
   themeBtn.innerHTML = savedTheme === 'dark'
-    ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
-    : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+    ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+    : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 }
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
