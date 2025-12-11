@@ -12,18 +12,23 @@
 <style>
 :root {
   /* --- Paleta PataMig --- */
-  --bg-body: #fdfdfd;
+  --bg-body: #E8F5E1;
   --bg-card: #ffffff;
+   
   --text-main: #2d3436;
   --text-sec: #636e72;
+   
   --primary: #68B553; 
   --primary-dark: #509e3c;
   --primary-light: #eafbe4;
+   
   --shadow-card: 0 8px 30px rgba(0,0,0,0.04);
   --shadow-float: 0 15px 35px rgba(104, 181, 83, 0.25);
+   
   --border: #f1f2f6;
   --radius: 20px;
   --font: 'Plus Jakarta Sans', sans-serif;
+   
   --spanish-btn: #FFC107; 
 }
 
@@ -49,36 +54,90 @@ body {
 
 /* --- HEADER --- */
 .header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(var(--bg-card), 0.95); backdrop-filter: blur(12px);
-  padding: 12px 20px; 
+  /* Se desplaza con el scroll */
+  background: rgba(var(--bg-card), 0.95);
+  backdrop-filter: blur(12px);
+  padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid var(--border);
+   
+  /* CAMBIO: Eliminado el border-bottom para quitar la línea molesta */
+  border-bottom: none; 
 }
 
-.header-left .brand {
-  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); margin: 0;
+/* Grupo Izquierdo: Título y Alergias juntos */
+.header-left-group {
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px;
+  align-items: flex-start;
 }
 
-.header-right { display: flex; align-items: center; gap: 8px; }
+.brand {
+  font-size: 2.4rem; 
+  font-weight: 800; letter-spacing: -1px; color: var(--primary); margin: 0;
+  line-height: 1;
+}
 
+/* Grupo Derecho: Idioma y Tema */
+.header-right-tools { 
+  display: flex; align-items: center; gap: 8px; 
+  align-self: flex-start; 
+  padding-top: 5px;
+}
+
+/* Selector Alergias - Estilo mejorado */
 .allergy-select {
   appearance: none; -webkit-appearance: none;
-  background: var(--bg-body); border: 1px solid var(--border);
-  color: var(--text-main); font-family: inherit; font-size: 0.75rem; font-weight: 700;
-  padding: 8px 12px; border-radius: 50px; cursor: pointer; outline: none; text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: var(--bg-body); 
+   
+  /* Borde visible en Modo Claro */
+  border: 2px solid #ced6e0; 
+   
+  color: var(--text-main); font-family: inherit;
+  font-size: 0.95rem; 
+  font-weight: 700;
+  padding: 8px 16px; 
+  border-radius: 50px;
+  cursor: pointer; outline: none; text-align: left;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  min-width: 140px;
 }
 
-.lang-btn { font-size: 0.75rem; font-weight: 800; border: 1px solid var(--border); background: var(--bg-body); color: var(--text-sec); padding: 8px 10px; border-radius: 50px; cursor: default; }
-.theme-btn { background: none; border: none; cursor: pointer; padding: 4px; color: var(--text-main); display: flex; align-items: center; }
+/* Quitar el borde fuerte en modo oscuro */
+[data-theme="dark"] .allergy-select {
+  border: 1px solid var(--border);
+}
 
-.info-bar { padding: 10px 24px; background: var(--primary-light); color: var(--primary-dark); font-size: 0.85rem; font-weight: 600; text-align: center; }
+.lang-badge {
+  font-size: 0.8rem; font-weight: 800; border: 1px solid var(--border); 
+  background: var(--bg-body); color: var(--text-sec); 
+  padding: 8px 10px; border-radius: 50px; cursor: default;
+}
 
+.theme-btn { 
+  background: none; border: none; cursor: pointer; padding: 4px; 
+  color: var(--text-main); display: flex; align-items: center; justify-content: center;
+}
+.theme-btn svg { width: 24px; height: 24px; }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+
+/* Subheader educativo */
+
+.info-bar {
+  padding: 10px 24px; background: var(--bg--body); color: var(--primary-dark);
+  font-size: 0.85rem; font-weight: 600; text-align: center;
+}
+
+/* Filtros: Ahora solo esto es sticky */
 .filters-wrap {
-  position: sticky; top: 65px; z-index: 90; padding: 12px 0; margin-bottom: 10px;
+  position: sticky; 
+  top: 0px; /* Pegado justo debajo de donde estaba el header, que ahora desaparece */
+  z-index: 900; 
+  padding: 12px 0; margin-bottom: 10px;
   background: linear-gradient(to bottom, var(--bg-body) 85%, transparent);
 }
+
 .filters-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 24px; scrollbar-width: none; }
 .filters-scroll::-webkit-scrollbar { display: none; }
 .filter-pill {
@@ -88,6 +147,7 @@ body {
 }
 .filter-pill.active { color: white; background: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-light); }
 
+/* Grid Platos */
 .menu-grid { display: flex; flex-direction: column; gap: 16px; padding: 0 20px; max-width: 800px; margin: 0 auto; }
 .dish-card {
   background: var(--bg-card); border-radius: var(--radius); padding: 16px;
@@ -119,7 +179,7 @@ body {
 #cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
 .badge-count { background: var(--primary); color: white; padding: 2px 8px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
 
-/* MODAL */
+/* MODAL / SHEET */
 .overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
   z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; justify-content: center; align-items: flex-end;
@@ -132,37 +192,9 @@ body {
 }
 .overlay.open .sheet { transform: translateY(0); }
 
-/* --- MODO CAMARERO --- */
-.sheet.waiter-mode {
-  height: 100% !important; max-height: 100vh !important;
-  border-radius: 0; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-  transform: translateY(0); z-index: 3000; padding-top: 80px;
+.sheet-header { 
+  display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed var(--border); 
 }
-.sheet.waiter-mode .sheet-header, 
-.sheet.waiter-mode .notes-container #waiterMsg, 
-.sheet.waiter-mode .clear-btn, 
-.sheet.waiter-mode .qty-controls { display: none !important; }
-
-/* Estilo items gigante */
-.sheet.waiter-mode .order-item { border-bottom: 2px solid var(--border); padding: 25px 20px; justify-content: flex-start; }
-.sheet.waiter-mode .order-item div { font-size: 1.6rem !important; font-weight: 800 !important; color: var(--text-main); }
-.sheet.waiter-mode .waiter-qty { display: block !important; font-size: 2rem !important; font-weight: 900; color: var(--primary); margin-right: 20px; }
-.sheet.waiter-mode textarea.notes { 
-  font-size: 1.3rem; font-weight: 700; color: #000; 
-  background-color: var(--spanish-btn); border-color: var(--spanish-btn); 
-}
-
-/* Botón cerrar modo camarero */
-#closeWaiterBtn {
-  display: none; position: absolute; top: 25px; right: 25px; z-index: 3001;
-  background: rgba(0,0,0,0.7); color: white;
-  width: 44px; height: 44px; border: none; border-radius: 50%;
-  font-weight: 700; font-size: 1.2rem; cursor: pointer; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3); align-items: center; justify-content: center;
-}
-body.waiter-active #closeWaiterBtn { display: flex !important; }
-
-.sheet-header { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed var(--border); }
 .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
 .waiter-controls { display: flex; gap: 10px; width: 100%; }
@@ -171,7 +203,9 @@ body.waiter-active #closeWaiterBtn { display: flex !important; }
   padding: 14px; border-radius: 14px; background: var(--bg-body); border: 1px solid var(--border);
   font-weight: 700; font-size: 0.95rem; cursor: pointer; color: var(--text-sec); transition: 0.2s;
 }
-.translate-btn.active { background: var(--spanish-btn); color: black; border-color: var(--spanish-btn); box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2); }
+.translate-btn.active {
+  background: var(--spanish-btn); color: black; border-color: var(--spanish-btn); box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+}
 
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 .order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-body); border-radius: 16px; }
@@ -179,6 +213,7 @@ body.waiter-active #closeWaiterBtn { display: flex !important; }
 .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
 .waiter-qty { display: none; }
+
 .empty-state { text-align: center; padding: 40px 20px; color: var(--text-sec); }
 .empty-icon { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
 .empty-text { font-size: 0.95rem; line-height: 1.6; }
@@ -190,29 +225,63 @@ textarea.notes {
 }
 textarea.notes:focus { border-color: var(--primary); }
 .clear-btn { margin-top:15px; width: 100%; background:none; border:none; color:var(--text-sec); text-decoration:underline; cursor:pointer; font-size:0.9rem; opacity: 0.7;}
+
+/* --- MODO CAMARERO --- */
+.sheet.waiter-mode {
+  height: 100% !important; max-height: 100vh !important;
+  border-radius: 0; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+  transform: translateY(0); z-index: 3000; padding-top: 80px;
+}
+.sheet.waiter-mode .sheet-header, 
+.sheet.waiter-mode .notes-container #waiterMsg, 
+.sheet.waiter-mode .clear-btn, 
+.sheet.waiter-mode .qty-controls { display: none !important; }
+
+.sheet.waiter-mode .order-item { border-bottom: 2px solid var(--border); padding: 25px 20px; justify-content: flex-start; }
+.sheet.waiter-mode .order-item div { font-size: 1.6rem !important; font-weight: 800 !important; color: var(--text-main); }
+.sheet.waiter-mode .waiter-qty { display: block !important; font-size: 2rem !important; font-weight: 900; color: var(--primary); margin-right: 20px; }
+.sheet.waiter-mode textarea.notes { font-size: 1.3rem; font-weight: 700; color: var(--spanish-btn); border-color: var(--spanish-btn); }
+
+/* Botón "X" de cerrar modo camarero */
+#closeWaiterBtn {
+  display: none; position: absolute; top: 25px; right: 25px; z-index: 3001;
+  background: rgba(0,0,0,0.6); /* Fondo semi-transparente */
+  color: white;
+  width: 44px; height: 44px; /* Redondo */
+  border: none; border-radius: 50%;
+  font-weight: 400; font-size: 1.5rem; line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center;
+}
+/* Ocultamos el botón por defecto, solo visible via JS en modo camarero */
+body:not(.waiter-active) #closeWaiterBtn { display: none !important; }
 </style>
 </head>
 <body id="bodyTag">
 
 <header class="header">
-  <div class="header-left">
+  <div class="header-left-group">
     <h1 class="brand">Carta</h1>
-  </div>
-  <div class="header-right">
     <select id="allergyFilter" class="allergy-select" onchange="applyAllergyFilter()">
       <option value="">ALERGIAS ▾</option>
       <option value="gf">🌾 Sin Gluten</option>
       <option value="lf">🥛 Sin Lactosa</option>
       <option value="v">🌱 Vegano</option>
     </select>
+  </div>
+   
+  <div class="header-right-tools">
     <div class="lang-badge" id="langDisplay">ES</div>
     <button class="theme-btn" id="themeBtn"></button>
   </div>
 </header>
 
+<hr style="border: 1.5px solid rgb(162, 151, 151)">
 <div class="info-bar" data-lang="infoBar">
   📝 Añade platos aquí para dictarlos luego.
 </div>
+<hr style="border: 1.5px solid rgb(162, 151, 151)">
 
 <div class="filters-wrap">
   <div class="filters-scroll">
@@ -231,7 +300,6 @@ textarea.notes:focus { border-color: var(--primary); }
 </div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
-  
   <button id="closeWaiterBtn" onclick="exitWaiterMode()">✕</button>
 
   <div class="sheet" id="orderSheet">
@@ -240,7 +308,7 @@ textarea.notes:focus { border-color: var(--primary); }
         <h3 style="margin:0; font-size:1.5rem; letter-spacing:-0.5px" id="modalTitle">Tu Lista</h3>
         <div onclick="closeSheet()" style="cursor:pointer; padding:8px; opacity:0.5; font-size:1.5rem">×</div>
       </div>
-      
+       
       <div class="waiter-controls" id="waiterControls">
         <button id="translateBtn" class="translate-btn" onclick="enterWaiterMode()">
           <span>🇪🇸</span> <span id="transText">Mostrar al Camarero (ES)</span>
@@ -262,11 +330,41 @@ textarea.notes:focus { border-color: var(--primary); }
 <script>
 /* --- DICCIONARIO --- */
 const i18n = {
-  es: { ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", btn: "Ver mi Lista", title: "Tu Lista", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", empty: "Tu lista está vacía.", ph: "Notas (ej. sin hielo...)", trans: "Modo Camarero", infoBar: "📝 Ve añadiendo platos a tu lista.", translating: "Traduciendo..." },
-  en: { ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", btn: "View my List", title: "Your List", msg: "💡 Read this list to the waiter.", clear: "Clear all", empty: "Your list is empty.", ph: "Notes (e.g. no ice...)", trans: "Show Waiter (ES)", infoBar: "📝 Add dishes here to prepare your order.", translating: "Translating..." },
-  de: { ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", btn: "Meine Liste", title: "Deine Liste", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", empty: "Deine Liste ist leer.", ph: "Notizen...", trans: "Dem Kellner zeigen (ES)", infoBar: "📝 Füge hier Gerichte hinzu.", translating: "Übersetzen..." },
-  fr: { ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", btn: "Ma Liste", title: "Votre Liste", msg: "💡 Lire au serveur.", clear: "Effacer", empty: "Votre liste est vide.", ph: "Notes...", trans: "Montrer au serveur (ES)", infoBar: "📝 Ajoutez des plats ici.", translating: "Traduction..." },
-  it: { ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", btn: "La mia Lista", title: "La tua Lista", msg: "💡 Leggi al cameriere.", clear: "Cancella", empty: "La tua lista è vuota.", ph: "Note...", trans: "Mostra al cameriere (ES)", infoBar: "📝 Aggiungi qui i piatti.", translating: "Traduzione..." }
+  es: { 
+    ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", 
+    btn: "Ver mi Lista", title: "Tu Lista", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", 
+    empty: "Tu lista está vacía.<br>Añade platos para organizarte.", ph: "Notas (ej. sin hielo...)", trans: "Modo Camarero", 
+    infoBar: "📝 Ve añadiendo platos a tu lista para preparar tu pedido.", translating: "Traduciendo..."
+  },
+  en: { 
+    ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", 
+    btn: "View my List", title: "Your List", msg: "💡 Read this list to the waiter.", clear: "Clear all", 
+    empty: "Your list is empty.", ph: "Notes (e.g. no ice...)", trans: "Show Waiter (ES)", 
+    infoBar: "📝 Add dishes here to prepare your order.", translating: "Translating..."
+  },
+  de: { 
+    ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", 
+    btn: "Meine Liste", title: "Deine Liste", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", 
+    empty: "Deine Liste ist leer.", ph: "Notizen...", trans: "Dem Kellner zeigen (ES)", 
+    infoBar: "📝 Füge hier Gerichte hinzu.", translating: "Übersetzen..."
+  },
+  fr: { 
+    ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", 
+    btn: "Ma Liste", title: "Votre Liste", msg: "💡 Lire au serveur.", clear: "Effacer", 
+    empty: "Votre liste est vide.", ph: "Notes...", trans: "Montrer au serveur (ES)", 
+    infoBar: "📝 Ajoutez des plats ici.", translating: "Traduction..."
+  },
+  it: { 
+    ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", 
+    btn: "La mia Lista", title: "La tua Lista", msg: "💡 Leggi al cameriere.", clear: "Cancella", 
+    empty: "La tua lista è vuota.", ph: "Note...", trans: "Mostra al cameriere (ES)", 
+    infoBar: "📝 Aggiungi qui i piatti.", translating: "Traducendo..."
+  }
+};
+
+/* --- TRADUCCIÓN DE NOTAS --- */
+const foodDictionary = {
+  "no": "sin", "without": "sin", "with": "con", "ice": "hielo", "water": "agua", "hot": "caliente", "cold": "frío", "spicy": "picante", "sauce": "salsa", "onion": "cebolla", "cheese": "queso", "meat": "carne", "chicken": "pollo", "please": "por favor", "allergy": "alergia", "gluten": "gluten"
 };
 
 /* --- DATOS --- */
@@ -292,13 +390,8 @@ let originalNote = "";
 let currentAllergy = ""; 
 
 function loadCart() {
-  try {
-    const saved = localStorage.getItem('pataMig_cart');
-    if(saved) cart = JSON.parse(saved) || {};
-  } catch (e) {
-    console.log("Error cargando carrito, reiniciando.");
-    cart = {};
-  }
+  const saved = localStorage.getItem('pataMig_cart');
+  if(saved) cart = JSON.parse(saved) || {};
   const savedNotes = localStorage.getItem('pataMig_notes');
   if(savedNotes) document.getElementById('notesField').value = savedNotes;
 }
@@ -310,14 +403,14 @@ function init() {
   const urlP = new URLSearchParams(window.location.search).get('lang');
   const saved = localStorage.getItem('userLang');
   const browser = navigator.language.slice(0,2);
-  
+   
   if(urlP && i18n[urlP]) lang = urlP;
   else if(saved && i18n[saved]) lang = saved;
   else if(i18n[browser]) lang = browser;
-  
+   
   localStorage.setItem('userLang', lang);
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
-  
+   
   loadCart(); 
   render();
   updateFloat(); 
@@ -384,49 +477,49 @@ function updateFloat() {
   if(count > 0) btn.classList.add('visible'); else btn.classList.remove('visible');
 }
 
-/* --- TRADUCCIÓN API (MyMemory) --- */
-async function fetchTranslation(text, sourceLang) {
-  if (!text || sourceLang === 'es') return text;
-  try {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|es`;
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data.responseStatus === 200) return data.responseData.translatedText;
-    else return text;
-  } catch (error) {
-    console.error("Error al traducir:", error);
-    return text;
+/* --- MODO CAMARERO (ZOOM & TRADUCCIÓN CON IA) --- */
+function localTranslate(text) {
+  // Fallback simple si falla la API
+  if (!text) return "";
+  let translated = text.toLowerCase();
+  for (const [key, value] of Object.entries(foodDictionary)) {
+    const regex = new RegExp(`\\b${key}\\b`, 'gi');
+    translated = translated.replace(regex, value);
   }
+  return translated;
 }
 
-/* --- MODO CAMARERO (ASYNC) --- */
 async function enterWaiterMode() {
   waiterMode = true;
-  const sheet = document.getElementById('orderSheet');
-  const noteField = document.getElementById('notesField');
-
-  // 1. Mostrar estado de carga si hay nota y no es español
-  const originalText = noteField.value;
-  if(originalText && lang !== 'es') {
-    noteField.value = i18n[lang].translating; 
-  }
-
-  // 2. Activar pantalla completa
-  sheet.classList.add('waiter-mode');
+  document.getElementById('orderSheet').classList.add('waiter-mode');
   document.body.classList.add('waiter-active');
+  document.getElementById('closeWaiterBtn').style.display = 'flex';
   
-  // 3. Traducir usando API
-  originalNote = originalText; // Guardar original
+  // Guardamos la nota original
+  originalNote = document.getElementById('notesField').value;
+  const noteField = document.getElementById('notesField');
   
-  if (originalNote.trim() !== "" && lang !== 'es') {
-    const translatedText = await fetchTranslation(originalNote, lang);
-    noteField.value = translatedText;
-    // Estilo para indicar que está traducido
-    noteField.style.borderColor = "var(--spanish-btn)";
-    noteField.style.backgroundColor = "var(--spanish-btn)";
-    noteField.style.color = "black";
-  } else {
-    noteField.value = originalNote;
+  // Si hay texto, usamos la API para traducir
+  if (originalNote.trim() !== "") {
+    // 1. Mostrar estado cargando en el idioma del usuario
+    noteField.value = i18n[lang].translating || "Translating..."; 
+    
+    try {
+      // 2. Llamada a MyMemory API (Gratis, limite ~1000 palabras/dia)
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(originalNote)}&langpair=${lang}|es`);
+      const data = await res.json();
+      
+      if(data.responseStatus === 200) {
+        noteField.value = data.responseData.translatedText;
+      } else {
+        // Si la API devuelve error, usamos diccionario local
+        noteField.value = localTranslate(originalNote);
+      }
+    } catch (e) {
+      console.error("Error API traducción:", e);
+      // Fallback si no hay internet o falla API
+      noteField.value = localTranslate(originalNote);
+    }
   }
   
   renderList();
@@ -436,13 +529,10 @@ function exitWaiterMode() {
   waiterMode = false;
   document.getElementById('orderSheet').classList.remove('waiter-mode');
   document.body.classList.remove('waiter-active');
+  document.getElementById('closeWaiterBtn').style.display = 'none';
   
   // Restaurar nota original
-  const noteField = document.getElementById('notesField');
-  if(originalNote !== "") noteField.value = originalNote;
-  noteField.style.borderColor = "var(--border)";
-  noteField.style.backgroundColor = "var(--bg-body)";
-  noteField.style.color = "var(--text-main)";
+  if(originalNote !== "") document.getElementById('notesField').value = originalNote;
   
   renderList();
 }
@@ -450,15 +540,14 @@ function exitWaiterMode() {
 function renderList() {
   const cont = document.getElementById('orderList');
   cont.innerHTML = '';
-  // Si modo camarero, forzar español. Si no, idioma usuario.
-  const displayLang = waiterMode ? 'es' : lang; 
+  const displayLang = waiterMode ? 'es' : lang; // Si modo camarero, forzar español
 
   if(Object.keys(cart).length === 0) {
     cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">${i18n[lang].empty}</div></div>`;
   } else {
     Object.keys(cart).forEach(id => {
       const p = menu.find(x => x.id == id);
-      if(!p) return; 
+      if(!p) return; // Evitar error si id antiguo
       const qty = cart[id];
       
       cont.innerHTML += `
@@ -513,6 +602,7 @@ function applyTheme() {
   let savedTheme = localStorage.getItem('theme');
   if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
+  
   themeBtn.innerHTML = savedTheme === 'dark'
     ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
     : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
