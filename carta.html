@@ -364,21 +364,32 @@ const i18n = {
 
 /* --- TRADUCCIÓN DE NOTAS --- */
 const foodDictionary = {
-  "no": "sin", "without": "sin", "with": "con", "ice": "hielo", "water": "agua", "hot": "caliente", "cold": "frío", "spicy": "picante", "sauce": "salsa", "onion": "cebolla", "cheese": "queso", "meat": "carne", "chicken": "pollo", "please": "por favor", "allergy": "alergia", "gluten": "gluten"
+  "no": "sin", "without": "sin", "with": "con", "ice": "hielo", "water": "agua", "hot": "caliente", "cold": "frío", "spicy": "picante", "sauce": "salsa", "onion": "cebolla", "cheese": "queso", "meat": "carne", "chicken": "pollo", "please": "por favor", "allergy": "alergia", "gluten": "gluten", "beer": "cerveza"
 };
 
-/* --- DATOS --- */
+/* --- DATOS NUEVOS (TIPO BOCATERÍA/BURGER) --- */
 const menu = [
+  // BEBIDAS
   { id: 201, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola", en: "Coca-Cola", de: "Coca-Cola", fr: "Coca-Cola", it: "Coca-Cola" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
   { id: 202, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola Zero", en: "Coke Zero", de: "Cola Zero", fr: "Coca Zéro", it: "Coca Zero" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
   { id: 203, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Naranja", en: "Fanta Orange", de: "Fanta Orange", fr: "Fanta Orange", it: "Fanta Arancia" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 204, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Limón", en: "Fanta Lemon", de: "Fanta Zitrone", fr: "Fanta Citron", it: "Fanta Limone" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 207, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.00, name: { es: "Agua", en: "Water", de: "Wasser", fr: "Eau", it: "Acqua" }, desc: { es: "50cl", en: "50cl", de: "50cl", fr: "50cl", it: "50cl" } },
-  { id: 1, tags: ['gf','lf'], cat: 'entrantes', price: 9.50, name: { es: "Huevos Rotos", en: "Broken Eggs", de: "Zerbrochene Eier", fr: "Œufs cassés", it: "Uova rotte" }, desc: { es: "Con jamón ibérico.", en: "With Iberian ham.", de: "Mit iberischem Schinken.", fr: "Au jambon ibérique.", it: "Con prosciutto iberico." } },
-  { id: 2, tags: [], cat: 'entrantes', price: 6.50, name: { es: "Croquetas (4ud)", en: "Croquettes (4pcs)", de: "Kroketten (4 Stk)", fr: "Croquettes (4pcs)", it: "Crocchette (4pz)" }, desc: { es: "Boletus y Trufa.", en: "Boletus & Truffle.", de: "Steinpilz & Trüffel.", fr: "Cèpes et Truffe.", it: "Porcini e Tartufo." } },
-  { id: 3, tags: ['gf','lf'], cat: 'principales', price: 16.00, name: { es: "Entrecot Vaca", en: "Beef Entrecote", de: "Rinderentrecote", fr: "Entrecôte de bœuf", it: "Entrecote di manzo" }, desc: { es: "300g a la parrilla.", en: "300g grilled.", de: "300g gegrillt.", fr: "300g grillé.", it: "300g alla griglia." } },
-  { id: 4, tags: [], cat: 'principales', price: 12.50, name: { es: "Burger Premium", en: "Premium Burger", de: "Premium Burger", fr: "Burger Premium", it: "Burger Premium" }, desc: { es: "Queso de cabra y cebolla.", en: "Goat cheese & onion.", de: "Ziegenkäse & Zwiebel.", fr: "Chèvre et oignon.", it: "Formaggio di capra e cipolla." } },
-  { id: 5, tags: ['v'], cat: 'postres', price: 6.00, name: { es: "Coulant Choco", en: "Choco Coulant", de: "Schoko-Coulant", fr: "Coulant au chocolat", it: "Coulant al cioccolato" }, desc: { es: "Con helado.", en: "With ice cream.", de: "Mit Eis.", fr: "Avec glace.", it: "Con gelato." } }
+  { id: 208, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.20, name: { es: "Cerveza (Caña)", en: "Beer (Glass)", de: "Bier", fr: "Bière (Verre)", it: "Birra" }, desc: { es: "Estrella", en: "Local beer", de: "Lokales Bier", fr: "Bière locale", it: "Birra locale" } },
+  { id: 207, tags: ['gf','lf','v'], cat: 'bebidas', price: 1.80, name: { es: "Agua", en: "Water", de: "Wasser", fr: "Eau", it: "Acqua" }, desc: { es: "50cl", en: "50cl", de: "50cl", fr: "50cl", it: "50cl" } },
+  
+  // ENTRANTES
+  { id: 10, tags: ['gf','lf','v'], cat: 'entrantes', price: 5.50, name: { es: "Patatas Bravas", en: "Spicy Potatoes (Bravas)", de: "Pikante Kartoffeln", fr: "Pommes de terre épicées", it: "Patate piccanti" }, desc: { es: "Con salsa casera.", en: "With house sauce.", de: "Mit Haussauce.", fr: "Sauce maison.", it: "Con salsa della casa." } },
+  { id: 11, tags: [], cat: 'entrantes', price: 6.50, name: { es: "Nachos con Queso", en: "Nachos with Cheese", de: "Nachos mit Käse", fr: "Nachos au fromage", it: "Nachos con formaggio" }, desc: { es: "Guacamole y jalapeños.", en: "Guacamole & jalapeños.", de: "Guacamole & Jalapeños.", fr: "Guacamole et piments.", it: "Guacamole e jalapeños." } },
+  { id: 12, tags: ['gf'], cat: 'entrantes', price: 7.00, name: { es: "Alitas de Pollo", en: "Chicken Wings", de: "Hähnchenflügel", fr: "Ailes de poulet", it: "Ali di pollo" }, desc: { es: "6 unidades, salsa barbacoa.", en: "6 units, BBQ sauce.", de: "6 Stück, BBQ-Sauce.", fr: "6 unités, sauce BBQ.", it: "6 unità, salsa BBQ." } },
+
+  // PRINCIPALES (BOCADILLOS/BURGERS)
+  { id: 20, tags: [], cat: 'principales', price: 9.50, name: { es: "Hamburguesa Completa", en: "Full Burger", de: "Komplett-Burger", fr: "Burger Complet", it: "Burger Completo" }, desc: { es: "Carne, huevo, bacon, queso.", en: "Beef, egg, bacon, cheese.", de: "Fleisch, Ei, Speck, Käse.", fr: "Bœuf, œuf, bacon, fromage.", it: "Manzo, uovo, pancetta." } },
+  { id: 21, tags: [], cat: 'principales', price: 6.50, name: { es: "Bocadillo de Lomo", en: "Pork Loin Sandwich", de: "Lendenbrötchen", fr: "Sandwich au filet", it: "Panino con lombo" }, desc: { es: "Con queso y pimientos.", en: "With cheese & peppers.", de: "Mit Käse & Paprika.", fr: "Fromage et poivrons.", it: "Con formaggio e peperoni." } },
+  { id: 22, tags: [], cat: 'principales', price: 7.00, name: { es: "Bocadillo de Calamares", en: "Calamari Sandwich", de: "Tintenfischbrötchen", fr: "Sandwich aux calmars", it: "Panino con calamari" }, desc: { es: "Clásico con mayonesa.", en: "Classic with mayo.", de: "Klassisch mit Mayo.", fr: "Classique avec mayo.", it: "Classico con maionese." } },
+  { id: 23, tags: [], cat: 'principales', price: 5.50, name: { es: "Perrito Caliente", en: "Hot Dog", de: "Hot Dog", fr: "Hot Dog", it: "Hot Dog" }, desc: { es: "Cebolla frita y ketchup.", en: "Fried onion & ketchup.", de: "Röstzwiebeln & Ketchup.", fr: "Oignons frits & ketchup.", it: "Cipolla fritta e ketchup." } },
+
+  // POSTRES
+  { id: 30, tags: [], cat: 'postres', price: 4.50, name: { es: "Brownie Casero", en: "Homemade Brownie", de: "Hausgemachter Brownie", fr: "Brownie maison", it: "Brownie fatto in casa" }, desc: { es: "Con nueces.", en: "With walnuts.", de: "Mit Walnüssen.", fr: "Aux noix.", it: "Con noci." } },
+  { id: 31, tags: ['gf'], cat: 'postres', price: 5.00, name: { es: "Tarta de Queso", en: "Cheesecake", de: "Käsekuchen", fr: "Gâteau au fromage", it: "Cheesecake" }, desc: { es: "Con mermelada de fresa.", en: "With strawberry jam.", de: "Mit Erdbeermarmelade.", fr: "Confiture de fraise.", it: "Marmellata di fragole." } }
 ];
 
 /* --- ESTADO --- */
@@ -545,10 +556,27 @@ function renderList() {
   if(Object.keys(cart).length === 0) {
     cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">${i18n[lang].empty}</div></div>`;
   } else {
-    Object.keys(cart).forEach(id => {
-      const p = menu.find(x => x.id == id);
-      if(!p) return; // Evitar error si id antiguo
-      const qty = cart[id];
+    // 1. Recuperar objetos completos del menú
+    let items = Object.keys(cart).map(id => menu.find(x => x.id == id)).filter(p => p);
+    
+    // 2. Definir Prioridad de Categorías (Orden de salida)
+    const catPriority = {
+      'bebidas': 1,
+      'entrantes': 2,
+      'principales': 3,
+      'postres': 4
+    };
+
+    // 3. Ordenar array
+    items.sort((a, b) => {
+      const prioA = catPriority[a.cat] || 5;
+      const prioB = catPriority[b.cat] || 5;
+      return prioA - prioB;
+    });
+
+    // 4. Renderizar ordenado
+    items.forEach(p => {
+      const qty = cart[p.id];
       
       cont.innerHTML += `
         <div class="order-item">
@@ -559,9 +587,9 @@ function renderList() {
           </div>
           
           <div class="qty-controls">
-            <button class="qty-btn" onclick="remove(${id})">-</button>
+            <button class="qty-btn" onclick="remove(${p.id})">-</button>
             <span style="font-weight:700; width:25px; text-align:center">${qty}</span>
-            <button class="qty-btn" onclick="add(${id})">+</button>
+            <button class="qty-btn" onclick="add(${p.id})">+</button>
           </div>
         </div>
       `;

@@ -186,7 +186,7 @@
 </main>
 
 <script>
-  /* --- 1. IDIOMAS --- */
+  /* --- 1. CONFIGURACIÓN DE DATOS --- */
   const translations = {
     es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", title:"Bienvenido a PataMig" },
     en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", title:"Welcome to PataMig" },
@@ -195,64 +195,86 @@
     it: { welcome:"Benvenuto!", prompt:"Cosa vuoi fare?", view_menu:"Vedi il menù", leave_review:"Lascia recensione", share_with_friends:"Condividi esperienza", title:"Benvenuto a PataMig" }
   };
 
+  const supportedLangs = ['es','en','de','fr','it'];
+  
+  // Elementos del DOM
   const contentElements = document.querySelectorAll('[data-lang]');
   const menuLink = document.getElementById("menuLink");
   const reviewLink = document.getElementById("reviewLink");
   const shareLink = document.getElementById("shareLink");
   const langSelect = document.getElementById("lang-select");
+  const themeBtn = document.getElementById('themeBtn');
 
-  function setLanguage(lang){
-    if(!translations[lang]) lang="es";
+  /* --- 2. FUNCIONES DE LÓGICA --- */
+
+  // Función para determinar y aplicar el idioma correcto
+  function syncLanguage() {
+    let lang = localStorage.getItem('userLang');
+    
+    // Si no hay nada guardado, detectamos navegador
+    if (!lang) {
+      const browserLang = navigator.language.slice(0,2);
+      lang = supportedLangs.includes(browserLang) ? browserLang : 'es';
+    }
+
+    // Aplicar textos
+    if(!translations[lang]) lang = "es";
     contentElements.forEach(el => { el.textContent = translations[lang][el.dataset.lang]; });
     
-    // Rutas (Asegúrate de que coincidan con tus archivos)
+    // Actualizar enlaces
     menuLink.href = `carta.html?lang=${lang}`;
     reviewLink.href = `restaurante_2.html?lang=${lang}`;
     shareLink.href = `compartir_2.html?lang=${lang}`;
     
+    // Actualizar título y selector
     document.title = translations[lang].title;
+    langSelect.value = lang;
   }
 
-  const supportedLangs = ['es','en','de','fr','it'];
-  const browserLang = navigator.language.slice(0,2);
-  let savedLang = localStorage.getItem('userLang');
-
-  if(!savedLang && supportedLangs.includes(browserLang)) savedLang = browserLang;
-  if(!savedLang) savedLang = 'es';
-
-  langSelect.value = savedLang;
-  setLanguage(savedLang);
-
-  langSelect.addEventListener('change', () => {
-    const selectedLang = langSelect.value;
-    setLanguage(selectedLang);
-    localStorage.setItem('userLang', selectedLang);
-  });
-
-  /* --- 2. TEMA (SOL/LUNA) --- */
-  const themeBtn = document.getElementById('themeBtn');
-  
-  function applyTheme() {
-    let savedTheme = localStorage.getItem('theme');
-    if (!savedTheme) {
-      savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    document.documentElement.setAttribute('data-theme', savedTheme);
+  // Función para determinar y aplicar el tema correcto
+  function syncTheme() {
+    let currentTheme = localStorage.getItem('theme');
     
-    // Icono SVG
-    themeBtn.innerHTML = savedTheme === 'dark' 
+    // Si no hay tema guardado, detectamos preferencia del sistema
+    if (!currentTheme) {
+      currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // Aplicar al DOM
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    // Actualizar Icono
+    themeBtn.innerHTML = currentTheme === 'dark' 
       ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
       : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
   }
 
+  /* --- 3. EVENTOS Y EJECUCIÓN --- */
+
+  // Cambio manual de idioma
+  langSelect.addEventListener('change', () => {
+    localStorage.setItem('userLang', langSelect.value);
+    syncLanguage();
+  });
+
+  // Cambio manual de tema
   themeBtn.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', newTheme);
-    applyTheme();
+    syncTheme();
   });
 
-  applyTheme();
+  // **CLAVE**: Detectar cuando se vuelve a esta página (desde carta, atrás, etc.)
+  // El evento 'pageshow' se dispara incluso si la página se carga desde la caché del navegador (bfcache)
+  window.addEventListener('pageshow', () => {
+    syncLanguage();
+    syncTheme();
+  });
+
+  // Ejecución inicial por si acaso
+  syncLanguage();
+  syncTheme();
 
 </script>
 
