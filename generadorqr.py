@@ -28,7 +28,7 @@ def get_local_ip():
         return "127.0.0.1"
 
 HOST_IP = get_local_ip() 
-BASE_URL = "https://webb-production-7e89.up.railway.app/r"
+BASE_URL = f"http://{HOST_IP}:5000/r"
 
 # =========================
 # UTILIDADES
