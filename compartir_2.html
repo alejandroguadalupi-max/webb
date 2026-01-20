@@ -61,23 +61,6 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* --- Header con Nombre --- */
-.brand-header {
-  text-align: center;
-  margin-bottom: 20px;
-  animation: fadeIn 0.5s ease-out;
-}
-
-.brand-name {
-  font-weight: 900;
-  font-size: 1.8rem;
-  color: var(--primary-color);
-  margin: 0;
-  line-height: 1.2;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-}
-
 /* --- Controles --- */
 .top-controls {
   position: absolute;
@@ -178,10 +161,6 @@ p.subtitle { margin: 0 0 25px; font-size: 0.9em; color: var(--text-sec); line-he
   <button class="theme-btn" id="themeBtn"></button>
 </div>
 
-<div class="brand-header">
-  <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
-</div>
-
 <div class="share-card">
   <h2 id="shareTitle">📸 Comparte tu momento</h2>
   <p id="shareSub" class="subtitle">Sube una foto y compártela con tus amigos.</p>
@@ -239,6 +218,7 @@ const COPY = {
 };
 
 let selectedFile = null;
+let currentRestaurantName = ""; // Variable para guardar el nombre aunque no se muestre
 
 /* --- 2. INICIALIZACIÓN --- */
 function init() {
@@ -247,10 +227,9 @@ function init() {
   // A. SEGURIDAD
   if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  // B. NOMBRE Y TÍTULO
-  const name = params.get('n') || "Restaurante";
-  document.getElementById('brandNameDisplay').textContent = name;
-  document.title = "Compartir - " + name;
+  // B. GUARDAR NOMBRE (Para watermark) PERO NO MOSTRARLO EN HTML
+  currentRestaurantName = params.get('n') || "Restaurante";
+  document.title = "Compartir - " + currentRestaurantName;
 
   // C. COLOR
   const category = params.get('categoria') || 'default';
@@ -303,15 +282,14 @@ async function addWatermarkToImage(file){
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      // Marca de agua simple con texto del restaurante si no hay logo
-      // O lógica de imagen como tenías antes. Aquí simplifico para el ejemplo:
-      const name = document.getElementById('brandNameDisplay').textContent;
+      // MARCA DE AGUA: Usamos la variable guardada 'currentRestaurantName'
+      const name = currentRestaurantName; 
       const fontSize = Math.max(30, canvas.width * 0.05);
       
       ctx.font = `bold ${fontSize}px Arial`;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
       ctx.textAlign = "right";
-      ctx.shadowColor="rgba(0,0,0,0.5)"; ctx.shadowBlur=4;
+      ctx.shadowColor="rgba(0,0,0,0.7)"; ctx.shadowBlur=4;
       ctx.fillText(name, canvas.width - 20, canvas.height - 20);
 
       canvas.toBlob(b => resolve(new File([b],"share.jpg",{type:"image/jpeg"})),"image/jpeg",0.9);
