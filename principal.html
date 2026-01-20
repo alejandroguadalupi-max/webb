@@ -9,7 +9,7 @@
   :root {
     --bg-color: #fdfdfd;
     --text-color: #333;
-    --btn-bg: #92d668; /* Se sobreescribe por JS */
+    --btn-bg: #92d668; 
     --btn-text: #fff;
     --select-bg: rgba(255,255,255,0.9);
     --select-border: #ccc;
@@ -49,7 +49,7 @@
     position: relative;
   }
 
-  /* --- DISEÑO LOGO --- */
+  /* --- LOGO --- */
   .logo-container {
     display: inline-flex;
     flex-direction: column;
@@ -62,6 +62,8 @@
     background: rgba(255,255,255,0.03);
     box-shadow: var(--shadow);
     position: relative;
+    user-select: none; /* Evita selección de texto al hacer clicks rápidos */
+    cursor: pointer;
   }
 
   .logo-icon {
@@ -106,7 +108,7 @@
     gap: 16px;
     width: 100%;
     max-width: 300px; 
-    margin-bottom: 30px; /* Reducido un poco para dar espacio al hint */
+    margin-bottom: 30px;
   }
 
   .btn {
@@ -131,6 +133,45 @@
   
   .btn:active { transform: scale(0.97); }
 
+  /* --- AVISO FLOTANTE DE SACUDIR (SOLUCIONADO) --- */
+  .shake-hint {
+    margin-top: 15px;
+    background: rgba(0,0,0,0.05); /* Fondo suave para que destaque */
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer; /* Importante para iOS */
+    border: 1px dashed var(--btn-bg);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shakeAnim {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-15deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  .shake-icon {
+    display: inline-block;
+    font-size: 1.4em;
+    animation: shakeAnim 1.2s infinite ease-in-out;
+  }
+
+  /* --- RESTO UI --- */
   .theme-btn {
     position: absolute;
     top: 20px; right: 20px;
@@ -156,34 +197,6 @@
     cursor: pointer;
     margin-top: 20px;
   }
-
-  /* --- NUEVO: ESTILO PARA EL AVISO DE SACUDIR --- */
-  .shake-hint {
-    font-size: 0.9em;
-    color: var(--text-color);
-    opacity: 0.6;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: default;
-  }
-
-  /* Animación de vibración */
-  @keyframes shakeAnim {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(10deg); }
-    50% { transform: rotate(0deg); }
-    75% { transform: rotate(-10deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  .shake-icon {
-    display: inline-block;
-    font-size: 1.2em;
-    animation: shakeAnim 1.5s infinite ease-in-out;
-  }
   </style>
 </head>
 <body>
@@ -191,7 +204,7 @@
 <main class="landing-container" id="landing">
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
   
-  <div class="logo-container">
+  <div class="logo-container" id="logoClickArea">
     <div id="logoIcon" class="logo-icon">🍽️</div> 
     <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
   </div>
@@ -204,8 +217,9 @@
     <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
   </div>
 
-  <div class="shake-hint" data-lang="shake_hint">
-    <span class="shake-icon">📳</span> ¡Agita para Zona de Juegos!
+  <div class="shake-hint" id="shakeBtn" onclick="requestPermissionAndShake()">
+    <span class="shake-icon">📳</span> 
+    <span id="shakeText" data-lang="shake_hint">¡Toca aquí y agita para jugar!</span>
   </div>
 
   <div class="lang-container">
@@ -220,16 +234,15 @@
 </main>
 
 <script>
-  /* --- 1. DICCIONARIO DE IDIOMAS --- */
+  /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Agita para Zona de Juegos!" },
-    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Shake for Kids Zone!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Schütteln für Spiele!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Secouez pour les Jeux!" },
-    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Scuoti per i Giochi!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Toca aquí y agita para jugar!" },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Tap here & shake for Games!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Hier tippen & schütteln!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Touchez et secouez !" },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Tocca e scuoti per giocare!" }
   };
 
-  /* --- 2. CONFIGURACIÓN VISUAL --- */
   const designSystem = {
     'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
     'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
@@ -241,14 +254,13 @@
 
   const params = new URLSearchParams(window.location.search);
 
-  /* --- 3. LÓGICA PRINCIPAL --- */
+  /* --- 2. CONFIGURACIÓN --- */
   function applyDemoLogic() {
     if (params.get('auth') !== 'true') {
       window.location.href = "https://taply.es"; 
       return;
     }
 
-    // Datos Básicos
     const name = params.get('n') || "Tu Restaurante";
     document.title = name;
     document.getElementById('brandNameDisplay').textContent = name;
@@ -262,71 +274,98 @@
     rootStyles.setProperty('--btn-text', style.text);
     if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
 
-    // Navegación
     const currentParams = window.location.search; 
     document.getElementById('menuLink').href   = `carta.html${currentParams}`;
     document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
     document.getElementById('shareLink').href  = `compartir_2.html${currentParams}`;
 
-    // Mostrar
     document.body.style.opacity = "1";
     
-    // Iniciar detector de sacudida
-    initShakeDetection(currentParams);
+    // Intentar iniciar sensores automáticamente (para Android)
+    startShakeListening();
   }
 
-  /* --- 4. DETECCIÓN DE SHAKE (SACUDIDA) --- */
-  function initShakeDetection(currentParams) {
-    let threshold = 15; // Sensibilidad (más bajo = más fácil, más alto = hay que agitar más fuerte)
-    let lastX = 0, lastY = 0, lastZ = 0;
-    let lastTime = 0;
-    
-    if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', function (event) {
-        let current = event.accelerationIncludingGravity;
-        if (!current) return;
-        
-        let currentTime = new Date().getTime();
-        
-        // Comprobar cada 100ms para no saturar
-        if ((currentTime - lastTime) > 100) {
-          let diffTime = currentTime - lastTime;
-          lastTime = currentTime;
-          
-          let speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
-          
-          if (speed > threshold * 100) { // Si supera la velocidad umbral
-             // ¡SHAKE DETECTADO! -> Redirigir a juegos
-             // Usamos replace para que no puedan volver atrás fácilmente si fue un error
-             window.location.href = `juegos.html${currentParams}`;
+  /* --- 3. LOGICA SENSOR DE MOVIMIENTO --- */
+  let shakeThreshold = 15;
+  let lastX = 0, lastY = 0, lastZ = 0;
+  let lastTime = 0;
+
+  // Función para iOS (requiere click del usuario)
+  function requestPermissionAndShake() {
+    // Si es iOS 13+
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            startShakeListening();
+            alert("¡Sensor activado! Ahora agita el móvil.");
+          } else {
+            alert("Permiso denegado. No podrás usar la función de agitar.");
           }
-          
-          lastX = current.x;
-          lastY = current.y;
-          lastZ = current.z;
-        }
-      });
+        })
+        .catch(console.error);
     } else {
-      console.log("Este dispositivo no soporta detección de movimiento.");
+      // Si no es iOS o es versión antigua, ya debería estar escuchando, pero avisamos
+      alert("¡Sensor listo! Agita el móvil con fuerza.");
+      startShakeListening();
     }
   }
+
+  function startShakeListening() {
+    if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', (event) => {
+        // Obtenemos aceleración incluyendo gravedad para asegurar compatibilidad
+        let acc = event.accelerationIncludingGravity;
+        if (!acc) return;
+
+        let curTime = new Date().getTime();
+        if ((curTime - lastTime) > 100) {
+          let diffTime = curTime - lastTime;
+          lastTime = curTime;
+
+          let speed = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ) / diffTime * 10000;
+
+          // Ajustamos umbral: Android suele ser más sensible, iOS menos
+          if (speed > shakeThreshold * 100) {
+            goToGames();
+          }
+
+          lastX = acc.x;
+          lastY = acc.y;
+          lastZ = acc.z;
+        }
+      });
+    }
+  }
+
+  function goToGames() {
+    // Vibrar si es posible
+    if(navigator.vibrate) navigator.vibrate(200);
+    window.location.href = `juegos.html${window.location.search}`;
+  }
+
+  /* --- 4. ACCESO SECRETO (3 CLICKS EN LOGO) --- */
+  let logoClicks = 0;
+  document.getElementById('logoClickArea').addEventListener('click', () => {
+    logoClicks++;
+    if(logoClicks === 3) {
+      goToGames();
+    }
+    // Reset contador despues de 1 seg
+    setTimeout(() => logoClicks = 0, 1000);
+  });
 
   /* --- 5. SISTEMA --- */
   function syncLanguage() {
     let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
     if(!translations[lang]) lang = "es";
     
-    // Actualizamos texto normal
     document.querySelectorAll('[data-lang]').forEach(el => {
-      // Caso especial para el hint que tiene un icono dentro
-      if (el.classList.contains('shake-hint')) {
-         // Mantenemos el icono, cambiamos solo el texto
-         const icon = el.querySelector('.shake-icon').outerHTML;
-         if(translations[lang][el.dataset.lang]) {
-            el.innerHTML = icon + ' ' + translations[lang][el.dataset.lang];
-         }
-      } else {
-         if(translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
+      // Para el botón de shake, actualizamos solo el texto interior
+      if(el.id === 'shakeText') {
+         el.textContent = translations[lang][el.dataset.lang];
+      } else if (translations[lang][el.dataset.lang]) {
+         el.textContent = translations[lang][el.dataset.lang];
       }
     });
     document.getElementById("lang-select").value = lang;
