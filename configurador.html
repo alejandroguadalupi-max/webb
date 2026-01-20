@@ -10,73 +10,32 @@
     --text-color: #333;
     --btn-bg: #92d668;
     --btn-text: #fff;
-    --btn-border: #333;
-    --select-bg: rgba(255,255,255,0.85);
     --select-border: #333;
     --shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 
   body {
-    margin:0;
-    font-family: Arial, sans-serif;
-    background: var(--bg-color);
-    color: var(--text-color);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    padding:20px;
-    box-sizing:border-box;
+    margin:0; font-family: Arial, sans-serif;
+    background: var(--bg-color); color: var(--text-color);
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; padding:20px; box-sizing:border-box;
   }
 
   .container {
-    max-width: 400px;
-    width: 100%;
-    background: var(--bg-color);
-    box-shadow: var(--shadow);
-    border-radius: 16px;
-    padding: 30px 25px;
-    text-align:center;
-  }
-
-  h1 {
-    margin-bottom: 15px;
-    font-size: 1.8em;
-  }
-
-  p.description {
-    font-size: 0.95em;
-    color:#555;
-    margin-bottom:25px;
+    max-width: 400px; width: 100%;
+    background: var(--bg-color); box-shadow: var(--shadow);
+    border-radius: 16px; padding: 30px 25px; text-align:center;
   }
 
   input, select, button {
-    width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 18px;
-    border-radius: 12px;
-    border: 2px solid var(--select-border);
-    font-size: 1em;
-    box-sizing: border-box;
+    width: 100%; padding: 14px 16px; margin-bottom: 18px;
+    border-radius: 12px; border: 2px solid var(--select-border);
+    font-size: 1em; box-sizing: border-box;
   }
 
   button {
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    border: 1px solid var(--btn-bg);
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s ease;
-  }
-
-  button:hover {
-    opacity:0.9;
-  }
-
-  .footer-note {
-    font-size: 0.85em;
-    color:#777;
-    margin-top:15px;
+    background: var(--btn-bg); color: var(--btn-text);
+    border: none; cursor: pointer; font-weight: bold;
   }
 </style>
 </head>
@@ -84,13 +43,13 @@
 
 <div class="container">
   <h1>Generar Demo</h1>
-  <p class="description">Introduce el nombre de tu restaurante y el tipo para ver un diseño automático básico y probar la funcionalidad.</p>
+  <p>Configura el nombre y el tipo para ver la paleta de colores automática.</p>
 
   <input type="text" id="restaurantName" placeholder="Nombre del restaurante" />
 
   <select id="restaurantType">
-    <option value="" disabled selected>Selecciona el tipo de restaurante</option>
-    <option value="restaurante">Restaurante (tradicional/familiar)</option>
+    <option value="" disabled selected>Selecciona el tipo</option>
+    <option value="restaurante">Restaurante (Genérico)</option>
     <option value="hamburgueseria">Hamburguesería / Bar</option>
     <option value="pizzeria">Pizzería / Italiano</option>
     <option value="asiatico">Asiático</option>
@@ -98,31 +57,17 @@
   </select>
 
   <button id="generateBtn">Generar Demo</button>
-
-  <p class="footer-note">El diseño que se generará es automático y básico, solo para que pruebes la funcionalidad.</p>
 </div>
 
 <script>
-  const btn = document.getElementById('generateBtn');
-
-  btn.addEventListener('click', () => {
+  document.getElementById('generateBtn').addEventListener('click', () => {
     const name = document.getElementById('restaurantName').value.trim();
     const type = document.getElementById('restaurantType').value;
 
-    if(!name) {
-      alert('Por favor ingresa el nombre del restaurante.');
-      return;
-    }
-    if(!type) {
-      alert('Por favor selecciona el tipo de restaurante.');
-      return;
-    }
+    if(!name || !type) { alert('Completa los campos'); return; }
 
-    // Generamos URL para demo (simulación)
-    // En tu app real puedes reemplazar "demo.html" por tu página real
+    // Generamos URL enviando 'n' (nombre) y 'categoria'
     const demoURL = `principal.html?n=${encodeURIComponent(name)}&categoria=${encodeURIComponent(type)}&auth=true`;
-
-    // Abrimos demo en nueva pestaña
     window.open(demoURL, '_blank');
   });
 </script>

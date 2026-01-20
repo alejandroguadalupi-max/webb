@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,34 +7,33 @@
 
   <style>
   :root {
+    /* Variables base */
     --bg-color: #ffffff;
     --text-color: #333;
-    --btn-bg: #92d668;
+    /* El color por defecto es verde, pero se cambiará por JS */
+    --btn-bg: #92d668; 
     --btn-text: #fff;
-    --btn-border: #333;
+    --btn-border: transparent; /* Simplificado */
     --select-bg: rgba(255,255,255,0.85);
     --select-border: #333;
-    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   [data-theme="dark"] {
     --bg-color: #1a1a1a;
     --text-color: #f4f4f4;
-    --btn-bg: #4a8f3d;
-    --btn-text: #fff;
-    --btn-border: #4a8f3d;
     --select-bg: rgba(0,0,0,0.6);
     --select-border: #f4f4f4;
-    --shadow: 0 4px 6px rgba(0,0,0,0.4);
+    --shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
 
   body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s, color 0.3s;
-    opacity: 0; /* Ocultar inicialmente para demo personalizada */
+    opacity: 0; /* Oculto hasta cargar configuración */
   }
 
   .landing-container {
@@ -50,58 +49,31 @@
     position: relative;
   }
 
-  .theme-btn {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: var(--bg-color);
-    border: 1px solid var(--select-border);
-    color: var(--text-color);
-    box-shadow: var(--shadow);
-    transition: transform 0.2s;
-    z-index: 100;
-  }
-
-  /* NUEVO: Nombre del restaurante en vez de logo */
-  .restaurant-name {
-    font-size: 2.2em;
+  /* --- NUEVO ESTILO PARA NOMBRE COMO LOGO --- */
+  .brand-name {
+    font-size: 2.8em;
     font-weight: 900;
-    margin-bottom: 20px;
-    padding: 15px 25px;
-    border-radius: 12px;
-    background: rgba(0,0,0,0.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    max-width: 280px;
-    text-align: center;
-    word-break: break-word;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    color: var(--btn-bg); /* Usa el color de la categoría */
+    line-height: 1.1;
+    max-width: 90%;
   }
 
   h2 {
-    font-size: 1.8em;
-    font-weight: 800;
-    margin: 0 0 15px 0;
-  }
-
-  p {
-    font-size: 1.15em;
+    font-size: 1.5em;
+    font-weight: 400;
     margin: 0 0 40px 0;
-    line-height: 1.5;
-    opacity: 0.85;
+    opacity: 0.8;
   }
 
   .button-group {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 15px;
     width: 100%;
-    max-width: 320px;
+    max-width: 320px; 
     margin-bottom: 50px;
   }
 
@@ -113,26 +85,48 @@
     font-weight: bold;
     font-size: 1.1em;
     text-align: center;
-    border: 1px solid var(--btn-border);
-    background: var(--bg-color);
+    border: 2px solid var(--btn-border);
+    background: transparent;
     color: var(--text-color);
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: var(--shadow);
+    border-color: var(--text-color); /* Borde por defecto para botones secundarios */
   }
 
   .btn-primary {
     background: var(--btn-bg);
     color: var(--btn-text);
-    border: 1px solid var(--btn-bg);
+    border: 2px solid var(--btn-bg);
+  }
+  
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Botón Tema */
+  .theme-btn {
+    position: absolute;
+    top: 25px; right: 25px;
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    background: var(--bg-color);
+    border: 1px solid var(--select-border);
+    color: var(--text-color);
+    box-shadow: var(--shadow);
+    font-size: 1.2em;
+    z-index: 100;
   }
 
   #lang-select {
-    padding: 12px 24px;
+    padding: 10px 20px;
     border-radius: 50px;
-    border: 2px solid var(--select-border);
+    border: 1px solid var(--select-border);
     background: var(--select-bg);
     color: var(--text-color);
     cursor: pointer;
+    font-size: 0.9em;
   }
   </style>
 </head>
@@ -140,12 +134,10 @@
 
 <main class="landing-container" id="landing">
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
-
-  <!-- Reemplazamos el logo por el nombre del restaurante -->
-  <div class="restaurant-name" id="restaurantName">Tu Restaurante</div>
-
-  <h2 data-lang="welcome" id="mainTitle">¡Bienvenid@!</h2>
-  <p data-lang="prompt">¿Qué te gustaría hacer?</p>
+  
+  <h1 id="brandNameDisplay" class="brand-name">Restaurante</h1>
+  
+  <h2 data-lang="welcome" id="subTitle">¡Bienvenid@!</h2>
 
   <div class="button-group">
     <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la carta</a>
@@ -165,47 +157,70 @@
 </main>
 
 <script>
-  /* --- 1. CONFIGURACIÓN --- */
+  /* --- 1. DICCIONARIO DE IDIOMAS --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", title:"Bienvenido" },
-    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", title:"Welcome" }
-    // ... añade otros idiomas si quieres
+    es: { welcome:"¡Bienvenid@!", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia" },
+    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte ansehen", leave_review:"Bewertung abgeben", share_with_friends:"Erfahrung teilen" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager l'expérience" },
+    it: { welcome:"Benvenuto!", view_menu:"Vedi il menu", leave_review:"Lascia una recensione", share_with_friends:"Condividi esperienza" }
+  };
+
+  /* --- 2. PALETAS DE COLORES (Según Categoría) --- */
+  const colorPalettes = {
+    // Nombre Categoría : { Fondo Botón, Texto Botón }
+    'hamburgueseria': { bg: '#FF8C00', text: '#fff' }, // Naranja intenso
+    'pizzeria':       { bg: '#D32F2F', text: '#fff' }, // Rojo clásico
+    'asiatico':       { bg: '#E91E63', text: '#fff' }, // Rosa fuerte / Rojo oriental
+    'cafe':           { bg: '#8D6E63', text: '#fff' }, // Marrón café
+    'restaurante':    { bg: '#2E7D32', text: '#fff' }, // Verde elegante
+    'default':        { bg: '#92d668', text: '#fff' }  // Tu verde original
   };
 
   const params = new URLSearchParams(window.location.search);
 
-  /* --- 2. PERSONALIZACIÓN DEMO --- */
+  /* --- 3. LÓGICA PRINCIPAL --- */
   function applyDemoLogic() {
-    // Seguridad demo
+    // Verificar AUTH
     if (params.get('auth') !== 'true') {
-      window.location.href = "https://taply.es"; 
+      window.location.href = "https://taply.es"; // Redirección de seguridad
       return;
     }
 
-    // Nombre del Restaurante
-    const name = params.get('n');
-    if (name) {
-      document.getElementById('restaurantName').textContent = name;
-      document.getElementById('mainTitle').textContent = `¡Bienvenid@ a ${name}!`;
-      document.title = name;
-    }
+    // A. OBTENER NOMBRE DEL RESTAURANTE
+    const name = params.get('n') || "Tu Restaurante";
+    
+    // Inyectamos el nombre en el título de la página
+    document.title = name;
+    
+    // Inyectamos el nombre como LOGO (H1)
+    document.getElementById('brandNameDisplay').textContent = name;
+    
+    // Inyectamos bienvenida en el H2 (subtítulo)
+    // Nota: El texto "¡Bienvenid@!" se gestiona luego con las traducciones, 
+    // pero si quisieras personalizarlo con el nombre también, podrías hacerlo aquí.
 
-    // Colores (opcional)
-    const c1 = params.get('btn'); // Color botón
-    const c2 = params.get('txt'); // Color texto botón
-    const c3 = params.get('bg');  // Color fondo web
+    // B. APLICAR COLORES SEGÚN CATEGORÍA
+    const category = params.get('categoria'); 
+    
+    // Buscamos la paleta, si no existe usamos 'default'
+    const palette = colorPalettes[category] || colorPalettes['default'];
 
-    if (c1) {
-      document.documentElement.style.setProperty('--btn-bg', '#' + c1);
-      document.documentElement.style.setProperty('--btn-border', '#' + c1);
-    }
-    if (c2) document.documentElement.style.setProperty('--btn-text', '#' + c2);
-    if (c3) document.documentElement.style.setProperty('--bg-color', '#' + c3);
+    // Aplicamos variables CSS
+    const rootStyles = document.documentElement.style;
+    rootStyles.setProperty('--btn-bg', palette.bg);
+    rootStyles.setProperty('--btn-text', palette.text);
+    // El borde del botón primario será del mismo color que el fondo
+    rootStyles.setProperty('--btn-border', palette.bg);
 
+    // Permitir overrides manuales por URL (opcional, mantiene funcionalidad anterior)
+    if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
+
+    // Mostrar contenido
     document.body.style.opacity = "1";
   }
 
-  /* --- 3. FUNCIONES EXISTENTES (IDIOMA Y TEMA) --- */
+  /* --- 4. FUNCIONES DE SISTEMA (Idioma/Tema) --- */
   function syncLanguage() {
     let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
     if(!translations[lang]) lang = "es";
@@ -215,18 +230,16 @@
         el.textContent = translations[lang][el.dataset.lang];
       }
     });
-
     document.getElementById("lang-select").value = lang;
   }
 
   function syncTheme() {
     let theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
-    const btn = document.getElementById('themeBtn');
-    btn.innerHTML = theme === 'dark' ? '🌙' : '☀️';
+    document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
   }
 
-  /* --- 4. EVENTOS --- */
+  // Event Listeners
   document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
@@ -239,12 +252,12 @@
     syncLanguage();
   });
 
+  // Inicialización
   window.addEventListener('pageshow', () => {
     syncTheme();
     syncLanguage();
     applyDemoLogic();
   });
-
 </script>
 </body>
 </html>
