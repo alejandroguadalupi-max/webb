@@ -28,181 +28,283 @@
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg-color);
+    background: radial-gradient(circle at top, var(--bg-color), var(--bg-color) 40%, rgba(0,0,0,0.03));
+    background-color: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s, color 0.3s;
-    opacity: 0;
+    opacity: 0; 
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
 
   .landing-container {
+    width: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 30px 20px;
+    box-sizing: border-box;
     text-align: center;
     position: relative;
   }
 
+  /* LOGO */
   .logo-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     padding: 25px 40px;
     margin-bottom: 25px;
-    border: 4px solid var(--btn-bg);
+    border: 4px solid var(--btn-bg); 
+    border-radius: 4px;
+    background: rgba(255,255,255,0.03);
     box-shadow: var(--shadow);
   }
+  .logo-icon { font-size: 3.5em; line-height: 1; margin-bottom: 10px; }
+  .brand-name { font-family: var(--logo-font); font-size: 2em; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--text-color); margin: 0; line-height: 1.1; }
+  .brand-name::after { content: ''; display: block; width: 40px; height: 4px; background: var(--btn-bg); margin: 10px auto 0 auto; }
 
-  .logo-icon { font-size: 3.5em; }
-  .brand-name {
-    font-family: var(--logo-font);
-    font-size: 2em;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin: 10px 0 0;
-  }
+  h2 { font-size: 1.2em; font-weight: 300; margin: 0 0 30px 0; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
 
-  h2 {
-    font-size: 1.2em;
-    font-weight: 300;
-    opacity: 0.7;
-    margin-bottom: 30px;
-  }
+  .button-group { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; margin-bottom: 30px; }
+  .btn { display: block; padding: 16px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1em; text-align: center; border: 2px solid var(--btn-bg); background: transparent; color: var(--text-color); transition: transform 0.2s ease; }
+  .btn-primary { background: var(--btn-bg); color: var(--btn-text); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
 
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 30px;
-  }
-
-  .btn {
-    padding: 16px;
-    border-radius: 50px;
-    font-weight: 700;
-    border: 2px solid var(--btn-bg);
-    background: transparent;
-    color: var(--text-color);
-    text-decoration: none;
-  }
-
-  .btn-primary {
-    background: var(--btn-bg);
-    color: var(--btn-text);
-  }
-
+  /* --- ZONA DE ACTIVACIÓN --- */
   .shake-activation-box {
+    width: 100%;
     max-width: 320px;
     border: 2px dashed var(--btn-bg);
     border-radius: 20px;
     padding: 15px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(0,0,0,0.03);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 15px;
-    margin-bottom: 20px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
+  /* Estado: Listo para agitar */
   .shake-activation-box.ready {
     background: var(--btn-bg);
+    border-style: solid;
     color: var(--btn-text);
-    animation: shakeAnim 1.5s infinite;
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: shakeAnim 1.5s infinite ease-in-out;
   }
 
-  @keyframes shakeAnim {
-    0% { transform: rotate(0); }
-    25% { transform: rotate(4deg); }
-    75% { transform: rotate(-4deg); }
-    100% { transform: rotate(0); }
+  .shake-icon { font-size: 2em; }
+  .shake-text { font-weight: 800; font-size: 1em; text-align: left; line-height: 1.2; }
+  .shake-sub { font-weight: 400; font-size: 0.85em; opacity: 0.8; display: block;}
+
+  @keyframes shakeAnim { 
+    0% { transform: rotate(0deg); } 
+    25% { transform: rotate(5deg); } 
+    50% { transform: rotate(0deg); } 
+    75% { transform: rotate(-5deg); } 
+    100% { transform: rotate(0deg); } 
   }
 
-  .theme-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    border: none;
-    background: var(--select-bg);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-  }
+  .theme-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; background: var(--select-bg); color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-size: 1.2em; z-index: 100; }
+  .lang-container select { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--select-border); background: transparent; color: var(--text-color); font-size: 0.85em; opacity: 0.8; cursor: pointer; margin-top: 20px; }
   </style>
 </head>
-
 <body>
-<main class="landing-container">
-  <button id="themeBtn" class="theme-btn">☀️</button>
 
+<main class="landing-container" id="landing">
+  <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
+  
   <div class="logo-container">
-    <div id="logoIcon" class="logo-icon">🍽️</div>
+    <div id="logoIcon" class="logo-icon">🍽️</div> 
     <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
   </div>
-
-  <h2 id="subTitle">¡Bienvenid@!</h2>
+  
+  <h2 data-lang="welcome" id="subTitle">¡Bienvenid@!</h2>
 
   <div class="button-group">
-    <a id="menuLink" class="btn btn-primary" href="#">Acceder a la carta</a>
-    <a id="reviewLink" class="btn" href="#">Dejar reseña</a>
-    <a id="shareLink" class="btn" href="#">Compartir experiencia</a>
+    <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la carta</a>
+    <a id="reviewLink" class="btn" data-lang="leave_review" href="#">Dejar reseña</a>
+    <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
   </div>
 
-  <div id="shakeTrigger" class="shake-activation-box" onclick="enableShakeFeature()">
-    <span>📲</span>
-    <div>
-      <strong>ZONA KIDS</strong><br>
-      <small id="shakeSubText">Toca para activar</small>
+  <div class="shake-activation-box" id="shakeTrigger" onclick="enableShakeFeature()">
+    <span class="shake-icon">📲</span>
+    <div class="shake-text">
+      <span id="shakeMainText">ZONA KIDS</span>
+      <span id="shakeSubText" class="shake-sub">Toca para activar</span>
     </div>
+  </div>
+
+  <div class="lang-container">
+    <select id="lang-select">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+    </select>
   </div>
 </main>
 
 <script>
-/* ===== SHAKE NATIVO COMPATIBLE SAFARI ===== */
+  /* --- 1. DICCIONARIO --- */
+  const translations = {
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_wait: "Toca para activar", shake_ready: "¡AGITA AHORA!" },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_wait: "Tap to activate", shake_ready: "SHAKE NOW!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_wait: "Tippen zum Starten", shake_ready: "JETZT SCHÜTTELN!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_wait: "Touchez pour activer", shake_ready: "SECOUEZ !" },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_wait: "Tocca per attivare", shake_ready: "SCUOTI ORA!" }
+  };
 
-let lastX=null, lastY=null, lastZ=null;
-let triggered=false;
+  const designSystem = {
+    'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
+    'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
+    'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
+    'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
+    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' },
+    'default':        { bg: '#92d668', text: '#fff', icon: '🥗' }
+  };
 
-function startNativeShake() {
-  window.addEventListener('devicemotion', (e) => {
-    const a = e.accelerationIncludingGravity;
-    if(!a) return;
+  const params = new URLSearchParams(window.location.search);
 
-    if(lastX !== null) {
-      const delta = Math.abs(a.x-lastX) + Math.abs(a.y-lastY) + Math.abs(a.z-lastZ);
-      if(delta > 12 && !triggered) {
-        triggered = true;
-        if(navigator.vibrate) navigator.vibrate(300);
-        window.location.href = `juegos.html${location.search}`;
+  /* --- 2. LOGICA DEL SHAKE NATIVO (SIN LIBRERIAS) --- */
+  let lastX = null, lastY = null, lastZ = null;
+  let lastTime = 0;
+  let isListening = false;
+
+  function startNativeShakeListener() {
+    if(isListening) return;
+    
+    // Cambiar UI a "LISTO"
+    const btn = document.getElementById('shakeTrigger');
+    btn.classList.add('ready');
+    
+    let lang = localStorage.getItem('userLang') || 'es';
+    const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA AHORA!";
+    document.getElementById('shakeSubText').innerText = readyText;
+    document.querySelector('.shake-icon').innerText = "📳";
+    isListening = true;
+
+    window.addEventListener('devicemotion', (event) => {
+      const current = event.accelerationIncludingGravity;
+      if (!current) return;
+
+      const currentTime = new Date().getTime();
+      // Leemos cada 100ms
+      if ((currentTime - lastTime) > 100) {
+        const diffTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        if (lastX !== null) {
+          const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
+          
+          // Umbral de sensibilidad (ajustado para que no sea muy dificil)
+          if (speed > 1000) { 
+             // EXITO!
+             if(navigator.vibrate) navigator.vibrate(300);
+             // Redirigir conservando todos los parametros
+             window.location.href = `juegos.html${window.location.search}`;
+          }
+        }
+
+        lastX = current.x;
+        lastY = current.y;
+        lastZ = current.z;
       }
+    });
+  }
+
+  function enableShakeFeature() {
+    // 1. Detección iOS 13+
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            startNativeShakeListener();
+          } else {
+            alert("Permiso denegado. Recarga la página.");
+          }
+        })
+        .catch(console.error);
+    } else {
+      // 2. Android / iOS antiguo (arranca directo)
+      startNativeShakeListener();
+    }
+  }
+
+  /* --- 3. CONFIGURACIÓN VISUAL Y URL --- */
+  function applyDemoLogic() {
+    if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
+
+    const name = params.get('n') || "Tu Restaurante";
+    document.title = name;
+    document.getElementById('brandNameDisplay').textContent = name;
+    const category = params.get('categoria'); 
+    const style = designSystem[category] || designSystem['default'];
+    document.getElementById('logoIcon').textContent = style.icon;
+    const rootStyles = document.documentElement.style;
+    rootStyles.setProperty('--btn-bg', style.bg);
+    rootStyles.setProperty('--btn-text', style.text);
+    if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
+
+    const currentParams = window.location.search; 
+    document.getElementById('menuLink').href = `carta.html${currentParams}`;
+    document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
+    document.getElementById('shareLink').href = `compartir_2.html${currentParams}`;
+
+    document.body.style.opacity = "1";
+  }
+
+  /* --- 4. SISTEMA UI --- */
+  function syncLanguage() {
+    let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
+    if(!translations[lang]) lang = "es";
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      if (translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
+    });
+    
+    // Actualizar texto del botón shake según estado
+    const subText = document.getElementById('shakeSubText');
+    if(document.getElementById('shakeTrigger').classList.contains('ready')) {
+       subText.innerText = translations[lang].shake_ready;
+    } else {
+       subText.innerText = translations[lang].shake_wait;
     }
 
-    lastX=a.x; lastY=a.y; lastZ=a.z;
-  });
-}
-
-function enableShakeFeature() {
-  const box = document.getElementById('shakeTrigger');
-  box.classList.add('ready');
-  document.getElementById('shakeSubText').innerText = '¡AGITA AHORA!';
-
-  if (
-    typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function'
-  ) {
-    DeviceMotionEvent.requestPermission().then(res => {
-      if(res === 'granted') startNativeShake();
-    });
-  } else {
-    startNativeShake();
+    document.getElementById("lang-select").value = lang;
   }
-}
 
-/* ===== INIT ===== */
-window.addEventListener('pageshow', () => {
-  document.body.style.opacity = 1;
-});
+  function syncTheme() {
+    let theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
+  }
+
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', newTheme);
+    syncTheme();
+  });
+
+  document.getElementById('lang-select').addEventListener('change', (e) => {
+    localStorage.setItem('userLang', e.target.value);
+    syncLanguage();
+  });
+
+  window.addEventListener('pageshow', () => {
+    syncTheme();
+    syncLanguage();
+    applyDemoLogic();
+  });
 </script>
 </body>
 </html>
