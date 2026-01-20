@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cargando...</title>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shake.js/1.2.2/shake.min.js"></script>
+
   <style>
   :root {
     --bg-color: #fdfdfd;
@@ -62,7 +64,7 @@
     background: rgba(255,255,255,0.03);
     box-shadow: var(--shadow);
     position: relative;
-    user-select: none; /* Evita selección de texto al hacer clicks rápidos */
+    user-select: none;
     cursor: pointer;
   }
 
@@ -133,22 +135,28 @@
   
   .btn:active { transform: scale(0.97); }
 
-  /* --- AVISO FLOTANTE DE SACUDIR (SOLUCIONADO) --- */
+  /* --- AVISO FLOTANTE --- */
   .shake-hint {
-    margin-top: 15px;
-    background: rgba(0,0,0,0.05); /* Fondo suave para que destaque */
-    padding: 10px 20px;
+    margin-top: 20px;
+    background: rgba(0,0,0,0.04);
+    border: 2px dashed var(--btn-bg);
+    padding: 15px 25px;
     border-radius: 30px;
-    font-size: 0.95em;
-    font-weight: 600;
+    font-size: 1em;
+    font-weight: 700;
     color: var(--text-color);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    cursor: pointer; /* Importante para iOS */
-    border: 1px dashed var(--btn-bg);
+    cursor: pointer;
     animation: pulse 2s infinite;
+    transition: background 0.2s;
+  }
+  
+  .shake-hint:active {
+    background: rgba(0,0,0,0.1);
+    transform: scale(0.98);
   }
 
   @keyframes pulse {
@@ -167,11 +175,10 @@
 
   .shake-icon {
     display: inline-block;
-    font-size: 1.4em;
+    font-size: 1.5em;
     animation: shakeAnim 1.2s infinite ease-in-out;
   }
 
-  /* --- RESTO UI --- */
   .theme-btn {
     position: absolute;
     top: 20px; right: 20px;
@@ -217,9 +224,9 @@
     <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
   </div>
 
-  <div class="shake-hint" id="shakeBtn" onclick="requestPermissionAndShake()">
+  <div class="shake-hint" id="shakeBtn" onclick="activateShake()">
     <span class="shake-icon">📳</span> 
-    <span id="shakeText" data-lang="shake_hint">¡Toca aquí y agita para jugar!</span>
+    <span id="shakeText" data-lang="shake_hint">¡Activar Modo Juegos!</span>
   </div>
 
   <div class="lang-container">
@@ -236,11 +243,11 @@
 <script>
   /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Toca aquí y agita para jugar!" },
-    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Tap here & shake for Games!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Hier tippen & schütteln!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Touchez et secouez !" },
-    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Tocca e scuoti per giocare!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Toca aquí y Agita! 🎮", activated: "¡Activado! Ahora agita el móvil." },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Tap here & Shake! 🎮", activated: "On! Now shake your phone." },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Tippen & Schütteln! 🎮", activated: "An! Jetzt schütteln." },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Touchez et Secouez ! 🎮", activated: "Activé! Secouez maintenant." },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Tocca e Scuoti! 🎮", activated: "Attivo! Scuoti ora." }
   };
 
   const designSystem = {
@@ -281,77 +288,72 @@
 
     document.body.style.opacity = "1";
     
-    // Intentar iniciar sensores automáticamente (para Android)
-    startShakeListening();
+    // Iniciar Shake.js en modo espera
+    initShakeLib();
   }
 
-  /* --- 3. LOGICA SENSOR DE MOVIMIENTO --- */
-  let shakeThreshold = 15;
-  let lastX = 0, lastY = 0, lastZ = 0;
-  let lastTime = 0;
+  /* --- 3. IMPLEMENTACIÓN DE SHAKE.JS (LA API) --- */
+  let myShakeEvent;
 
-  // Función para iOS (requiere click del usuario)
-  function requestPermissionAndShake() {
-    // Si es iOS 13+
-    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-      DeviceMotionEvent.requestPermission()
-        .then(permissionState => {
-          if (permissionState === 'granted') {
-            startShakeListening();
-            alert("¡Sensor activado! Ahora agita el móvil.");
-          } else {
-            alert("Permiso denegado. No podrás usar la función de agitar.");
-          }
-        })
-        .catch(console.error);
+  function initShakeLib() {
+    // Instanciamos la librería
+    myShakeEvent = new Shake({
+        threshold: 15, // Umbral de fuerza (menos es más sensible)
+        timeout: 1000 // Frecuencia de eventos
+    });
+    
+    // Escuchamos el evento 'shake'
+    window.addEventListener('shake', shakeEventDidOccur, false);
+  }
+
+  // Esta función se ejecuta cuando la librería detecta la sacudida
+  function shakeEventDidOccur () {
+      if(navigator.vibrate) navigator.vibrate(200); // Vibración física
+      window.location.href = `juegos.html${window.location.search}`;
+  }
+
+  // Función vinculada al botón visual "Agita para jugar"
+  function activateShake() {
+    // 1. iOS 13+ requiere permiso explícito
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    myShakeEvent.start();
+                    confirmActivation();
+                } else {
+                    alert('Permiso denegado. Haz 3 clicks en el logo para entrar.');
+                }
+            })
+            .catch(console.error);
     } else {
-      // Si no es iOS o es versión antigua, ya debería estar escuchando, pero avisamos
-      alert("¡Sensor listo! Agita el móvil con fuerza.");
-      startShakeListening();
+        // 2. Android y iOS antiguos (no requieren permiso, solo start)
+        myShakeEvent.start();
+        confirmActivation();
     }
   }
 
-  function startShakeListening() {
-    if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', (event) => {
-        // Obtenemos aceleración incluyendo gravedad para asegurar compatibilidad
-        let acc = event.accelerationIncludingGravity;
-        if (!acc) return;
-
-        let curTime = new Date().getTime();
-        if ((curTime - lastTime) > 100) {
-          let diffTime = curTime - lastTime;
-          lastTime = curTime;
-
-          let speed = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ) / diffTime * 10000;
-
-          // Ajustamos umbral: Android suele ser más sensible, iOS menos
-          if (speed > shakeThreshold * 100) {
-            goToGames();
-          }
-
-          lastX = acc.x;
-          lastY = acc.y;
-          lastZ = acc.z;
-        }
-      });
-    }
+  function confirmActivation() {
+    // Cambiar texto para feedback visual
+    let lang = localStorage.getItem('userLang') || 'es';
+    const msg = translations[lang] ? translations[lang].activated : "¡Activado! Agita.";
+    
+    const btn = document.getElementById('shakeBtn');
+    btn.style.borderColor = "#4CAF50"; // Verde confirmación
+    btn.style.backgroundColor = "rgba(76, 175, 80, 0.1)";
+    document.getElementById('shakeText').innerText = msg;
+    
+    // Pequeña vibración de feedback
+    if(navigator.vibrate) navigator.vibrate(50);
   }
 
-  function goToGames() {
-    // Vibrar si es posible
-    if(navigator.vibrate) navigator.vibrate(200);
-    window.location.href = `juegos.html${window.location.search}`;
-  }
-
-  /* --- 4. ACCESO SECRETO (3 CLICKS EN LOGO) --- */
+  /* --- 4. PLAN B: ACCESO SECRETO (3 CLICKS) --- */
   let logoClicks = 0;
   document.getElementById('logoClickArea').addEventListener('click', () => {
     logoClicks++;
     if(logoClicks === 3) {
-      goToGames();
+      window.location.href = `juegos.html${window.location.search}`;
     }
-    // Reset contador despues de 1 seg
     setTimeout(() => logoClicks = 0, 1000);
   });
 
@@ -361,10 +363,11 @@
     if(!translations[lang]) lang = "es";
     
     document.querySelectorAll('[data-lang]').forEach(el => {
-      // Para el botón de shake, actualizamos solo el texto interior
       if(el.id === 'shakeText') {
-         el.textContent = translations[lang][el.dataset.lang];
-      } else if (translations[lang][el.dataset.lang]) {
+         // Si ya está activado, no sobrescribimos el mensaje de "Activado"
+         // A menos que sea la carga inicial
+      }
+      if (translations[lang][el.dataset.lang]) {
          el.textContent = translations[lang][el.dataset.lang];
       }
     });
