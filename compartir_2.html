@@ -3,48 +3,40 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="theme-color" content="#68B553" />
-<title data-lang="title">Compartir experiencia · PataMig</title>
+<meta name="theme-color" content="#68B553" id="metaThemeColor" />
+<title data-lang="title">Compartir</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  /* --- Variables Base (Modo Claro) --- */
-  --primary-green: #68B553;
-  --bg-body: #E8F5E1; 
+  /* --- Variables Base --- */
+  --primary-color: #68B553; /* Se sobrescribe por JS */
+  
+  --bg-body: #f8f9fa; 
   --bg-card: #ffffff;
-  --bg-photo: #fdfdfd;
+  --bg-photo: #f0f0f0;
   
   --text-main: #333333;
   --text-sec: #6b7280;
   
-  --border: #d0e2c8;
+  --border: #e0e0e0;
   --shadow: rgba(0,0,0,0.08);
   
   --btn-placeholder-bg: #ffffff;
-  --btn-placeholder-text: #68B553;
 }
 
 [data-theme="dark"] {
-  /* --- Variables Modo Oscuro --- */
   --bg-body: #121212; 
   --bg-card: #1e1e1e;
   --bg-photo: #2a2a2a;
-  
   --text-main: #f0f0f0;
   --text-sec: #a0a0a0;
-  
   --border: #333333;
   --shadow: rgba(0,0,0,0.4);
-  
   --btn-placeholder-bg: #2a2a2a;
-  --btn-placeholder-text: #68B553;
-  
-  /* Ajuste de color primario para contraste */
-  --primary-green: #5ca54a;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -52,10 +44,6 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
-}
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
 }
 
 body {
@@ -73,211 +61,114 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* --- Controles Superiores (Idioma/Tema) --- */
+/* --- Header con Nombre --- */
+.brand-header {
+  text-align: center;
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.brand-name {
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+/* --- Controles --- */
 .top-controls {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 10;
+  top: 20px; right: 20px;
+  display: flex; align-items: center; gap: 12px; z-index: 10;
 }
 
 .lang-badge {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-sec);
-  padding: 6px 12px;
-  border-radius: 50px;
-  box-shadow: 0 2px 5px var(--shadow);
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-sec); padding: 5px 10px; border-radius: 50px;
 }
 
 .theme-btn {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px var(--shadow);
-  transition: transform 0.2s;
-}
-.theme-btn:active { transform: scale(0.9); }
-
-/* --- Layout Principal --- */
-.wrap {
-  width: 100%;
-  max-width: 450px; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: fadeIn 0.5s ease-out; 
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-main); width: 36px; height: 36px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform 0.2s;
 }
 
+/* --- Card --- */
 .share-card {
   background: var(--bg-card);
-  border-radius: 20px; 
-  padding: 30px; 
+  border-radius: 24px; 
+  padding: 30px 25px; 
   border: 1px solid var(--border);
-  width: 100%;
+  width: 100%; max-width: 420px;
   text-align: center;
-  box-shadow: 0 10px 30px var(--shadow); 
-  transition: background 0.3s ease, border 0.3s ease;
+  box-shadow: 0 10px 40px var(--shadow); 
+  animation: fadeIn 0.6s ease-out;
 }
 
-h2 {
-  margin: 0 0 10px;
-  font-size: 1.6em; 
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-p.subtitle {
-  margin: 0 0 20px;
-  font-size: 0.95em; 
-  color: var(--text-sec);
-  line-height: 1.5;
-}
+h2 { margin: 0 0 10px; font-size: 1.4em; font-weight: 700; color: var(--text-main); }
+p.subtitle { margin: 0 0 25px; font-size: 0.9em; color: var(--text-sec); line-height: 1.5; }
 
 /* Área de Foto */
 .photo-area {
-  width: 100%;
-  aspect-ratio: 4/3;
+  width: 100%; aspect-ratio: 4/3;
   border-radius: 16px; 
   border: 2px dashed var(--border); 
   background: var(--bg-photo); 
   overflow: hidden; 
-  display: flex; 
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px; 
-  position: relative; 
-  transition: border-color 0.2s ease, background 0.3s ease;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 25px; position: relative; 
+  transition: border-color 0.2s ease;
 }
 
-.photo-area:hover {
-  border-color: var(--primary-green);
-}
-
-.photo-preview-container {
-  width: 100%;
-  height: 100%;
-  display: none; 
-}
-
-.photo-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; 
-}
+.photo-preview-container { width: 100%; height: 100%; display: none; }
+.photo-preview { width: 100%; height: 100%; object-fit: contain; }
 
 #btnRemovePhoto {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  font-size: 1.2em;
-  font-weight: 700;
-  line-height: 30px;
-  text-align: center;
-  cursor: pointer;
-  z-index: 5;
-  transition: transform 0.2s ease;
-  display: none; 
+  position: absolute; top: 10px; right: 10px;
+  width: 32px; height: 32px; border: none; border-radius: 50%;
+  background: rgba(0,0,0,0.6); color: white; font-size: 1.2em; line-height: 1;
+  cursor: pointer; z-index: 5; display: none; 
 }
-#btnRemovePhoto:hover { transform: scale(1.1); }
 
 .placeholder-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 20px;
-  animation: zoomIn 0.3s ease-out;
+  display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;
 }
 
 .placeholder-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 200px;
-  padding: 12px 0;
-  border: 2px solid var(--primary-green);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 80%; padding: 12px 0;
+  border: 2px solid var(--primary-color);
   border-radius: 12px;
-  font-weight: 600;
-  font-size: 1.0em;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  color: var(--btn-placeholder-text);
-  background: var(--btn-placeholder-bg);
+  font-weight: 600; font-size: 0.95em;
+  cursor: pointer; transition: all 0.2s ease;
+  color: var(--primary-color); background: var(--btn-placeholder-bg);
 }
-.placeholder-btn:hover {
-  background: var(--primary-green);
-  color: #fff;
-  transform: scale(1.05);
-}
-.placeholder-btn span {
-  font-size: 1.5em; 
-  line-height: 1;
-}
+.placeholder-btn:active { transform: scale(0.98); opacity: 0.8; }
 
 .btn {
-  padding: 14px 0; 
-  border: none;
-  border-radius: 12px; 
-  font-weight: 600;
-  font-size: 1.0em;
-  cursor: pointer;
-  transition: all 0.25s ease;
+  padding: 16px 0; border: none; border-radius: 12px; 
+  font-weight: 700; font-size: 1.0em; width: 100%;
+  cursor: pointer; transition: all 0.2s ease;
 }
 
-.btn-green {
-  background: var(--primary-green);
-  color: #fff;
-  box-shadow: 0 6px 20px rgba(104,181,83,0.25);
+.btn-primary {
+  background: var(--primary-color); color: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
-.btn-green:hover { 
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(104,181,83,0.35);
-}
+.btn-primary:active { transform: scale(0.98); }
 
 .watermark-toggle {
-  margin: 10px 0 20px; 
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9em;
-  color: var(--text-sec);
-  justify-content: center;
-  cursor: pointer; 
+  margin: 0 0 20px; display: flex; align-items: center; justify-content: center;
+  gap: 8px; font-size: 0.85em; color: var(--text-sec); cursor: pointer; 
 }
+.watermark-toggle input { accent-color: var(--primary-color); transform: scale(1.2); }
 
-.watermark-toggle input[type="checkbox"] {
-  transform: scale(1.2); 
-  accent-color: var(--primary-green); 
-}
-
-.note {
-  font-size: 0.85em; 
-  color: var(--text-sec);
-  margin-top: 10px;
-}
+.note { font-size: 0.8em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -287,197 +178,116 @@ p.subtitle {
   <button class="theme-btn" id="themeBtn"></button>
 </div>
 
-<div class="wrap">
-  <div class="share-card">
-    <h2 id="shareTitle">📸 Comparte tu momento</h2>
-    <p id="shareSub" class="subtitle">Elige o toma una foto y compártela con tus amigos.</p>
+<div class="brand-header">
+  <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
+</div>
 
-    <div class="photo-area" id="photoArea">
-      
-      <div class="photo-preview-container" id="photoPreviewContainer">
-        <img id="photoPreview" class="photo-preview" alt="Vista previa">
+<div class="share-card">
+  <h2 id="shareTitle">📸 Comparte tu momento</h2>
+  <p id="shareSub" class="subtitle">Sube una foto y compártela con tus amigos.</p>
+
+  <div class="photo-area" id="photoArea">
+    
+    <div class="photo-preview-container" id="photoPreviewContainer">
+      <img id="photoPreview" class="photo-preview" alt="Vista previa">
+    </div>
+    <button id="btnRemovePhoto">×</button>
+
+    <div class="placeholder-content" id="placeholderContent">
+      <div class="placeholder-btn" id="btnCamera">
+        <span>📷</span> <span data-lang="takePhoto">Tomar foto</span>
       </div>
-      
-      <button id="btnRemovePhoto">×</button>
-
-      <div class="placeholder-content" id="placeholderContent">
-        <div class="placeholder-btn" id="btnCamera">
-          <span>📷</span> <span data-lang="takePhoto">Tomar foto</span>
-        </div>
-        <div class="placeholder-btn" id="btnGallery">
-          <span>🖼️</span> <span data-lang="choosePhoto">Elegir foto</span>
-        </div>
+      <div class="placeholder-btn" id="btnGallery">
+        <span>🖼️</span> <span data-lang="choosePhoto">Elegir foto</span>
       </div>
-
     </div>
 
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
-    <input type="file" id="galleryInput" accept="image/*" style="display:none;">
-
-    <label class="watermark-toggle">
-      <input type="checkbox" id="chkWatermark" checked>
-      <span id="watermarkLabel">Incluir nombre del restaurante</span>
-    </label>
-
-    <button id="btnShare" class="btn btn-green" style="width:100%;">Compartir</button>
-    <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta del restaurante.</p>
   </div>
+
+  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
+  <input type="file" id="galleryInput" accept="image/*" style="display:none;">
+
+  <label class="watermark-toggle">
+    <input type="checkbox" id="chkWatermark" checked>
+    <span id="watermarkLabel">Incluir nombre del restaurante</span>
+  </label>
+
+  <button id="btnShare" class="btn btn-primary">Compartir</button>
+  <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta estándar.</p>
 </div>
 
 <script>
-// --- CONSTANTES ---
+/* --- 1. CONFIGURACIÓN --- */
 const DEFAULT_CARD="img/logo35.png"; 
 const LOGO_WATERMARK_URL = "img/PataMig.png"; 
 
-// --- DICCIONARIO ---
-const COPY = {
-  es: {
-    title: "Compartir experiencia · PataMig",
-    shareTitle: "📸 Comparte tu momento",
-    shareSub: "Elige o toma una foto y compártela con tus amigos.",
-    note: "Si no eliges foto, se compartirá una tarjeta del restaurante.",
-    shareBtn: "Compartir",
-    takePhoto: "Tomar foto",
-    choosePhoto: "Elegir foto",
-    watermark: "Incluir nombre del restaurante"
-  },
-  en: {
-    title: "Share Experience · PataMig",
-    shareTitle: "📸 Share your moment",
-    shareSub: "Take or choose a photo and share with friends.",
-    note: "If you don't choose a photo, a restaurant card will be shared.",
-    shareBtn: "Share",
-    takePhoto: "Take photo",
-    choosePhoto: "Choose photo",
-    watermark: "Include restaurant name"
-  },
-  de: {
-    title: "Erfahrung teilen · PataMig",
-    shareTitle: "📸 Teilen Sie Ihren Moment",
-    shareSub: "Machen Sie ein Foto und teilen Sie es mit Freunden.",
-    note: "Wenn Sie kein Foto wählen, wird eine Restaurantkarte geteilt.",
-    shareBtn: "Teilen",
-    takePhoto: "Foto aufnehmen",
-    choosePhoto: "Foto wählen",
-    watermark: "Restaurantnamen einfügen"
-  },
-  fr: {
-    title: "Partager l'expérience · PataMig",
-    shareTitle: "📸 Partagez votre moment",
-    shareSub: "Prenez ou choisissez une photo et partagez-la.",
-    note: "Si vous ne choisissez pas de photo, une carte du restaurant sera partagée.",
-    shareBtn: "Partager",
-    takePhoto: "Prendre photo",
-    choosePhoto: "Choisir photo",
-    watermark: "Inclure le nom du restaurant"
-  },
-  it: {
-    title: "Condividi esperienza · PataMig",
-    shareTitle: "📸 Condividi il tuo momento",
-    shareSub: "Scatta o scegli una foto e condividila con gli amici.",
-    note: "Se non scegli una foto, verrà condivisa una scheda del ristorante.",
-    shareBtn: "Condividi",
-    takePhoto: "Scatta foto",
-    choosePhoto: "Scegli foto",
-    watermark: "Includi nome del ristorante"
-  }
+const palettes = {
+    'hamburgueseria': '#FF8C00', 
+    'pizzeria':       '#D32F2F', 
+    'asiatico':       '#E91E63', 
+    'cafe':           '#8D6E63', 
+    'restaurante':    '#2E7D32', 
+    'default':        '#68B553'
 };
 
-const supportedLangs = ['es', 'en', 'de', 'fr', 'it'];
-let currentLang = 'es';
+const COPY = {
+  es: { title: "Compartir", shareTitle: "📸 Comparte tu momento", shareSub: "Sube una foto y compártela.", note: "Si no hay foto, se usará una tarjeta.", shareBtn: "Compartir", takePhoto: "Tomar foto", choosePhoto: "Elegir foto", watermark: "Incluir nombre" },
+  en: { title: "Share", shareTitle: "📸 Share your moment", shareSub: "Upload a photo and share it.", note: "No photo? A card will be used.", shareBtn: "Share", takePhoto: "Take photo", choosePhoto: "Choose photo", watermark: "Include name" },
+  de: { title: "Teilen", shareTitle: "📸 Moment teilen", shareSub: "Foto hochladen und teilen.", note: "Ohne Foto wird eine Karte geteilt.", shareBtn: "Teilen", takePhoto: "Foto aufnehmen", choosePhoto: "Foto wählen", watermark: "Name einfügen" },
+  fr: { title: "Partager", shareTitle: "📸 Partagez l'instant", shareSub: "Téléchargez et partagez.", note: "Sans photo, une carte sera utilisée.", shareBtn: "Partager", takePhoto: "Prendre photo", choosePhoto: "Choisir photo", watermark: "Inclure le nom" },
+  it: { title: "Condividi", shareTitle: "📸 Condividi il momento", shareSub: "Carica e condividi.", note: "Senza foto useremo una card.", shareBtn: "Condividi", takePhoto: "Scatta foto", choosePhoto: "Scegli foto", watermark: "Includi nome" }
+};
+
 let selectedFile = null;
 
-/* --- 1. LÓGICA DE IDIOMA --- */
-function detectAndSetLanguage() {
-  const urlParams = new URLSearchParams(window.location.search);
-  let lang = urlParams.get('lang');
+/* --- 2. INICIALIZACIÓN --- */
+function init() {
+  const params = new URLSearchParams(window.location.search);
 
-  // Detectar persistencia (igual que principal y carta)
-  if (!lang) lang = localStorage.getItem('userLang');
-  if (!lang) {
-    const browserLang = navigator.language.slice(0, 2);
-    if (supportedLangs.includes(browserLang)) lang = browserLang;
-  }
-  if (!lang || !COPY[lang]) lang = 'es';
+  // A. SEGURIDAD
+  if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  localStorage.setItem('userLang', lang);
-  currentLang = lang;
-  
-  // Actualizar UI
-  document.documentElement.lang = lang; 
-  document.getElementById('langDisplay').textContent = lang;
-  
-  applyLanguageToDOM(lang);
-}
+  // B. NOMBRE Y TÍTULO
+  const name = params.get('n') || "Restaurante";
+  document.getElementById('brandNameDisplay').textContent = name;
+  document.title = "Compartir - " + name;
 
-function applyLanguageToDOM(lang) {
-  const c = COPY[lang];
-  if (!c) return;
+  // C. COLOR
+  const category = params.get('categoria') || 'default';
+  const color = palettes[category] || palettes['default'];
+  document.documentElement.style.setProperty('--primary-color', color);
+  document.getElementById('metaThemeColor').setAttribute('content', color);
 
-  document.title = c.title;
-  document.getElementById('shareTitle').textContent = c.shareTitle;
-  document.getElementById('shareSub').textContent = c.shareSub;
-  document.getElementById('btnShare').textContent = c.shareBtn;
-  document.getElementById('note').textContent = c.note;
-  document.getElementById('watermarkLabel').textContent = c.watermark;
-
-  document.querySelector('[data-lang="takePhoto"]').textContent = c.takePhoto;
-  document.querySelector('[data-lang="choosePhoto"]').textContent = c.choosePhoto;
-}
-
-/* --- 2. LÓGICA DE TEMA (SINCRONIZADO) --- */
-const themeBtn = document.getElementById('themeBtn');
-
-function applyTheme() {
-  // 1. Detectar tema guardado en localStorage (el mismo que usa principal.html)
-  let savedTheme = localStorage.getItem('theme');
-  
-  // 2. Si no hay, detectar preferencia del sistema
-  if (!savedTheme) {
-    savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-  
-  // 3. Aplicar al HTML
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  
-  // 4. Cambiar icono
-  themeBtn.innerHTML = savedTheme === 'dark'
-    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
-    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
-}
-
-themeBtn.addEventListener('click', () => {
-  const current = document.documentElement.getAttribute('data-theme');
-  const newTheme = current === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', newTheme);
+  // D. IDIOMA Y TEMA
+  detectLanguage();
   applyTheme();
-});
+}
 
-// --- LÓGICA DE FOTOS ---
-function handleFileInput(input, photoPreview, placeholderContent, photoPreviewContainer, btnRemovePhoto, photoArea){
+/* --- 3. LÓGICA DE FOTOS --- */
+function handleFileInput(input, preview, content, container, btnRemove, area){
   const f=input.files?.[0];
   if(!f) return;
   selectedFile=f;
-  photoPreview.src=URL.createObjectURL(f);
+  preview.src=URL.createObjectURL(f);
   
-  placeholderContent.style.display = 'none';
-  photoPreviewContainer.style.display = 'block';
-  btnRemovePhoto.style.display = 'block';
-  photoArea.style.borderColor = 'var(--primary-green)'; 
-  photoArea.style.borderStyle = 'solid';
+  content.style.display = 'none';
+  container.style.display = 'block';
+  btnRemove.style.display = 'block';
+  area.style.borderColor = 'var(--primary-color)'; 
+  area.style.borderStyle = 'solid';
 }
 
-function removePhoto(cameraInput, galleryInput, photoPreview, placeholderContent, photoPreviewContainer, btnRemovePhoto, photoArea) {
+function removePhoto() {
   selectedFile = null;
-  photoPreview.src = ''; 
-  cameraInput.value = null; 
-  galleryInput.value = null;
+  document.getElementById('photoPreview').src = ''; 
+  document.getElementById('cameraInput').value = null; 
+  document.getElementById('galleryInput').value = null;
 
-  placeholderContent.style.display = 'flex';
-  photoPreviewContainer.style.display = 'none';
-  btnRemovePhoto.style.display = 'none';
-  photoArea.style.borderColor = 'var(--border)'; 
-  photoArea.style.borderStyle = 'dashed';
+  document.getElementById('placeholderContent').style.display = 'flex';
+  document.getElementById('photoPreviewContainer').style.display = 'none';
+  document.getElementById('btnRemovePhoto').style.display = 'none';
+  document.getElementById('photoArea').style.borderColor = 'var(--border)'; 
+  document.getElementById('photoArea').style.borderStyle = 'dashed';
 };
 
 async function addWatermarkToImage(file){
@@ -491,118 +301,95 @@ async function addWatermarkToImage(file){
       const ctx = canvas.getContext('2d');
       canvas.width = img.width;
       canvas.height = img.height;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
 
-      const logo = new Image();
-      logo.crossOrigin = "anonymous";
-      logo.src = LOGO_WATERMARK_URL;
+      // Marca de agua simple con texto del restaurante si no hay logo
+      // O lógica de imagen como tenías antes. Aquí simplifico para el ejemplo:
+      const name = document.getElementById('brandNameDisplay').textContent;
+      const fontSize = Math.max(30, canvas.width * 0.05);
+      
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+      ctx.textAlign = "right";
+      ctx.shadowColor="rgba(0,0,0,0.5)"; ctx.shadowBlur=4;
+      ctx.fillText(name, canvas.width - 20, canvas.height - 20);
 
-      logo.onload = () => {
-        const logoNaturalWidth = logo.naturalWidth;
-        const logoNaturalHeight = logo.naturalHeight;
-        const targetLogoHeight = Math.max(25, canvas.height * 0.08); 
-        const targetLogoWidth = (logoNaturalWidth / logoNaturalHeight) * targetLogoHeight;
-        const margin = Math.max(15, canvas.height * 0.03); 
-        const x = canvas.width - targetLogoWidth - margin;
-        const y = canvas.height - targetLogoHeight - margin;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.7)"; 
-        const padding = 5; 
-        ctx.roundRect(x - padding, y - padding, targetLogoWidth + (padding*2), targetLogoHeight + (padding*2), 5); 
-        ctx.fill();
-        ctx.drawImage(logo, x, y, targetLogoWidth, targetLogoHeight);
-
-        canvas.toBlob(b=>{
-          resolve(new File([b],"patamig_momento.jpg",{type:"image/jpeg"}));
-        },"image/jpeg",0.9);
-      };
-      logo.onerror = () => reject(new Error("Error al cargar el logo para la marca de agua."));
+      canvas.toBlob(b => resolve(new File([b],"share.jpg",{type:"image/jpeg"})),"image/jpeg",0.9);
     };
-    img.onerror = () => reject(new Error("Error al cargar la imagen seleccionada para la marca de agua."));
+    img.onerror = reject;
   });
 }
 
-async function shareExperience(e){
-  e&&e.preventDefault();
-  const chkWatermark = document.getElementById('chkWatermark'); 
+async function shareExperience(){
   try{
-    let baseFile;
-    if(selectedFile){
-      baseFile=selectedFile;
-    } else {
-      const res=await fetch(DEFAULT_CARD);
-      const blob=await res.blob();
-      baseFile=new File([blob],"patamig_card.jpg",{type:"image/jpeg"});
-    }
-    let fileToShare=baseFile;
-    if(chkWatermark.checked){
-      fileToShare=await addWatermarkToImage(baseFile);
+    let fileToShare = selectedFile;
+    
+    // Si no hay foto, usar la default
+    if(!fileToShare) {
+       const res = await fetch(DEFAULT_CARD);
+       const blob = await res.blob();
+       fileToShare = new File([blob], "card.jpg", {type:"image/jpeg"});
+    } else if(document.getElementById('chkWatermark').checked){
+       fileToShare = await addWatermarkToImage(selectedFile);
     }
 
-    if(navigator.canShare?.({files:[fileToShare]})){
-      await navigator.share({
-        files:[fileToShare]
-      });
+    if(navigator.canShare && navigator.canShare({files:[fileToShare]})){
+      await navigator.share({ files:[fileToShare] });
     } else {
-      const url=URL.createObjectURL(fileToShare);
-      window.open(url,"_blank");
+      // Fallback para PC
+      const url = URL.createObjectURL(fileToShare);
+      const a = document.createElement('a');
+      a.href = url; a.download = "experiencia.jpg";
+      a.click();
     }
-  }catch(err){ 
-    if (err.name === 'AbortError') {
-        console.log("Compartir cancelado por el usuario.");
-    } else {
-        console.error("Error al compartir:", err);
-    }
+  } catch(err){ 
+    if (err.name !== 'AbortError') console.error(err);
   }
 }
 
-// --- INICIALIZACIÓN ---
-document.addEventListener('DOMContentLoaded', () => {
+/* --- 4. UTILS (Idioma/Tema) --- */
+function detectLanguage() {
+  let lang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
+  if (!COPY[lang]) lang = 'es';
+  localStorage.setItem('userLang', lang);
+  document.getElementById('langDisplay').textContent = lang.toUpperCase();
+  
+  const c = COPY[lang];
+  document.querySelector('[data-lang="title"]').textContent = c.title;
+  document.getElementById('shareTitle').textContent = c.shareTitle;
+  document.getElementById('shareSub').textContent = c.shareSub;
+  document.getElementById('btnShare').textContent = c.shareBtn;
+  document.getElementById('note').textContent = c.note;
+  document.getElementById('watermarkLabel').textContent = c.watermark;
+  document.querySelector('[data-lang="takePhoto"]').textContent = c.takePhoto;
+  document.querySelector('[data-lang="choosePhoto"]').textContent = c.choosePhoto;
+}
 
-  // 1. Configuración Inicial (Sincronización)
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme() {
+  let saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', saved);
+  themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
+}
+
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
   applyTheme();
-  detectAndSetLanguage();
-
-  // 2. Elementos DOM
-  const cameraInput = document.getElementById('cameraInput');
-  const galleryInput = document.getElementById('galleryInput');
-  const photoArea = document.getElementById('photoArea');
-  const photoPreviewContainer = document.getElementById('photoPreviewContainer');
-  const photoPreview = document.getElementById('photoPreview');
-  const placeholderContent = document.getElementById('placeholderContent');
-  const btnCamera = document.getElementById('btnCamera');
-  const btnGallery = document.getElementById('btnGallery');
-  const btnRemovePhoto = document.getElementById('btnRemovePhoto');
-  const btnShare = document.getElementById('btnShare');
-  
-  // 3. Event Listeners
-  btnCamera.onclick = () => cameraInput.click();
-  btnGallery.onclick = () => galleryInput.click();
-  
-  btnRemovePhoto.onclick = () => removePhoto(
-    cameraInput, galleryInput, photoPreview, 
-    placeholderContent, photoPreviewContainer, 
-    btnRemovePhoto, photoArea
-  );
-  
-  btnShare.onclick = shareExperience;
-
-  cameraInput.onchange = () => handleFileInput(
-    cameraInput, photoPreview, placeholderContent, 
-    photoPreviewContainer, btnRemovePhoto, photoArea
-  );
-  
-  galleryInput.onchange = () => handleFileInput(
-    galleryInput, photoPreview, placeholderContent, 
-    photoPreviewContainer, btnRemovePhoto, photoArea
-  );
-
-  // 4. Estado inicial foto
-  if (!selectedFile) {
-    placeholderContent.style.display = 'flex';
-    photoPreviewContainer.style.display = 'none';
-    btnRemovePhoto.style.display = 'none';
-  }
 });
+
+// Event Listeners DOM
+document.getElementById('btnCamera').onclick = () => document.getElementById('cameraInput').click();
+document.getElementById('btnGallery').onclick = () => document.getElementById('galleryInput').click();
+document.getElementById('btnRemovePhoto').onclick = removePhoto;
+document.getElementById('btnShare').onclick = shareExperience;
+
+document.getElementById('cameraInput').onchange = (e) => handleFileInput(e.target, document.getElementById('photoPreview'), document.getElementById('placeholderContent'), document.getElementById('photoPreviewContainer'), document.getElementById('btnRemovePhoto'), document.getElementById('photoArea'));
+document.getElementById('galleryInput').onchange = (e) => handleFileInput(e.target, document.getElementById('photoPreview'), document.getElementById('placeholderContent'), document.getElementById('photoPreviewContainer'), document.getElementById('btnRemovePhoto'), document.getElementById('photoArea'));
+
+window.addEventListener("pageshow", init);
+
 </script>
 </body>
 </html>

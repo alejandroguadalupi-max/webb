@@ -12,9 +12,9 @@
 
 <style>
   :root {
-    /* --- Variables Base (Se sobreescriben por JS) --- */
-    --primary-color: #68B553; /* Color dinámico */
-    --secondary-color: #e89f4b; /* Color fijo para el botón secundario */
+    /* --- Variables Base --- */
+    --primary-color: #68B553; 
+    --secondary-color: #e89f4b; 
     
     --bg-body: #f8f9fa;
     --bg-card: #ffffff;
@@ -31,10 +31,8 @@
   [data-theme="dark"] {
     --bg-body: #121212;
     --bg-card: #1e1e1e;
-    
     --text-main: #f0f0f0;
     --text-sec: #a0a0a0;
-    
     --border: #333333;
     --shadow: rgba(0,0,0,0.4);
   }
@@ -55,30 +53,6 @@
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
-  }
-
-  /* --- Header con Nombre --- */
-  .brand-header {
-    text-align: center;
-    padding-top: 50px;
-    padding-bottom: 10px;
-    animation: fadeInUp 0.5s ease-out;
-  }
-  
-  .brand-name {
-    font-weight: 900;
-    font-size: 1.8rem;
-    color: var(--primary-color);
-    margin: 0;
-    line-height: 1.2;
-    text-transform: uppercase;
-    letter-spacing: -1px;
-  }
-  
-  .brand-subtitle {
-    font-size: 0.9rem;
-    color: var(--text-sec);
-    margin-top: 5px;
   }
 
   /* --- Controles Superiores --- */
@@ -108,7 +82,7 @@
   /* Contenedor principal */
   .review-container {
     width: 100%;
-    min-height: 80vh; /* Ajustado para dejar espacio al header */
+    height: 100vh; /* Ocupa toda la pantalla */
     display: flex;
     flex-direction: column;
     justify-content: center; 
@@ -120,8 +94,7 @@
   .content-wrapper {
     width: 100%;
     max-width: 450px; 
-    animation: fadeInUp 0.6s ease-out 0.1s;
-    animation-fill-mode: backwards;
+    animation: fadeInUp 0.6s ease-out;
   }
 
   /* Caja de opción */
@@ -188,11 +161,6 @@
   <button class="theme-btn" id="themeBtn"></button>
 </div>
 
-<div class="brand-header">
-  <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
-  <div class="brand-subtitle" data-lang="subtitle">Tu opinión nos importa</div>
-</div>
-
 <main class="review-container">
   <div class="content-wrapper">
     
@@ -216,7 +184,7 @@
 </main>
 
 <script>
-/* --- 1. CONFIGURACIÓN DE PALETAS (IGUAL QUE EN PRINCIPAL) --- */
+/* --- 1. CONFIGURACIÓN DE PALETAS --- */
 const palettes = {
     'hamburgueseria': '#FF8C00', // Naranja
     'pizzeria':       '#D32F2F', // Rojo
@@ -227,19 +195,19 @@ const palettes = {
 };
 
 // Enlaces de destino
-const GOOGLE_LINK = "https://www.google.com/maps"; // Pon aquí tu link real
+const GOOGLE_LINK = "https://www.google.com/maps"; 
 const TALLY_LINKS = {
   es: "https://tally.so/r/w2Qla9",
-  en: "https://tally.so/r/w20k9D" // Fallback
+  en: "https://tally.so/r/w20k9D"
 };
 
 /* --- 2. TRADUCCIONES --- */
 const translations = {
-  es: { subtitle: "Tu opinión nos importa", publicTitle: "⭐ Reseña pública", publicText: "Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn: "Publicar en Google", publicNote: "Queda visible para todos.", privateTitle: "📝 Comentario privado", privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn: "Hablar con el equipo", privateNote: "Solo lo vemos nosotros." },
-  en: { subtitle: "Your opinion matters", publicTitle: "⭐ Public review", publicText: "Your review helps other customers find us.", publicBtn: "Post on Google", publicNote: "Visible to everyone.", privateTitle: "📝 Private feedback", privateText: "Had an issue? Your feedback helps us improve directly.", privateBtn: "Tell the Team", privateNote: "Only we can see it." },
-  de: { subtitle: "Ihre Meinung zählt", publicTitle: "⭐ Öffentliche Bewertung", publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn: "Auf Google posten", publicNote: "Für alle sichtbar.", privateTitle: "📝 Privates Feedback", privateText: "Gab es ein Problem? Helfen Sie uns direkt.", privateBtn: "Dem Team mitteilen", privateNote: "Nur wir sehen es." },
-  fr: { subtitle: "Votre avis compte", publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour tous.", privateTitle: "📝 Retour privé", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
-  it: { subtitle: "La tua opinione conta", publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a migliorare.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi." }
+  es: { publicTitle: "⭐ Reseña pública", publicText: "Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn: "Publicar en Google", publicNote: "Queda visible para todos.", privateTitle: "📝 Comentario privado", privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn: "Hablar con el equipo", privateNote: "Solo lo vemos nosotros." },
+  en: { publicTitle: "⭐ Public review", publicText: "Your review helps other customers find us.", publicBtn: "Post on Google", publicNote: "Visible to everyone.", privateTitle: "📝 Private feedback", privateText: "Had an issue? Your feedback helps us improve directly.", privateBtn: "Tell the Team", privateNote: "Only we can see it." },
+  de: { publicTitle: "⭐ Öffentliche Bewertung", publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn: "Auf Google posten", publicNote: "Für alle sichtbar.", privateTitle: "📝 Privates Feedback", privateText: "Gab es ein Problem? Helfen Sie uns direkt.", privateBtn: "Dem Team mitteilen", privateNote: "Nur wir sehen es." },
+  fr: { publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour tous.", privateTitle: "📝 Retour privé", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
+  it: { publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a migliorare.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi." }
 };
 
 /* --- 3. LÓGICA PRINCIPAL --- */
@@ -252,9 +220,8 @@ function init() {
      return;
   }
 
-  // B. NOMBRE DEL RESTAURANTE
+  // B. NOMBRE EN PESTAÑA (Opcional, invisible en la web)
   const name = params.get('n') || "Restaurante";
-  document.getElementById('brandNameDisplay').textContent = name;
   document.title = "Opinión - " + name;
 
   // C. APLICAR COLOR (PALETA)
