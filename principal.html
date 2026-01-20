@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PataMig</title>
+  <title>Cargando...</title>
 
   <style>
   :root {
@@ -34,6 +34,7 @@
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s, color 0.3s;
+    opacity: 0; /* Ocultar inicialmente para demo personalizada */
   }
 
   .landing-container {
@@ -42,16 +43,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centrado vertical perfecto */
-    padding: 40px 20px; /* Más padding arriba/abajo */
+    justify-content: center;
+    padding: 40px 20px;
     box-sizing: border-box;
     text-align: center;
     position: relative;
   }
 
-  /* --- BOTONES SUPERIORES --- */
-  
-  /* Botón Tema (Circular) */
   .theme-btn {
     position: absolute;
     top: 25px;
@@ -70,48 +68,46 @@
     transition: transform 0.2s;
     z-index: 100;
   }
-  .theme-btn:active { transform: scale(0.9); }
 
-  /* --- LOGO Y TEXTO --- */
-  .restaurant-logo {
-    width: 100%;
-    max-width: 280px; 
-    height: auto;
-    margin-top: 40px; /* Empuja un poco hacia abajo desde el top */
-    margin-bottom: 30px;
-    border-radius: 10px;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15); /* Sombra mejorada */
-    transition: transform 0.3s ease;
+  /* NUEVO: Nombre del restaurante en vez de logo */
+  .restaurant-name {
+    font-size: 2.2em;
+    font-weight: 900;
+    margin-bottom: 20px;
+    padding: 15px 25px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    max-width: 280px;
+    text-align: center;
+    word-break: break-word;
   }
 
   h2 {
-    font-size: 2em; /* Un poco más grande */
+    font-size: 1.8em;
     font-weight: 800;
     margin: 0 0 15px 0;
-    color: var(--text-color);
   }
 
   p {
     font-size: 1.15em;
-    color: var(--text-color);
-    margin: 0 0 40px 0; /* Más espacio antes de los botones */
+    margin: 0 0 40px 0;
     line-height: 1.5;
     opacity: 0.85;
   }
 
-  /* --- BOTONES PRINCIPALES --- */
   .button-group {
     display: flex;
     flex-direction: column;
-    gap: 18px; /* Más separación entre botones */
+    gap: 18px;
     width: 100%;
-    max-width: 320px; 
+    max-width: 320px;
     margin-bottom: 50px;
   }
 
   .btn {
     display: block;
-    padding: 18px; /* Botones más altos */
+    padding: 18px;
     border-radius: 16px;
     text-decoration: none;
     font-weight: bold;
@@ -124,47 +120,31 @@
     box-shadow: var(--shadow);
   }
 
-  /* El botón de la carta destaca más */
   .btn-primary {
     background: var(--btn-bg);
     color: var(--btn-text);
     border: 1px solid var(--btn-bg);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-  }
-
-  .btn:active { transform: scale(0.98); }
-
-  /* --- SELECTOR IDIOMA --- */
-  .lang-container {
-    margin-top: 10px;
   }
 
   #lang-select {
-    display: block;
     padding: 12px 24px;
     border-radius: 50px;
     border: 2px solid var(--select-border);
     background: var(--select-bg);
     color: var(--text-color);
     cursor: pointer;
-    font-size: 1em;
-    text-align: center;
-    transition: background 0.3s, color 0.3s;
-    min-width: 160px;
-    outline: none;
   }
-
   </style>
 </head>
 <body>
 
 <main class="landing-container" id="landing">
-  
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
 
-  <img src="img/PataMig.png" alt="PataMig" class="restaurant-logo">
-  
-  <h2 data-lang="welcome">¡Bienvenid@!</h2>
+  <!-- Reemplazamos el logo por el nombre del restaurante -->
+  <div class="restaurant-name" id="restaurantName">Tu Restaurante</div>
+
+  <h2 data-lang="welcome" id="mainTitle">¡Bienvenid@!</h2>
   <p data-lang="prompt">¿Qué te gustaría hacer?</p>
 
   <div class="button-group">
@@ -182,101 +162,89 @@
       <option value="it">Italiano</option>
     </select>
   </div>
-
 </main>
 
 <script>
-  /* --- 1. CONFIGURACIÓN DE DATOS --- */
+  /* --- 1. CONFIGURACIÓN --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", title:"Bienvenido a PataMig" },
-    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", title:"Welcome to PataMig" },
-    de: { welcome:"Willkommen!", prompt:"Was möchten Sie tun?", view_menu:"Menü anzeigen", leave_review:"Bewertung abgeben", share_with_friends:"Erfahrung teilen", title:"Willkommen bei PataMig" },
-    fr: { welcome:"Bienvenue!", prompt:"Que souhaitez-vous faire ?", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager l'expérience", title:"Bienvenue à PataMig" },
-    it: { welcome:"Benvenuto!", prompt:"Cosa vuoi fare?", view_menu:"Vedi il menù", leave_review:"Lascia recensione", share_with_friends:"Condividi esperienza", title:"Benvenuto a PataMig" }
+    es: { welcome:"¡Bienvenid@!", prompt:"¿Qué te gustaría hacer?", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia", title:"Bienvenido" },
+    en: { welcome:"Welcome!", prompt:"What would you like to do?", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", title:"Welcome" }
+    // ... añade otros idiomas si quieres
   };
 
-  const supportedLangs = ['es','en','de','fr','it'];
-  
-  // Elementos del DOM
-  const contentElements = document.querySelectorAll('[data-lang]');
-  const menuLink = document.getElementById("menuLink");
-  const reviewLink = document.getElementById("reviewLink");
-  const shareLink = document.getElementById("shareLink");
-  const langSelect = document.getElementById("lang-select");
-  const themeBtn = document.getElementById('themeBtn');
+  const params = new URLSearchParams(window.location.search);
 
-  /* --- 2. FUNCIONES DE LÓGICA --- */
+  /* --- 2. PERSONALIZACIÓN DEMO --- */
+  function applyDemoLogic() {
+    // Seguridad demo
+    if (params.get('auth') !== 'true') {
+      window.location.href = "https://taply.es"; 
+      return;
+    }
 
-  // Función para determinar y aplicar el idioma correcto
+    // Nombre del Restaurante
+    const name = params.get('n');
+    if (name) {
+      document.getElementById('restaurantName').textContent = name;
+      document.getElementById('mainTitle').textContent = `¡Bienvenid@ a ${name}!`;
+      document.title = name;
+    }
+
+    // Colores (opcional)
+    const c1 = params.get('btn'); // Color botón
+    const c2 = params.get('txt'); // Color texto botón
+    const c3 = params.get('bg');  // Color fondo web
+
+    if (c1) {
+      document.documentElement.style.setProperty('--btn-bg', '#' + c1);
+      document.documentElement.style.setProperty('--btn-border', '#' + c1);
+    }
+    if (c2) document.documentElement.style.setProperty('--btn-text', '#' + c2);
+    if (c3) document.documentElement.style.setProperty('--bg-color', '#' + c3);
+
+    document.body.style.opacity = "1";
+  }
+
+  /* --- 3. FUNCIONES EXISTENTES (IDIOMA Y TEMA) --- */
   function syncLanguage() {
-    let lang = localStorage.getItem('userLang');
-    
-    // Si no hay nada guardado, detectamos navegador
-    if (!lang) {
-      const browserLang = navigator.language.slice(0,2);
-      lang = supportedLangs.includes(browserLang) ? browserLang : 'es';
-    }
-
-    // Aplicar textos
+    let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
     if(!translations[lang]) lang = "es";
-    contentElements.forEach(el => { el.textContent = translations[lang][el.dataset.lang]; });
     
-    // Actualizar enlaces
-    menuLink.href = `carta.html?lang=${lang}`;
-    reviewLink.href = `restaurante_2.html?lang=${lang}`;
-    shareLink.href = `compartir_2.html?lang=${lang}`;
-    
-    // Actualizar título y selector
-    document.title = translations[lang].title;
-    langSelect.value = lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      if(translations[lang][el.dataset.lang]) {
+        el.textContent = translations[lang][el.dataset.lang];
+      }
+    });
+
+    document.getElementById("lang-select").value = lang;
   }
 
-  // Función para determinar y aplicar el tema correcto
   function syncTheme() {
-    let currentTheme = localStorage.getItem('theme');
-    
-    // Si no hay tema guardado, detectamos preferencia del sistema
-    if (!currentTheme) {
-      currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    // Aplicar al DOM
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    
-    // Actualizar Icono
-    themeBtn.innerHTML = currentTheme === 'dark' 
-      ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
-      : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+    let theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+    const btn = document.getElementById('themeBtn');
+    btn.innerHTML = theme === 'dark' ? '🌙' : '☀️';
   }
 
-  /* --- 3. EVENTOS Y EJECUCIÓN --- */
-
-  // Cambio manual de idioma
-  langSelect.addEventListener('change', () => {
-    localStorage.setItem('userLang', langSelect.value);
-    syncLanguage();
-  });
-
-  // Cambio manual de tema
-  themeBtn.addEventListener('click', () => {
+  /* --- 4. EVENTOS --- */
+  document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', newTheme);
     syncTheme();
   });
 
-  // **CLAVE**: Detectar cuando se vuelve a esta página (desde carta, atrás, etc.)
-  // El evento 'pageshow' se dispara incluso si la página se carga desde la caché del navegador (bfcache)
-  window.addEventListener('pageshow', () => {
+  document.getElementById('lang-select').addEventListener('change', (e) => {
+    localStorage.setItem('userLang', e.target.value);
     syncLanguage();
-    syncTheme();
   });
 
-  // Ejecución inicial por si acaso
-  syncLanguage();
-  syncTheme();
+  window.addEventListener('pageshow', () => {
+    syncTheme();
+    syncLanguage();
+    applyDemoLogic();
+  });
 
 </script>
-
 </body>
 </html>

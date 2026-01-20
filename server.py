@@ -1,7 +1,7 @@
 from flask import Flask, redirect, abort, request, jsonify, send_from_directory
 import os
 
-# Importamos las rutas y funciones
+# Importamos las rutas y funciones desde el generador
 from generadorqr import create_qr, load_mapping, save_mapping, QR_DIR
 
 app = Flask(__name__)
@@ -16,6 +16,7 @@ def redirect_code(code):
     mapping = load_mapping()
     if code in mapping:
         data = mapping[code]
+        # Soporte para formato nuevo (diccionario) y viejo (string)
         if isinstance(data, dict):
             url_destino = data.get("url")
         else:
@@ -43,7 +44,6 @@ def api_create_qr():
         
     except Exception as e:
         print(f"[ERROR CRITICO] Al crear QR: {e}")
-        # Esto imprimirá el error real en la consola en vez de solo "500"
         return jsonify({"error": str(e)}), 500
 
 # 🔄 ACTUALIZAR DESTINO
@@ -71,7 +71,41 @@ def update_qr():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 🖼️ SERVIR IMÁGENES QR (VERSIÓN BLINDADA)
+# 🗑️ ELIMINAR QR (NUEVO)
+# Esta función borra el registro del JSON y el archivo físico
+@app.route("/api/delete_qr", methods=["POST"])
+def delete_qr():
+    try:
+        data = request.get_json()
+        code = data.get("code")      # ID del QR
+        filename = data.get("image") # Nombre del archivo png
+
+        # 1. Borrar del JSON (mapping.json)
+        mapping = load_mapping()
+        if code in mapping:
+            del mapping[code]
+            save_mapping(mapping)
+            print(f"[INFO] Mapping eliminado para ID: {code}")
+
+        # 2. Borrar archivo físico (.png)
+        if filename:
+            # Construimos la ruta completa
+            file_path = os.path.join(QR_DIR, filename)
+            
+            # Verificamos si existe antes de intentar borrar
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print(f"[INFO] Archivo borrado fisicamente: {file_path}")
+            else:
+                print(f"[AVISO] El archivo no existía para borrar: {file_path}")
+
+        return jsonify({"ok": True})
+
+    except Exception as e:
+        print(f"[ERROR] Borrando QR: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# 🖼️ SERVIR IMÁGENES QR
 @app.route("/QR/<filename>")
 def serve_qr(filename):
     try:

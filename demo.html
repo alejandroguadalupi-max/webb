@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taply | Generador de Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f9fafb;
+            --card: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --primary: #000000;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 0 0 10px 0; }
+        p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 10px; border: 1px solid var(--border);
+            border-radius: 6px; box-sizing: border-box; font-size: 1rem;
+        }
+        
+        .color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; text-align: left; }
+        .color-item label { font-size: 0.75rem; text-align: center; display: block; }
+        input[type="color"] { width: 100%; height: 40px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; padding: 2px; background: white; }
+
+        button {
+            width: 100%; padding: 14px; background: var(--primary); color: white;
+            border: none; border-radius: 6px; font-weight: 600; font-size: 1rem;
+            cursor: pointer; transition: opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
+        
+        .logo-text { font-weight: 800; margin-bottom: 20px; display: inline-block; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-text">taply.es</div>
+        <h2>Configurar Demo</h2>
+        <p>Introduce los datos para personalizar la vista.</p>
+
+        <div class="form-group">
+            <label>Nombre del Restaurante</label>
+            <input type="text" id="nombre" placeholder="Ej: La Trattoria">
+        </div>
+
+        <div class="color-grid">
+            <div class="color-item">
+                <label>Botón</label>
+                <input type="color" id="c1" value="#000000">
+            </div>
+            <div class="color-item">
+                <label>Texto</label>
+                <input type="color" id="c2" value="#ffffff">
+            </div>
+            <div class="color-item">
+                <label>Fondo</label>
+                <input type="color" id="c3" value="#ffffff">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>URL Logo (Opcional)</label>
+            <input type="text" id="logoUrl" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+            <label>PIN de Seguridad</label>
+            <input type="password" id="pin" placeholder="••••">
+        </div>
+        
+        <button onclick="generar()">Generar y Ver</button>
+    </div>
+
+    <script>
+        function generar() {
+            const n = document.getElementById('nombre').value;
+            const c1 = document.getElementById('c1').value.replace('#','');
+            const c2 = document.getElementById('c2').value.replace('#','');
+            const c3 = document.getElementById('c3').value.replace('#','');
+            const logo = document.getElementById('logoUrl').value;
+            const p = document.getElementById('pin').value;
+
+            // --- AQUÍ ESTABA EL CAMBIO ---
+            // Cambia "1234" por tu contraseña real
+            if(p === "1234") { 
+                let url = `principal.html?n=${encodeURIComponent(n)}&btn=${c1}&txt=${c2}&bg=${c3}&auth=true`;
+                
+                if(logo) url += `&logo=${encodeURIComponent(logo)}`;
+                
+                // Redirige a principal.html
+                window.location.href = url;
+            } else {
+                alert("PIN incorrecto");
+            }
+        }
+    </script>
+</body>
+</html>
