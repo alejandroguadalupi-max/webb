@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, maximum-scale=1" />
-<title>Mi Lista de Pedido</title>
+<title>Menú</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,36 +11,35 @@
 
 <style>
 :root {
-  /* --- Paleta PataMig --- */
-  --bg-body: #E8F5E1;
+  /* --- Variables Base (Se sobreescriben por JS) --- */
+  --bg-body: #ffffff;
   --bg-card: #ffffff;
-   
+  
   --text-main: #2d3436;
   --text-sec: #636e72;
-   
+  
+  /* Color Principal Dinámico */
   --primary: #68B553; 
   --primary-dark: #509e3c;
   --primary-light: #eafbe4;
-   
-  --shadow-card: 0 8px 30px rgba(0,0,0,0.04);
-  --shadow-float: 0 15px 35px rgba(104, 181, 83, 0.25);
-   
+  
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.06);
+  --shadow-float: 0 15px 35px rgba(0, 0, 0, 0.2);
+  
   --border: #f1f2f6;
-  --radius: 20px;
+  --radius: 16px;
   --font: 'Plus Jakarta Sans', sans-serif;
-   
+  
   --spanish-btn: #FFC107; 
 }
 
 [data-theme="dark"] {
-  --bg-body: #0f0f0f;
-  --bg-card: #1a1a1a;
+  --bg-body: #121212;
+  --bg-card: #1e1e1e;
   --text-main: #f5f6fa;
   --text-sec: #a4b0be;
-  --primary: #68B553;
-  --primary-dark: #68B553;
-  --primary-light: rgba(104, 181, 83, 0.15);
-  --shadow-card: 0 8px 30px rgba(0,0,0,0.3);
+  /* En dark mode, el primary se mantiene o ajusta ligeramente */
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.4);
   --border: #2f3640;
   --spanish-btn: #FFD54F;
 }
@@ -54,236 +53,195 @@ body {
 
 /* --- HEADER --- */
 .header {
-  /* Se desplaza con el scroll */
-  background: rgba(var(--bg-card), 0.95);
-  backdrop-filter: blur(12px);
+  background: var(--bg-card);
   padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
-   
-  /* CAMBIO: Eliminado el border-bottom para quitar la línea molesta */
-  border-bottom: none; 
+  position: sticky; top: 0; z-index: 800;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-/* Grupo Izquierdo: Título y Alergias juntos */
-.header-left-group {
-  display: flex; 
-  flex-direction: column; 
-  gap: 8px;
-  align-items: flex-start;
+.brand-area { display: flex; flex-direction: column; }
+.brand-name {
+  font-size: 1.6rem; 
+  font-weight: 800; 
+  color: var(--primary); 
+  margin: 0; line-height: 1;
+  text-transform: capitalize;
 }
+.brand-category { font-size: 0.8rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-.brand {
-  font-size: 2.4rem; 
-  font-weight: 800; letter-spacing: -1px; color: var(--primary); margin: 0;
-  line-height: 1;
-}
-
-/* Grupo Derecho: Idioma y Tema */
-.header-right-tools { 
-  display: flex; align-items: center; gap: 8px; 
-  align-self: flex-start; 
-  padding-top: 5px;
-}
-
-/* Selector Alergias - Estilo mejorado */
-.allergy-select {
-  appearance: none; -webkit-appearance: none;
-  background: var(--bg-body); 
-   
-  /* Borde visible en Modo Claro */
-  border: 2px solid #ced6e0; 
-   
-  color: var(--text-main); font-family: inherit;
-  font-size: 0.95rem; 
-  font-weight: 700;
-  padding: 8px 16px; 
-  border-radius: 50px;
-  cursor: pointer; outline: none; text-align: left;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  min-width: 140px;
-}
-
-/* Quitar el borde fuerte en modo oscuro */
-[data-theme="dark"] .allergy-select {
-  border: 1px solid var(--border);
-}
+/* Grupo Derecho */
+.header-right { display: flex; align-items: center; gap: 10px; }
 
 .lang-badge {
-  font-size: 0.8rem; font-weight: 800; border: 1px solid var(--border); 
+  font-size: 0.75rem; font-weight: 800; border: 1px solid var(--border); 
   background: var(--bg-body); color: var(--text-sec); 
-  padding: 8px 10px; border-radius: 50px; cursor: default;
+  padding: 6px 10px; border-radius: 50px; cursor: default;
 }
 
 .theme-btn { 
   background: none; border: none; cursor: pointer; padding: 4px; 
   color: var(--text-main); display: flex; align-items: center; justify-content: center;
 }
-.theme-btn svg { width: 24px; height: 24px; }
+.theme-btn svg { width: 22px; height: 22px; }
 
-.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
-
-/* Subheader educativo */
-
-.info-bar {
-  padding: 10px 24px; background: var(--bg--body); color: var(--primary-dark);
-  font-size: 0.85rem; font-weight: 600; text-align: center;
+/* FILTROS Y ALERGIAS */
+.controls-area {
+  padding: 15px 20px 5px 20px;
+  background: var(--bg-body);
 }
 
-/* Filtros: Ahora solo esto es sticky */
-.filters-wrap {
-  position: sticky; 
-  top: 0px; /* Pegado justo debajo de donde estaba el header, que ahora desaparece */
-  z-index: 900; 
-  padding: 12px 0; margin-bottom: 10px;
-  background: linear-gradient(to bottom, var(--bg-body) 85%, transparent);
+.allergy-select {
+  width: 100%;
+  appearance: none; -webkit-appearance: none;
+  background: var(--bg-card); 
+  border: 1px solid var(--border); 
+  color: var(--text-main); font-family: inherit;
+  font-size: 0.9rem; font-weight: 600;
+  padding: 10px 16px; border-radius: 12px;
+  cursor: pointer; outline: none; margin-bottom: 15px;
 }
 
-.filters-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 24px; scrollbar-width: none; }
+/* Scroll Horizontal Filtros */
+.filters-scroll { 
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; 
+}
 .filters-scroll::-webkit-scrollbar { display: none; }
-.filter-pill {
-  padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 50px; 
-  white-space: nowrap; font-size: 0.9rem; font-weight: 600; color: var(--text-sec); cursor: pointer; transition: 0.2s;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-}
-.filter-pill.active { color: white; background: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px var(--primary-light); }
 
-/* Grid Platos */
-.menu-grid { display: flex; flex-direction: column; gap: 16px; padding: 0 20px; max-width: 800px; margin: 0 auto; }
+.filter-pill {
+  padding: 8px 18px; 
+  background: var(--bg-card); 
+  border: 1px solid var(--border); 
+  border-radius: 50px; 
+  white-space: nowrap; 
+  font-size: 0.9rem; font-weight: 600; 
+  color: var(--text-sec); cursor: pointer; transition: 0.2s;
+}
+.filter-pill.active { 
+  color: #fff; /* Texto siempre blanco para contraste */
+  background: var(--primary); 
+  border-color: var(--primary); 
+  box-shadow: 0 4px 12px var(--primary-light); 
+}
+
+/* MENU GRID */
+.menu-grid { display: flex; flex-direction: column; gap: 16px; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
+
 .dish-card {
   background: var(--bg-card); border-radius: var(--radius); padding: 16px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  box-shadow: var(--shadow-card); border: 1px solid var(--border); transition: 0.2s;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  box-shadow: var(--shadow-card); border: 1px solid transparent; transition: 0.2s;
 }
-.dish-card:active { transform: scale(0.98); }
-.dish-info { flex: 1; }
-.dish-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; }
-.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
-.dish-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 75px; }
-.dish-price { font-weight: 700; font-size: 1rem; color: var(--primary-dark); }
-.add-btn {
-  background: var(--primary-light); color: var(--primary-dark); border: none; height: 36px; padding: 0 16px; 
-  border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
-}
-.add-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px var(--primary-light); }
+/* Borde sutil al hover en desktop o active en mobile */
+.dish-card:active { border-color: var(--primary); transform: scale(0.99); }
 
-/* Float Button */
+.dish-info { flex: 1; }
+.dish-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.2; color: var(--text-main); }
+.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; margin-top: 6px; }
+
+.dish-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 70px; }
+.dish-price { font-weight: 800; font-size: 1rem; color: var(--primary); }
+
+.add-btn {
+  background: var(--bg-body); color: var(--primary); 
+  border: 1px solid var(--primary); 
+  height: 34px; padding: 0 14px; 
+  border-radius: 10px; font-size: 1.2rem; font-weight: 700; 
+  cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.add-btn.active { 
+  background: var(--primary); color: #fff; 
+  box-shadow: 0 4px 10px var(--primary-light);
+}
+
+/* FLOAT CART BUTTON */
 #cart-float {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px) scale(0.9);
   background: var(--text-main); color: var(--bg-card); 
   padding: 16px 28px; border-radius: 100px; 
-  display: flex; align-items: center; gap: 16px; justify-content: center;
-  box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex; align-items: center; gap: 12px; justify-content: center;
+  box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   font-weight: 700; font-size: 1rem;
 }
 #cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
-.badge-count { background: var(--primary); color: white; padding: 2px 8px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
+.badge-count { background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
 
-/* MODAL / SHEET */
+/* --- SHEET / MODAL (Igual que antes pero adaptado) --- */
 .overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
   z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; justify-content: center; align-items: flex-end;
 }
 .overlay.open { opacity: 1; pointer-events: auto; }
+
 .sheet {
-  background: var(--bg-card); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 32px 32px 0 0;
+  background: var(--bg-card); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 24px 24px 0 0;
   padding: 24px; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
 }
 .overlay.open .sheet { transform: translateY(0); }
 
-.sheet-header { 
-  display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed var(--border); 
-}
-.header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
 
-.waiter-controls { display: flex; gap: 10px; width: 100%; }
+/* Waiter Controls */
+.waiter-box { background: var(--bg-body); border-radius: 12px; padding: 15px; margin-bottom: 15px; display: none; }
 .translate-btn {
-  width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px; border-radius: 14px; background: var(--bg-body); border: 1px solid var(--border);
-  font-weight: 700; font-size: 0.95rem; cursor: pointer; color: var(--text-sec); transition: 0.2s;
+  width: 100%; padding: 12px; border-radius: 10px; background: var(--border); border: none;
+  font-weight: 700; cursor: pointer; color: var(--text-sec); display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.translate-btn.active {
-  background: var(--spanish-btn); color: black; border-color: var(--spanish-btn); box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
-}
+.translate-btn.active { background: var(--spanish-btn); color: #000; }
 
-.order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-.order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-body); border-radius: 16px; }
-.qty-controls { display: flex; align-items: center; gap: 12px; }
-.qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 
-.waiter-qty { display: none; }
+.order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.order-item:last-child { border-bottom: none; }
 
-.empty-state { text-align: center; padding: 40px 20px; color: var(--text-sec); }
-.empty-icon { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
-.empty-text { font-size: 0.95rem; line-height: 1.6; }
+.qty-controls { display: flex; align-items: center; gap: 10px; }
+.qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-body); color: var(--text-main); font-weight: 700; cursor: pointer; }
 
-.notes-container { margin-top: auto; }
-textarea.notes {
-  width: 100%; padding: 16px; border-radius: 16px; background: var(--bg-body); border: 2px solid var(--border);
-  color: var(--text-main); font-family: inherit; resize: none; outline: none; font-size: 0.95rem; margin-bottom: 10px; transition: 0.3s;
-}
-textarea.notes:focus { border-color: var(--primary); }
-.clear-btn { margin-top:15px; width: 100%; background:none; border:none; color:var(--text-sec); text-decoration:underline; cursor:pointer; font-size:0.9rem; opacity: 0.7;}
+/* MODO CAMARERO ESTILOS */
+.sheet.waiter-mode { height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 60px; }
+.sheet.waiter-mode .order-item { padding: 20px 0; border-bottom: 2px solid var(--border); }
+.sheet.waiter-mode .order-name { font-size: 1.4rem; font-weight: 800; }
+.sheet.waiter-mode .waiter-qty-big { font-size: 1.8rem; font-weight: 900; color: var(--primary); margin-right: 15px; display: block; }
+.waiter-qty-big { display: none; }
 
-/* --- MODO CAMARERO --- */
-.sheet.waiter-mode {
-  height: 100% !important; max-height: 100vh !important;
-  border-radius: 0; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-  transform: translateY(0); z-index: 3000; padding-top: 80px;
-}
-.sheet.waiter-mode .sheet-header, 
-.sheet.waiter-mode .notes-container #waiterMsg, 
-.sheet.waiter-mode .clear-btn, 
-.sheet.waiter-mode .qty-controls { display: none !important; }
-
-.sheet.waiter-mode .order-item { border-bottom: 2px solid var(--border); padding: 25px 20px; justify-content: flex-start; }
-.sheet.waiter-mode .order-item div { font-size: 1.6rem !important; font-weight: 800 !important; color: var(--text-main); }
-.sheet.waiter-mode .waiter-qty { display: block !important; font-size: 2rem !important; font-weight: 900; color: var(--primary); margin-right: 20px; }
-.sheet.waiter-mode textarea.notes { font-size: 1.3rem; font-weight: 700; color: var(--spanish-btn); border-color: var(--spanish-btn); }
-
-/* Botón "X" de cerrar modo camarero */
 #closeWaiterBtn {
-  display: none; position: absolute; top: 25px; right: 25px; z-index: 3001;
-  background: rgba(0,0,0,0.6); /* Fondo semi-transparente */
-  color: white;
-  width: 44px; height: 44px; /* Redondo */
-  border: none; border-radius: 50%;
-  font-weight: 400; font-size: 1.5rem; line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  display: flex; align-items: center; justify-content: center;
+  position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: #000; color: #fff;
+  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; z-index: 3001;
 }
-/* Ocultamos el botón por defecto, solo visible via JS en modo camarero */
-body:not(.waiter-active) #closeWaiterBtn { display: none !important; }
+
+textarea.notes {
+  width: 100%; padding: 12px; border-radius: 12px; background: var(--bg-body); border: 1px solid var(--border);
+  color: var(--text-main); font-family: inherit; resize: none; outline: none; margin-bottom: 10px;
+}
+
+.clear-link { text-align: center; font-size: 0.9rem; color: var(--text-sec); text-decoration: underline; cursor: pointer; margin-top: 10px; }
+
 </style>
 </head>
-<body id="bodyTag">
+<body>
 
 <header class="header">
-  <div class="header-left-group">
-    <h1 class="brand">Carta</h1>
-    <select id="allergyFilter" class="allergy-select" onchange="applyAllergyFilter()">
-      <option value="">ALERGIAS ▾</option>
-      <option value="gf">🌾 Sin Gluten</option>
-      <option value="lf">🥛 Sin Lactosa</option>
-      <option value="v">🌱 Vegano</option>
-    </select>
+  <div class="brand-area">
+    <h1 class="brand-name" id="brandNameDisplay">Restaurante</h1>
+    <span class="brand-category" id="catDisplay">Menu</span>
   </div>
-   
-  <div class="header-right-tools">
+  
+  <div class="header-right">
     <div class="lang-badge" id="langDisplay">ES</div>
     <button class="theme-btn" id="themeBtn"></button>
   </div>
 </header>
 
-<hr style="border: 1.5px solid rgb(162, 151, 151)">
-<div class="info-bar" data-lang="infoBar">
-  📝 Añade platos aquí para dictarlos luego.
-</div>
-<hr style="border: 1.5px solid rgb(162, 151, 151)">
+<div class="controls-area">
+  <select id="allergyFilter" class="allergy-select" onchange="render()">
+    <option value="">🌱 Filtrar Alergias / Dietas</option>
+    <option value="gf">🌾 Sin Gluten</option>
+    <option value="lf">🥛 Sin Lactosa</option>
+    <option value="v">🥦 Vegano</option>
+  </select>
 
-<div class="filters-wrap">
   <div class="filters-scroll">
     <button class="filter-pill active" onclick="filter('bebidas')" id="f-drk">Bebidas</button>
     <button class="filter-pill" onclick="filter('entrantes')" id="f-ent">Entrantes</button>
@@ -292,11 +250,12 @@ body:not(.waiter-active) #closeWaiterBtn { display: none !important; }
   </div>
 </div>
 
-<div class="menu-grid" id="menuContainer"></div>
+<div class="menu-grid" id="menuContainer">
+  </div>
 
 <div id="cart-float" onclick="openSheet()">
   <span class="badge-count" id="countBadge">0</span>
-  <span id="btnText">Ver mi Lista</span>
+  <span id="btnText">Ver Pedido</span>
 </div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
@@ -304,346 +263,324 @@ body:not(.waiter-active) #closeWaiterBtn { display: none !important; }
 
   <div class="sheet" id="orderSheet">
     <div class="sheet-header">
-      <div class="header-top">
-        <h3 style="margin:0; font-size:1.5rem; letter-spacing:-0.5px" id="modalTitle">Tu Lista</h3>
-        <div onclick="closeSheet()" style="cursor:pointer; padding:8px; opacity:0.5; font-size:1.5rem">×</div>
-      </div>
-       
-      <div class="waiter-controls" id="waiterControls">
-        <button id="translateBtn" class="translate-btn" onclick="enterWaiterMode()">
-          <span>🇪🇸</span> <span id="transText">Mostrar al Camarero (ES)</span>
-        </button>
-      </div>
+      <h3 style="margin:0; font-size:1.4rem" id="modalTitle">Tu Pedido</h3>
+      <div onclick="closeSheet()" style="cursor:pointer; padding:5px; opacity:0.5; font-size:1.5rem">×</div>
+    </div>
+    
+    <div class="waiter-box" id="waiterBox">
+      <button id="translateBtn" class="translate-btn" onclick="enterWaiterMode()">
+        <span>🗣️</span> <span id="transText">Mostrar al Camarero (ES)</span>
+      </button>
     </div>
     
     <div class="order-list" id="orderList"></div>
 
-    <div class="notes-container">
-      <textarea class="notes" id="notesField" placeholder="Notas..." oninput="saveNotes()"></textarea>
-      <div style="text-align:center; font-size:0.85rem; color:var(--text-sec); font-weight:500" id="waiterMsg">💡 Lee esto al camarero.</div>
+    <div class="notes-container" id="notesArea">
+      <textarea class="notes" id="notesField" placeholder="Notas (ej. sin hielo, carne muy hecha...)" oninput="saveNotes()"></textarea>
     </div>
     
-    <button onclick="clearCart()" class="clear-btn" id="clearTxt">Borrar lista</button>
+    <div onclick="clearCart()" class="clear-link" id="clearTxt">Borrar todo</div>
   </div>
 </div>
 
 <script>
-/* --- DICCIONARIO --- */
-const i18n = {
-  es: { 
-    ent: "Entrantes", main: "Principales", des: "Postres", drk: "Bebidas", 
-    btn: "Ver mi Lista", title: "Tu Lista", msg: "💡 Lee esta lista al camarero/a.", clear: "Borrar todo", 
-    empty: "Tu lista está vacía.<br>Añade platos para organizarte.", ph: "Notas (ej. sin hielo...)", trans: "Modo Camarero", 
-    infoBar: "📝 Ve añadiendo platos a tu lista para preparar tu pedido.", translating: "Traduciendo..."
+/* --- 1. CONFIGURACIÓN DINÁMICA (PALETAS Y MENÚS) --- */
+const config = {
+  // Paletas de Colores
+  palettes: {
+    'hamburgueseria': { primary: '#FF8C00', light: '#FFF3E0', dark: '#E65100' },
+    'pizzeria':       { primary: '#D32F2F', light: '#FFEBEE', dark: '#B71C1C' },
+    'asiatico':       { primary: '#E91E63', light: '#FCE4EC', dark: '#C2185B' },
+    'cafe':           { primary: '#8D6E63', light: '#EFEBE9', dark: '#5D4037' },
+    'restaurante':    { primary: '#2E7D32', light: '#E8F5E9', dark: '#1B5E20' }, // Default
+    'default':        { primary: '#68B553', light: '#eafbe4', dark: '#509e3c' }
   },
-  en: { 
-    ent: "Starters", main: "Mains", des: "Desserts", drk: "Drinks", 
-    btn: "View my List", title: "Your List", msg: "💡 Read this list to the waiter.", clear: "Clear all", 
-    empty: "Your list is empty.", ph: "Notes (e.g. no ice...)", trans: "Show Waiter (ES)", 
-    infoBar: "📝 Add dishes here to prepare your order.", translating: "Translating..."
-  },
-  de: { 
-    ent: "Vorspeisen", main: "Hauptspeisen", des: "Desserts", drk: "Getränke", 
-    btn: "Meine Liste", title: "Deine Liste", msg: "💡 Dem Kellner vorlesen.", clear: "Löschen", 
-    empty: "Deine Liste ist leer.", ph: "Notizen...", trans: "Dem Kellner zeigen (ES)", 
-    infoBar: "📝 Füge hier Gerichte hinzu.", translating: "Übersetzen..."
-  },
-  fr: { 
-    ent: "Entrées", main: "Plats", des: "Desserts", drk: "Boissons", 
-    btn: "Ma Liste", title: "Votre Liste", msg: "💡 Lire au serveur.", clear: "Effacer", 
-    empty: "Votre liste est vide.", ph: "Notes...", trans: "Montrer au serveur (ES)", 
-    infoBar: "📝 Ajoutez des plats ici.", translating: "Traduction..."
-  },
-  it: { 
-    ent: "Antipasti", main: "Primi/Secondi", des: "Dolci", drk: "Bevande", 
-    btn: "La mia Lista", title: "La tua Lista", msg: "💡 Leggi al cameriere.", clear: "Cancella", 
-    empty: "La tua lista è vuota.", ph: "Note...", trans: "Mostra al cameriere (ES)", 
-    infoBar: "📝 Aggiungi qui i piatti.", translating: "Traducendo..."
+  
+  // Menús Diferentes según Categoría
+  menus: {
+    'pizzeria': [
+       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.00, name: {es:"Provolone Fundido", en:"Melted Provolone"}, desc: {es:"Con tomate y orégano", en:"Tomato & oregano"} },
+       { id: 102, cat: 'principales', tags: [], price: 12.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil"} },
+       { id: 103, cat: 'principales', tags: [], price: 14.50, name: {es:"Pizza Diavola", en:"Pizza Diavola"}, desc: {es:"Picante con salami", en:"Spicy salami"} },
+       { id: 104, cat: 'postres', tags: [], price: 6.00, name: {es:"Tiramisú", en:"Tiramisu"}, desc: {es:"Casero", en:"Homemade"} }
+    ],
+    'hamburgueseria': [
+       { id: 201, cat: 'entrantes', tags: ['v'], price: 7.50, name: {es:"Nachos con Queso", en:"Cheese Nachos"}, desc: {es:"Con guacamole", en:"With guacamole"} },
+       { id: 202, cat: 'principales', tags: [], price: 11.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Queso cheddar y bacon", en:"Cheddar & bacon"} },
+       { id: 203, cat: 'principales', tags: ['v'], price: 12.00, name: {es:"Burger Vegana", en:"Vegan Burger"}, desc: {es:"Heura y aguacate", en:"Heura & avocado"} },
+       { id: 204, cat: 'postres', tags: [], price: 5.50, name: {es:"Brownie", en:"Brownie"}, desc: {es:"Con helado", en:"With ice cream"} }
+    ],
+    'asiatico': [
+       { id: 301, cat: 'entrantes', tags: [], price: 5.50, name: {es:"Gyozas de Pollo", en:"Chicken Gyozas"}, desc: {es:"4 unidades", en:"4 units"} },
+       { id: 302, cat: 'principales', tags: [], price: 13.00, name: {es:"Ramen Tonkotsu", en:"Tonkotsu Ramen"}, desc: {es:"Caldo de cerdo y fideos", en:"Pork broth noodles"} },
+       { id: 303, cat: 'principales', tags: ['gf'], price: 15.00, name: {es:"Sushi Mix (12p)", en:"Sushi Mix (12p)"}, desc: {es:"Salmón y atún", en:"Salmon & tuna"} },
+       { id: 304, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Mochi de Té Verde", en:"Green Tea Mochi"}, desc: {es:"2 unidades", en:"2 units"} }
+    ],
+    'cafe': [
+       { id: 401, cat: 'entrantes', tags: ['v'], price: 3.50, name: {es:"Croissant Mantequilla", en:"Butter Croissant"}, desc: {es:"Recién horneado", en:"Freshly baked"} },
+       { id: 402, cat: 'principales', tags: ['v'], price: 8.50, name: {es:"Tostada Aguacate", en:"Avocado Toast"}, desc: {es:"Con huevo poché", en:"Poached egg"} },
+       { id: 403, cat: 'principales', tags: [], price: 9.00, name: {es:"Sandwich Club", en:"Club Sandwich"}, desc: {es:"Pollo, bacon, lechuga", en:"Chicken, bacon, lettuce"} },
+       { id: 404, cat: 'bebidas', tags: ['gf'], price: 4.00, name: {es:"Smoothie Verde", en:"Green Smoothie"}, desc: {es:"Espinacas y manzana", en:"Spinach & apple"} }
+    ],
+    // Bebidas Comunes (se añaden siempre)
+    'comunes': [
+       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke"}, desc: {es:"33cl", en:"33cl"} },
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water"}, desc: {es:"50cl", en:"50cl"} },
+       { id: 903, cat: 'bebidas', tags: ['gf'], price: 3.00, name: {es:"Cerveza", en:"Beer"}, desc: {es:"Local", en:"Local"} }
+    ]
   }
 };
 
-/* --- TRADUCCIÓN DE NOTAS --- */
-const foodDictionary = {
-  "no": "sin", "without": "sin", "with": "con", "ice": "hielo", "water": "agua", "hot": "caliente", "cold": "frío", "spicy": "picante", "sauce": "salsa", "onion": "cebolla", "cheese": "queso", "meat": "carne", "chicken": "pollo", "please": "por favor", "allergy": "alergia", "gluten": "gluten", "beer": "cerveza"
-};
-
-/* --- DATOS NUEVOS (TIPO BOCATERÍA/BURGER) --- */
-const menu = [
-  // BEBIDAS
-  { id: 201, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola", en: "Coca-Cola", de: "Coca-Cola", fr: "Coca-Cola", it: "Coca-Cola" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 202, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Coca-Cola Zero", en: "Coke Zero", de: "Cola Zero", fr: "Coca Zéro", it: "Coca Zero" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 203, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.50, name: { es: "Fanta Naranja", en: "Fanta Orange", de: "Fanta Orange", fr: "Fanta Orange", it: "Fanta Arancia" }, desc: { es: "33cl", en: "33cl", de: "33cl", fr: "33cl", it: "33cl" } },
-  { id: 208, tags: ['gf','lf','v'], cat: 'bebidas', price: 2.20, name: { es: "Cerveza (Caña)", en: "Beer (Glass)", de: "Bier", fr: "Bière (Verre)", it: "Birra" }, desc: { es: "Estrella", en: "Local beer", de: "Lokales Bier", fr: "Bière locale", it: "Birra locale" } },
-  { id: 207, tags: ['gf','lf','v'], cat: 'bebidas', price: 1.80, name: { es: "Agua", en: "Water", de: "Wasser", fr: "Eau", it: "Acqua" }, desc: { es: "50cl", en: "50cl", de: "50cl", fr: "50cl", it: "50cl" } },
-  
-  // ENTRANTES
-  { id: 10, tags: ['gf','lf','v'], cat: 'entrantes', price: 5.50, name: { es: "Patatas Bravas", en: "Spicy Potatoes (Bravas)", de: "Pikante Kartoffeln", fr: "Pommes de terre épicées", it: "Patate piccanti" }, desc: { es: "Con salsa casera.", en: "With house sauce.", de: "Mit Haussauce.", fr: "Sauce maison.", it: "Con salsa della casa." } },
-  { id: 11, tags: [], cat: 'entrantes', price: 6.50, name: { es: "Nachos con Queso", en: "Nachos with Cheese", de: "Nachos mit Käse", fr: "Nachos au fromage", it: "Nachos con formaggio" }, desc: { es: "Guacamole y jalapeños.", en: "Guacamole & jalapeños.", de: "Guacamole & Jalapeños.", fr: "Guacamole et piments.", it: "Guacamole e jalapeños." } },
-  { id: 12, tags: ['gf'], cat: 'entrantes', price: 7.00, name: { es: "Alitas de Pollo", en: "Chicken Wings", de: "Hähnchenflügel", fr: "Ailes de poulet", it: "Ali di pollo" }, desc: { es: "6 unidades, salsa barbacoa.", en: "6 units, BBQ sauce.", de: "6 Stück, BBQ-Sauce.", fr: "6 unités, sauce BBQ.", it: "6 unità, salsa BBQ." } },
-
-  // PRINCIPALES (BOCADILLOS/BURGERS)
-  { id: 20, tags: [], cat: 'principales', price: 9.50, name: { es: "Hamburguesa Completa", en: "Full Burger", de: "Komplett-Burger", fr: "Burger Complet", it: "Burger Completo" }, desc: { es: "Carne, huevo, bacon, queso.", en: "Beef, egg, bacon, cheese.", de: "Fleisch, Ei, Speck, Käse.", fr: "Bœuf, œuf, bacon, fromage.", it: "Manzo, uovo, pancetta." } },
-  { id: 21, tags: [], cat: 'principales', price: 6.50, name: { es: "Bocadillo de Lomo", en: "Pork Loin Sandwich", de: "Lendenbrötchen", fr: "Sandwich au filet", it: "Panino con lombo" }, desc: { es: "Con queso y pimientos.", en: "With cheese & peppers.", de: "Mit Käse & Paprika.", fr: "Fromage et poivrons.", it: "Con formaggio e peperoni." } },
-  { id: 22, tags: [], cat: 'principales', price: 7.00, name: { es: "Bocadillo de Calamares", en: "Calamari Sandwich", de: "Tintenfischbrötchen", fr: "Sandwich aux calmars", it: "Panino con calamari" }, desc: { es: "Clásico con mayonesa.", en: "Classic with mayo.", de: "Klassisch mit Mayo.", fr: "Classique avec mayo.", it: "Classico con maionese." } },
-  { id: 23, tags: [], cat: 'principales', price: 5.50, name: { es: "Perrito Caliente", en: "Hot Dog", de: "Hot Dog", fr: "Hot Dog", it: "Hot Dog" }, desc: { es: "Cebolla frita y ketchup.", en: "Fried onion & ketchup.", de: "Röstzwiebeln & Ketchup.", fr: "Oignons frits & ketchup.", it: "Cipolla fritta e ketchup." } },
-
-  // POSTRES
-  { id: 30, tags: [], cat: 'postres', price: 4.50, name: { es: "Brownie Casero", en: "Homemade Brownie", de: "Hausgemachter Brownie", fr: "Brownie maison", it: "Brownie fatto in casa" }, desc: { es: "Con nueces.", en: "With walnuts.", de: "Mit Walnüssen.", fr: "Aux noix.", it: "Con noci." } },
-  { id: 31, tags: ['gf'], cat: 'postres', price: 5.00, name: { es: "Tarta de Queso", en: "Cheesecake", de: "Käsekuchen", fr: "Gâteau au fromage", it: "Cheesecake" }, desc: { es: "Con mermelada de fresa.", en: "With strawberry jam.", de: "Mit Erdbeermarmelade.", fr: "Confiture de fraise.", it: "Marmellata di fragole." } }
-];
-
 /* --- ESTADO --- */
 let cart = {};
-let filterCat = 'bebidas';
+let activeCategory = 'principales'; // Categoría por defecto al entrar
 let lang = 'es';
-let waiterMode = false; 
-let originalNote = ""; 
-let currentAllergy = ""; 
+let currentMenu = [];
+let userCategory = 'restaurante'; // Tipo de restaurante detectado
 
-function loadCart() {
-  const saved = localStorage.getItem('pataMig_cart');
-  if(saved) cart = JSON.parse(saved) || {};
-  const savedNotes = localStorage.getItem('pataMig_notes');
-  if(savedNotes) document.getElementById('notesField').value = savedNotes;
-}
-function saveCart() { localStorage.setItem('pataMig_cart', JSON.stringify(cart)); }
-function saveNotes() { localStorage.setItem('pataMig_notes', document.getElementById('notesField').value); }
-
-/* --- LOGICA INICIAL --- */
+/* --- INIT --- */
 function init() {
-  const urlP = new URLSearchParams(window.location.search).get('lang');
-  const saved = localStorage.getItem('userLang');
-  const browser = navigator.language.slice(0,2);
-   
-  if(urlP && i18n[urlP]) lang = urlP;
-  else if(saved && i18n[saved]) lang = saved;
-  else if(i18n[browser]) lang = browser;
-   
-  localStorage.setItem('userLang', lang);
+  const params = new URLSearchParams(window.location.search);
+  
+  // 1. Configurar Idioma
+  lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
-   
-  loadCart(); 
+  
+  // 2. Detectar Restaurante y Categoría
+  const name = params.get('n') || "Restaurante";
+  userCategory = params.get('categoria') || 'restaurante';
+  
+  document.getElementById('brandNameDisplay').innerText = name;
+  document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
+  
+  // 3. Aplicar Paleta de Colores
+  const palette = config.palettes[userCategory] || config.palettes['default'];
+  const root = document.documentElement.style;
+  root.setProperty('--primary', palette.primary);
+  root.setProperty('--primary-light', palette.light);
+  root.setProperty('--primary-dark', palette.dark);
+
+  // 4. Construir Menú (Específico + Comunes)
+  // Si no existe menú específico, usar hamburguesería como fallback genérico
+  const specificMenu = config.menus[userCategory] || config.menus['restaurante'] || config.menus['hamburgueseria'];
+  currentMenu = [...specificMenu, ...config.menus['comunes']];
+
+  // 5. Cargar Carrito
+  loadCart();
+  
+  // 6. Traducir Interfaz Estática
+  translateUI();
+  
+  // 7. Renderizar
   render();
-  updateFloat(); 
+  updateFloat();
 }
 
-/* --- FILTROS --- */
-function applyAllergyFilter() {
-  currentAllergy = document.getElementById('allergyFilter').value;
-  render(); 
-}
-
+/* --- RENDERIZADO --- */
 function render() {
-  const list = document.getElementById('menuContainer');
-  list.innerHTML = '';
-  const txt = i18n[lang];
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+  
+  const allergyFilter = document.getElementById('allergyFilter').value;
 
-  document.getElementById('f-ent').innerText = txt.ent;
-  document.getElementById('f-main').innerText = txt.main;
-  document.getElementById('f-des').innerText = txt.des;
-  document.getElementById('f-drk').innerText = txt.drk;
-  document.getElementById('btnText').innerText = txt.btn;
-  document.getElementById('modalTitle').innerText = txt.title;
-  document.getElementById('waiterMsg').innerText = txt.msg;
-  document.getElementById('clearTxt').innerHTML = txt.clear;
-  document.getElementById('notesField').placeholder = txt.ph;
-  document.getElementById('transText').innerText = txt.trans;
-  document.querySelector('[data-lang="infoBar"]').innerHTML = txt.infoBar;
+  // Filtrar platos
+  const items = currentMenu.filter(item => {
+    // Filtro por categoría actual (pestanas)
+    if(item.cat !== activeCategory) return false;
+    // Filtro por alergia
+    if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
+    return true;
+  });
 
-  const wControls = document.getElementById('waiterControls');
-  if (lang === 'es') wControls.style.display = 'none';
-  else wControls.style.display = 'flex';
+  if(items.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec)">No hay productos aquí.</div>`;
+    return;
+  }
 
-  menu.forEach(p => {
-    if(p.cat !== filterCat) return;
-    if(currentAllergy !== "" && !p.tags.includes(currentAllergy)) return;
-
+  items.forEach(p => {
     const qty = cart[p.id] || 0;
-    let btnTxt = '+';
-    let btnClass = 'add-btn';
-    if(qty > 0) { btnTxt = `${qty} +`; btnClass += ' active'; }
+    const btnClass = qty > 0 ? 'add-btn active' : 'add-btn';
+    const btnContent = qty > 0 ? `${qty}` : '+';
+    
+    // Obtener nombre en idioma actual o fallback a ES
+    const pName = p.name[lang] || p.name['es'];
+    const pDesc = p.desc[lang] || p.desc['es'];
 
-    list.innerHTML += `
+    container.innerHTML += `
       <div class="dish-card">
         <div class="dish-info">
-          <div class="dish-header"><span class="dish-name">${p.name[lang]}</span></div>
-          <div class="dish-desc">${p.desc[lang]}</div>
+          <div class="dish-header">
+            <span class="dish-name">${pName}</span>
+          </div>
+          <div class="dish-desc">${pDesc}</div>
         </div>
         <div class="dish-actions">
           <span class="dish-price">${p.price.toFixed(2)}€</span>
-          <button class="${btnClass}" onclick="add(${p.id})">${btnTxt}</button>
+          <button class="${btnClass}" onclick="add(${p.id})">${btnContent}</button>
         </div>
       </div>
     `;
   });
 }
 
-function add(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); render(); updateFloat(); if(document.getElementById('overlay').classList.contains('open')) renderList(); }
-function remove(id) { if(cart[id]) { cart[id]--; if(cart[id] <= 0) delete cart[id]; } saveCart(); render(); updateFloat(); renderList(); }
+/* --- FUNCIONALIDAD PESTAÑAS --- */
+function filter(cat) {
+  activeCategory = cat;
+  document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+  
+  // Mapeo simple de IDs botones
+  const map = { 'bebidas':'f-drk', 'entrantes':'f-ent', 'principales':'f-main', 'postres':'f-des' };
+  document.getElementById(map[cat]).classList.add('active');
+  
+  render();
+}
+
+/* --- CARRITO --- */
+function add(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  saveCart();
+  render(); // Actualiza botones lista
+  updateFloat();
+  if(document.getElementById('overlay').classList.contains('open')) renderList(); // Actualiza modal si abierto
+}
+
+function remove(id) {
+  if(cart[id]) {
+    cart[id]--;
+    if(cart[id] <= 0) delete cart[id];
+  }
+  saveCart();
+  renderList(); // Solo necesitamos actualizar la lista del modal
+  render(); // Y los botones de fondo
+  updateFloat();
+}
 
 function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
   document.getElementById('countBadge').innerText = count;
   const btn = document.getElementById('cart-float');
-  if(count > 0) btn.classList.add('visible'); else btn.classList.remove('visible');
-}
-
-/* --- MODO CAMARERO (ZOOM & TRADUCCIÓN CON IA) --- */
-function localTranslate(text) {
-  // Fallback simple si falla la API
-  if (!text) return "";
-  let translated = text.toLowerCase();
-  for (const [key, value] of Object.entries(foodDictionary)) {
-    const regex = new RegExp(`\\b${key}\\b`, 'gi');
-    translated = translated.replace(regex, value);
-  }
-  return translated;
-}
-
-async function enterWaiterMode() {
-  waiterMode = true;
-  document.getElementById('orderSheet').classList.add('waiter-mode');
-  document.body.classList.add('waiter-active');
-  document.getElementById('closeWaiterBtn').style.display = 'flex';
-  
-  // Guardamos la nota original
-  originalNote = document.getElementById('notesField').value;
-  const noteField = document.getElementById('notesField');
-  
-  // Si hay texto, usamos la API para traducir
-  if (originalNote.trim() !== "") {
-    // 1. Mostrar estado cargando en el idioma del usuario
-    noteField.value = i18n[lang].translating || "Translating..."; 
-    
-    try {
-      // 2. Llamada a MyMemory API (Gratis, limite ~1000 palabras/dia)
-      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(originalNote)}&langpair=${lang}|es`);
-      const data = await res.json();
-      
-      if(data.responseStatus === 200) {
-        noteField.value = data.responseData.translatedText;
-      } else {
-        // Si la API devuelve error, usamos diccionario local
-        noteField.value = localTranslate(originalNote);
-      }
-    } catch (e) {
-      console.error("Error API traducción:", e);
-      // Fallback si no hay internet o falla API
-      noteField.value = localTranslate(originalNote);
-    }
-  }
-  
-  renderList();
-}
-
-function exitWaiterMode() {
-  waiterMode = false;
-  document.getElementById('orderSheet').classList.remove('waiter-mode');
-  document.body.classList.remove('waiter-active');
-  document.getElementById('closeWaiterBtn').style.display = 'none';
-  
-  // Restaurar nota original
-  if(originalNote !== "") document.getElementById('notesField').value = originalNote;
-  
-  renderList();
+  if(count > 0) btn.classList.add('visible');
+  else btn.classList.remove('visible');
 }
 
 function renderList() {
-  const cont = document.getElementById('orderList');
-  cont.innerHTML = '';
-  const displayLang = waiterMode ? 'es' : lang; // Si modo camarero, forzar español
+  const list = document.getElementById('orderList');
+  list.innerHTML = '';
+  
+  // Modo visualización: si estamos en modo camarero, forzamos ES
+  const isWaiter = document.body.classList.contains('waiter-active');
+  const displayLang = isWaiter ? 'es' : lang;
 
   if(Object.keys(cart).length === 0) {
-    cont.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">${i18n[lang].empty}</div></div>`;
-  } else {
-    // 1. Recuperar objetos completos del menú
-    let items = Object.keys(cart).map(id => menu.find(x => x.id == id)).filter(p => p);
+    list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
+    return;
+  }
+
+  // Ordenar items
+  const items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
+  
+  items.forEach(p => {
+    const qty = cart[p.id];
+    const pName = p.name[displayLang] || p.name['es'];
     
-    // 2. Definir Prioridad de Categorías (Orden de salida)
-    const catPriority = {
-      'bebidas': 1,
-      'entrantes': 2,
-      'principales': 3,
-      'postres': 4
-    };
-
-    // 3. Ordenar array
-    items.sort((a, b) => {
-      const prioA = catPriority[a.cat] || 5;
-      const prioB = catPriority[b.cat] || 5;
-      return prioA - prioB;
-    });
-
-    // 4. Renderizar ordenado
-    items.forEach(p => {
-      const qty = cart[p.id];
-      
-      cont.innerHTML += `
+    if(isWaiter) {
+      // ESTILO MODO CAMARERO (Grande y simple)
+      list.innerHTML += `
         <div class="order-item">
-          <div class="waiter-qty">x${qty}</div>
-          
-          <div style="flex:1">
-            <div style="font-weight:700; font-size:1.1rem; transition:0.3s">${p.name[displayLang]}</div>
+          <div style="display:flex; align-items:center">
+             <span class="waiter-qty-big">${qty}</span>
+             <span class="order-name">${pName}</span>
           </div>
-          
+        </div>
+      `;
+    } else {
+      // ESTILO MODO USUARIO (Con controles + -)
+      list.innerHTML += `
+        <div class="order-item">
+          <span style="font-weight:600; flex:1">${pName}</span>
           <div class="qty-controls">
             <button class="qty-btn" onclick="remove(${p.id})">-</button>
-            <span style="font-weight:700; width:25px; text-align:center">${qty}</span>
+            <span style="font-weight:700; width:20px; text-align:center">${qty}</span>
             <button class="qty-btn" onclick="add(${p.id})">+</button>
           </div>
         </div>
       `;
-    });
-  }
+    }
+  });
 }
 
-function filter(cat) {
-  filterCat = cat;
-  document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-  let id='f-drk';
-  if(cat==='entrantes') id='f-ent'; if(cat==='principales') id='f-main'; if(cat==='postres') id='f-des';
-  document.getElementById(id).classList.add('active');
-  render();
-}
-
-function clearCart() {
-  if(confirm(i18n[lang].clear + '?')) {
-    cart = {}; document.getElementById('notesField').value = '';
-    saveCart(); saveNotes(); exitWaiterMode();
-    render(); updateFloat(); closeSheet();
-  }
-}
+/* --- UTILIDADES Y MODOS --- */
+function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
+function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
+function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
+function clearCart() { if(confirm("¿Borrar todo?")) { cart={}; saveCart(); render(); updateFloat(); closeSheet(); } }
 
 function openSheet() { 
-  exitWaiterMode(); // Resetear siempre al abrir
-  renderList(); 
   document.getElementById('overlay').classList.add('open'); 
+  // Mostrar controles de camarero solo si el idioma NO es español
+  document.getElementById('waiterBox').style.display = (lang === 'es') ? 'none' : 'block';
+  renderList();
 }
-function closeSheet() { 
-  exitWaiterMode();
-  document.getElementById('overlay').classList.remove('open'); 
+function closeSheet() { exitWaiterMode(); document.getElementById('overlay').classList.remove('open'); }
+
+function enterWaiterMode() {
+  document.body.classList.add('waiter-active');
+  document.getElementById('orderSheet').classList.add('waiter-mode');
+  document.getElementById('closeWaiterBtn').style.display = 'flex';
+  document.getElementById('waiterBox').style.display = 'none'; // Ocultar boton trigger
+  document.getElementById('notesArea').style.display = 'none'; // Ocultar input notas
+  renderList(); // Re-renderizar en Español y Grande
 }
 
-/* --- THEME --- */
-const themeBtn = document.getElementById('themeBtn');
-function applyTheme() {
-  let savedTheme = localStorage.getItem('theme');
-  if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  
-  themeBtn.innerHTML = savedTheme === 'dark'
-    ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
-    : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+function exitWaiterMode() {
+  document.body.classList.remove('waiter-active');
+  document.getElementById('orderSheet').classList.remove('waiter-mode');
+  document.getElementById('closeWaiterBtn').style.display = 'none';
+  if(lang !== 'es') document.getElementById('waiterBox').style.display = 'block';
+  document.getElementById('notesArea').style.display = 'block';
+  renderList(); // Volver a normal
 }
+
+/* --- TRADUCCIÓN UI --- */
+const uiDict = {
+  es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero (ES)" },
+  en: { ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)" },
+  de: { ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)" },
+  fr: { ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", trans:"Montrer au serveur (ES)" },
+  it: { ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", trans:"Mostra al cameriere (ES)" }
+};
+
+function translateUI() {
+  const t = uiDict[lang] || uiDict['es'];
+  document.getElementById('f-ent').innerText = t.ent;
+  document.getElementById('f-main').innerText = t.main;
+  document.getElementById('f-des').innerText = t.des;
+  document.getElementById('f-drk').innerText = t.drk;
+  document.getElementById('btnText').innerText = t.btn;
+  document.getElementById('modalTitle').innerText = t.title;
+  document.getElementById('clearTxt').innerText = t.clear;
+  document.getElementById('transText').innerText = t.trans;
+}
+
+/* --- TEMA OSCURO --- */
+const themeBtn = document.getElementById('themeBtn');
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
-  const newTheme = current === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', newTheme);
-  applyTheme();
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  updateThemeIcon(next);
 });
 
-// Init
-applyTheme();
+function updateThemeIcon(theme) {
+  themeBtn.innerHTML = theme === 'dark' ? '🌙' : '☀️';
+}
+// Init Theme
+const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
+// GO
 init();
 </script>
 </body>

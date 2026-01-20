@@ -28,7 +28,6 @@
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    /* Fondo con un degradado radial sutil para que no se vea plano */
     background: radial-gradient(circle at top, var(--bg-color), var(--bg-color) 40%, rgba(0,0,0,0.03));
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -50,7 +49,7 @@
     position: relative;
   }
 
-  /* --- NUEVO DISEÑO TIPO LOGO --- */
+  /* --- DISEÑO LOGO --- */
   .logo-container {
     display: inline-flex;
     flex-direction: column;
@@ -58,11 +57,9 @@
     justify-content: center;
     padding: 25px 40px;
     margin-bottom: 30px;
-    
-    /* El borde simula el marco del logo usando el color de la marca */
     border: 4px solid var(--btn-bg); 
-    border-radius: 4px; /* Bordes ligeramente redondeados o cuadrados para seriedad */
-    background: rgba(255,255,255,0.03); /* Fondo muy sutil dentro del logo */
+    border-radius: 4px;
+    background: rgba(255,255,255,0.03);
     box-shadow: var(--shadow);
     position: relative;
   }
@@ -85,7 +82,6 @@
     line-height: 1.1;
   }
   
-  /* Pequeña línea decorativa debajo del nombre */
   .brand-name::after {
     content: '';
     display: block;
@@ -116,12 +112,12 @@
   .btn {
     display: block;
     padding: 16px;
-    border-radius: 50px; /* Botones más modernos y redondos */
+    border-radius: 50px;
     text-decoration: none;
     font-weight: 700;
     font-size: 1em;
     text-align: center;
-    border: 2px solid var(--btn-bg); /* Borde siempre del color de la marca */
+    border: 2px solid var(--btn-bg);
     background: transparent;
     color: var(--text-color);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
@@ -130,7 +126,7 @@
   .btn-primary {
     background: var(--btn-bg);
     color: var(--btn-text);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Sombra suave para destacar */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
   }
   
   .btn:active { transform: scale(0.97); }
@@ -167,7 +163,8 @@
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
   
   <div class="logo-container">
-    <div id="logoIcon" class="logo-icon">🍽️</div> <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
+    <div id="logoIcon" class="logo-icon">🍽️</div> 
+    <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
   </div>
   
   <h2 data-lang="welcome" id="subTitle">¡Bienvenid@!</h2>
@@ -199,14 +196,13 @@
     it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi" }
   };
 
-  /* --- 2. CONFIGURACIÓN VISUAL (ICONOS Y COLORES) --- */
-  // Aquí definimos el Emoji y el color para cada tipo
+  /* --- 2. CONFIGURACIÓN VISUAL --- */
   const designSystem = {
     'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
     'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
     'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
     'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
-    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' }, // Genérico
+    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' },
     'default':        { bg: '#92d668', text: '#fff', icon: '🥗' }
   };
 
@@ -214,31 +210,36 @@
 
   /* --- 3. LÓGICA PRINCIPAL --- */
   function applyDemoLogic() {
+    // 1. Seguridad
     if (params.get('auth') !== 'true') {
       window.location.href = "https://taply.es"; 
       return;
     }
 
-    // A. NOMBRE
+    // 2. Aplicar Nombre
     const name = params.get('n') || "Tu Restaurante";
     document.title = name;
     document.getElementById('brandNameDisplay').textContent = name;
 
-    // B. ESTILO (Color e Icono)
+    // 3. Aplicar Estilo (Color e Icono)
     const category = params.get('categoria'); 
     const style = designSystem[category] || designSystem['default'];
 
-    // Inyectamos Icono
     document.getElementById('logoIcon').textContent = style.icon;
-
-    // Inyectamos Colores CSS
     const rootStyles = document.documentElement.style;
     rootStyles.setProperty('--btn-bg', style.bg);
     rootStyles.setProperty('--btn-text', style.text);
-
-    // Override manual (opcional)
     if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
 
+    // 4. CONFIGURAR NAVEGACIÓN (NUEVO)
+    // Pasamos todos los parámetros actuales (?n=X&categoria=Y...) a las siguientes páginas
+    const currentParams = window.location.search; 
+    
+    document.getElementById('menuLink').href   = `carta.html${currentParams}`;
+    document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
+    document.getElementById('shareLink').href  = `compartir_2.html${currentParams}`;
+
+    // Mostrar página
     document.body.style.opacity = "1";
   }
 
