@@ -106,7 +106,7 @@
     gap: 16px;
     width: 100%;
     max-width: 300px; 
-    margin-bottom: 30px; /* Reducido un poco para dar espacio al hint */
+    margin-bottom: 50px;
   }
 
   .btn {
@@ -154,35 +154,6 @@
     font-size: 0.85em;
     opacity: 0.8;
     cursor: pointer;
-    margin-top: 20px;
-  }
-
-  /* --- NUEVO: ESTILO PARA EL AVISO DE SACUDIR --- */
-  .shake-hint {
-    font-size: 0.9em;
-    color: var(--text-color);
-    opacity: 0.6;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: default;
-  }
-
-  /* Animación de vibración */
-  @keyframes shakeAnim {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(10deg); }
-    50% { transform: rotate(0deg); }
-    75% { transform: rotate(-10deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  .shake-icon {
-    display: inline-block;
-    font-size: 1.2em;
-    animation: shakeAnim 1.5s infinite ease-in-out;
   }
   </style>
 </head>
@@ -204,10 +175,6 @@
     <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
   </div>
 
-  <div class="shake-hint" data-lang="shake_hint">
-    <span class="shake-icon">📳</span> ¡Agita para Zona de Juegos!
-  </div>
-
   <div class="lang-container">
     <select id="lang-select">
       <option value="es">Español</option>
@@ -222,11 +189,11 @@
 <script>
   /* --- 1. DICCIONARIO DE IDIOMAS --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Agita para Zona de Juegos!" },
-    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Shake for Kids Zone!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Schütteln für Spiele!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Secouez pour les Jeux!" },
-    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Scuoti per i Giochi!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir" },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager" },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi" }
   };
 
   /* --- 2. CONFIGURACIÓN VISUAL --- */
@@ -243,16 +210,18 @@
 
   /* --- 3. LÓGICA PRINCIPAL --- */
   function applyDemoLogic() {
+    // 1. Seguridad
     if (params.get('auth') !== 'true') {
       window.location.href = "https://taply.es"; 
       return;
     }
 
-    // Datos Básicos
+    // 2. Aplicar Nombre
     const name = params.get('n') || "Tu Restaurante";
     document.title = name;
     document.getElementById('brandNameDisplay').textContent = name;
 
+    // 3. Aplicar Estilo (Color e Icono)
     const category = params.get('categoria'); 
     const style = designSystem[category] || designSystem['default'];
 
@@ -262,72 +231,24 @@
     rootStyles.setProperty('--btn-text', style.text);
     if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
 
-    // Navegación
+    // 4. CONFIGURAR NAVEGACIÓN (NUEVO)
+    // Pasamos todos los parámetros actuales (?n=X&categoria=Y...) a las siguientes páginas
     const currentParams = window.location.search; 
+    
     document.getElementById('menuLink').href   = `carta.html${currentParams}`;
     document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
     document.getElementById('shareLink').href  = `compartir_2.html${currentParams}`;
 
-    // Mostrar
+    // Mostrar página
     document.body.style.opacity = "1";
-    
-    // Iniciar detector de sacudida
-    initShakeDetection(currentParams);
   }
 
-  /* --- 4. DETECCIÓN DE SHAKE (SACUDIDA) --- */
-  function initShakeDetection(currentParams) {
-    let threshold = 15; // Sensibilidad (más bajo = más fácil, más alto = hay que agitar más fuerte)
-    let lastX = 0, lastY = 0, lastZ = 0;
-    let lastTime = 0;
-    
-    if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', function (event) {
-        let current = event.accelerationIncludingGravity;
-        if (!current) return;
-        
-        let currentTime = new Date().getTime();
-        
-        // Comprobar cada 100ms para no saturar
-        if ((currentTime - lastTime) > 100) {
-          let diffTime = currentTime - lastTime;
-          lastTime = currentTime;
-          
-          let speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
-          
-          if (speed > threshold * 100) { // Si supera la velocidad umbral
-             // ¡SHAKE DETECTADO! -> Redirigir a juegos
-             // Usamos replace para que no puedan volver atrás fácilmente si fue un error
-             window.location.href = `juegos.html${currentParams}`;
-          }
-          
-          lastX = current.x;
-          lastY = current.y;
-          lastZ = current.z;
-        }
-      });
-    } else {
-      console.log("Este dispositivo no soporta detección de movimiento.");
-    }
-  }
-
-  /* --- 5. SISTEMA --- */
+  /* --- 4. FUNCIONES DE SISTEMA --- */
   function syncLanguage() {
     let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
     if(!translations[lang]) lang = "es";
-    
-    // Actualizamos texto normal
     document.querySelectorAll('[data-lang]').forEach(el => {
-      // Caso especial para el hint que tiene un icono dentro
-      if (el.classList.contains('shake-hint')) {
-         // Mantenemos el icono, cambiamos solo el texto
-         const icon = el.querySelector('.shake-icon').outerHTML;
-         if(translations[lang][el.dataset.lang]) {
-            el.innerHTML = icon + ' ' + translations[lang][el.dataset.lang];
-         }
-      } else {
-         if(translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
-      }
+      if(translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
     });
     document.getElementById("lang-select").value = lang;
   }
