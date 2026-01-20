@@ -43,8 +43,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 30px 20px;
+    /* CAMBIO: padding-top aumentado para bajar todo y que no choque con el header */
+    padding: 90px 20px 40px 20px; 
     box-sizing: border-box;
     text-align: center;
     position: relative;
@@ -73,49 +73,40 @@
   .btn { display: block; padding: 16px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1em; text-align: center; border: 2px solid var(--btn-bg); background: transparent; color: var(--text-color); transition: transform 0.2s ease; }
   .btn-primary { background: var(--btn-bg); color: var(--btn-text); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
 
-  /* --- ZONA DE ACTIVACIÓN (REDUCIDA) --- */
-  .shake-activation-box {
-    width: auto; /* Se adapta al contenido */
-    max-width: 260px; /* Más estrecho */
-    border: 1px dashed var(--btn-bg); /* Borde más fino */
-    border-radius: 50px; /* Forma de píldora */
-    padding: 8px 20px; /* Menos relleno vertical */
+  /* --- ZONA DE ACTIVACIÓN (MINIMALISTA) --- */
+  .simple-shake-link {
     cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.8;
     transition: all 0.3s ease;
-    background: rgba(0,0,0,0.02);
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    gap: 8px;
     margin-bottom: 20px;
+    border: 1px solid transparent; /* Invisible por defecto */
   }
+  
+  /* Efecto al tocar */
+  .simple-shake-link:active { opacity: 0.5; }
 
-  /* Estado: Listo para agitar */
-  .shake-activation-box.ready {
+  /* Estado: LISTO PARA AGITAR (Se resalta un poco) */
+  .simple-shake-link.ready {
     background: var(--btn-bg);
-    border-style: solid;
     color: var(--btn-text);
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    animation: shakeAnim 1.5s infinite ease-in-out;
+    opacity: 1;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: pulse 1.5s infinite;
   }
 
-  .shake-icon { font-size: 1.4em; } /* Icono más pequeño */
-  .shake-text { font-weight: 700; font-size: 0.85em; text-align: left; line-height: 1.1; } /* Texto más pequeño */
-  .shake-sub { font-weight: 400; font-size: 0.85em; opacity: 0.8; display: block;}
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-  @keyframes shakeAnim { 
-    0% { transform: rotate(0deg); } 
-    25% { transform: rotate(5deg); } 
-    50% { transform: rotate(0deg); } 
-    75% { transform: rotate(-5deg); } 
-    100% { transform: rotate(0deg); } 
-  }
-
-  .theme-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; background: var(--select-bg); color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-size: 1.2em; z-index: 100; }
-  .lang-container select { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--select-border); background: transparent; color: var(--text-color); font-size: 0.85em; opacity: 0.8; cursor: pointer; margin-top: 20px; }
+  .theme-btn { position: absolute; top: 25px; right: 25px; width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; background: var(--select-bg); color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-size: 1.4em; z-index: 100; display:flex; align-items:center; justify-content:center;}
+  .lang-container select { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--select-border); background: transparent; color: var(--text-color); font-size: 0.85em; opacity: 0.8; cursor: pointer; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -136,12 +127,9 @@
     <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
   </div>
 
-  <div class="shake-activation-box" id="shakeTrigger" onclick="enableShakeFeature()">
-    <span class="shake-icon">📲</span>
-    <div class="shake-text">
-      <span id="shakeMainText">ZONA KIDS</span>
-      <span id="shakeSubText" class="shake-sub">Toca para activar</span>
-    </div>
+  <div id="shakeTrigger" class="simple-shake-link" onclick="enableShakeFeature()">
+    <span id="shakeIcon">🎮</span> 
+    <span id="shakeText" style="text-decoration: underline;">Zona Kids: Toca para jugar</span>
   </div>
 
   <div class="lang-container">
@@ -158,11 +146,11 @@
 <script>
   /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_wait: "Toca para activar", shake_ready: "¡AGITA AHORA!" },
-    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_wait: "Tap to activate", shake_ready: "SHAKE NOW!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_wait: "Tippen zum Starten", shake_ready: "JETZT SCHÜTTELN!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_wait: "Touchez pour activer", shake_ready: "SECOUEZ !" },
-    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_wait: "Tocca per attivare", shake_ready: "SCUOTI ORA!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA EL MÓVIL!" },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE PHONE!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "HANDY SCHÜTTELN!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ !" },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI ORA!" }
   };
 
   const designSystem = {
@@ -176,7 +164,7 @@
 
   const params = new URLSearchParams(window.location.search);
 
-  /* --- 2. LOGICA DEL SHAKE NATIVO (SIN LIBRERIAS) --- */
+  /* --- 2. LOGICA NATIVA (SHAKE) --- */
   let lastX = null, lastY = null, lastZ = null;
   let lastTime = 0;
   let isListening = false;
@@ -184,14 +172,15 @@
   function startNativeShakeListener() {
     if(isListening) return;
     
-    // Cambiar UI a "LISTO"
+    // Cambiar visualmente a "Listo"
     const btn = document.getElementById('shakeTrigger');
     btn.classList.add('ready');
     
     let lang = localStorage.getItem('userLang') || 'es';
-    const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA AHORA!";
-    document.getElementById('shakeSubText').innerText = readyText;
-    document.querySelector('.shake-icon').innerText = "📳";
+    document.getElementById('shakeText').innerText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
+    document.getElementById('shakeText').style.textDecoration = 'none'; // Quitar subrayado
+    document.getElementById('shakeIcon').innerText = "📳";
+    
     isListening = true;
 
     window.addEventListener('devicemotion', (event) => {
@@ -199,47 +188,36 @@
       if (!current) return;
 
       const currentTime = new Date().getTime();
-      // Leemos cada 100ms
       if ((currentTime - lastTime) > 100) {
         const diffTime = currentTime - lastTime;
         lastTime = currentTime;
 
         if (lastX !== null) {
           const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
-          
-          if (speed > 1000) { 
-             // EXITO!
+          if (speed > 800) { // Sensibilidad
              if(navigator.vibrate) navigator.vibrate(300);
              window.location.href = `juegos.html${window.location.search}`;
           }
         }
-
-        lastX = current.x;
-        lastY = current.y;
-        lastZ = current.z;
+        lastX = current.x; lastY = current.y; lastZ = current.z;
       }
     });
   }
 
   function enableShakeFeature() {
-    // 1. Detección iOS 13+
+    // Detectar iOS 13+
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
       DeviceMotionEvent.requestPermission()
         .then(response => {
-          if (response === 'granted') {
-            startNativeShakeListener();
-          } else {
-            alert("Permiso denegado. Recarga la página.");
-          }
+          if (response === 'granted') startNativeShakeListener();
         })
         .catch(console.error);
     } else {
-      // 2. Android / iOS antiguo (arranca directo)
       startNativeShakeListener();
     }
   }
 
-  /* --- 3. CONFIGURACIÓN VISUAL Y URL --- */
+  /* --- 3. CONFIGURACIÓN --- */
   function applyDemoLogic() {
     if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
@@ -270,12 +248,11 @@
       if (translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
     });
     
-    // Actualizar texto del botón shake según estado
-    const subText = document.getElementById('shakeSubText');
+    // Actualizar texto shake
     if(document.getElementById('shakeTrigger').classList.contains('ready')) {
-       subText.innerText = translations[lang].shake_ready;
+       document.getElementById('shakeText').innerText = translations[lang].shake_ready;
     } else {
-       subText.innerText = translations[lang].shake_wait;
+       document.getElementById('shakeText').innerText = translations[lang].shake_wait;
     }
 
     document.getElementById("lang-select").value = lang;
