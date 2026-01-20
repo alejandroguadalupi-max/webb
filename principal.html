@@ -7,33 +7,34 @@
 
   <style>
   :root {
-    /* Variables base */
-    --bg-color: #ffffff;
+    --bg-color: #fdfdfd;
     --text-color: #333;
-    /* El color por defecto es verde, pero se cambiará por JS */
-    --btn-bg: #92d668; 
+    --btn-bg: #92d668; /* Se sobreescribe por JS */
     --btn-text: #fff;
-    --btn-border: transparent; /* Simplificado */
-    --select-bg: rgba(255,255,255,0.85);
-    --select-border: #333;
-    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --select-bg: rgba(255,255,255,0.9);
+    --select-border: #ccc;
+    --shadow: 0 10px 25px rgba(0,0,0,0.1);
+    --logo-font: 'Arial Black', 'Helvetica Neue', sans-serif;
   }
 
   [data-theme="dark"] {
-    --bg-color: #1a1a1a;
+    --bg-color: #121212;
     --text-color: #f4f4f4;
-    --select-bg: rgba(0,0,0,0.6);
-    --select-border: #f4f4f4;
-    --shadow: 0 4px 12px rgba(0,0,0,0.4);
+    --select-bg: rgba(30,30,30,0.8);
+    --select-border: #444;
+    --shadow: 0 10px 25px rgba(0,0,0,0.5);
   }
 
   body {
     margin: 0;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* Fondo con un degradado radial sutil para que no se vea plano */
+    background: radial-gradient(circle at top, var(--bg-color), var(--bg-color) 40%, rgba(0,0,0,0.03));
+    background-color: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s, color 0.3s;
-    opacity: 0; /* Oculto hasta cargar configuración */
+    opacity: 0; 
+    min-height: 100vh;
   }
 
   .landing-container {
@@ -43,90 +44,120 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 30px 20px;
     box-sizing: border-box;
     text-align: center;
     position: relative;
   }
 
-  /* --- NUEVO ESTILO PARA NOMBRE COMO LOGO --- */
-  .brand-name {
-    font-size: 2.8em;
-    font-weight: 900;
+  /* --- NUEVO DISEÑO TIPO LOGO --- */
+  .logo-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 40px;
+    margin-bottom: 30px;
+    
+    /* El borde simula el marco del logo usando el color de la marca */
+    border: 4px solid var(--btn-bg); 
+    border-radius: 4px; /* Bordes ligeramente redondeados o cuadrados para seriedad */
+    background: rgba(255,255,255,0.03); /* Fondo muy sutil dentro del logo */
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .logo-icon {
+    font-size: 3.5em;
+    line-height: 1;
     margin-bottom: 10px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  }
+
+  .brand-name {
+    font-family: var(--logo-font);
+    font-size: 2em;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: -1px;
-    color: var(--btn-bg); /* Usa el color de la categoría */
+    letter-spacing: 2px;
+    color: var(--text-color);
+    margin: 0;
     line-height: 1.1;
-    max-width: 90%;
+  }
+  
+  /* Pequeña línea decorativa debajo del nombre */
+  .brand-name::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: var(--btn-bg);
+    margin: 10px auto 0 auto;
   }
 
   h2 {
-    font-size: 1.5em;
-    font-weight: 400;
+    font-size: 1.2em;
+    font-weight: 300;
     margin: 0 0 40px 0;
-    opacity: 0.8;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .button-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
     width: 100%;
-    max-width: 320px; 
+    max-width: 300px; 
     margin-bottom: 50px;
   }
 
   .btn {
     display: block;
-    padding: 18px;
-    border-radius: 16px;
+    padding: 16px;
+    border-radius: 50px; /* Botones más modernos y redondos */
     text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1em;
+    font-weight: 700;
+    font-size: 1em;
     text-align: center;
-    border: 2px solid var(--btn-border);
+    border: 2px solid var(--btn-bg); /* Borde siempre del color de la marca */
     background: transparent;
     color: var(--text-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--shadow);
-    border-color: var(--text-color); /* Borde por defecto para botones secundarios */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
   }
 
   .btn-primary {
     background: var(--btn-bg);
     color: var(--btn-text);
-    border: 2px solid var(--btn-bg);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Sombra suave para destacar */
   }
   
-  .btn:active {
-    transform: scale(0.98);
-  }
+  .btn:active { transform: scale(0.97); }
 
-  /* Botón Tema */
   .theme-btn {
     position: absolute;
-    top: 25px; right: 25px;
-    width: 45px; height: 45px;
+    top: 20px; right: 20px;
+    width: 40px; height: 40px;
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    border: none;
     cursor: pointer;
-    background: var(--bg-color);
-    border: 1px solid var(--select-border);
+    background: var(--select-bg);
     color: var(--text-color);
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     font-size: 1.2em;
     z-index: 100;
   }
 
-  #lang-select {
-    padding: 10px 20px;
-    border-radius: 50px;
+  .lang-container select {
+    padding: 8px 16px;
+    border-radius: 20px;
     border: 1px solid var(--select-border);
-    background: var(--select-bg);
+    background: transparent;
     color: var(--text-color);
+    font-size: 0.85em;
+    opacity: 0.8;
     cursor: pointer;
-    font-size: 0.9em;
   }
   </style>
 </head>
@@ -135,7 +166,9 @@
 <main class="landing-container" id="landing">
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
   
-  <h1 id="brandNameDisplay" class="brand-name">Restaurante</h1>
+  <div class="logo-container">
+    <div id="logoIcon" class="logo-icon">🍽️</div> <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
+  </div>
   
   <h2 data-lang="welcome" id="subTitle">¡Bienvenid@!</h2>
 
@@ -159,76 +192,62 @@
 <script>
   /* --- 1. DICCIONARIO DE IDIOMAS --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Acceder a la carta", leave_review:"Dejar reseña", share_with_friends:"Compartir experiencia" },
-    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte ansehen", leave_review:"Bewertung abgeben", share_with_friends:"Erfahrung teilen" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir le menu", leave_review:"Laisser un avis", share_with_friends:"Partager l'expérience" },
-    it: { welcome:"Benvenuto!", view_menu:"Vedi il menu", leave_review:"Lascia una recensione", share_with_friends:"Condividi esperienza" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir" },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager" },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi" }
   };
 
-  /* --- 2. PALETAS DE COLORES (Según Categoría) --- */
-  const colorPalettes = {
-    // Nombre Categoría : { Fondo Botón, Texto Botón }
-    'hamburgueseria': { bg: '#FF8C00', text: '#fff' }, // Naranja intenso
-    'pizzeria':       { bg: '#D32F2F', text: '#fff' }, // Rojo clásico
-    'asiatico':       { bg: '#E91E63', text: '#fff' }, // Rosa fuerte / Rojo oriental
-    'cafe':           { bg: '#8D6E63', text: '#fff' }, // Marrón café
-    'restaurante':    { bg: '#2E7D32', text: '#fff' }, // Verde elegante
-    'default':        { bg: '#92d668', text: '#fff' }  // Tu verde original
+  /* --- 2. CONFIGURACIÓN VISUAL (ICONOS Y COLORES) --- */
+  // Aquí definimos el Emoji y el color para cada tipo
+  const designSystem = {
+    'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
+    'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
+    'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
+    'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
+    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' }, // Genérico
+    'default':        { bg: '#92d668', text: '#fff', icon: '🥗' }
   };
 
   const params = new URLSearchParams(window.location.search);
 
   /* --- 3. LÓGICA PRINCIPAL --- */
   function applyDemoLogic() {
-    // Verificar AUTH
     if (params.get('auth') !== 'true') {
-      window.location.href = "https://taply.es"; // Redirección de seguridad
+      window.location.href = "https://taply.es"; 
       return;
     }
 
-    // A. OBTENER NOMBRE DEL RESTAURANTE
+    // A. NOMBRE
     const name = params.get('n') || "Tu Restaurante";
-    
-    // Inyectamos el nombre en el título de la página
     document.title = name;
-    
-    // Inyectamos el nombre como LOGO (H1)
     document.getElementById('brandNameDisplay').textContent = name;
-    
-    // Inyectamos bienvenida en el H2 (subtítulo)
-    // Nota: El texto "¡Bienvenid@!" se gestiona luego con las traducciones, 
-    // pero si quisieras personalizarlo con el nombre también, podrías hacerlo aquí.
 
-    // B. APLICAR COLORES SEGÚN CATEGORÍA
+    // B. ESTILO (Color e Icono)
     const category = params.get('categoria'); 
-    
-    // Buscamos la paleta, si no existe usamos 'default'
-    const palette = colorPalettes[category] || colorPalettes['default'];
+    const style = designSystem[category] || designSystem['default'];
 
-    // Aplicamos variables CSS
+    // Inyectamos Icono
+    document.getElementById('logoIcon').textContent = style.icon;
+
+    // Inyectamos Colores CSS
     const rootStyles = document.documentElement.style;
-    rootStyles.setProperty('--btn-bg', palette.bg);
-    rootStyles.setProperty('--btn-text', palette.text);
-    // El borde del botón primario será del mismo color que el fondo
-    rootStyles.setProperty('--btn-border', palette.bg);
+    rootStyles.setProperty('--btn-bg', style.bg);
+    rootStyles.setProperty('--btn-text', style.text);
 
-    // Permitir overrides manuales por URL (opcional, mantiene funcionalidad anterior)
+    // Override manual (opcional)
     if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
 
-    // Mostrar contenido
     document.body.style.opacity = "1";
   }
 
-  /* --- 4. FUNCIONES DE SISTEMA (Idioma/Tema) --- */
+  /* --- 4. FUNCIONES DE SISTEMA --- */
   function syncLanguage() {
     let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
     if(!translations[lang]) lang = "es";
-    
     document.querySelectorAll('[data-lang]').forEach(el => {
-      if(translations[lang][el.dataset.lang]) {
-        el.textContent = translations[lang][el.dataset.lang];
-      }
+      if(translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
     });
     document.getElementById("lang-select").value = lang;
   }
@@ -239,7 +258,6 @@
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
   }
 
-  // Event Listeners
   document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
@@ -252,7 +270,6 @@
     syncLanguage();
   });
 
-  // Inicialización
   window.addEventListener('pageshow', () => {
     syncTheme();
     syncLanguage();
