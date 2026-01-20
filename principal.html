@@ -73,22 +73,23 @@
   .btn { display: block; padding: 16px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1em; text-align: center; border: 2px solid var(--btn-bg); background: transparent; color: var(--text-color); transition: transform 0.2s ease; }
   .btn-primary { background: var(--btn-bg); color: var(--btn-text); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
 
-  /* --- ZONA DE ACTIVACIÓN --- */
+  /* --- ZONA DE ACTIVACIÓN (REDUCIDA) --- */
   .shake-activation-box {
-    width: 100%;
-    max-width: 320px;
-    border: 2px dashed var(--btn-bg);
-    border-radius: 20px;
-    padding: 15px;
+    width: auto; /* Se adapta al contenido */
+    max-width: 260px; /* Más estrecho */
+    border: 1px dashed var(--btn-bg); /* Borde más fino */
+    border-radius: 50px; /* Forma de píldora */
+    padding: 8px 20px; /* Menos relleno vertical */
     cursor: pointer;
     transition: all 0.3s ease;
-    background: rgba(0,0,0,0.03);
+    background: rgba(0,0,0,0.02);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 10px;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    margin-bottom: 20px;
   }
 
   /* Estado: Listo para agitar */
@@ -97,12 +98,12 @@
     border-style: solid;
     color: var(--btn-text);
     transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
     animation: shakeAnim 1.5s infinite ease-in-out;
   }
 
-  .shake-icon { font-size: 2em; }
-  .shake-text { font-weight: 800; font-size: 1em; text-align: left; line-height: 1.2; }
+  .shake-icon { font-size: 1.4em; } /* Icono más pequeño */
+  .shake-text { font-weight: 700; font-size: 0.85em; text-align: left; line-height: 1.1; } /* Texto más pequeño */
   .shake-sub { font-weight: 400; font-size: 0.85em; opacity: 0.8; display: block;}
 
   @keyframes shakeAnim { 
@@ -206,11 +207,9 @@
         if (lastX !== null) {
           const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
           
-          // Umbral de sensibilidad (ajustado para que no sea muy dificil)
           if (speed > 1000) { 
              // EXITO!
              if(navigator.vibrate) navigator.vibrate(300);
-             // Redirigir conservando todos los parametros
              window.location.href = `juegos.html${window.location.search}`;
           }
         }
