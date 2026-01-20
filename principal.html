@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Cargando...</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shake.js/1.2.2/shake.min.js"></script>
@@ -36,6 +36,7 @@
     transition: background 0.3s, color 0.3s;
     opacity: 0; 
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
 
   .landing-container {
@@ -65,6 +66,7 @@
     box-shadow: var(--shadow);
     position: relative;
     user-select: none;
+    -webkit-user-select: none; /* Safari */
     cursor: pointer;
   }
 
@@ -135,14 +137,14 @@
   
   .btn:active { transform: scale(0.97); }
 
-  /* --- AVISO FLOTANTE --- */
+  /* --- BOTÓN SHAKE --- */
   .shake-hint {
-    margin-top: 20px;
-    background: rgba(0,0,0,0.04);
+    margin-top: 15px;
+    background: rgba(0,0,0,0.05);
     border: 2px dashed var(--btn-bg);
     padding: 15px 25px;
     border-radius: 30px;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: 700;
     color: var(--text-color);
     display: flex;
@@ -150,13 +152,16 @@
     justify-content: center;
     gap: 10px;
     cursor: pointer;
-    animation: pulse 2s infinite;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
+    /* Animación pulso para llamar la atención */
+    animation: pulse 2s infinite; 
   }
   
-  .shake-hint:active {
-    background: rgba(0,0,0,0.1);
-    transform: scale(0.98);
+  .shake-hint.activated {
+    background: #4CAF50 !important;
+    color: white !important;
+    border-color: #4CAF50 !important;
+    animation: none;
   }
 
   @keyframes pulse {
@@ -175,7 +180,7 @@
 
   .shake-icon {
     display: inline-block;
-    font-size: 1.5em;
+    font-size: 1.4em;
     animation: shakeAnim 1.2s infinite ease-in-out;
   }
 
@@ -224,9 +229,9 @@
     <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
   </div>
 
-  <div class="shake-hint" id="shakeBtn" onclick="activateShake()">
+  <div class="shake-hint" id="shakeBtn" onclick="enableShake()">
     <span class="shake-icon">📳</span> 
-    <span id="shakeText" data-lang="shake_hint">¡Activar Modo Juegos!</span>
+    <span id="shakeText" data-lang="shake_hint">¡Toca para activar JUEGOS!</span>
   </div>
 
   <div class="lang-container">
@@ -243,11 +248,11 @@
 <script>
   /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Toca aquí y Agita! 🎮", activated: "¡Activado! Ahora agita el móvil." },
-    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Tap here & Shake! 🎮", activated: "On! Now shake your phone." },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Tippen & Schütteln! 🎮", activated: "An! Jetzt schütteln." },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Touchez et Secouez ! 🎮", activated: "Activé! Secouez maintenant." },
-    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Tocca e Scuoti! 🎮", activated: "Attivo! Scuoti ora." }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_hint: "¡Toca para activar JUEGOS!", activated: "¡Activado! Agita el móvil.", error: "Usa los 3 clicks en el logo." },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_hint: "Tap to enable GAMES!", activated: "On! Shake your phone.", error: "Use 3 clicks on logo." },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_hint: "Tippen & Schütteln!", activated: "An! Jetzt schütteln.", error: "3 Klicks auf Logo." },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_hint: "Touchez et Secouez !", activated: "Activé! Secouez.", error: "3 clics sur le logo." },
+    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_hint: "Tocca e Scuoti!", activated: "Attivo! Scuoti ora.", error: "3 click sul logo." }
   };
 
   const designSystem = {
@@ -260,8 +265,12 @@
   };
 
   const params = new URLSearchParams(window.location.search);
+  
+  // Variable para la instancia de Shake
+  let shakeInstance = null;
+  let shakeEnabled = false;
 
-  /* --- 2. CONFIGURACIÓN --- */
+  /* --- 2. CONFIGURACIÓN INICIAL --- */
   function applyDemoLogic() {
     if (params.get('auth') !== 'true') {
       window.location.href = "https://taply.es"; 
@@ -288,85 +297,94 @@
 
     document.body.style.opacity = "1";
     
-    // Iniciar Shake.js en modo espera
-    initShakeLib();
+    // NO iniciamos shake.js aquí automáticamente para evitar errores en Safari.
+    // Lo hacemos en la función enableShake()
   }
 
-  /* --- 3. IMPLEMENTACIÓN DE SHAKE.JS (LA API) --- */
-  let myShakeEvent;
+  /* --- 3. LÓGICA DE ACTIVACIÓN (SAFARI COMPATIBLE) --- */
+  
+  // Esta función DEBE ser llamada por un click directo del usuario (onclick)
+  function enableShake() {
+    if (shakeEnabled) return; // Si ya está activo, no hacer nada
 
-  function initShakeLib() {
-    // Instanciamos la librería
-    myShakeEvent = new Shake({
-        threshold: 15, // Umbral de fuerza (menos es más sensible)
-        timeout: 1000 // Frecuencia de eventos
-    });
-    
-    // Escuchamos el evento 'shake'
-    window.addEventListener('shake', shakeEventDidOccur, false);
-  }
-
-  // Esta función se ejecuta cuando la librería detecta la sacudida
-  function shakeEventDidOccur () {
-      if(navigator.vibrate) navigator.vibrate(200); // Vibración física
-      window.location.href = `juegos.html${window.location.search}`;
-  }
-
-  // Función vinculada al botón visual "Agita para jugar"
-  function activateShake() {
-    // 1. iOS 13+ requiere permiso explícito
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    // PASO A: Comprobar si es iOS 13+ (Requiere Permiso)
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        
         DeviceMotionEvent.requestPermission()
             .then(permissionState => {
                 if (permissionState === 'granted') {
-                    myShakeEvent.start();
-                    confirmActivation();
+                    startShakeListener();
                 } else {
-                    alert('Permiso denegado. Haz 3 clicks en el logo para entrar.');
+                    showErrorState();
                 }
             })
-            .catch(console.error);
+            .catch(e => {
+                console.error(e);
+                showErrorState(); // Seguramente falta HTTPS
+            });
+            
     } else {
-        // 2. Android y iOS antiguos (no requieren permiso, solo start)
-        myShakeEvent.start();
-        confirmActivation();
+        // PASO B: Android o iOS antiguo (No requiere permiso, activar directo)
+        startShakeListener();
     }
   }
 
-  function confirmActivation() {
-    // Cambiar texto para feedback visual
-    let lang = localStorage.getItem('userLang') || 'es';
-    const msg = translations[lang] ? translations[lang].activated : "¡Activado! Agita.";
+  function startShakeListener() {
+    // Instanciamos Shake.js SOLO cuando tenemos permiso
+    shakeInstance = new Shake({
+        threshold: 15, 
+        timeout: 1000
+    });
+
+    shakeInstance.start();
     
+    // Escuchamos el evento
+    window.addEventListener('shake', onShakeDetected, false);
+    
+    // Feedback visual de éxito
+    shakeEnabled = true;
     const btn = document.getElementById('shakeBtn');
-    btn.style.borderColor = "#4CAF50"; // Verde confirmación
-    btn.style.backgroundColor = "rgba(76, 175, 80, 0.1)";
-    document.getElementById('shakeText').innerText = msg;
+    btn.classList.add('activated');
     
-    // Pequeña vibración de feedback
+    let lang = localStorage.getItem('userLang') || 'es';
+    document.getElementById('shakeText').innerText = translations[lang] ? translations[lang].activated : "OK! Agita.";
+    
     if(navigator.vibrate) navigator.vibrate(50);
   }
 
-  /* --- 4. PLAN B: ACCESO SECRETO (3 CLICKS) --- */
+  function onShakeDetected() {
+    if(navigator.vibrate) navigator.vibrate(200);
+    window.location.href = `juegos.html${window.location.search}`;
+  }
+
+  function showErrorState() {
+    let lang = localStorage.getItem('userLang') || 'es';
+    const msg = translations[lang] ? translations[lang].error : "Error";
+    alert("⚠️ Safari necesita HTTPS o permiso denegado.\n\n" + msg);
+  }
+
+
+  /* --- 4. ACCESO SECRETO (3 CLICKS) --- */
+  // Plan de respaldo por si el usuario deniega permiso o falla el sensor
   let logoClicks = 0;
   document.getElementById('logoClickArea').addEventListener('click', () => {
     logoClicks++;
     if(logoClicks === 3) {
       window.location.href = `juegos.html${window.location.search}`;
     }
-    setTimeout(() => logoClicks = 0, 1000);
+    setTimeout(() => logoClicks = 0, 800);
   });
 
-  /* --- 5. SISTEMA --- */
+
+  /* --- 5. SISTEMA UI (IDIOMAS Y TEMAS) --- */
   function syncLanguage() {
     let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
     if(!translations[lang]) lang = "es";
     
     document.querySelectorAll('[data-lang]').forEach(el => {
-      if(el.id === 'shakeText') {
-         // Si ya está activado, no sobrescribimos el mensaje de "Activado"
-         // A menos que sea la carga inicial
-      }
+      // No sobrescribir mensaje de "Activado" si ya se pulsó
+      if(el.id === 'shakeText' && shakeEnabled) return;
+      
       if (translations[lang][el.dataset.lang]) {
          el.textContent = translations[lang][el.dataset.lang];
       }
