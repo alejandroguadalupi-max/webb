@@ -2,234 +2,296 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creador de Demos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Configurador Demo</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --primary: #2563eb;
-    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    --card-bg: #ffffff;
+    --primary: #2563eb; 
+    --bg-page: #f3f4f6;
+    --bg-card: #ffffff;
     --text-main: #111827;
     --text-sec: #6b7280;
-    --border: #e5e7eb;
-    --error: #dc2626;
+    --border: #d1d5db;
+    --error: #ef4444;
   }
 
   body {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg-gradient);
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-page);
     color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     padding: 20px;
+    box-sizing: border-box;
   }
 
   .container {
-    max-width: 450px;
+    max-width: 400px; /* Un poco más compacto */
     width: 100%;
-    background: var(--card-bg);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    border-radius: 24px;
-    padding: 40px 35px;
-    text-align: center;
-    position: relative;
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    text-align: left;
   }
 
   h1 {
     margin: 0 0 10px;
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: 700;
+    color: var(--text-main);
+    text-align: center;
+    letter-spacing: -0.5px;
   }
 
   p.description {
-    font-size: 0.95em;
+    font-size: 0.9em;
     color: var(--text-sec);
-    margin-bottom: 35px;
+    margin-bottom: 25px;
+    text-align: center;
     line-height: 1.5;
   }
 
+  /* Inputs */
   .input-group {
-    text-align: left;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
 
   label {
     display: block;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    color: var(--text-main);
   }
 
-  input, select {
+  input[type="text"], select {
     width: 100%;
-    padding: 16px;
-    border-radius: 12px;
-    border: 2px solid var(--border);
-    font-size: 1em;
-    background: #f9fafb;
-    transition: 0.2s;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 0.95em;
+    font-family: inherit;
+    background: #fff;
+    color: var(--text-main);
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none; 
   }
 
-  input:focus, select:focus {
+  input[type="text"]:focus, select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     outline: none;
   }
 
+  /* Flecha select */
+  select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 10px auto;
+  }
+
+  /* --- COLORES (PEQUEÑOS) --- */
+  .color-label-container {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .color-label-container span { font-size: 0.8em; font-weight: 400; color: var(--text-sec); }
+
   .color-picker-container {
     display: flex;
-    gap: 12px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 10px;
+    gap: 10px; /* Espacio reducido */
+    margin-top: 8px;
+    padding: 5px 0;
   }
 
   .color-option {
-    width: 40px;
-    height: 40px;
+    width: 32px; /* Círculos más pequeños */
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
-    border: 3px solid transparent;
-    transition: 0.2s;
+    border: 2px solid transparent;
+    transition: transform 0.2s;
+    position: relative;
   }
+
+  .color-option:hover { transform: scale(1.1); }
 
   .color-option.selected {
-    border-color: #fff;
-    box-shadow: 0 0 0 3px #111827;
-    transform: scale(1.15);
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-main);
   }
 
-  button {
+  /* --- BOTÓN --- */
+  button#generateBtn {
     width: 100%;
-    padding: 18px;
-    margin-top: 15px;
-    border-radius: 14px;
+    padding: 14px;
+    margin-top: 25px;
+    border-radius: 10px;
     border: none;
-    font-size: 1.1em;
-    font-weight: 700;
-    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    color: white;
     background: var(--primary);
     cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
   }
 
-  /* ===== TOAST ===== */
+  button#generateBtn:hover { background: #1d4ed8; }
+  button#generateBtn:active { transform: scale(0.98); }
+
+  /* --- FOOTER NOTE --- */
+  .footer-note {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.8em;
+    color: var(--text-sec);
+    text-align: center;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* --- TOAST --- */
   .toast {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: #111827;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9em;
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.3s ease;
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    background: #1f2937; color: white; padding: 12px 24px; border-radius: 50px;
+    display: flex; align-items: center; gap: 10px; font-size: 0.9em; font-weight: 500;
+    opacity: 0; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+    z-index: 100; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
   }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  .toast.error {
-    background: var(--error);
-  }
 </style>
 </head>
-
 <body>
 
 <div class="container">
-  <h1>Configura tu Demo</h1>
-  <p class="description">Introduce estos datos básicos y te generaremos una demo automática para que veas cómo funciona Taply.</p>
+  <h1>Configurar Demo</h1>
+  <p class="description">Introduce los datos básicos del cliente para generar una <strong>vista previa automática</strong>.</p>
 
   <div class="input-group">
     <label>Nombre del Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Roma">
+    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Roma" autocomplete="off">
   </div>
 
   <div class="input-group">
     <label>Tipo de Cocina</label>
     <select id="restaurantType">
-      <option value="" disabled selected>Selecciona una categoría</option>
-      <option value="restaurante">Restaurante</option>
+      <option value="" disabled selected>Selecciona una opción...</option>
+      <option value="restaurante">Restaurante (Genérico)</option>
       <option value="hamburgueseria">Hamburguesería</option>
-      <option value="pizzeria">Pizzería</option>
-      <option value="asiatico">Asiático</option>
-      <option value="cafe">Cafetería</option>
+      <option value="pizzeria">Pizzería / Italiano</option>
+      <option value="asiatico">Asiático / Sushi</option>
+      <option value="cafe">Cafetería / Brunch</option>
     </select>
   </div>
 
   <div class="input-group">
-    <label>Color de Marca</label>
+    <div class="color-label-container">
+      <label>Color de Marca</label>
+      <span>(Elige uno)</span>
+    </div>
     <div class="color-picker-container">
-      <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32"></div>
-      <div class="color-option" style="background:#FF8C00" data-color="FF8C00"></div>
-      <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
-      <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
-      <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
+      <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32" title="Verde"></div>
+      <div class="color-option" style="background:#FF8C00" data-color="FF8C00" title="Naranja"></div>
+      <div class="color-option" style="background:#D32F2F" data-color="D32F2F" title="Rojo"></div>
+      <div class="color-option" style="background:#E91E63" data-color="E91E63" title="Rosa"></div>
+      <div class="color-option" style="background:#8D6E63" data-color="8D6E63" title="Marrón"></div>
+      <div class="color-option" style="background:#111827" data-color="111827" title="Negro"></div>
+      <div class="color-option" style="background:#2962FF" data-color="2962FF" title="Azul"></div>
+      <div class="color-option" style="background:#6200EA" data-color="6200EA" title="Morado"></div>
+      <div class="color-option" style="background:#00897B" data-color="00897B" title="Turquesa"></div>
+      <div class="color-option" style="background:#FBC02D" data-color="FBC02D" title="Amarillo"></div>
     </div>
   </div>
 
-  <button id="generateBtn">Generar Demo</button>
+  <button id="generateBtn">Crear Demo</button>
 
-  <div id="toast" class="toast error">
-    <span>⚠️</span>
-    <span id="toastText"></span>
+  <div class="footer-note">
+    ℹ️ <strong>Nota:</strong> Esto es solo un ejemplo rápido. Nuestra versión final incluirá tu logotipo real, fotografías profesionales y un diseño 100% personalizado a tu marca.
   </div>
+</div>
 
-<p><em>Este ejemplo es una versión sencilla de prueba: los diseños finales se personalizan completamente para cada restaurante.</em></p>
+<div id="toast" class="toast">
+  <span>⚠️</span> <span id="toastText">Error</span>
 </div>
 
 <script>
 let selectedHex = '2E7D32';
 
+// 1. Selector de Color
 document.querySelectorAll('.color-option').forEach(el => {
   el.onclick = () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     selectedHex = el.dataset.color;
+    
+    // Feedback táctil
+    if(navigator.vibrate) navigator.vibrate(10);
   };
 });
 
+// 2. Autoselección por tipo
+const typeSelect = document.getElementById('restaurantType');
+const defaultColors = {
+  'restaurante': '2E7D32',
+  'hamburgueseria': 'FF8C00',
+  'pizzeria': 'D32F2F',
+  'asiatico': 'E91E63',
+  'cafe': '8D6E63'
+};
+
+typeSelect.addEventListener('change', () => {
+  const type = typeSelect.value;
+  const suggestedColor = defaultColors[type];
+  if(suggestedColor) {
+    const colorOption = document.querySelector(`.color-option[data-color="${suggestedColor}"]`);
+    if(colorOption) colorOption.click();
+  }
+});
+
+// 3. Toast
 const toast = document.getElementById('toast');
 const toastText = document.getElementById('toastText');
 
 function showToast(msg) {
   toastText.textContent = msg;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+  setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+// 4. Generar URL
 document.getElementById('generateBtn').onclick = () => {
-  const name = restaurantName.value.trim();
-  const type = restaurantType.value;
+  const name = document.getElementById('restaurantName').value.trim();
+  const type = document.getElementById('restaurantType').value;
 
-  if (!name) {
-    showToast('Escribe el nombre del restaurante');
-    return;
-  }
-  if (!type) {
-    showToast('Selecciona el tipo de cocina');
-    return;
-  }
+  if (!name) { showToast('Falta el nombre'); return; }
+  if (!type) { showToast('Falta el tipo'); return; }
 
-  const url = `principal.html?n=${encodeURIComponent(name)}&categoria=${type}&btn=${selectedHex}&auth=true`;
-  window.open(url, '_blank');
+  const btn = document.getElementById('generateBtn');
+  btn.innerHTML = "Generando...";
+  
+  setTimeout(() => {
+    // Generar URL
+    const url = `principal.html?n=${encodeURIComponent(name)}&categoria=${type}&btn=${selectedHex}&auth=true`;
+    window.open(url, '_blank');
+    btn.innerHTML = "Crear Demo";
+  }, 500);
 };
 </script>
+
 </body>
 </html>

@@ -2,53 +2,51 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1, user-scalable=no"/>
 <meta name="theme-color" content="#68B553" id="metaThemeColor" />
 <title data-lang="title">Compartir</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  /* --- Variables Base --- */
-  --primary-color: #68B553; /* Se sobrescribe por JS */
+  /* Se sobrescribe por JS */
+  --brand-color: #68B553; 
   
-  --bg-body: #f8f9fa; 
+  --bg-body: #f8fafc;
   --bg-card: #ffffff;
-  --bg-photo: #f0f0f0;
+  --bg-photo: #f1f5f9;
   
-  --text-main: #333333;
-  --text-sec: #6b7280;
+  --text-main: #1e293b;
+  --text-sec: #64748b;
+  --border: #e2e8f0;
   
-  --border: #e0e0e0;
-  --shadow: rgba(0,0,0,0.08);
-  
-  --btn-placeholder-bg: #ffffff;
+  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.1);
+  --shadow-soft: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 [data-theme="dark"] {
-  --bg-body: #121212; 
-  --bg-card: #1e1e1e;
-  --bg-photo: #2a2a2a;
-  --text-main: #f0f0f0;
-  --text-sec: #a0a0a0;
-  --border: #333333;
-  --shadow: rgba(0,0,0,0.4);
-  --btn-placeholder-bg: #2a2a2a;
+  --bg-body: #0f172a;
+  --bg-card: #1e293b;
+  --bg-photo: #0f172a;
+  --text-main: #f8fafc;
+  --text-sec: #94a3b8;
+  --border: #334155;
+  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.4);
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif; 
+  font-family: 'Outfit', sans-serif; 
   background: var(--bg-body);
   color: var(--text-main);
   min-height: 100vh;
@@ -56,16 +54,20 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   -webkit-font-smoothing: antialiased;
   transition: background 0.3s ease, color 0.3s ease;
+  padding: 20px;
 }
 
-/* --- Controles --- */
+/* --- CONTROLES SUPERIORES (Flotantes) --- */
 .top-controls {
   position: absolute;
-  top: 20px; right: 20px;
-  display: flex; align-items: center; gap: 12px; z-index: 10;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
 }
 
 .lang-badge {
@@ -74,14 +76,15 @@ body {
   color: var(--text-sec); padding: 5px 10px; border-radius: 50px;
 }
 
-.theme-btn {
-  background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text-main); width: 36px; height: 36px;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: transform 0.2s;
+.theme-btn { 
+  background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
+  color: var(--text-main); display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+  transition: transform 0.2s;
 }
+.theme-btn:active { transform: scale(0.9); }
 
-/* --- Card --- */
+/* --- CONTENIDO PRINCIPAL --- */
 .share-card {
   background: var(--bg-card);
   border-radius: 24px; 
@@ -89,80 +92,91 @@ body {
   border: 1px solid var(--border);
   width: 100%; max-width: 420px;
   text-align: center;
-  box-shadow: 0 10px 40px var(--shadow); 
-  animation: fadeIn 0.6s ease-out;
+  box-shadow: var(--shadow-card);
+  animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  margin-top: 40px; /* Espacio para no chocar con los controles */
 }
 
-h2 { margin: 0 0 10px; font-size: 1.4em; font-weight: 700; color: var(--text-main); }
-p.subtitle { margin: 0 0 25px; font-size: 0.9em; color: var(--text-sec); line-height: 1.5; }
+h2 { margin: 0 0 8px; font-size: 1.5em; font-weight: 800; color: var(--text-main); }
+p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-height: 1.5; font-weight: 400; }
 
 /* Área de Foto */
 .photo-area {
-  width: 100%; aspect-ratio: 4/3;
-  border-radius: 16px; 
+  width: 100%; aspect-ratio: 1/1; 
+  max-height: 350px;
+  border-radius: 20px; 
   border: 2px dashed var(--border); 
   background: var(--bg-photo); 
   overflow: hidden; 
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 25px; position: relative; 
-  transition: border-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.photo-preview-container { width: 100%; height: 100%; display: none; }
+.photo-preview-container { width: 100%; height: 100%; display: none; background: #000; }
 .photo-preview { width: 100%; height: 100%; object-fit: contain; }
 
 #btnRemovePhoto {
-  position: absolute; top: 10px; right: 10px;
-  width: 32px; height: 32px; border: none; border-radius: 50%;
-  background: rgba(0,0,0,0.6); color: white; font-size: 1.2em; line-height: 1;
-  cursor: pointer; z-index: 5; display: none; 
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px; border: none; border-radius: 50%;
+  background: rgba(0,0,0,0.6); color: white; font-size: 1.2em;
+  cursor: pointer; z-index: 5; display: none; backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center;
 }
 
 .placeholder-content {
-  display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%;
 }
 
+/* Botones de acción */
 .placeholder-btn {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 80%; padding: 12px 0;
-  border: 2px solid var(--primary-color);
-  border-radius: 12px;
-  font-weight: 600; font-size: 0.95em;
+  width: 85%; padding: 14px 0;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-card);
+  font-weight: 600; font-size: 1em;
   cursor: pointer; transition: all 0.2s ease;
-  color: var(--primary-color); background: var(--btn-placeholder-bg);
+  color: var(--text-main);
+  box-shadow: var(--shadow-soft);
 }
-.placeholder-btn:active { transform: scale(0.98); opacity: 0.8; }
+.placeholder-btn:active { transform: scale(0.98); }
+.placeholder-btn span:first-child { font-size: 1.2em; }
+.placeholder-btn:hover { border-color: var(--brand-color); color: var(--brand-color); }
 
-.btn {
-  padding: 16px 0; border: none; border-radius: 12px; 
-  font-weight: 700; font-size: 1.0em; width: 100%;
-  cursor: pointer; transition: all 0.2s ease;
-}
-
+/* Botón Compartir */
 .btn-primary {
-  background: var(--primary-color); color: #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  width: 100%; padding: 18px 0; border: none; border-radius: 16px; 
+  font-weight: 800; font-size: 1.1em; 
+  background: var(--brand-color); color: #fff;
+  cursor: pointer; transition: all 0.2s ease;
+  box-shadow: 0 10px 20px -5px var(--brand-color); 
 }
-.btn-primary:active { transform: scale(0.98); }
+.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
 
+/* Toggle Watermark */
 .watermark-toggle {
-  margin: 0 0 20px; display: flex; align-items: center; justify-content: center;
-  gap: 8px; font-size: 0.85em; color: var(--text-sec); cursor: pointer; 
+  margin: 0 0 25px; display: flex; align-items: center; justify-content: center;
+  gap: 10px; font-size: 0.9em; color: var(--text-sec); cursor: pointer; font-weight: 500;
 }
-.watermark-toggle input { accent-color: var(--primary-color); transform: scale(1.2); }
+.watermark-toggle input { 
+  accent-color: var(--brand-color); 
+  width: 18px; height: 18px; cursor: pointer;
+}
 
-.note { font-size: 0.8em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; }
+.note { font-size: 0.85em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300; }
+
 </style>
 </head>
 <body>
 
 <div class="top-controls">
   <div class="lang-badge" id="langDisplay">ES</div>
-  <button class="theme-btn" id="themeBtn"></button>
+  <button class="theme-btn" id="themeBtn">☀️</button>
 </div>
 
 <div class="share-card">
-  <h2 id="shareTitle">📸 Comparte tu momento</h2>
+  <h2 id="shareTitle">📸 Tu Momento</h2>
   <p id="shareSub" class="subtitle">Sube una foto y compártela con tus amigos.</p>
 
   <div class="photo-area" id="photoArea">
@@ -170,14 +184,15 @@ p.subtitle { margin: 0 0 25px; font-size: 0.9em; color: var(--text-sec); line-he
     <div class="photo-preview-container" id="photoPreviewContainer">
       <img id="photoPreview" class="photo-preview" alt="Vista previa">
     </div>
-    <button id="btnRemovePhoto">×</button>
+    
+    <button id="btnRemovePhoto">✕</button>
 
     <div class="placeholder-content" id="placeholderContent">
       <div class="placeholder-btn" id="btnCamera">
-        <span>📷</span> <span data-lang="takePhoto">Tomar foto</span>
+        <span>📷</span> <span data-lang="takePhoto">Cámara</span>
       </div>
       <div class="placeholder-btn" id="btnGallery">
-        <span>🖼️</span> <span data-lang="choosePhoto">Elegir foto</span>
+        <span>🖼️</span> <span data-lang="choosePhoto">Galería</span>
       </div>
     </div>
 
@@ -191,7 +206,7 @@ p.subtitle { margin: 0 0 25px; font-size: 0.9em; color: var(--text-sec); line-he
     <span id="watermarkLabel">Incluir nombre del restaurante</span>
   </label>
 
-  <button id="btnShare" class="btn btn-primary">Compartir</button>
+  <button id="btnShare" class="btn-primary">Compartir</button>
   <p class="note" id="note">Si no eliges foto, se compartirá una tarjeta estándar.</p>
 </div>
 
@@ -200,6 +215,7 @@ p.subtitle { margin: 0 0 25px; font-size: 0.9em; color: var(--text-sec); line-he
 const DEFAULT_CARD="img/logo35.png"; 
 const LOGO_WATERMARK_URL = "img/PataMig.png"; 
 
+// Paletas de respaldo
 const palettes = {
     'hamburgueseria': '#FF8C00', 
     'pizzeria':       '#D32F2F', 
@@ -210,15 +226,15 @@ const palettes = {
 };
 
 const COPY = {
-  es: { title: "Compartir", shareTitle: "📸 Comparte tu momento", shareSub: "Sube una foto y compártela.", note: "Si no hay foto, se usará una tarjeta.", shareBtn: "Compartir", takePhoto: "Tomar foto", choosePhoto: "Elegir foto", watermark: "Incluir nombre" },
-  en: { title: "Share", shareTitle: "📸 Share your moment", shareSub: "Upload a photo and share it.", note: "No photo? A card will be used.", shareBtn: "Share", takePhoto: "Take photo", choosePhoto: "Choose photo", watermark: "Include name" },
-  de: { title: "Teilen", shareTitle: "📸 Moment teilen", shareSub: "Foto hochladen und teilen.", note: "Ohne Foto wird eine Karte geteilt.", shareBtn: "Teilen", takePhoto: "Foto aufnehmen", choosePhoto: "Foto wählen", watermark: "Name einfügen" },
-  fr: { title: "Partager", shareTitle: "📸 Partagez l'instant", shareSub: "Téléchargez et partagez.", note: "Sans photo, une carte sera utilisée.", shareBtn: "Partager", takePhoto: "Prendre photo", choosePhoto: "Choisir photo", watermark: "Inclure le nom" },
-  it: { title: "Condividi", shareTitle: "📸 Condividi il momento", shareSub: "Carica e condividi.", note: "Senza foto useremo una card.", shareBtn: "Condividi", takePhoto: "Scatta foto", choosePhoto: "Scegli foto", watermark: "Includi nome" }
+  es: { title: "Compartir", shareTitle: "📸 Tu Momento", shareSub: "Sube una foto y compártela.", note: "Si no hay foto, se usará una tarjeta.", shareBtn: "Compartir Ahora", takePhoto: "Usar Cámara", choosePhoto: "Abrir Galería", watermark: "Incluir nombre" },
+  en: { title: "Share", shareTitle: "📸 Your Moment", shareSub: "Upload a photo and share it.", note: "No photo? A card will be used.", shareBtn: "Share Now", takePhoto: "Use Camera", choosePhoto: "Open Gallery", watermark: "Include name" },
+  de: { title: "Teilen", shareTitle: "📸 Dein Moment", shareSub: "Foto hochladen und teilen.", note: "Ohne Foto wird eine Karte geteilt.", shareBtn: "Jetzt Teilen", takePhoto: "Kamera", choosePhoto: "Galerie", watermark: "Name einfügen" },
+  fr: { title: "Partager", shareTitle: "📸 Votre Moment", shareSub: "Téléchargez et partagez.", note: "Sans photo, une carte sera utilisée.", shareBtn: "Partager", takePhoto: "Caméra", choosePhoto: "Galerie", watermark: "Inclure le nom" },
+  it: { title: "Condividi", shareTitle: "📸 Il tuo Momento", shareSub: "Carica e condividi.", note: "Senza foto useremo una card.", shareBtn: "Condividi Ora", takePhoto: "Fotocamera", choosePhoto: "Galleria", watermark: "Includi nome" }
 };
 
 let selectedFile = null;
-let currentRestaurantName = ""; // Variable para guardar el nombre aunque no se muestre
+let currentRestaurantName = ""; // Guardamos el nombre para la marca de agua
 
 /* --- 2. INICIALIZACIÓN --- */
 function init() {
@@ -227,14 +243,21 @@ function init() {
   // A. SEGURIDAD
   if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  // B. GUARDAR NOMBRE (Para watermark) PERO NO MOSTRARLO EN HTML
+  // B. GUARDAR NOMBRE (Pero no mostrarlo en el HTML, solo para Watermark)
   currentRestaurantName = params.get('n') || "Restaurante";
   document.title = "Compartir - " + currentRestaurantName;
 
-  // C. COLOR
+  // C. COLOR DINÁMICO
   const category = params.get('categoria') || 'default';
-  const color = palettes[category] || palettes['default'];
-  document.documentElement.style.setProperty('--primary-color', color);
+  let color;
+  
+  if(params.get('btn')) {
+     color = '#' + params.get('btn'); // Color del configurador
+  } else {
+     color = palettes[category] || palettes['default']; // Fallback
+  }
+  
+  document.documentElement.style.setProperty('--brand-color', color);
   document.getElementById('metaThemeColor').setAttribute('content', color);
 
   // D. IDIOMA Y TEMA
@@ -251,8 +274,8 @@ function handleFileInput(input, preview, content, container, btnRemove, area){
   
   content.style.display = 'none';
   container.style.display = 'block';
-  btnRemove.style.display = 'block';
-  area.style.borderColor = 'var(--primary-color)'; 
+  btnRemove.style.display = 'flex';
+  area.style.borderColor = 'var(--brand-color)'; 
   area.style.borderStyle = 'solid';
 }
 
@@ -282,7 +305,7 @@ async function addWatermarkToImage(file){
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      // MARCA DE AGUA: Usamos la variable guardada 'currentRestaurantName'
+      // Marca de agua simple con el nombre del restaurante
       const name = currentRestaurantName; 
       const fontSize = Math.max(30, canvas.width * 0.05);
       
@@ -299,6 +322,10 @@ async function addWatermarkToImage(file){
 }
 
 async function shareExperience(){
+  const btn = document.getElementById('btnShare');
+  const originalText = btn.textContent;
+  btn.textContent = "Procesando...";
+  
   try{
     let fileToShare = selectedFile;
     
@@ -322,6 +349,8 @@ async function shareExperience(){
     }
   } catch(err){ 
     if (err.name !== 'AbortError') console.error(err);
+  } finally {
+    btn.textContent = originalText;
   }
 }
 

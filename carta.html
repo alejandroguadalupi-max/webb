@@ -2,173 +2,192 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, maximum-scale=1" />
-<title>Menú</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
+<title>Carta Digital</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  /* --- Variables Base (Se sobreescriben por JS) --- */
-  --bg-body: #ffffff;
+  /* Se sobrescribe por JS */
+  --brand-color: #68B553; 
+  
+  --bg-body: #f8fafc;
   --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-sec: #64748b;
+  --border: #e2e8f0;
   
-  --text-main: #2d3436;
-  --text-sec: #636e72;
-  
-  /* Color Principal Dinámico */
-  --primary: #68B553; 
-  --primary-dark: #509e3c;
-  --primary-light: #eafbe4;
-  
-  --shadow-card: 0 4px 20px rgba(0,0,0,0.06);
-  --shadow-float: 0 15px 35px rgba(0, 0, 0, 0.2);
-  
-  --border: #f1f2f6;
-  --radius: 16px;
-  --font: 'Plus Jakarta Sans', sans-serif;
-  
-  --spanish-btn: #FFC107; 
+  /* Sombras Premium */
+  --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.05);
+  --shadow-float: 0 15px 35px -5px rgba(0,0,0,0.15);
 }
 
 [data-theme="dark"] {
-  --bg-body: #121212;
-  --bg-card: #1e1e1e;
-  --text-main: #f5f6fa;
-  --text-sec: #a4b0be;
-  /* En dark mode, el primary se mantiene o ajusta ligeramente */
-  --shadow-card: 0 4px 20px rgba(0,0,0,0.4);
-  --border: #2f3640;
-  --spanish-btn: #FFD54F;
+  --bg-body: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-sec: #94a3b8;
+  --border: #334155;
+  --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.3);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-  margin: 0; background: var(--bg-body); color: var(--text-main); font-family: var(--font);
-  transition: background 0.3s ease; padding-bottom: 120px;
+  margin: 0; 
+  background: var(--bg-body); 
+  color: var(--text-main); 
+  font-family: 'Outfit', sans-serif;
+  transition: background 0.3s ease; 
+  padding-bottom: 140px; 
+  -webkit-font-smoothing: antialiased;
 }
 
 /* --- HEADER --- */
 .header {
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.9);
   padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; z-index: 800;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+[data-theme="dark"] .header { background: rgba(30, 41, 59, 0.9); }
 
 .brand-area { display: flex; flex-direction: column; }
 .brand-name {
-  font-size: 1.6rem; 
-  font-weight: 800; 
-  color: var(--primary); 
-  margin: 0; line-height: 1;
+  font-size: 1.3rem; font-weight: 800; 
+  color: var(--brand-color); 
+  margin: 0; line-height: 1.1;
   text-transform: capitalize;
 }
-.brand-category { font-size: 0.8rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.brand-category { font-size: 0.8rem; color: var(--text-sec); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
-/* Grupo Derecho */
 .header-right { display: flex; align-items: center; gap: 10px; }
 
-.lang-badge {
-  font-size: 0.75rem; font-weight: 800; border: 1px solid var(--border); 
-  background: var(--bg-body); color: var(--text-sec); 
-  padding: 6px 10px; border-radius: 50px; cursor: default;
-}
-
 .theme-btn { 
-  background: none; border: none; cursor: pointer; padding: 4px; 
+  background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
   color: var(--text-main); display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+  transition: transform 0.2s;
 }
-.theme-btn svg { width: 22px; height: 22px; }
+.theme-btn:active { transform: scale(0.9); }
 
-/* FILTROS Y ALERGIAS */
-.controls-area {
-  padding: 15px 20px 5px 20px;
+/* --- CONTROLES --- */
+.controls-container {
+  position: sticky; top: 62px; z-index: 790;
   background: var(--bg-body);
+  padding: 10px 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
 }
 
+.allergy-wrapper { padding: 0 20px 10px 20px; }
 .allergy-select {
-  width: 100%;
-  appearance: none; -webkit-appearance: none;
-  background: var(--bg-card); 
-  border: 1px solid var(--border); 
+  width: 100%; appearance: none; -webkit-appearance: none;
+  background: var(--bg-card); border: 1px solid var(--border); 
   color: var(--text-main); font-family: inherit;
-  font-size: 0.9rem; font-weight: 600;
-  padding: 10px 16px; border-radius: 12px;
-  cursor: pointer; outline: none; margin-bottom: 15px;
+  font-size: 0.9rem; font-weight: 500;
+  padding: 12px 16px; border-radius: 12px; cursor: pointer; outline: none;
+  box-shadow: var(--shadow-card);
+  /* Icono flecha SVG data uri */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 10px auto;
 }
 
-/* Scroll Horizontal Filtros */
 .filters-scroll { 
-  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; 
+  display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; 
+  scrollbar-width: none; -ms-overflow-style: none;
 }
 .filters-scroll::-webkit-scrollbar { display: none; }
 
 .filter-pill {
-  padding: 8px 18px; 
+  padding: 10px 20px; 
   background: var(--bg-card); 
   border: 1px solid var(--border); 
   border-radius: 50px; 
   white-space: nowrap; 
   font-size: 0.9rem; font-weight: 600; 
-  color: var(--text-sec); cursor: pointer; transition: 0.2s;
+  color: var(--text-sec); cursor: pointer; transition: all 0.2s;
 }
 .filter-pill.active { 
-  color: #fff; /* Texto siempre blanco para contraste */
-  background: var(--primary); 
-  border-color: var(--primary); 
-  box-shadow: 0 4px 12px var(--primary-light); 
+  color: #fff; 
+  background: var(--brand-color); 
+  border-color: var(--brand-color); 
+  box-shadow: 0 4px 12px -3px var(--brand-color); 
 }
 
-/* MENU GRID */
-.menu-grid { display: flex; flex-direction: column; gap: 16px; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
+/* --- MENU LIST --- */
+.menu-grid { 
+  display: flex; flex-direction: column; gap: 15px; 
+  padding: 10px 20px; max-width: 800px; margin: 0 auto; 
+}
 
 .dish-card {
-  background: var(--bg-card); border-radius: var(--radius); padding: 16px;
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-  box-shadow: var(--shadow-card); border: 1px solid transparent; transition: 0.2s;
+  background: var(--bg-card); border-radius: 16px; padding: 16px;
+  display: grid; grid-template-columns: 1fr auto; gap: 15px;
+  box-shadow: var(--shadow-card); border: 1px solid transparent; 
+  transition: transform 0.2s;
+  align-items: start;
 }
-/* Borde sutil al hover en desktop o active en mobile */
-.dish-card:active { border-color: var(--primary); transform: scale(0.99); }
 
-.dish-info { flex: 1; }
-.dish-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
-.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.2; color: var(--text-main); }
-.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; margin-top: 6px; }
+.dish-info { display: flex; flex-direction: column; gap: 5px; }
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); }
+.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
+.dish-price { font-weight: 700; font-size: 1rem; color: var(--text-main); margin-top: 5px; }
 
-.dish-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 70px; }
-.dish-price { font-weight: 800; font-size: 1rem; color: var(--primary); }
+/* Controles (+/-) */
+.action-area {
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start;
+  min-width: 90px;
+}
 
-.add-btn {
-  background: var(--bg-body); color: var(--primary); 
-  border: 1px solid var(--primary); 
-  height: 34px; padding: 0 14px; 
-  border-radius: 10px; font-size: 1.2rem; font-weight: 700; 
+/* Botón "Añadir" */
+.btn-add-simple {
+  background: rgba(0,0,0,0.03); 
+  color: var(--brand-color);
+  font-weight: 700; font-size: 0.9rem;
+  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
   cursor: pointer; transition: 0.2s;
-  display: flex; align-items: center; justify-content: center;
+  width: 100%;
 }
-.add-btn.active { 
-  background: var(--primary); color: #fff; 
-  box-shadow: 0 4px 10px var(--primary-light);
-}
+.btn-add-simple:active { transform: scale(0.95); background: rgba(0,0,0,0.05); }
 
-/* FLOAT CART BUTTON */
+/* Selector Cantidad [ - 1 + ] */
+.qty-selector {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-body); border: 1px solid var(--border);
+  border-radius: 8px; padding: 3px; width: 100%;
+}
+.qty-selector button {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  background: var(--bg-card); color: var(--text-main);
+  font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.qty-selector button:active { transform: scale(0.9); }
+.qty-selector button.plus { color: var(--brand-color); }
+.qty-selector span { font-weight: 600; font-size: 0.95rem; }
+
+/* --- CESTA FLOTANTE --- */
 #cart-float {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px) scale(0.9);
   background: var(--text-main); color: var(--bg-card); 
-  padding: 16px 28px; border-radius: 100px; 
+  padding: 14px 24px; border-radius: 100px; 
   display: flex; align-items: center; gap: 12px; justify-content: center;
-  box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  font-weight: 700; font-size: 1rem;
+  box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; 
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: 600; font-size: 1rem; width: max-content;
 }
 #cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
-.badge-count { background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
+.badge-count { background: var(--brand-color); color: #fff; padding: 3px 9px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
 
-/* --- SHEET / MODAL (Igual que antes pero adaptado) --- */
+/* --- MODAL (ORDER SHEET) --- */
 .overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
   z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; justify-content: center; align-items: flex-end;
@@ -176,47 +195,55 @@ body {
 .overlay.open { opacity: 1; pointer-events: auto; }
 
 .sheet {
-  background: var(--bg-card); width: 100%; max-width: 600px; max-height: 90vh; border-radius: 24px 24px 0 0;
-  padding: 24px; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  background: var(--bg-card); width: 100%; max-width: 600px; max-height: 85vh; border-radius: 24px 24px 0 0;
+  padding: 25px; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
 }
 .overlay.open .sheet { transform: translateY(0); }
 
 .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
-
-/* Waiter Controls */
-.waiter-box { background: var(--bg-body); border-radius: 12px; padding: 15px; margin-bottom: 15px; display: none; }
-.translate-btn {
-  width: 100%; padding: 12px; border-radius: 10px; background: var(--border); border: none;
-  font-weight: 700; cursor: pointer; color: var(--text-sec); display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.translate-btn.active { background: var(--spanish-btn); color: #000; }
+.sheet-title { margin: 0; font-size: 1.3rem; font-weight: 700; }
 
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-
-.order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); }
-.order-item:last-child { border-bottom: none; }
-
-.qty-controls { display: flex; align-items: center; gap: 10px; }
-.qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-body); color: var(--text-main); font-weight: 700; cursor: pointer; }
-
-/* MODO CAMARERO ESTILOS */
-.sheet.waiter-mode { height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 60px; }
-.sheet.waiter-mode .order-item { padding: 20px 0; border-bottom: 2px solid var(--border); }
-.sheet.waiter-mode .order-name { font-size: 1.4rem; font-weight: 800; }
-.sheet.waiter-mode .waiter-qty-big { font-size: 1.8rem; font-weight: 900; color: var(--primary); margin-right: 15px; display: block; }
-.waiter-qty-big { display: none; }
-
-#closeWaiterBtn {
-  position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: #000; color: #fff;
-  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; z-index: 3001;
-}
+.order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-body); border-radius: 12px; }
+.order-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
 
 textarea.notes {
-  width: 100%; padding: 12px; border-radius: 12px; background: var(--bg-body); border: 1px solid var(--border);
-  color: var(--text-main); font-family: inherit; resize: none; outline: none; margin-bottom: 10px;
+  width: 100%; padding: 15px; border-radius: 12px; background: var(--bg-body); border: 2px solid var(--border);
+  color: var(--text-main); font-family: inherit; resize: none; outline: none; margin-bottom: 15px; font-size: 0.95rem;
+}
+textarea.notes:focus { border-color: var(--brand-color); }
+
+/* Botones de acción Modal */
+.btn-action-wrapper { display: flex; flex-direction: column; gap: 10px; }
+
+.btn-waiter {
+  width: 100%; padding: 16px; border-radius: 14px; 
+  background: #111827; color: white; /* Negro elegante por defecto */
+  border: none; font-weight: 700; font-size: 1.1rem; cursor: pointer; 
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: var(--shadow-card);
 }
 
-.clear-link { text-align: center; font-size: 0.9rem; color: var(--text-sec); text-decoration: underline; cursor: pointer; margin-top: 10px; }
+.clear-btn { background: transparent; border: none; color: var(--text-sec); text-decoration: underline; cursor: pointer; align-self: center; font-size: 0.9rem; margin-top: 5px;}
+
+/* --- MODO CAMARERO (ZOOM) --- */
+/* Cuando se activa, el sheet ocupa todo y es enorme */
+.sheet.waiter-mode { 
+  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 70px; 
+}
+.sheet.waiter-mode .order-item { 
+  padding: 25px 10px; background: transparent; border-bottom: 2px solid var(--border); border-radius: 0; 
+}
+.sheet.waiter-mode .order-name { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+.sheet.waiter-mode .qty-display { font-size: 2rem; font-weight: 900; color: var(--brand-color); margin-right: 20px; }
+
+/* Botón cerrar modo camarero */
+#closeWaiterBtn {
+  position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: #000; color: #fff;
+  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; z-index: 3001;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
 
 </style>
 </head>
@@ -227,20 +254,21 @@ textarea.notes {
     <h1 class="brand-name" id="brandNameDisplay">Restaurante</h1>
     <span class="brand-category" id="catDisplay">Menu</span>
   </div>
-  
   <div class="header-right">
     <div class="lang-badge" id="langDisplay">ES</div>
-    <button class="theme-btn" id="themeBtn"></button>
+    <button class="theme-btn" id="themeBtn">☀️</button>
   </div>
 </header>
 
-<div class="controls-area">
-  <select id="allergyFilter" class="allergy-select" onchange="render()">
-    <option value="">🌱 Filtrar Alergias / Dietas</option>
-    <option value="gf">🌾 Sin Gluten</option>
-    <option value="lf">🥛 Sin Lactosa</option>
-    <option value="v">🥦 Vegano</option>
-  </select>
+<div class="controls-container">
+  <div class="allergy-wrapper">
+    <select id="allergyFilter" class="allergy-select" onchange="render()">
+      <option value="">🌱 Filtrar Alergias / Dietas</option>
+      <option value="gf">🌾 Sin Gluten</option>
+      <option value="lf">🥛 Sin Lactosa</option>
+      <option value="v">🥦 Vegano</option>
+    </select>
+  </div>
 
   <div class="filters-scroll">
     <button class="filter-pill active" onclick="filter('bebidas')" id="f-drk">Bebidas</button>
@@ -263,185 +291,208 @@ textarea.notes {
 
   <div class="sheet" id="orderSheet">
     <div class="sheet-header">
-      <h3 style="margin:0; font-size:1.4rem" id="modalTitle">Tu Pedido</h3>
-      <div onclick="closeSheet()" style="cursor:pointer; padding:5px; opacity:0.5; font-size:1.5rem">×</div>
-    </div>
-    
-    <div class="waiter-box" id="waiterBox">
-      <button id="translateBtn" class="translate-btn" onclick="enterWaiterMode()">
-        <span>🗣️</span> <span id="transText">Mostrar al Camarero (ES)</span>
-      </button>
+      <h3 class="sheet-title" id="modalTitle">Tu Pedido</h3>
+      <div onclick="closeSheet()" style="cursor:pointer; padding:5px; font-size:1.5rem">✕</div>
     </div>
     
     <div class="order-list" id="orderList"></div>
 
-    <div class="notes-container" id="notesArea">
+    <div id="notesArea">
       <textarea class="notes" id="notesField" placeholder="Notas (ej. sin hielo, carne muy hecha...)" oninput="saveNotes()"></textarea>
     </div>
     
-    <div onclick="clearCart()" class="clear-link" id="clearTxt">Borrar todo</div>
+    <div class="btn-action-wrapper">
+      <button class="btn-waiter" id="btnShowWaiter" style="display:none;" onclick="enterWaiterMode()">
+        <span>🗣️</span> Mostrar al Camarero
+      </button>
+      
+      <button onclick="clearCart()" class="clear-btn" id="clearTxt">Borrar todo</button>
+    </div>
   </div>
 </div>
 
 <script>
-/* --- 1. CONFIGURACIÓN DINÁMICA (PALETAS Y MENÚS) --- */
+/* --- CONFIGURACIÓN DE MENÚS Y COLORES --- */
 const config = {
-  // Paletas de Colores
-  palettes: {
-    'hamburgueseria': { primary: '#FF8C00', light: '#FFF3E0', dark: '#E65100' },
-    'pizzeria':       { primary: '#D32F2F', light: '#FFEBEE', dark: '#B71C1C' },
-    'asiatico':       { primary: '#E91E63', light: '#FCE4EC', dark: '#C2185B' },
-    'cafe':           { primary: '#8D6E63', light: '#EFEBE9', dark: '#5D4037' },
-    'restaurante':    { primary: '#2E7D32', light: '#E8F5E9', dark: '#1B5E20' }, // Default
-    'default':        { primary: '#68B553', light: '#eafbe4', dark: '#509e3c' }
-  },
-  
-  // Menús Diferentes según Categoría
+  // Menús (Ampliado)
   menus: {
     'pizzeria': [
-       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.00, name: {es:"Provolone Fundido", en:"Melted Provolone"}, desc: {es:"Con tomate y orégano", en:"Tomato & oregano"} },
-       { id: 102, cat: 'principales', tags: [], price: 12.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil"} },
-       { id: 103, cat: 'principales', tags: [], price: 14.50, name: {es:"Pizza Diavola", en:"Pizza Diavola"}, desc: {es:"Picante con salami", en:"Spicy salami"} },
-       { id: 104, cat: 'postres', tags: [], price: 6.00, name: {es:"Tiramisú", en:"Tiramisu"}, desc: {es:"Casero", en:"Homemade"} }
+       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato"} },
+       { id: 102, cat: 'entrantes', tags: [], price: 12.00, name: {es:"Carpaccio", en:"Carpaccio"}, desc: {es:"Ternera con parmesano", en:"Beef with parmesan"} },
+       { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil"} },
+       { id: 105, cat: 'principales', tags: [], price: 13.50, name: {es:"Pizza Diavola", en:"Pizza Diavola"}, desc: {es:"Picante con salami", en:"Spicy salami"} },
+       { id: 106, cat: 'principales', tags: ['v'], price: 14.00, name: {es:"Pizza 4 Quesos", en:"4 Cheese Pizza"}, desc: {es:"Mozzarella, gorgonzola...", en:"Mozzarella, gorgonzola..."} },
+       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara", en:"Carbonara"}, desc: {es:"Auténtica con huevo", en:"Authentic with egg"} },
+       { id: 108, cat: 'postres', tags: [], price: 6.00, name: {es:"Tiramisú", en:"Tiramisu"}, desc: {es:"Casero", en:"Homemade"} },
+       { id: 109, cat: 'postres', tags: [], price: 5.50, name: {es:"Panna Cotta", en:"Panna Cotta"}, desc: {es:"Frutos rojos", en:"Red berries"} }
     ],
     'hamburgueseria': [
-       { id: 201, cat: 'entrantes', tags: ['v'], price: 7.50, name: {es:"Nachos con Queso", en:"Cheese Nachos"}, desc: {es:"Con guacamole", en:"With guacamole"} },
-       { id: 202, cat: 'principales', tags: [], price: 11.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Queso cheddar y bacon", en:"Cheddar & bacon"} },
-       { id: 203, cat: 'principales', tags: ['v'], price: 12.00, name: {es:"Burger Vegana", en:"Vegan Burger"}, desc: {es:"Heura y aguacate", en:"Heura & avocado"} },
-       { id: 204, cat: 'postres', tags: [], price: 5.50, name: {es:"Brownie", en:"Brownie"}, desc: {es:"Con helado", en:"With ice cream"} }
+       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos", en:"Nachos"}, desc: {es:"Con guacamole y cheddar", en:"Guacamole & cheddar"} },
+       { id: 202, cat: 'entrantes', tags: [], price: 9.00, name: {es:"Alitas BBQ", en:"BBQ Wings"}, desc: {es:"Salsa barbacoa casera", en:"Homemade BBQ sauce"} },
+       { id: 203, cat: 'entrantes', tags: ['v'], price: 6.50, name: {es:"Aros de Cebolla", en:"Onion Rings"}, desc: {es:"Crujientes", en:"Crispy"} },
+       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon, lechuga", en:"Cheddar, bacon, lettuce"} },
+       { id: 205, cat: 'principales', tags: [], price: 14.00, name: {es:"Burger Trufada", en:"Truffle Burger"}, desc: {es:"Queso brie y trufa", en:"Brie & truffle"} },
+       { id: 206, cat: 'principales', tags: ['v'], price: 13.00, name: {es:"Burger Vegana", en:"Vegan Burger"}, desc: {es:"Heura y aguacate", en:"Heura & avocado"} },
+       { id: 207, cat: 'principales', tags: [], price: 11.50, name: {es:"Pollo Crispy", en:"Crispy Chicken"}, desc: {es:"Pechuga empanada", en:"Breaded chicken"} },
+       { id: 208, cat: 'postres', tags: [], price: 6.00, name: {es:"Brownie", en:"Brownie"}, desc: {es:"Con helado de vainilla", en:"With vanilla ice cream"} },
+       { id: 209, cat: 'postres', tags: [], price: 6.50, name: {es:"Cheesecake", en:"Cheesecake"}, desc: {es:"Estilo New York", en:"NY Style"} }
     ],
     'asiatico': [
-       { id: 301, cat: 'entrantes', tags: [], price: 5.50, name: {es:"Gyozas de Pollo", en:"Chicken Gyozas"}, desc: {es:"4 unidades", en:"4 units"} },
-       { id: 302, cat: 'principales', tags: [], price: 13.00, name: {es:"Ramen Tonkotsu", en:"Tonkotsu Ramen"}, desc: {es:"Caldo de cerdo y fideos", en:"Pork broth noodles"} },
-       { id: 303, cat: 'principales', tags: ['gf'], price: 15.00, name: {es:"Sushi Mix (12p)", en:"Sushi Mix (12p)"}, desc: {es:"Salmón y atún", en:"Salmon & tuna"} },
-       { id: 304, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Mochi de Té Verde", en:"Green Tea Mochi"}, desc: {es:"2 unidades", en:"2 units"} }
+       { id: 301, cat: 'entrantes', tags: [], price: 5.50, name: {es:"Gyozas", en:"Gyozas"}, desc: {es:"Pollo y verduras", en:"Chicken & veg"} },
+       { id: 302, cat: 'entrantes', tags: ['v'], price: 4.50, name: {es:"Edamame", en:"Edamame"}, desc: {es:"Con sal", en:"Salted"} },
+       { id: 303, cat: 'entrantes', tags: [], price: 6.00, name: {es:"Rollitos", en:"Spring Rolls"}, desc: {es:"Vietnamitas", en:"Vietnamese"} },
+       { id: 304, cat: 'principales', tags: [], price: 13.00, name: {es:"Ramen", en:"Ramen"}, desc: {es:"Tonkotsu (Cerdo)", en:"Tonkotsu (Pork)"} },
+       { id: 305, cat: 'principales', tags: ['gf'], price: 16.00, name: {es:"Sushi Mix", en:"Sushi Mix"}, desc: {es:"12 piezas variadas", en:"12 assorted pieces"} },
+       { id: 306, cat: 'principales', tags: [], price: 11.50, name: {es:"Pollo Teriyaki", en:"Teriyaki Chicken"}, desc: {es:"Con arroz", en:"With rice"} },
+       { id: 307, cat: 'principales', tags: ['v'], price: 10.00, name: {es:"Yakisoba", en:"Yakisoba"}, desc: {es:"Fideos y verduras", en:"Veggie noodles"} },
+       { id: 308, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Mochis", en:"Mochis"}, desc: {es:"Té verde", en:"Green tea"} },
+       { id: 309, cat: 'postres', tags: [], price: 5.00, name: {es:"Dorayaki", en:"Dorayaki"}, desc: {es:"Chocolate", en:"Chocolate"} }
     ],
     'cafe': [
-       { id: 401, cat: 'entrantes', tags: ['v'], price: 3.50, name: {es:"Croissant Mantequilla", en:"Butter Croissant"}, desc: {es:"Recién horneado", en:"Freshly baked"} },
-       { id: 402, cat: 'principales', tags: ['v'], price: 8.50, name: {es:"Tostada Aguacate", en:"Avocado Toast"}, desc: {es:"Con huevo poché", en:"Poached egg"} },
-       { id: 403, cat: 'principales', tags: [], price: 9.00, name: {es:"Sandwich Club", en:"Club Sandwich"}, desc: {es:"Pollo, bacon, lechuga", en:"Chicken, bacon, lettuce"} },
-       { id: 404, cat: 'bebidas', tags: ['gf'], price: 4.00, name: {es:"Smoothie Verde", en:"Green Smoothie"}, desc: {es:"Espinacas y manzana", en:"Spinach & apple"} }
+       { id: 401, cat: 'entrantes', tags: ['v'], price: 2.50, name: {es:"Croissant", en:"Croissant"}, desc: {es:"Mantequilla", en:"Butter"} },
+       { id: 402, cat: 'entrantes', tags: ['v'], price: 3.50, name: {es:"Carrot Cake", en:"Carrot Cake"}, desc: {es:"Casera", en:"Homemade"} },
+       { id: 403, cat: 'entrantes', tags: [], price: 4.00, name: {es:"Cookie", en:"Cookie"}, desc: {es:"Chocolate", en:"Chocolate"} },
+       { id: 404, cat: 'principales', tags: ['v'], price: 7.50, name: {es:"Tostada Aguacate", en:"Avocado Toast"}, desc: {es:"Huevo poché", en:"Poached egg"} },
+       { id: 405, cat: 'principales', tags: [], price: 9.00, name: {es:"Sandwich Club", en:"Club Sandwich"}, desc: {es:"Pollo y bacon", en:"Chicken & bacon"} },
+       { id: 406, cat: 'principales', tags: ['v'], price: 8.00, name: {es:"Açaí Bowl", en:"Acai Bowl"}, desc: {es:"Frutas y granola", en:"Fruits & granola"} },
+       { id: 407, cat: 'bebidas', tags: ['gf'], price: 4.50, name: {es:"Smoothie", en:"Smoothie"}, desc: {es:"Verde detox", en:"Green detox"} },
+       { id: 408, cat: 'bebidas', tags: ['gf'], price: 3.50, name: {es:"Latte", en:"Latte"}, desc: {es:"Especialidad", en:"Specialty"} },
+       { id: 409, cat: 'postres', tags: [], price: 4.00, name: {es:"Yogurt", en:"Yogurt"}, desc: {es:"Miel y nueces", en:"Honey & walnuts"} }
     ],
-    // Bebidas Comunes (se añaden siempre)
+    // Comunes
     'comunes': [
        { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke"}, desc: {es:"33cl", en:"33cl"} },
        { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water"}, desc: {es:"50cl", en:"50cl"} },
-       { id: 903, cat: 'bebidas', tags: ['gf'], price: 3.00, name: {es:"Cerveza", en:"Beer"}, desc: {es:"Local", en:"Local"} }
+       { id: 903, cat: 'bebidas', tags: ['gf'], price: 3.00, name: {es:"Cerveza", en:"Beer"}, desc: {es:"Nacional", en:"Local"} },
+       { id: 904, cat: 'bebidas', tags: ['gf'], price: 3.50, name: {es:"Vino Tinto", en:"Red Wine"}, desc: {es:"Copa Rioja", en:"Rioja Glass"} }
     ]
   }
 };
 
 /* --- ESTADO --- */
 let cart = {};
-let activeCategory = 'principales'; // Categoría por defecto al entrar
+let activeCategory = 'principales'; 
 let lang = 'es';
 let currentMenu = [];
-let userCategory = 'restaurante'; // Tipo de restaurante detectado
+let userCategory = 'restaurante';
 
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
   
-  // 1. Configurar Idioma
+  // Idioma
   lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
-  // 2. Detectar Restaurante y Categoría
+  // Info Restaurante
   const name = params.get('n') || "Restaurante";
   userCategory = params.get('categoria') || 'restaurante';
   
   document.getElementById('brandNameDisplay').innerText = name;
   document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
   
-  // 3. Aplicar Paleta de Colores
-  const palette = config.palettes[userCategory] || config.palettes['default'];
+  // Color Dinámico
   const root = document.documentElement.style;
-  root.setProperty('--primary', palette.primary);
-  root.setProperty('--primary-light', palette.light);
-  root.setProperty('--primary-dark', palette.dark);
+  if(params.get('btn')) {
+     const customColor = '#' + params.get('btn');
+     root.setProperty('--brand-color', customColor);
+  } else {
+     const defaults = {'pizzeria':'#D32F2F', 'hamburgueseria':'#FF8C00', 'asiatico':'#E91E63', 'cafe':'#8D6E63'};
+     root.setProperty('--brand-color', defaults[userCategory] || '#68B553');
+  }
 
-  // 4. Construir Menú (Específico + Comunes)
-  // Si no existe menú específico, usar hamburguesería como fallback genérico
-  const specificMenu = config.menus[userCategory] || config.menus['restaurante'] || config.menus['hamburgueseria'];
+  // Cargar Menú
+  const specificMenu = config.menus[userCategory] || config.menus['hamburgueseria'];
   currentMenu = [...specificMenu, ...config.menus['comunes']];
 
-  // 5. Cargar Carrito
+  // Cargar Carrito y UI
   loadCart();
-  
-  // 6. Traducir Interfaz Estática
   translateUI();
   
-  // 7. Renderizar
+  if(!hasItems('principales')) {
+     if(hasItems('entrantes')) activeCategory = 'entrantes';
+     else if(hasItems('bebidas')) activeCategory = 'bebidas';
+  }
+  
+  updateFilterUI();
   render();
   updateFloat();
 }
 
-/* --- RENDERIZADO --- */
+function hasItems(cat) { return currentMenu.some(i => i.cat === cat); }
+
+/* --- RENDERIZADO MEJORADO (+/-) --- */
 function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
   
   const allergyFilter = document.getElementById('allergyFilter').value;
 
-  // Filtrar platos
   const items = currentMenu.filter(item => {
-    // Filtro por categoría actual (pestanas)
     if(item.cat !== activeCategory) return false;
-    // Filtro por alergia
     if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
     return true;
   });
 
   if(items.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec)">No hay productos aquí.</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec); opacity:0.7">No hay productos disponibles.</div>`;
     return;
   }
 
   items.forEach(p => {
     const qty = cart[p.id] || 0;
-    const btnClass = qty > 0 ? 'add-btn active' : 'add-btn';
-    const btnContent = qty > 0 ? `${qty}` : '+';
-    
-    // Obtener nombre en idioma actual o fallback a ES
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
+
+    // Renderizar Control (+/-) o Botón simple
+    let controlHTML;
+    if (qty === 0) {
+      controlHTML = `<button class="btn-add-simple" onclick="add(${p.id})">Añadir</button>`;
+    } else {
+      controlHTML = `
+        <div class="qty-selector">
+          <button onclick="remove(${p.id})">-</button>
+          <span>${qty}</span>
+          <button class="plus" onclick="add(${p.id})">+</button>
+        </div>
+      `;
+    }
 
     container.innerHTML += `
       <div class="dish-card">
         <div class="dish-info">
-          <div class="dish-header">
-            <span class="dish-name">${pName}</span>
-          </div>
+          <div class="dish-name">${pName}</div>
           <div class="dish-desc">${pDesc}</div>
+          <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
-        <div class="dish-actions">
-          <span class="dish-price">${p.price.toFixed(2)}€</span>
-          <button class="${btnClass}" onclick="add(${p.id})">${btnContent}</button>
+        <div class="action-area">
+          ${controlHTML}
         </div>
       </div>
     `;
   });
 }
 
-/* --- FUNCIONALIDAD PESTAÑAS --- */
+function updateFilterUI() {
+  document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+  const map = { 'bebidas':'f-drk', 'entrantes':'f-ent', 'principales':'f-main', 'postres':'f-des' };
+  const activeId = map[activeCategory];
+  if(activeId) document.getElementById(activeId).classList.add('active');
+}
+
 function filter(cat) {
   activeCategory = cat;
-  document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
-  
-  // Mapeo simple de IDs botones
-  const map = { 'bebidas':'f-drk', 'entrantes':'f-ent', 'principales':'f-main', 'postres':'f-des' };
-  document.getElementById(map[cat]).classList.add('active');
-  
+  updateFilterUI();
   render();
 }
 
-/* --- CARRITO --- */
+/* --- LOGICA CARRITO --- */
 function add(id) {
   cart[id] = (cart[id] || 0) + 1;
   saveCart();
-  render(); // Actualiza botones lista
+  render(); 
   updateFloat();
-  if(document.getElementById('overlay').classList.contains('open')) renderList(); // Actualiza modal si abierto
+  if(document.querySelector('.overlay.open')) renderList(); 
 }
 
 function remove(id) {
@@ -450,9 +501,9 @@ function remove(id) {
     if(cart[id] <= 0) delete cart[id];
   }
   saveCart();
-  renderList(); // Solo necesitamos actualizar la lista del modal
-  render(); // Y los botones de fondo
+  render();
   updateFloat();
+  if(document.querySelector('.overlay.open')) renderList(); 
 }
 
 function updateFloat() {
@@ -463,20 +514,20 @@ function updateFloat() {
   else btn.classList.remove('visible');
 }
 
+/* --- LOGICA MODAL/SHEET --- */
 function renderList() {
   const list = document.getElementById('orderList');
   list.innerHTML = '';
   
-  // Modo visualización: si estamos en modo camarero, forzamos ES
   const isWaiter = document.body.classList.contains('waiter-active');
-  const displayLang = isWaiter ? 'es' : lang;
+  const displayLang = isWaiter ? 'es' : lang; // Si es modo camarero, forzar español
 
   if(Object.keys(cart).length === 0) {
     list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
+    closeSheet(); 
     return;
   }
 
-  // Ordenar items
   const items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
   
   items.forEach(p => {
@@ -484,24 +535,24 @@ function renderList() {
     const pName = p.name[displayLang] || p.name['es'];
     
     if(isWaiter) {
-      // ESTILO MODO CAMARERO (Grande y simple)
+      // DISEÑO GIGANTE CAMARERO
       list.innerHTML += `
         <div class="order-item">
           <div style="display:flex; align-items:center">
-             <span class="waiter-qty-big">${qty}</span>
+             <span class="qty-display">x${qty}</span>
              <span class="order-name">${pName}</span>
           </div>
         </div>
       `;
     } else {
-      // ESTILO MODO USUARIO (Con controles + -)
+      // DISEÑO NORMAL (User)
       list.innerHTML += `
         <div class="order-item">
-          <span style="font-weight:600; flex:1">${pName}</span>
-          <div class="qty-controls">
-            <button class="qty-btn" onclick="remove(${p.id})">-</button>
-            <span style="font-weight:700; width:20px; text-align:center">${qty}</span>
-            <button class="qty-btn" onclick="add(${p.id})">+</button>
+          <span class="order-name" style="flex:1">${pName}</span>
+          <div class="qty-selector" style="width:100px;">
+            <button onclick="remove(${p.id})">-</button>
+            <span>${qty}</span>
+            <button class="plus" onclick="add(${p.id})">+</button>
           </div>
         </div>
       `;
@@ -509,39 +560,62 @@ function renderList() {
   });
 }
 
-/* --- UTILIDADES Y MODOS --- */
-function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
-function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
-function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
-function clearCart() { if(confirm("¿Borrar todo?")) { cart={}; saveCart(); render(); updateFloat(); closeSheet(); } }
-
 function openSheet() { 
   document.getElementById('overlay').classList.add('open'); 
-  // Mostrar controles de camarero solo si el idioma NO es español
-  document.getElementById('waiterBox').style.display = (lang === 'es') ? 'none' : 'block';
+  
+  // LOGICA MOSTRAR BOTÓN CAMARERO
+  const waiterBtn = document.getElementById('btnShowWaiter');
+  if (lang === 'es') {
+    waiterBtn.style.display = 'none'; // Si ya hablas español, no hace falta
+  } else {
+    waiterBtn.style.display = 'flex'; // Si no, muéstralo
+  }
+
   renderList();
 }
-function closeSheet() { exitWaiterMode(); document.getElementById('overlay').classList.remove('open'); }
+
+function closeSheet() { 
+  // Al cerrar, salir del modo camarero por si acaso
+  exitWaiterMode();
+  document.getElementById('overlay').classList.remove('open'); 
+}
 
 function enterWaiterMode() {
   document.body.classList.add('waiter-active');
   document.getElementById('orderSheet').classList.add('waiter-mode');
+  
+  // Ocultar elementos que no necesita el camarero
+  document.getElementById('btnShowWaiter').style.display = 'none';
+  document.getElementById('notesArea').style.display = 'none';
+  document.getElementById('clearTxt').style.display = 'none';
+  
+  // Mostrar botón cerrar grande
   document.getElementById('closeWaiterBtn').style.display = 'flex';
-  document.getElementById('waiterBox').style.display = 'none'; // Ocultar boton trigger
-  document.getElementById('notesArea').style.display = 'none'; // Ocultar input notas
-  renderList(); // Re-renderizar en Español y Grande
+  
+  renderList(); // Re-renderizar en español y grande
 }
 
 function exitWaiterMode() {
   document.body.classList.remove('waiter-active');
   document.getElementById('orderSheet').classList.remove('waiter-mode');
   document.getElementById('closeWaiterBtn').style.display = 'none';
-  if(lang !== 'es') document.getElementById('waiterBox').style.display = 'block';
+  
+  // Restaurar visibilidad
   document.getElementById('notesArea').style.display = 'block';
-  renderList(); // Volver a normal
+  document.getElementById('clearTxt').style.display = 'block';
+  // El botón de camarero se gestiona al abrir, pero lo restauramos si el idioma no es ES
+  if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';
+  
+  renderList();
 }
 
-/* --- TRADUCCIÓN UI --- */
+/* --- UTILIDADES --- */
+function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
+function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
+function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
+function clearCart() { if(confirm("¿Borrar todo?")) { cart={}; saveCart(); render(); updateFloat(); closeSheet(); } }
+
+/* --- IDIOMAS --- */
 const uiDict = {
   es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero (ES)" },
   en: { ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)" },
@@ -559,26 +633,22 @@ function translateUI() {
   document.getElementById('btnText').innerText = t.btn;
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
-  document.getElementById('transText').innerText = t.trans;
 }
 
-/* --- TEMA OSCURO --- */
+/* --- TEMA --- */
 const themeBtn = document.getElementById('themeBtn');
+function applyTheme() {
+  let saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', saved);
+  themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
+}
+
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
-  updateThemeIcon(next);
+  applyTheme();
 });
-
-function updateThemeIcon(theme) {
-  themeBtn.innerHTML = theme === 'dark' ? '🌙' : '☀️';
-}
-// Init Theme
-const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-document.documentElement.setAttribute('data-theme', savedTheme);
-updateThemeIcon(savedTheme);
 
 // GO
 init();
