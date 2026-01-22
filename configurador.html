@@ -4,18 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Creador de Demos</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --primary: #4F46E5;
-    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --card-bg: rgba(255, 255, 255, 0.95);
-    --text-main: #1f2937;
+    --primary: #2563eb;
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --card-bg: #ffffff;
+    --text-main: #111827;
     --text-sec: #6b7280;
     --border: #e5e7eb;
+    --error: #dc2626;
   }
 
   body {
@@ -28,256 +30,206 @@
     justify-content: center;
     min-height: 100vh;
     padding: 20px;
-    box-sizing: border-box;
   }
 
   .container {
-    max-width: 420px;
+    max-width: 450px;
     width: 100%;
     background: var(--card-bg);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     border-radius: 24px;
-    padding: 40px 30px;
+    padding: 40px 35px;
     text-align: center;
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease;
+    position: relative;
   }
 
   h1 {
     margin: 0 0 10px;
     font-size: 1.8em;
     font-weight: 700;
-    background: -webkit-linear-gradient(#4F46E5, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 
   p.description {
     font-size: 0.95em;
     color: var(--text-sec);
-    margin-bottom: 30px;
+    margin-bottom: 35px;
     line-height: 1.5;
   }
 
-  /* Inputs Styling */
   .input-group {
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
   }
 
   label {
     display: block;
-    font-size: 0.85em;
+    font-size: 0.9em;
     font-weight: 600;
-    color: var(--text-main);
     margin-bottom: 8px;
-    margin-left: 5px;
   }
 
-  input[type="text"], select {
+  input, select {
     width: 100%;
     padding: 16px;
     border-radius: 12px;
     border: 2px solid var(--border);
     font-size: 1em;
-    font-family: inherit;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-    background: #fff;
+    background: #f9fafb;
+    transition: 0.2s;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
     outline: none;
   }
 
-  input[type="text"]:focus, select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-  }
-
-  /* Color Picker Grid */
   .color-picker-container {
     display: flex;
-    gap: 10px;
-    justify-content: center;
+    gap: 12px;
     flex-wrap: wrap;
+    justify-content: center;
     margin-top: 10px;
-    background: #f3f4f6;
-    padding: 15px;
-    border-radius: 16px;
   }
 
   .color-option {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
     border: 3px solid transparent;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: 0.2s;
   }
 
-  .color-option:hover { transform: scale(1.1); }
-  
   .color-option.selected {
-    border-color: #333;
+    border-color: #fff;
+    box-shadow: 0 0 0 3px #111827;
     transform: scale(1.15);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
 
-  /* Custom Color Input disguised */
-  .custom-color-wrapper {
-    position: relative;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
-    border: 3px solid transparent;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
-  }
-  .custom-color-wrapper.selected { border-color: #333; transform: scale(1.15); }
-  
-  input[type="color"] {
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    cursor: pointer;
-    opacity: 0;
-  }
-
-  /* Button */
-  button#generateBtn {
+  button {
     width: 100%;
     padding: 18px;
-    margin-top: 20px;
+    margin-top: 15px;
     border-radius: 14px;
     border: none;
     font-size: 1.1em;
     font-weight: 700;
-    color: white;
+    color: #fff;
     background: var(--primary);
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
   }
 
-  button#generateBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 25px rgba(79, 70, 229, 0.4);
-    background: #4338ca;
+  /* ===== TOAST ===== */
+  .toast {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #111827;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease;
   }
 
-  button#generateBtn:active { transform: translateY(1px); }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
+  .toast.error {
+    background: var(--error);
+  }
 </style>
 </head>
+
 <body>
 
 <div class="container">
   <h1>Configura tu Demo</h1>
-  <p class="description">Crea una vista previa personalizada para tu cliente en segundos.</p>
+  <p class="description">Introduce estos datos básicos y te generaremos una demo automática para que veas cómo funciona Taply.</p>
 
   <div class="input-group">
     <label>Nombre del Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Bella Napoli" autocomplete="off" />
+    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Roma">
   </div>
 
   <div class="input-group">
     <label>Tipo de Cocina</label>
     <select id="restaurantType">
       <option value="" disabled selected>Selecciona una categoría</option>
-      <option value="restaurante">Restaurante (Genérico)</option>
-      <option value="hamburgueseria">Hamburguesería / Bar</option>
-      <option value="pizzeria">Pizzería / Italiano</option>
-      <option value="asiatico">Asiático / Sushi</option>
-      <option value="cafe">Cafetería / Brunch</option>
+      <option value="restaurante">Restaurante</option>
+      <option value="hamburgueseria">Hamburguesería</option>
+      <option value="pizzeria">Pizzería</option>
+      <option value="asiatico">Asiático</option>
+      <option value="cafe">Cafetería</option>
     </select>
   </div>
 
   <div class="input-group">
     <label>Color de Marca</label>
     <div class="color-picker-container">
-      <div class="color-option selected" style="background-color: #2E7D32;" data-color="2E7D32" title="Verde (Genérico)"></div>
-      <div class="color-option" style="background-color: #FF8C00;" data-color="FF8C00" title="Naranja (Burger)"></div>
-      <div class="color-option" style="background-color: #D32F2F;" data-color="D32F2F" title="Rojo (Pizza)"></div>
-      <div class="color-option" style="background-color: #E91E63;" data-color="E91E63" title="Rosa (Asiático)"></div>
-      <div class="color-option" style="background-color: #8D6E63;" data-color="8D6E63" title="Marrón (Café)"></div>
-      <div class="color-option" style="background-color: #333333;" data-color="333333" title="Negro (Elegante)"></div>
-      <div class="color-option" style="background-color: #2962FF;" data-color="2962FF" title="Azul (Mar)"></div>
-      
-      <div class="custom-color-wrapper" id="customWrapper" title="Personalizado">
-        <input type="color" id="customColorInput" value="#68B553">
-      </div>
+      <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32"></div>
+      <div class="color-option" style="background:#FF8C00" data-color="FF8C00"></div>
+      <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
+      <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
+      <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
     </div>
   </div>
 
-  <button id="generateBtn">✨ Generar Demo</button>
+  <button id="generateBtn">Generar Demo</button>
+
+  <div id="toast" class="toast error">
+    <span>⚠️</span>
+    <span id="toastText"></span>
+  </div>
+
+<p><em>Este ejemplo es una versión sencilla de prueba: los diseños finales se personalizan completamente para cada restaurante.</em></p>
 </div>
 
 <script>
-  let selectedHex = '2E7D32'; // Valor por defecto
+let selectedHex = '2E7D32';
 
-  // 1. Manejo de Selección de Color (Círculos)
-  document.querySelectorAll('.color-option').forEach(el => {
-    el.addEventListener('click', () => {
-      // Quitar clase selected de todos
-      document.querySelectorAll('.color-option, .custom-color-wrapper').forEach(opt => opt.classList.remove('selected'));
-      // Añadir al clickado
-      el.classList.add('selected');
-      // Guardar valor
-      selectedHex = el.dataset.color;
-    });
-  });
-
-  // 2. Manejo de Color Personalizado (Input)
-  const customInput = document.getElementById('customColorInput');
-  const customWrapper = document.getElementById('customWrapper');
-
-  customInput.addEventListener('input', (e) => {
-    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-    customWrapper.classList.add('selected');
-    // Quitamos el # para guardarlo limpio
-    selectedHex = e.target.value.replace('#', '');
-  });
-
-  // 3. Lógica Automática (Cambiar color al elegir categoría)
-  // Esto ayuda al usuario sugiriendo el color típico
-  const typeSelect = document.getElementById('restaurantType');
-  const defaultColors = {
-    'restaurante': '2E7D32',
-    'hamburgueseria': 'FF8C00',
-    'pizzeria': 'D32F2F',
-    'asiatico': 'E91E63',
-    'cafe': '8D6E63'
+document.querySelectorAll('.color-option').forEach(el => {
+  el.onclick = () => {
+    document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedHex = el.dataset.color;
   };
+});
 
-  typeSelect.addEventListener('change', () => {
-    const type = typeSelect.value;
-    const suggestedColor = defaultColors[type];
-    
-    if(suggestedColor) {
-      // Simular click en el color sugerido
-      const colorOption = document.querySelector(`.color-option[data-color="${suggestedColor}"]`);
-      if(colorOption) {
-        colorOption.click();
-      }
-    }
-  });
+const toast = document.getElementById('toast');
+const toastText = document.getElementById('toastText');
 
-  // 4. Generar URL Final
-  document.getElementById('generateBtn').addEventListener('click', () => {
-    const name = document.getElementById('restaurantName').value.trim();
-    const type = document.getElementById('restaurantType').value;
+function showToast(msg) {
+  toastText.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
 
-    if(!name) { alert('Por favor, escribe el nombre del restaurante.'); return; }
-    if(!type) { alert('Por favor, selecciona el tipo de cocina.'); return; }
+document.getElementById('generateBtn').onclick = () => {
+  const name = restaurantName.value.trim();
+  const type = restaurantType.value;
 
-    // Construimos la URL
-    // Pasamos 'n', 'categoria', 'auth' y AHORA TAMBIÉN 'btn' (que es el color)
-    const demoURL = `principal.html?n=${encodeURIComponent(name)}&categoria=${encodeURIComponent(type)}&btn=${selectedHex}&auth=true`;
-    
-    window.open(demoURL, '_blank');
-  });
+  if (!name) {
+    showToast('Escribe el nombre del restaurante');
+    return;
+  }
+  if (!type) {
+    showToast('Selecciona el tipo de cocina');
+    return;
+  }
+
+  const url = `principal.html?n=${encodeURIComponent(name)}&categoria=${type}&btn=${selectedHex}&auth=true`;
+  window.open(url, '_blank');
+};
 </script>
-
 </body>
 </html>

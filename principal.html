@@ -3,133 +3,259 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Cargando...</title>
+  <title>Bienvenido</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
 
   <style>
   :root {
-    --bg-color: #fdfdfd;
-    --text-color: #333;
-    --btn-bg: #92d668; 
-    --btn-text: #fff;
-    --select-bg: rgba(255,255,255,0.9);
-    --select-border: #ccc;
-    --shadow: 0 10px 25px rgba(0,0,0,0.1);
-    --logo-font: 'Arial Black', 'Helvetica Neue', sans-serif;
+    /* Color base (se sobrescribe por JS) */
+    --brand-color: #6366f1; 
+    
+    --bg-body: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-sec: #64748b;
+    --btn-bg-light: #ffffff;
+    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+    --shadow-hover: 0 20px 40px -10px rgba(0,0,0,0.12);
   }
 
   [data-theme="dark"] {
-    --bg-color: #121212;
-    --text-color: #f4f4f4;
-    --select-bg: rgba(30,30,30,0.8);
-    --select-border: #444;
-    --shadow: 0 10px 25px rgba(0,0,0,0.5);
+    --bg-body: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f1f5f9;
+    --text-sec: #94a3b8;
+    --btn-bg-light: #334155;
+    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.3);
   }
 
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: radial-gradient(circle at top, var(--bg-color), var(--bg-color) 40%, rgba(0,0,0,0.03));
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background 0.3s, color 0.3s;
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg-body);
+    color: var(--text-main);
+    transition: background 0.4s ease;
     opacity: 0; 
     min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
-  .landing-container {
+  /* --- CONTENEDOR PRINCIPAL TIPO APP --- */
+  .app-container {
     width: 100%;
-    min-height: 100vh;
+    max-width: 420px;
+    padding: 20px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* CAMBIO: padding-top aumentado para bajar todo y que no choque con el header */
-    padding: 90px 20px 40px 20px; 
-    box-sizing: border-box;
-    text-align: center;
     position: relative;
   }
 
-  /* LOGO */
-  .logo-container {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 25px 40px;
-    margin-bottom: 25px;
-    border: 4px solid var(--btn-bg); 
-    border-radius: 4px;
-    background: rgba(255,255,255,0.03);
-    box-shadow: var(--shadow);
+  /* --- HEADER & LOGO --- */
+  .header-section {
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .logo-icon { font-size: 3.5em; line-height: 1; margin-bottom: 10px; }
-  .brand-name { font-family: var(--logo-font); font-size: 2em; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--text-color); margin: 0; line-height: 1.1; }
-  .brand-name::after { content: ''; display: block; width: 40px; height: 4px; background: var(--btn-bg); margin: 10px auto 0 auto; }
 
-  h2 { font-size: 1.2em; font-weight: 300; margin: 0 0 30px 0; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  .logo-icon {
+    font-size: 4em;
+    margin-bottom: 5px;
+    display: inline-block;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+  }
 
-  .button-group { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; margin-bottom: 30px; }
-  .btn { display: block; padding: 16px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1em; text-align: center; border: 2px solid var(--btn-bg); background: transparent; color: var(--text-color); transition: transform 0.2s ease; }
-  .btn-primary { background: var(--btn-bg); color: var(--btn-text); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+  .brand-name {
+    font-size: 2.2em;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+    color: var(--brand-color); /* Color dinámico */
+    text-transform: capitalize;
+    letter-spacing: -1px;
+  }
 
-  /* --- ZONA DE ACTIVACIÓN (MINIMALISTA) --- */
-  .simple-shake-link {
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 30px;
+  .welcome-text {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--text-sec);
+    margin-top: 10px;
+  }
+
+  /* --- BOTONES DEL MENÚ --- */
+  .menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 1.05em;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Efecto Hover Premium */
+  .menu-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--brand-color);
+  }
+
+  /* Pequeña barra de color a la izquierda */
+  .menu-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: var(--brand-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-btn:hover::before { opacity: 1; }
+
+  /* Icono flecha */
+  .menu-btn::after {
+    content: '→';
+    font-weight: 300;
+    opacity: 0.5;
+    transition: transform 0.3s;
+  }
+  .menu-btn:hover::after {
+    transform: translateX(5px);
+    opacity: 1;
+    color: var(--brand-color);
+  }
+
+  /* Botón Principal (Destacado) */
+  .menu-btn.primary {
+    background: var(--brand-color);
+    color: #fff;
+    box-shadow: 0 15px 30px -10px var(--brand-color); /* Sombra de color */
+  }
+  .menu-btn.primary:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: transparent;
+  }
+  .menu-btn.primary::before { display: none; }
+  .menu-btn.primary::after { color: #fff; opacity: 0.8; }
+
+
+  /* --- ZONA KIDS --- */
+  .kids-trigger {
+    margin-top: 40px;
+    padding: 12px 30px;
+    border-radius: 50px;
     font-size: 0.9em;
     font-weight: 600;
-    color: var(--text-color);
-    opacity: 0.8;
+    color: var(--text-sec);
+    cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
-    border: 1px solid transparent; /* Invisible por defecto */
+    background: rgba(0,0,0,0.03);
+    border: 1px solid transparent;
   }
-  
-  /* Efecto al tocar */
-  .simple-shake-link:active { opacity: 0.5; }
 
-  /* Estado: LISTO PARA AGITAR (Se resalta un poco) */
-  .simple-shake-link.ready {
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    opacity: 1;
+  .kids-trigger:hover {
+    background: rgba(0,0,0,0.06);
+    transform: scale(1.05);
+  }
+
+  /* Estado Activado (Agitar) */
+  .kids-trigger.active {
+    background: var(--brand-color);
+    color: #fff;
     font-weight: 800;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 1.1em;
+    padding: 15px 40px;
+    box-shadow: 0 10px 25px -5px var(--brand-color);
     animation: pulse 1.5s infinite;
   }
 
-  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+  @keyframes pulse { 
+    0% { transform: scale(1); } 
+    50% { transform: scale(1.05); } 
+    100% { transform: scale(1); } 
+  }
 
-  .theme-btn { position: absolute; top: 25px; right: 25px; width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; background: var(--select-bg); color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-size: 1.4em; z-index: 100; display:flex; align-items:center; justify-content:center;}
-  .lang-container select { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--select-border); background: transparent; color: var(--text-color); font-size: 0.85em; opacity: 0.8; cursor: pointer; margin-top: 10px; }
+  /* --- UTILIDADES --- */
+  .theme-btn { 
+    position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; 
+    border-radius: 50%; border: none; cursor: pointer; 
+    background: var(--card-bg); color: var(--text-main); 
+    box-shadow: var(--shadow-soft); font-size: 1.2em; 
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+  }
+  .theme-btn:active { transform: scale(0.9); }
+
+  .lang-container {
+    margin-top: 30px;
+    opacity: 0.7;
+  }
+  .lang-container select {
+    padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text-sec);
+    background: transparent; color: var(--text-main); font-size: 0.8em;
+    cursor: pointer;
+  }
+
+  /* Animaciones Entrada */
+  @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
   </style>
 </head>
 <body>
 
-<main class="landing-container" id="landing">
-  <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema"></button>
+<main class="app-container">
+  <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema">☀️</button>
   
-  <div class="logo-container">
+  <div class="header-section">
     <div id="logoIcon" class="logo-icon">🍽️</div> 
-    <h1 id="brandNameDisplay" class="brand-name">RESTAURANTE</h1>
-  </div>
-  
-  <h2 data-lang="welcome" id="subTitle">¡Bienvenid@!</h2>
-
-  <div class="button-group">
-    <a id="menuLink" class="btn btn-primary" data-lang="view_menu" href="#">Acceder a la carta</a>
-    <a id="reviewLink" class="btn" data-lang="leave_review" href="#">Dejar reseña</a>
-    <a id="shareLink" class="btn" data-lang="share_with_friends" href="#">Compartir experiencia</a>
+    <h1 id="brandNameDisplay" class="brand-name">Restaurante</h1>
+    <p class="welcome-text" data-lang="welcome">¡Bienvenid@!</p>
   </div>
 
-  <div id="shakeTrigger" class="simple-shake-link" onclick="enableShakeFeature()">
+  <div class="menu-grid">
+    <a id="menuLink" class="menu-btn primary" href="#">
+      <span data-lang="view_menu">Ver la Carta</span>
+    </a>
+    <a id="reviewLink" class="menu-btn" href="#">
+      <span data-lang="leave_review">Dejar Reseña</span>
+    </a>
+    <a id="shareLink" class="menu-btn" href="#">
+      <span data-lang="share_with_friends">Compartir</span>
+    </a>
+  </div>
+
+  <div id="shakeTrigger" class="kids-trigger" onclick="enableShakeFeature()">
     <span id="shakeIcon">🎮</span> 
-    <span id="shakeText" style="text-decoration: underline;">Zona Kids: Toca para jugar</span>
+    <span id="shakeText">Zona Kids: Toca para jugar</span>
   </div>
 
   <div class="lang-container">
@@ -146,23 +272,12 @@
 <script>
   /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA EL MÓVIL!" },
-    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Leave Review", share_with_friends:"Share", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE PHONE!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "HANDY SCHÜTTELN!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir Menu", leave_review:"Avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ !" },
-    it: { welcome:"Benvenuto!", view_menu:"Menu", leave_review:"Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI ORA!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA EL MÓVIL!" },
+    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE PHONE!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Erfahrung teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "HANDY SCHÜTTELN!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Laisser un avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ !" },
+    it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI ORA!" }
   };
-
-  const designSystem = {
-    'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
-    'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
-    'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
-    'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
-    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' },
-    'default':        { bg: '#92d668', text: '#fff', icon: '🥗' }
-  };
-
-  const params = new URLSearchParams(window.location.search);
 
   /* --- 2. LOGICA NATIVA (SHAKE) --- */
   let lastX = null, lastY = null, lastZ = null;
@@ -172,17 +287,19 @@
   function startNativeShakeListener() {
     if(isListening) return;
     
-    // Cambiar visualmente a "Listo"
+    // VISUAL: ACTIVAR BOTÓN
     const btn = document.getElementById('shakeTrigger');
-    btn.classList.add('ready');
+    btn.classList.add('active'); // Clase CSS nueva para estado "pulsando"
     
     let lang = localStorage.getItem('userLang') || 'es';
-    document.getElementById('shakeText').innerText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
-    document.getElementById('shakeText').style.textDecoration = 'none'; // Quitar subrayado
+    const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
+    
+    document.getElementById('shakeText').innerText = readyText;
     document.getElementById('shakeIcon').innerText = "📳";
     
     isListening = true;
 
+    // SENSOR
     window.addEventListener('devicemotion', (event) => {
       const current = event.accelerationIncludingGravity;
       if (!current) return;
@@ -194,7 +311,7 @@
 
         if (lastX !== null) {
           const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
-          if (speed > 800) { // Sensibilidad
+          if (speed > 800) { 
              if(navigator.vibrate) navigator.vibrate(300);
              window.location.href = `juegos.html${window.location.search}`;
           }
@@ -205,7 +322,7 @@
   }
 
   function enableShakeFeature() {
-    // Detectar iOS 13+
+    // iOS 13+ Permisos
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
       DeviceMotionEvent.requestPermission()
         .then(response => {
@@ -217,21 +334,43 @@
     }
   }
 
-  /* --- 3. CONFIGURACIÓN --- */
+  /* --- 3. CONFIGURACIÓN (COLORES Y DATOS) --- */
+  const designSystem = {
+    'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
+    'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
+    'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
+    'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
+    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' },
+    'default':        { bg: '#92d668', text: '#fff', icon: '🥗' }
+  };
+
+  const params = new URLSearchParams(window.location.search);
+
   function applyDemoLogic() {
     if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
+    // Textos
     const name = params.get('n') || "Tu Restaurante";
     document.title = name;
     document.getElementById('brandNameDisplay').textContent = name;
+    
+    // Icono
     const category = params.get('categoria'); 
     const style = designSystem[category] || designSystem['default'];
     document.getElementById('logoIcon').textContent = style.icon;
-    const rootStyles = document.documentElement.style;
-    rootStyles.setProperty('--btn-bg', style.bg);
-    rootStyles.setProperty('--btn-text', style.text);
-    if(params.get('btn')) rootStyles.setProperty('--btn-bg', '#' + params.get('btn'));
 
+    // COLOR DINÁMICO
+    const rootStyles = document.documentElement.style;
+    if(params.get('btn')) {
+       // Color del configurador
+       const customColor = '#' + params.get('btn');
+       rootStyles.setProperty('--brand-color', customColor);
+    } else {
+       // Color por defecto
+       rootStyles.setProperty('--brand-color', style.bg);
+    }
+
+    // Enlaces
     const currentParams = window.location.search; 
     document.getElementById('menuLink').href = `carta.html${currentParams}`;
     document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
@@ -249,10 +388,11 @@
     });
     
     // Actualizar texto shake
-    if(document.getElementById('shakeTrigger').classList.contains('ready')) {
-       document.getElementById('shakeText').innerText = translations[lang].shake_ready;
+    const txtSpan = document.getElementById('shakeText');
+    if(document.getElementById('shakeTrigger').classList.contains('active')) {
+       txtSpan.innerText = translations[lang].shake_ready;
     } else {
-       document.getElementById('shakeText').innerText = translations[lang].shake_wait;
+       txtSpan.innerText = translations[lang].shake_wait;
     }
 
     document.getElementById("lang-select").value = lang;
