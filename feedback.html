@@ -11,143 +11,90 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --brand-color: #68B553;
-  --bg-body: #f8fafc;
-  --bg-card: #ffffff;
-  --text-main: #1e293b;
-  --text-sec: #64748b;
-  --border: #e2e8f0;
-  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.1);
-}
+  :root {
+    --brand-color: #68B553; 
+    --bg-body: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-sec: #64748b;
+    --border: #e2e8f0;
+    --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.08); /* Sombra más suave */
+  }
 
-[data-theme="dark"] {
-  --bg-body: #0f172a;
-  --bg-card: #1e293b;
-  --text-main: #f8fafc;
-  --text-sec: #94a3b8;
-  --border: #334155;
-  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.4);
-}
+  [data-theme="dark"] {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-sec: #94a3b8;
+    --border: #334155;
+    --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.4);
+  }
 
-body {
-  margin: 0;
-  font-family: 'Outfit', sans-serif;
-  background: var(--bg-body);
-  color: var(--text-main);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.form-card {
-  background: var(--bg-card);
-  width: 100%;
-  max-width: 420px;
-  border-radius: 24px;
-  padding: 35px 30px;
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border);
-  text-align: center;
-}
-
-h1 {
-  margin: 0 0 10px;
-  font-size: 1.6em;
-  font-weight: 700;
-}
-
-.subtitle {
-  margin: 0 0 30px;
-  font-size: 0.95em;
-  color: var(--text-sec);
-}
-
-.star-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-.star {
-  font-size: 2.5em;
-  cursor: pointer;
-  color: var(--border);
-  transition: transform 0.2s, color 0.2s;
-}
-
-.star.active { color: #FFC107; }
-.star:hover { transform: scale(1.2); }
-
-.input-group {
-  margin-bottom: 25px;
-  text-align: left;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.9em;
-  margin-bottom: 8px;
-}
-
-textarea {
-  width: 100%;
-  padding: 15px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--bg-body);
-  font-family: inherit;
-  font-size: 1em;
-  resize: none;
-  height: 120px;
-  box-sizing: border-box;
-}
-
-textarea:focus {
-  outline: none;
-  border-color: var(--brand-color);
-}
-
-button {
-  width: 100%;
-  padding: 18px;
-  border-radius: 14px;
-  border: none;
-  font-size: 1.1em;
-  font-weight: 700;
-  color: white;
-  background: var(--brand-color);
-  cursor: pointer;
-  box-shadow: 0 10px 20px -5px var(--brand-color);
-}
-
-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-/* ✅ Ajustes móvil */
-@media (max-width: 480px) {
   body {
-    padding: 16px;
+    margin: 0; font-family: 'Outfit', sans-serif;
+    background: var(--bg-body); color: var(--text-main);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    /* AUMENTADO: Padding lateral para que no toque los bordes */
+    padding: 40px 24px; 
+    box-sizing: border-box;
+    transition: background 0.3s;
   }
+
   .form-card {
-    padding: 28px 20px;
-    border-radius: 20px;
+    background: var(--bg-card); 
+    width: 100%; 
+    max-width: 400px; /* Un poco más estrecho para elegancia */
+    border-radius: 24px; padding: 35px 28px;
+    box-shadow: var(--shadow-card); border: 1px solid var(--border);
+    text-align: center;
+    /* Asegura que no desborde */
+    box-sizing: border-box;
   }
-}
+
+  h1 { margin: 0 0 10px; font-size: 1.6em; font-weight: 700; color: var(--text-main); }
+  p.subtitle { margin: 0 0 30px; font-size: 0.95em; color: var(--text-sec); line-height: 1.5; }
+
+  .star-container {
+    display: flex; justify-content: center; gap: 8px;
+    margin-bottom: 30px;
+  }
+  
+  .star {
+    font-size: 2.8em; cursor: pointer; color: var(--border);
+    transition: transform 0.2s, color 0.2s;
+    line-height: 1;
+  }
+  
+  .star.active { color: #FFC107; }
+  .star:hover { transform: scale(1.2); }
+
+  .input-group { margin-bottom: 25px; text-align: left; }
+  label { display: block; font-weight: 600; font-size: 0.9em; margin-bottom: 8px; color: var(--text-main); }
+  
+  textarea {
+    width: 100%; padding: 16px; border-radius: 14px;
+    border: 2px solid var(--border); background: var(--bg-body);
+    font-family: inherit; font-size: 1em; color: var(--text-main);
+    resize: none; outline: none; height: 120px;
+    box-sizing: border-box; transition: border-color 0.3s;
+  }
+  
+  textarea:focus { border-color: var(--brand-color); }
+
+  button {
+    width: 100%; padding: 18px; border-radius: 14px; border: none;
+    font-size: 1.1em; font-weight: 700; color: white;
+    background: var(--brand-color); cursor: pointer;
+    box-shadow: 0 10px 20px -5px var(--brand-color);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  
+  button:disabled { opacity: 0.7; cursor: wait; transform: scale(0.98); }
+  button:active { transform: scale(0.95); }
+
 </style>
 </head>
-
 <body>
 
 <form class="form-card" id="feedbackForm">
@@ -156,26 +103,26 @@ button:active {
 
   <div class="input-group" style="text-align:center">
     <label id="lblRating">¿Cómo fue tu experiencia general? *</label>
-    <div class="star-container">
+    <div class="star-container" id="starContainer">
       <span class="star" data-value="1">★</span>
       <span class="star" data-value="2">★</span>
       <span class="star" data-value="3">★</span>
       <span class="star" data-value="4">★</span>
       <span class="star" data-value="5">★</span>
     </div>
-    <input type="hidden" id="ratingInput">
+    <input type="hidden" id="ratingInput" required>
   </div>
 
   <div class="input-group">
     <label id="lblComment">¿Qué podemos mejorar? *</label>
-    <textarea id="commentInput" placeholder="..."></textarea>
+    <textarea id="commentInput" placeholder="..." required></textarea>
   </div>
 
   <button type="submit" id="submitBtn">Enviar Comentario</button>
 </form>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo4q3MIwWjXgE88lIl5_E8UdsrxNmwGvjQATsZ9rLXoha2EixB5BdozivNJ24W_NYH/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo4q3MIwWjXgE88lIl5_E8UdsrxNmwGvjQATsZ9rLXoha2EixB5BdozivNJ24W_NYH/exec"; 
 
 const translations = {
   es: {
@@ -197,6 +144,36 @@ const translations = {
     sending: "Sending...",
     alertStar: "Please select a star rating.",
     alertComment: "Please write a comment."
+  },
+  de: {
+    subtitle: "Helfen Sie uns, besser zu werden.",
+    lblRating: "Wie war Ihre Erfahrung? *",
+    lblComment: "Was können wir verbessern? *",
+    placeholder: "Das Essen war...",
+    submit: "Feedback senden",
+    sending: "Senden...",
+    alertStar: "Bitte wählen Sie eine Sternebewertung.",
+    alertComment: "Bitte schreiben Sie einen Kommentar."
+  },
+  fr: {
+    subtitle: "Aidez-nous à nous améliorer.",
+    lblRating: "Comment s'est passée votre expérience ? *",
+    lblComment: "Que pouvons-nous améliorer ? *",
+    placeholder: "La nourriture était...",
+    submit: "Envoyer",
+    sending: "Envoi...",
+    alertStar: "Veuillez sélectionner une note.",
+    alertComment: "Veuillez écrire un commentaire."
+  },
+  it: {
+    subtitle: "Aiutaci a migliorare la tua esperienza.",
+    lblRating: "Com'è stata la tua esperienza? *",
+    lblComment: "Cosa possiamo migliorare? *",
+    placeholder: "Il cibo era...",
+    submit: "Invia Feedback",
+    sending: "Invio...",
+    alertStar: "Seleziona un punteggio.",
+    alertComment: "Scrivi un commento."
   }
 };
 
@@ -204,12 +181,10 @@ const params = new URLSearchParams(window.location.search);
 let currentLang = 'es';
 
 function init() {
-  if (params.get('auth') !== 'true') {
-    window.location.href = "https://taply.es";
-    return;
-  }
+  if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  document.getElementById('brandName').innerText = params.get('n') || "Restaurante";
+  const name = params.get('n') || "Restaurante";
+  document.getElementById('brandName').innerText = name;
 
   if (params.get('btn')) {
     const color = '#' + params.get('btn');
@@ -217,9 +192,17 @@ function init() {
     document.getElementById('metaThemeColor').setAttribute('content', color);
   }
 
-  currentLang = localStorage.getItem('userLang') || navigator.language.slice(0,2);
-  if (!translations[currentLang]) currentLang = 'es';
+  // TEMA: Detectar y aplicar
+  const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', savedTheme);
 
+  // IDIOMA
+  currentLang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
+  if (!translations[currentLang]) currentLang = 'es';
+  translateUI();
+}
+
+function translateUI() {
   const t = translations[currentLang];
   document.getElementById('txtSubtitle').innerText = t.subtitle;
   document.getElementById('lblRating').innerText = t.lblRating;
@@ -228,42 +211,51 @@ function init() {
   document.getElementById('submitBtn').innerText = t.submit;
 }
 
+// Lógica Estrellas
 const stars = document.querySelectorAll('.star');
 const ratingInput = document.getElementById('ratingInput');
-
 stars.forEach(star => {
   star.addEventListener('click', () => {
-    const val = star.dataset.value;
+    const val = parseInt(star.dataset.value);
     ratingInput.value = val;
-    stars.forEach(s =>
-      s.classList.toggle('active', s.dataset.value <= val)
-    );
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val));
   });
 });
 
-document.getElementById('feedbackForm').addEventListener('submit', e => {
+// ENVÍO RÁPIDO (Fire & Forget)
+const form = document.getElementById('feedbackForm');
+form.addEventListener('submit', (e) => {
   e.preventDefault();
   const t = translations[currentLang];
 
-  if (!ratingInput.value) return alert(t.alertStar);
-  if (!commentInput.value.trim()) return alert(t.alertComment);
+  if (!ratingInput.value) { alert(t.alertStar); return; }
+  const comment = document.getElementById('commentInput').value.trim();
+  if (!comment) { alert(t.alertComment); return; }
 
-  submitBtn.disabled = true;
-  submitBtn.innerText = t.sending;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerText = t.sending;
 
   const data = new FormData();
   data.append('valoracion', ratingInput.value);
-  data.append('comentario', commentInput.value.trim());
+  data.append('comentario', comment);
 
-  fetch(SCRIPT_URL, { method: 'POST', body: data, mode: 'no-cors' });
+  // 1. Disparar el envío en segundo plano (keepalive asegura que se envíe aunque cambiemos de página)
+  fetch(SCRIPT_URL, { 
+    method: 'POST', 
+    body: data, 
+    mode: 'no-cors',
+    keepalive: true 
+  }).catch(err => console.log("Envío background lanzado"));
 
+  // 2. Redirigir casi inmediatamente (UX percibida: instantánea)
   setTimeout(() => {
-    window.location.href = `agradecimiento.html${window.location.search}`;
-  }, 300);
+    const currentQuery = window.location.search;
+    window.location.href = `agradecimiento.html${currentQuery}`;
+  }, 800); // 0.8 segundos para ver el efecto visual del botón
 });
 
 init();
 </script>
-
 </body>
 </html>

@@ -10,181 +10,209 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --primary: #2563eb; 
-    --bg-page: #f3f4f6;
-    --bg-card: #ffffff;
-    --text-main: #111827;
-    --text-sec: #6b7280;
-    --border: #d1d5db;
-    --error: #ef4444;
-  }
+:root {
+  --primary: #2563eb;
+  --bg-start: #f8fafc;
+  --bg-end: #eef2f7;
+  --bg-card: #ffffff;
+  --text-main: #111827;
+  --text-sec: #6b7280;
+  --border: #e5e7eb;
+}
 
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-page);
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-  }
+/* Reset suave */
+* { box-sizing: border-box; }
 
-  .container {
-    max-width: 400px; /* Un poco más compacto */
-    width: 100%;
-    background: var(--bg-card);
-    border-radius: 20px;
-    padding: 30px 25px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    text-align: left;
-  }
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-  h1 {
-    margin: 0 0 10px;
-    font-size: 1.6em;
-    font-weight: 700;
-    color: var(--text-main);
-    text-align: center;
-    letter-spacing: -0.5px;
-  }
+/* Card */
+.container {
+  max-width: 420px;
+  width: 100%;
+  background: var(--bg-card);
+  border-radius: 22px;
+  padding: 34px 28px;
+  box-shadow:
+    0 20px 30px -20px rgba(0,0,0,0.25),
+    0 10px 15px -10px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+}
 
-  p.description {
-    font-size: 0.9em;
-    color: var(--text-sec);
-    margin-bottom: 25px;
-    text-align: center;
-    line-height: 1.5;
-  }
+/* Header */
+h1 {
+  margin: 0 0 8px;
+  font-size: 1.7em;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.6px;
+}
 
-  /* Inputs */
-  .input-group {
-    margin-bottom: 20px;
-  }
+p.description {
+  font-size: 0.95em;
+  color: var(--text-sec);
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 1.5;
+}
 
-  label {
-    display: block;
-    font-size: 0.85em;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-main);
-  }
+/* Inputs */
+.input-group {
+  margin-bottom: 22px;
+}
 
-  input[type="text"], select {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    font-size: 0.95em;
-    font-family: inherit;
-    background: #fff;
-    color: var(--text-main);
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none; 
-  }
+label {
+  display: block;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
 
-  input[type="text"]:focus, select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    outline: none;
-  }
+input[type="text"], select {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-size: 0.95em;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+}
 
-  /* Flecha select */
-  select {
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px top 50%;
-    background-size: 10px auto;
-  }
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
 
-  /* --- COLORES (PEQUEÑOS) --- */
-  .color-label-container {
-    display: flex; justify-content: space-between; align-items: baseline;
-  }
-  .color-label-container span { font-size: 0.8em; font-weight: 400; color: var(--text-sec); }
+/* Select arrow */
+select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236b7280' d='M5.5 7.5l4.5 4.5 4.5-4.5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
 
-  .color-picker-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px; /* Espacio reducido */
-    margin-top: 8px;
-    padding: 5px 0;
-  }
+/* Color section */
+.color-label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
 
-  .color-option {
-    width: 32px; /* Círculos más pequeños */
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: transform 0.2s;
-    position: relative;
-  }
+.color-label-container span {
+  font-size: 0.75em;
+  color: var(--text-sec);
+}
 
-  .color-option:hover { transform: scale(1.1); }
+.color-picker-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
 
-  .color-option.selected {
-    transform: scale(1.2);
-    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-main);
-  }
+.color-option {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-  /* --- BOTÓN --- */
-  button#generateBtn {
-    width: 100%;
-    padding: 14px;
-    margin-top: 25px;
-    border-radius: 10px;
-    border: none;
-    font-size: 1em;
-    font-weight: 600;
-    color: white;
-    background: var(--primary);
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
-  }
+.color-option:hover {
+  transform: scale(1.1);
+}
 
-  button#generateBtn:hover { background: #1d4ed8; }
-  button#generateBtn:active { transform: scale(0.98); }
+.color-option.selected {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px var(--text-main);
+}
 
-  /* --- FOOTER NOTE --- */
-  .footer-note {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    font-size: 0.8em;
-    color: var(--text-sec);
-    text-align: center;
-    line-height: 1.4;
-    font-style: italic;
-  }
+/* Button */
+button#generateBtn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 28px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1em;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(180deg, var(--primary), #1e40af);
+  cursor: pointer;
+  box-shadow: 0 12px 20px -10px rgba(37,99,235,0.5);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
 
-  /* --- TOAST --- */
-  .toast {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-    background: #1f2937; color: white; padding: 12px 24px; border-radius: 50px;
-    display: flex; align-items: center; gap: 10px; font-size: 0.9em; font-weight: 500;
-    opacity: 0; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
-    z-index: 100; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+button#generateBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px -12px rgba(37,99,235,0.6);
+}
 
+button#generateBtn:active {
+  transform: scale(0.98);
+}
+
+/* Footer note */
+.footer-note {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.8em;
+  color: var(--text-sec);
+  text-align: center;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: #111827;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 50px;
+  font-size: 0.9em;
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
   <h1>Configurar Demo</h1>
-  <p class="description">Introduce los datos básicos del cliente para generar una <strong>vista previa automática</strong>.</p>
+  <p class="description">
+    Introduce ciertos datos de tu restaurante para generar una
+    <strong>vista previa automática</strong>.
+  </p>
 
   <div class="input-group">
     <label>Nombre del Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Roma" autocomplete="off">
+    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Roma">
   </div>
 
   <div class="input-group">
@@ -202,93 +230,76 @@
   <div class="input-group">
     <div class="color-label-container">
       <label>Color de Marca</label>
-      <span>(Elige uno)</span>
+      <span>(elige uno)</span>
     </div>
+
     <div class="color-picker-container">
-      <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32" title="Verde"></div>
-      <div class="color-option" style="background:#FF8C00" data-color="FF8C00" title="Naranja"></div>
-      <div class="color-option" style="background:#D32F2F" data-color="D32F2F" title="Rojo"></div>
-      <div class="color-option" style="background:#E91E63" data-color="E91E63" title="Rosa"></div>
-      <div class="color-option" style="background:#8D6E63" data-color="8D6E63" title="Marrón"></div>
-      <div class="color-option" style="background:#111827" data-color="111827" title="Negro"></div>
-      <div class="color-option" style="background:#2962FF" data-color="2962FF" title="Azul"></div>
-      <div class="color-option" style="background:#6200EA" data-color="6200EA" title="Morado"></div>
-      <div class="color-option" style="background:#00897B" data-color="00897B" title="Turquesa"></div>
-      <div class="color-option" style="background:#FBC02D" data-color="FBC02D" title="Amarillo"></div>
+      <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32"></div>
+      <div class="color-option" style="background:#FF8C00" data-color="FF8C00"></div>
+      <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
+      <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
+      <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
+      <div class="color-option" style="background:#111827" data-color="111827"></div>
+      <div class="color-option" style="background:#2962FF" data-color="2962FF"></div>
+      <div class="color-option" style="background:#6200EA" data-color="6200EA"></div>
+      <div class="color-option" style="background:#00897B" data-color="00897B"></div>
+      <div class="color-option" style="background:#FBC02D" data-color="FBC02D"></div>
     </div>
   </div>
 
   <button id="generateBtn">Crear Demo</button>
 
   <div class="footer-note">
-    ℹ️ <strong>Nota:</strong> Esto es solo un ejemplo rápido. Nuestra versión final incluirá tu logotipo real, fotografías profesionales y un diseño 100% personalizado a tu marca.
+    ℹ️ Esto es solo un ejemplo rápido. La versión final incluirá logotipo real,
+    fotos profesionales y diseño 100% personalizado.
   </div>
 </div>
 
-<div id="toast" class="toast">
-  <span>⚠️</span> <span id="toastText">Error</span>
-</div>
+<div id="toast" class="toast">Error</div>
 
 <script>
 let selectedHex = '2E7D32';
 
-// 1. Selector de Color
 document.querySelectorAll('.color-option').forEach(el => {
   el.onclick = () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     selectedHex = el.dataset.color;
-    
-    // Feedback táctil
-    if(navigator.vibrate) navigator.vibrate(10);
+    if (navigator.vibrate) navigator.vibrate(10);
   };
 });
 
-// 2. Autoselección por tipo
-const typeSelect = document.getElementById('restaurantType');
 const defaultColors = {
-  'restaurante': '2E7D32',
-  'hamburgueseria': 'FF8C00',
-  'pizzeria': 'D32F2F',
-  'asiatico': 'E91E63',
-  'cafe': '8D6E63'
+  restaurante: '2E7D32',
+  hamburgueseria: 'FF8C00',
+  pizzeria: 'D32F2F',
+  asiatico: 'E91E63',
+  cafe: '8D6E63'
 };
 
-typeSelect.addEventListener('change', () => {
-  const type = typeSelect.value;
-  const suggestedColor = defaultColors[type];
-  if(suggestedColor) {
-    const colorOption = document.querySelector(`.color-option[data-color="${suggestedColor}"]`);
-    if(colorOption) colorOption.click();
-  }
-});
+restaurantType.onchange = () => {
+  const c = defaultColors[restaurantType.value];
+  if (c) document.querySelector(`[data-color="${c}"]`)?.click();
+};
 
-// 3. Toast
 const toast = document.getElementById('toast');
-const toastText = document.getElementById('toastText');
-
 function showToast(msg) {
-  toastText.textContent = msg;
+  toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// 4. Generar URL
-document.getElementById('generateBtn').onclick = () => {
-  const name = document.getElementById('restaurantName').value.trim();
-  const type = document.getElementById('restaurantType').value;
+generateBtn.onclick = () => {
+  if (!restaurantName.value.trim()) return showToast('Falta el nombre');
+  if (!restaurantType.value) return showToast('Falta el tipo');
 
-  if (!name) { showToast('Falta el nombre'); return; }
-  if (!type) { showToast('Falta el tipo'); return; }
-
-  const btn = document.getElementById('generateBtn');
-  btn.innerHTML = "Generando...";
-  
+  generateBtn.textContent = 'Generando...';
   setTimeout(() => {
-    // Generar URL
-    const url = `principal.html?n=${encodeURIComponent(name)}&categoria=${type}&btn=${selectedHex}&auth=true`;
-    window.open(url, '_blank');
-    btn.innerHTML = "Crear Demo";
+    window.open(
+      `principal.html?n=${encodeURIComponent(restaurantName.value)}&categoria=${restaurantType.value}&btn=${selectedHex}&auth=true`,
+      '_blank'
+    );
+    generateBtn.textContent = 'Crear Demo';
   }, 500);
 };
 </script>
