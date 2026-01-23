@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#68B553" id="metaThemeColor" />
+<title>Feedback</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --brand-color: #68B553; 
+    --bg-body: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-sec: #64748b;
+    --border: #e2e8f0;
+    --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.1);
+  }
+
+  [data-theme="dark"] {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-sec: #94a3b8;
+    --border: #334155;
+    --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.4);
+  }
+
+  body {
+    margin: 0; font-family: 'Outfit', sans-serif;
+    background: var(--bg-body); color: var(--text-main);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 20px; box-sizing: border-box;
+    transition: background 0.3s;
+  }
+
+  .form-card {
+    background: var(--bg-card); width: 100%; max-width: 420px;
+    border-radius: 24px; padding: 35px 30px;
+    box-shadow: var(--shadow-card); border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  h1 { margin: 0 0 10px; font-size: 1.6em; font-weight: 700; color: var(--text-main); }
+  p.subtitle { margin: 0 0 30px; font-size: 0.95em; color: var(--text-sec); line-height: 1.5; }
+
+  .star-container {
+    display: flex; justify-content: center; gap: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .star {
+    font-size: 2.5em; cursor: pointer; color: var(--border);
+    transition: transform 0.2s, color 0.2s;
+  }
+  
+  .star.active { color: #FFC107; }
+  .star:hover { transform: scale(1.2); }
+
+  .input-group { margin-bottom: 25px; text-align: left; }
+  label { display: block; font-weight: 600; font-size: 0.9em; margin-bottom: 8px; color: var(--text-main); }
+  
+  textarea {
+    width: 100%; padding: 15px; border-radius: 12px;
+    border: 2px solid var(--border); background: var(--bg-body);
+    font-family: inherit; font-size: 1em; color: var(--text-main);
+    resize: none; outline: none; height: 120px;
+    box-sizing: border-box; transition: border-color 0.3s;
+  }
+  
+  textarea:focus { border-color: var(--brand-color); }
+
+  button {
+    width: 100%; padding: 18px; border-radius: 14px; border: none;
+    font-size: 1.1em; font-weight: 700; color: white;
+    background: var(--brand-color); cursor: pointer;
+    box-shadow: 0 10px 20px -5px var(--brand-color);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  
+  button:disabled { opacity: 0.7; cursor: not-allowed; }
+  button:active { transform: scale(0.98); }
+</style>
+</head>
+<body>
+
+<form class="form-card" id="feedbackForm">
+  <h1 id="brandName">Tu Opinión</h1>
+  <p class="subtitle" id="txtSubtitle">Ayúdanos a mejorar contándonos tu experiencia de hoy.</p>
+
+  <div class="input-group" style="text-align:center">
+    <label id="lblRating">¿Cómo fue tu experiencia general? *</label>
+    <div class="star-container" id="starContainer">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+    <input type="hidden" id="ratingInput" required>
+  </div>
+
+  <div class="input-group">
+    <label id="lblComment">¿Qué podemos mejorar? *</label>
+    <textarea id="commentInput" placeholder="..." required></textarea>
+  </div>
+
+  <button type="submit" id="submitBtn">Enviar Comentario</button>
+</form>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo4q3MIwWjXgE88lIl5_E8UdsrxNmwGvjQATsZ9rLXoha2EixB5BdozivNJ24W_NYH/exec"; 
+
+const translations = {
+  es: {
+    subtitle: "Ayúdanos a mejorar contándonos tu experiencia de hoy.",
+    lblRating: "¿Cómo fue tu experiencia general? *",
+    lblComment: "¿Qué podemos mejorar? *",
+    placeholder: "La comida estaba...",
+    submit: "Enviar Comentario",
+    sending: "Enviando...",
+    alertStar: "Por favor, selecciona una puntuación de estrellas.",
+    alertComment: "Por favor, escribe un comentario."
+  },
+  en: {
+    subtitle: "Help us improve by sharing your experience today.",
+    lblRating: "How was your overall experience? *",
+    lblComment: "What can we improve? *",
+    placeholder: "The food was...",
+    submit: "Send Feedback",
+    sending: "Sending...",
+    alertStar: "Please select a star rating.",
+    alertComment: "Please write a comment."
+  }
+  // Se pueden añadir de, fr, it aquí...
+};
+
+const params = new URLSearchParams(window.location.search);
+let currentLang = 'es';
+
+function init() {
+  if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
+
+  const name = params.get('n') || "Restaurante";
+  document.getElementById('brandName').innerText = name;
+
+  if (params.get('btn')) {
+    const color = '#' + params.get('btn');
+    document.documentElement.style.setProperty('--brand-color', color);
+    document.getElementById('metaThemeColor').setAttribute('content', color);
+  }
+
+  // Aplicar tema guardado
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  // Idioma
+  currentLang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
+  if (!translations[currentLang]) currentLang = 'es';
+  translateUI();
+}
+
+function translateUI() {
+  const t = translations[currentLang];
+  document.getElementById('txtSubtitle').innerText = t.subtitle;
+  document.getElementById('lblRating').innerText = t.lblRating;
+  document.getElementById('lblComment').innerText = t.lblComment;
+  document.getElementById('commentInput').placeholder = t.placeholder;
+  document.getElementById('submitBtn').innerText = t.submit;
+}
+
+// Lógica de Estrellas
+const stars = document.querySelectorAll('.star');
+const ratingInput = document.getElementById('ratingInput');
+stars.forEach(star => {
+  star.addEventListener('click', () => {
+    const val = parseInt(star.dataset.value);
+    ratingInput.value = val;
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val));
+  });
+});
+
+// Envío y Redirección
+const form = document.getElementById('feedbackForm');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const t = translations[currentLang];
+
+  if (!ratingInput.value) { alert(t.alertStar); return; }
+  const comment = document.getElementById('commentInput').value.trim();
+  if (!comment) { alert(t.alertComment); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerText = t.sending;
+
+  const data = new FormData();
+  data.append('valoracion', ratingInput.value);
+  data.append('comentario', comment);
+
+  fetch(SCRIPT_URL, { method: 'POST', body: data, mode: 'no-cors' })
+  .then(() => {
+    // Redirigir a agradecimiento.html con los mismos parámetros
+    const currentQuery = window.location.search;
+    window.location.href = `agradecimiento.html${currentQuery}`;
+  })
+  .catch(() => {
+    alert("Error al enviar.");
+    btn.disabled = false;
+    btn.innerText = t.submit;
+  });
+});
+
+init();
+</script>
+</body>
+</html>

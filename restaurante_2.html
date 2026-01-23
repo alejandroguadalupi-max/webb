@@ -12,20 +12,14 @@
 
 <style>
   :root {
-    /* --- Variables Base --- */
-    --primary-color: #68B553; /* Se sobrescribe por JS */
+    --primary-color: #68B553; 
     --secondary-color: #e89f4b; 
-    
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
-    
     --text-main: #1e293b;
     --text-sec: #64748b;
-    
     --border: #e2e8f0;
-    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     --shadow-card: 0 10px 25px -5px rgba(0,0,0,0.1);
-    
     --btn-text: #ffffff;
   }
 
@@ -46,25 +40,16 @@
   }
 
   html, body {
-    margin: 0;
-    height: 100%;
-    background-color: var(--bg-body); 
-    color: var(--text-main);
-    font-family: 'Outfit', sans-serif; 
-    -webkit-font-smoothing: antialiased;
+    margin: 0; height: 100%;
+    background-color: var(--bg-body); color: var(--text-main);
+    font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
   }
 
-  /* --- Controles Superiores --- */
   .top-controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 10;
+    position: absolute; top: 20px; right: 20px;
+    display: flex; align-items: center; gap: 12px; z-index: 10;
   }
 
   .lang-badge {
@@ -81,59 +66,38 @@
   }
   .theme-btn:active { transform: scale(0.9); }
 
-  /* Contenedor principal */
   .review-container {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-    padding: 20px 25px; 
-    text-align: center;
+    width: 100%; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 20px 25px; text-align: center;
   }
   
   .content-wrapper {
-    width: 100%;
-    max-width: 420px; 
+    width: 100%; max-width: 420px; 
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  /* Caja de opción */
   .option-box {
-    width: 100%;
-    background: var(--bg-card);
-    border: 1px solid var(--border); 
-    border-radius: 24px; 
-    padding: 30px 25px; 
-    box-shadow: var(--shadow-card); 
-    transition: transform 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    width: 100%; background: var(--bg-card); border: 1px solid var(--border); 
+    border-radius: 24px; padding: 30px 25px; box-shadow: var(--shadow-card); 
+    transition: transform 0.3s ease; position: relative; overflow: hidden;
   }
   
-  /* Borde superior de color */
-  .option-box::before {
-    content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px;
-  }
+  .option-box::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; }
   .box-public::before { background: var(--primary-color); }
   .box-private::before { background: var(--secondary-color); }
 
-  .option-box h2 { font-size: 1.4em; font-weight: 700; margin: 10px 0 8px 0; color: var(--text-main); }
-  .option-box p { font-size: 0.95em; color: var(--text-sec); margin: 0 0 25px 0; line-height: 1.5; }
+  .option-box h2 { font-size: 1.4em; font-weight: 700; margin: 10px 0 8px 0; }
+  .option-box p { font-size: 0.95em; color: var(--text-sec); margin: 0 0 20px 0; line-height: 1.5; }
 
-  /* Divisor "O" */
   .divider {
     display: flex; align-items: center; width: 100%; margin: 25px 0; 
     color: var(--text-sec); font-weight: 600; font-size: 0.85em; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;
   }
-  .divider::before, .divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .divider::before { margin-right: 15px; }
   .divider::after { margin-left: 15px; }
 
-  /* Botones */
   .btn {
     display: block; width: 100%; text-decoration: none; padding: 18px 0; 
     border-radius: 16px; font-weight: 700; font-size: 1.05em; text-align: center;
@@ -143,7 +107,6 @@
 
   .btn-google {
     background-color: var(--primary-color);
-    /* Sombra suave del color de la marca */
     box-shadow: 0 10px 20px -5px var(--primary-color); 
     opacity: 0.95;
   }
@@ -156,7 +119,6 @@
   .btn-private:active { transform: scale(0.98); }
 
   .note { font-size: 0.85em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300;}
-  
 </style>
 </head>
 <body>
@@ -181,7 +143,7 @@
     <section class="option-box box-private">
       <h2 data-lang="privateTitle">📝 Comentario privado</h2>
       <p data-lang="privateText">¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.</p>
-      <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#" target="_blank">Hablar con el equipo</a>
+      <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#">Hablar con el equipo</a>
       <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
     </section>
 
@@ -190,7 +152,6 @@
 
 <script>
 /* --- 1. CONFIGURACIÓN --- */
-// Paletas de respaldo (por si no llega el parámetro btn)
 const palettes = {
     'hamburgueseria': '#FF8C00', 
     'pizzeria':       '#D32F2F', 
@@ -200,50 +161,42 @@ const palettes = {
     'default':        '#68B553'
 };
 
-const GOOGLE_LINK = "https://www.google.com/maps"; 
-const TALLY_LINKS = {
-  es: "https://tally.so/r/w2Qla9",
-  en: "https://tally.so/r/w20k9D"
-};
+const GOOGLE_LINK = "https://search.google.com/local/writereview?placeid=TU_ID_AQUI"; 
 
 const translations = {
   es: { publicTitle: "⭐ Reseña pública", publicText: "Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn: "Publicar en Google", publicNote: "Queda visible para todos.", privateTitle: "📝 Comentario privado", privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn: "Hablar con el equipo", privateNote: "Solo lo vemos nosotros." },
   en: { publicTitle: "⭐ Public review", publicText: "Your review helps other customers find us.", publicBtn: "Post on Google", publicNote: "Visible to everyone.", privateTitle: "📝 Private feedback", privateText: "Had an issue? Your feedback helps us improve directly.", privateBtn: "Tell the Team", privateNote: "Only we can see it." },
   de: { publicTitle: "⭐ Öffentliche Bewertung", publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn: "Auf Google posten", publicNote: "Für alle sichtbar.", privateTitle: "📝 Privates Feedback", privateText: "Gab es ein Problem? Helfen Sie uns direkt.", privateBtn: "Dem Team mitteilen", privateNote: "Nur wir sehen es." },
-  fr: { publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour tous.", privateTitle: "📝 Retour privé", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
-  it: { publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a migliorare.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi." }
+  fr: { publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour tous.", privateTitle: "📝 Retour privado", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
+  it: { publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a mejorar.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi." }
 };
 
 /* --- 2. LÓGICA PRINCIPAL --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
 
-  // A. SEGURIDAD
   if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  // B. TITULO
   const name = params.get('n') || "Restaurante";
   document.title = "Opinión - " + name;
 
-  // C. APLICAR COLOR (Prioridad: ?btn > Categoría)
+  // Aplicar Color
   const category = params.get('categoria') || 'default';
-  
-  let color;
-  if(params.get('btn')) {
-     color = '#' + params.get('btn'); // Color personalizado del configurador
-  } else {
-     color = palettes[category] || palettes['default']; // Fallback
-  }
+  let color = params.get('btn') ? '#' + params.get('btn') : (palettes[category] || palettes['default']);
 
   document.documentElement.style.setProperty('--primary-color', color);
   document.getElementById('metaThemeColor').setAttribute('content', color);
 
-  // D. IDIOMA Y TEMA
+  // Configurar Idioma y Tema
   detectAndSetLanguage();
   applyTheme();
+
+  // --- CONFIGURAR ENLACES ---
+  // El botón privado ahora envía todos los parámetros actuales a feedback.html
+  document.getElementById("btnPrivate").href = "feedback.html" + window.location.search;
+  document.getElementById("btnGoogle").href = GOOGLE_LINK;
 }
 
-/* --- FUNCIONES AUXILIARES --- */
 function detectAndSetLanguage() {
   let lang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
   if (!translations[lang]) lang = 'es';
@@ -254,9 +207,6 @@ function detectAndSetLanguage() {
   document.querySelectorAll("[data-lang]").forEach(el => {
     if (translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
   });
-
-  document.getElementById("btnGoogle").href = GOOGLE_LINK;
-  document.getElementById("btnPrivate").href = TALLY_LINKS[lang] || TALLY_LINKS['en'];
 }
 
 const themeBtn = document.getElementById('themeBtn');
@@ -268,15 +218,12 @@ function applyTheme() {
 
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
-  const newTheme = current === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', newTheme);
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
   applyTheme();
 });
 
-// Arrancar
 window.addEventListener("pageshow", init);
-
 </script>
-
 </body>
 </html>

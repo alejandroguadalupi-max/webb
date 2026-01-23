@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Restaurante PataMig — Gracias</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>Gracias</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --brand: #0ea5a4;
-      --brand2: #7c3aed;
-      --tint: #e6fbfa;
-      --bgTop: #ffffff;
-      --bgBottom: #f5f7fb;
-      --text: #111827;
-      --textSec: #4b5563;
+      /* Colores de Marca (JS los sobrescribe) */
+      --brand: #68B553;
+      --brand2: #3b82f6; /* Color de acento para el degradado del borde */
+      
+      /* Colores de Tema Claro */
+      --bg-gradient: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+      --card-bg: linear-gradient(180deg, #f9fafb 0%, #ffffff 70%);
+      --text-main: #111827;
+      --text-sec: #4b5563;
       --stroke: #e5e7eb;
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+      --card-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 70%);
+      --text-main: #f8fafc;
+      --text-sec: #94a3b8;
+      --stroke: #334155;
     }
 
     * { box-sizing: border-box; }
@@ -27,206 +36,186 @@
 
     body {
       min-height: 100dvh;
-      display: grid;
-      grid-template-rows: 1fr auto;
-      padding: 16px;
-      background: linear-gradient(180deg, var(--bgTop), var(--bgBottom));
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: var(--bg-gradient);
+      font-family: 'Outfit', system-ui, sans-serif;
+      transition: background 0.4s ease;
+      overflow: hidden;
     }
 
     main {
       width: 100%;
-      max-width: 580px;
-      margin-inline: auto;
-      display: grid;
-      gap: 14px;
+      max-width: 500px;
       text-align: center;
-      align-self: center;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .brand {
+    /* Nombre del Restaurante Animado */
+    .brand-title {
       font-family: "Playfair Display", serif;
       font-weight: 700;
-      font-size: clamp(2rem, 8vw, 2.7rem);
+      font-size: clamp(2.2rem, 10vw, 3rem);
       color: var(--brand);
       margin: 0;
       opacity: 0;
-      transform: translateY(-14px);
-      animation: brandIn 1s ease-out forwards,
-                 brandMove 1s ease-in-out 4.5s forwards;
+      transform: translateY(-20px);
+      animation: brandIn 1s ease-out forwards;
     }
 
     @keyframes brandIn {
       to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes brandMove {
-      to { transform: translateY(40px); }
-    }
 
+    /* Tarjeta con borde animado */
     .card-wrap {
       position: relative;
-      border-radius: 18px;
-      padding: 3px;
-      background: linear-gradient(90deg, var(--brand), var(--brand2), var(--brand)) no-repeat;
-      background-size: 300% 300%;
-      animation: borderFlow 6s linear infinite,
-                 cardEnter 5.5s cubic-bezier(.25,1.25,.4,1) .7s forwards;
+      border-radius: 28px;
+      padding: 4px;
+      background: linear-gradient(90deg, var(--brand), var(--brand2), var(--brand));
+      background-size: 200% auto;
+      animation: borderFlow 4s linear infinite, cardEnter 0.8s cubic-bezier(.25, 1, .5, 1) 0.3s forwards;
       opacity: 0;
-      transform: translateY(20px) scale(0.98);
-      filter: blur(8px);
+      transform: scale(0.9);
     }
+
     @keyframes borderFlow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
+      to { background-position: 200% center; }
     }
+
     @keyframes cardEnter {
-      60% { opacity: 1; transform: translateY(-6px) scale(1.02); filter: blur(0); }
-      100% { transform: translateY(0) scale(1); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .card {
-      border-radius: 15px;
-      background: linear-gradient(180deg, var(--tint) 0%, #ffffff 70%);
+      border-radius: 24px;
+      background: var(--card-bg);
+      padding: 40px 30px;
       border: 1px solid var(--stroke);
-      padding: clamp(20px, 5vw, 28px);
     }
 
     .card h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.7rem, 7vw, 2.2rem);
-      font-weight: 700;
-      color: var(--text);
+      margin: 0 0 15px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
     }
 
     .card p {
       margin: 0;
-      font-size: clamp(1rem, 4vw, 1.12rem);
+      font-size: 1.1rem;
       line-height: 1.6;
-      color: var(--textSec);
+      color: var(--text-sec);
     }
 
+    /* Iconos Sociales */
     footer.social {
       display: flex;
       justify-content: center;
-      align-items: center;
       gap: 20px;
-      margin-top: 18px;
-      padding: 12px 0;
+      margin-top: 30px;
+      animation: brandIn 1s ease-out 1s forwards;
+      opacity: 0;
     }
-    footer.social a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform .15s ease;
-    }
-    footer.social img {
-      width: 44px;
-      height: 44px;
-      object-fit: cover;
-      display: block;
-      border-radius: 10px;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-    footer.social a:hover { transform: scale(1.08); }
 
-    @media (prefers-reduced-motion: reduce) {
-      .card-wrap, .brand {
-        animation: none;
-        opacity: 1;
-        transform: none;
-        filter: none;
-      }
+    footer.social a {
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    footer.social img {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    footer.social a:hover { transform: scale(1.15) rotate(5deg); }
+
+    .btn-back {
+        margin-top: 20px;
+        background: transparent;
+        border: none;
+        color: var(--text-sec);
+        text-decoration: underline;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+
   <main>
-    <h2 class="brand" id="brand">Restaurante PataMig</h2>
+    <h2 class="brand-title" id="brandDisplay">Restaurante</h2>
 
     <div class="card-wrap">
-      <section class="card" aria-labelledby="t">
-        <h1 id="t">Gracias por tu ayuda</h1>
-        <p id="desc">Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
+      <section class="card">
+        <h1 id="txtHeading">Gracias por tu ayuda</h1>
+        <p id="txtDesc">Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
       </section>
     </div>
+
+    <button class="btn-back" id="txtBack" onclick="goHome()">Volver al inicio</button>
   </main>
 
   <footer class="social">
-    <a id="btnIG" target="_blank" rel="noopener" aria-label="Instagram">
+    <a href="https://instagram.com/taply.es" target="_blank" rel="noopener">
       <img src="img/ig.jpg" alt="Instagram">
     </a>
-    <a id="btnTT" target="_blank" rel="noopener" aria-label="TikTok">
+    <a href="https://tiktok.com/@taply" target="_blank" rel="noopener">
       <img src="img/tiktok.jpg" alt="TikTok">
     </a>
   </footer>
 
   <script>
-    // ===== Config =====
-    const BRAND_NAME = "Restaurante Casablanca";
+    const params = new URLSearchParams(window.location.search);
 
-    const IG_URL = "https://instagram.com/taply.es";
-    const TIKTOK_URL = "https://tiktok.com/@tu_usuario";
-
-    // Textos para cada idioma
     const COPY = {
-      es: {
-        title: `${BRAND_NAME} — Gracias`,
-        heading: "Gracias por tu ayuda",
-        desc: "Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio."
-      },
-      en: {
-        title: `${BRAND_NAME} — Thanks`,
-        heading: "Thanks for your help",
-        desc: "Your feedback helps us improve and offer you a better service."
-      },
-      de: {
-        title: `${BRAND_NAME} — Danke`,
-        heading: "Vielen Dank für Ihre Hilfe",
-        desc: "Ihr Feedback hilft uns, uns zu verbessern und Ihnen einen besseren Service zu bieten."
-      },
-      fr: {
-        title: `${BRAND_NAME} — Merci`,
-        heading: "Merci pour votre aide",
-        desc: "Vos commentaires nous aident à nous améliorer et à vous offrir un meilleur service."
-      }
+      es: { heading: "Gracias por tu ayuda", desc: "Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.", back: "Volver al inicio" },
+      en: { heading: "Thanks for your help", desc: "Your feedback helps us improve and offer you a better service.", back: "Back to home" },
+      de: { heading: "Danke für deine Hilfe", desc: "Dein Feedback hilft uns, uns zu verbessern.", back: "Zurück zum Start" },
+      fr: { heading: "Merci de tu aide", desc: "Vos commentaires nos aident à nous améliorer.", back: "Retour au début" },
+      it: { heading: "Grazie per il tuo aiuto", desc: "Il tuo feedback ci aiuta a migliorare.", back: "Torna alla home" }
     };
 
-    // 1. Detecta idioma (URL > navegador > inglés)
-    function getLanguage() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const langFromUrl = urlParams.get('lang');
-      if (langFromUrl && COPY[langFromUrl]) return langFromUrl;
+    function init() {
+      // 1. Nombre del Restaurante
+      const name = params.get('n') || "Restaurante";
+      document.getElementById("brandDisplay").textContent = name;
+      document.title = name + " - Gracias";
 
-      const browserLangs = navigator.languages || [navigator.language || 'en'];
-      for (const lang of browserLangs) {
-        const langCode = lang.slice(0, 2);
-        if (COPY[langCode]) return langCode;
+      // 2. Aplicar Color de Marca
+      if (params.get('btn')) {
+        const color = '#' + params.get('btn');
+        document.documentElement.style.setProperty('--brand', color);
       }
-      return 'en';
+
+      // 3. Aplicar Tema (Claro/Oscuro)
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+
+      // 4. Idioma
+      let lang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
+      if (!COPY[lang]) lang = 'es';
+      
+      const dict = COPY[lang];
+      document.getElementById("txtHeading").textContent = dict.heading;
+      document.getElementById("txtDesc").textContent = dict.desc;
+      document.getElementById("txtBack").textContent = dict.back;
     }
 
-    // 2. Aplica textos
-    function setLang(lang) {
-      const dict = COPY[lang] || COPY.en;
-      document.documentElement.lang = lang;
-      document.title = dict.title;
-      document.getElementById("brand").textContent = BRAND_NAME;
-      document.getElementById("t").textContent = dict.heading;
-      document.getElementById("desc").textContent = dict.desc;
+    function goHome() {
+        // Vuelve a la página principal manteniendo los parámetros
+        window.location.href = "principal.html" + window.location.search;
     }
 
-    // 3. Inicialización
-    (function () {
-      const lang = getLanguage();
-      setLang(lang);
-      document.getElementById("btnIG").href = IG_URL;
-      document.getElementById("btnTT").href = TIKTOK_URL;
-    })();
-
+    init();
   </script>
 </body>
 </html>
