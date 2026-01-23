@@ -12,7 +12,7 @@
 
 <style>
   :root {
-    --brand-color: #68B553; 
+    --brand-color: #68B553; /* Se sobrescribe por JS */
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
     --text-main: #1e293b;
@@ -114,6 +114,7 @@
 </form>
 
 <script>
+// URL de tu Script de Google (App Script)
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo4q3MIwWjXgE88lIl5_E8UdsrxNmwGvjQATsZ9rLXoha2EixB5BdozivNJ24W_NYH/exec"; 
 
 const translations = {
@@ -136,30 +137,62 @@ const translations = {
     sending: "Sending...",
     alertStar: "Please select a star rating.",
     alertComment: "Please write a comment."
+  },
+  de: {
+    subtitle: "Helfen Sie uns, besser zu werden.",
+    lblRating: "Wie war Ihre Erfahrung? *",
+    lblComment: "Was können wir verbessern? *",
+    placeholder: "Das Essen war...",
+    submit: "Feedback senden",
+    sending: "Wird gesendet...",
+    alertStar: "Bitte wählen Sie eine Sternebewertung.",
+    alertComment: "Bitte schreiben Sie einen Kommentar."
+  },
+  fr: {
+    subtitle: "Aidez-nous à nous améliorer.",
+    lblRating: "Comment s'est passée votre expérience ? *",
+    lblComment: "Que pouvons-nous améliorer ? *",
+    placeholder: "La nourriture était...",
+    submit: "Envoyer",
+    sending: "Envoi...",
+    alertStar: "Veuillez sélectionner une note.",
+    alertComment: "Veuillez écrire un commentaire."
+  },
+  it: {
+    subtitle: "Aiutaci a migliorare la tua esperienza.",
+    lblRating: "Com'è stata la tua esperienza? *",
+    lblComment: "Cosa possiamo migliorare? *",
+    placeholder: "Il cibo era...",
+    submit: "Invia Feedback",
+    sending: "Invio...",
+    alertStar: "Seleziona un punteggio.",
+    alertComment: "Scrivi un commento."
   }
-  // Se pueden añadir de, fr, it aquí...
 };
 
 const params = new URLSearchParams(window.location.search);
 let currentLang = 'es';
 
 function init() {
+  // 1. Seguridad
   if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
+  // 2. Nombre del Restaurante
   const name = params.get('n') || "Restaurante";
   document.getElementById('brandName').innerText = name;
 
+  // 3. Color
   if (params.get('btn')) {
     const color = '#' + params.get('btn');
     document.documentElement.style.setProperty('--brand-color', color);
     document.getElementById('metaThemeColor').setAttribute('content', color);
   }
 
-  // Aplicar tema guardado
-  const savedTheme = localStorage.getItem('theme') || 'light';
+  // 4. Tema (Claro/Oscuro)
+  const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', savedTheme);
 
-  // Idioma
+  // 5. Idioma
   currentLang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
   if (!translations[currentLang]) currentLang = 'es';
   translateUI();
@@ -185,7 +218,7 @@ stars.forEach(star => {
   });
 });
 
-// Envío y Redirección
+// Envío
 const form = document.getElementById('feedbackForm');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -205,7 +238,7 @@ form.addEventListener('submit', (e) => {
 
   fetch(SCRIPT_URL, { method: 'POST', body: data, mode: 'no-cors' })
   .then(() => {
-    // Redirigir a agradecimiento.html con los mismos parámetros
+    // REDIRECCIÓN A AGRADECIMIENTO CON TODOS LOS PARÁMETROS
     const currentQuery = window.location.search;
     window.location.href = `agradecimiento.html${currentQuery}`;
   })
@@ -216,6 +249,7 @@ form.addEventListener('submit', (e) => {
   });
 });
 
+// Arrancar
 init();
 </script>
 </body>
