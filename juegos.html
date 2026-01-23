@@ -4,168 +4,168 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Zona Kids</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg-color: #f0f8ff;
-      --card-bg: #ffffff;
-      --text-color: #333;
-      --primary: #FF8C00; /* Se cambiará por JS */
-      --radius: 12px;
+      /* Se sobrescribe por JS */
+      --brand-color: #FF8C00; 
+      
+      --bg-body: #f0f4f8;
+      --bg-card: #ffffff;
+      --text-main: #1e293b;
+      --text-sec: #64748b;
+      --border: #e2e8f0;
+      
+      /* Estilo Cartoon */
+      --shadow-cartoon: 0 6px 0 rgba(0,0,0,0.15);
+      --radius-fun: 24px;
     }
 
     [data-theme="dark"] {
-      --bg-color: #1a1a1a;
-      --card-bg: #2d2d2d;
-      --text-color: #f4f4f4;
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-sec: #94a3b8;
+      --border: #334155;
+      --shadow-cartoon: 0 6px 0 rgba(0,0,0,0.5);
     }
 
     body {
-      margin: 0;
-      font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Fuente divertida */
-      background: var(--bg-color);
-      color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      user-select: none;
-      transition: background 0.3s;
+      margin: 0; font-family: 'Fredoka', sans-serif; /* Fuente divertida */
+      background: var(--bg-body); color: var(--text-main);
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; transition: background 0.3s;
+      overflow-x: hidden; user-select: none;
+      padding-bottom: 40px;
     }
 
-    /* HEADER */
+    /* --- HEADER --- */
     header {
-      width: 100%;
-      padding: 20px;
-      text-align: center;
-      background: var(--card-bg);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      width: 100%; padding: 20px; text-align: center;
+      background: var(--bg-card); 
+      border-bottom: 2px solid var(--border);
+      position: sticky; top: 0; z-index: 50;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    h1 {
-      margin: 0;
-      font-size: 1.4rem;
-      color: var(--primary);
-    }
-    
-    .subtitle {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin-top: 5px;
-    }
+    h1 { margin: 0; font-size: 1.6rem; font-weight: 700; color: var(--brand-color); letter-spacing: 0.5px; }
+    .subtitle { font-size: 1rem; color: var(--text-sec); margin-top: 5px; font-family: 'Outfit', sans-serif; }
 
-    /* TABLERO DE JUEGO */
-    .game-board {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      padding: 20px;
-      width: 100%;
-      max-width: 400px;
-      margin-top: 20px;
-      perspective: 1000px;
-    }
-
-    .card {
-      background-color: transparent;
-      height: 80px; /* Altura de la carta */
-      cursor: pointer;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.5s;
-    }
-
-    .card.flipped {
-      transform: rotateY(180deg);
-    }
-
-    .card.matched {
-      visibility: hidden; /* Ocultar las parejas encontradas o dejarlas fijas */
-      opacity: 0;
-      transition: opacity 0.5s;
-      pointer-events: none;
-    }
-
-    /* CARAS DE LA CARTA */
-    .card-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backface-visibility: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      font-size: 2.5rem;
-    }
-
-    .card-front {
-      background-color: var(--primary);
-      color: white;
-      font-size: 2rem;
-    }
-
-    .card-back {
-      background-color: var(--card-bg);
-      border: 2px solid var(--primary);
-      transform: rotateY(180deg);
-    }
-
-    /* BOTONES */
-    .controls {
-      margin-top: auto;
-      margin-bottom: 30px;
-      display: flex;
-      gap: 15px;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: transform 0.1s;
-    }
-    
-    .btn:active { transform: scale(0.95); }
-
-    .btn-exit {
-      background: #f44336;
-      color: white;
-    }
-
-    .btn-restart {
-      background: var(--primary);
-      color: white;
-    }
-
-    /* MODAL VICTORIA */
-    .modal {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 100;
-      opacity: 0; pointer-events: none; transition: 0.3s;
-    }
-    .modal.show { opacity: 1; pointer-events: auto; }
-    
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
+    /* --- MENU PRINCIPAL (CARTOON STYLE) --- */
+    .hub-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+      width: 100%; max-width: 480px; padding: 30px 20px;
       animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes popIn {
-      0% { transform: scale(0); } 100% { transform: scale(1); }
+    .game-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-fun);
+      padding: 20px 10px;
+      display: flex; flex-direction: column; align-items: center;
+      cursor: pointer; position: relative; overflow: hidden;
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-cartoon);
+      transition: transform 0.1s, box-shadow 0.1s;
     }
+    
+    .game-card:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+    }
+
+    /* Decoración de fondo de la carta */
+    .game-card::before {
+      content: ''; position: absolute; top: -20px; left: -20px;
+      width: 70px; height: 70px; border-radius: 50%;
+      background: var(--brand-color); opacity: 0.1;
+    }
+
+    .game-icon { font-size: 3.5rem; margin-bottom: 10px; z-index: 2; transition: transform 0.2s;}
+    .game-card:hover .game-icon { transform: scale(1.1) rotate(5deg); }
+
+    .game-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px; }
+    .game-tag { 
+      font-family: 'Outfit', sans-serif; font-size: 0.75rem; 
+      background: var(--brand-color); color: #fff; padding: 4px 10px; 
+      border-radius: 20px; font-weight: 700;
+    }
+
+    /* --- AREA DE JUEGO ACTIVO --- */
+    .game-wrapper {
+      display: none; flex-direction: column; align-items: center; 
+      width: 100%; max-width: 450px; padding: 20px;
+      flex: 1; animation: slideUp 0.4s ease-out;
+    }
+    .game-wrapper.active { display: flex; }
+
+    /* --- BOTONES --- */
+    .controls { width: 100%; display: flex; gap: 15px; margin-top: auto; padding-top: 20px; }
+    .btn {
+      flex: 1; padding: 16px; border-radius: 18px; border: none; font-weight: 700; font-size: 1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: 'Outfit', sans-serif;
+      transition: transform 0.1s;
+    }
+    .btn:active { transform: scale(0.95); }
+    
+    .btn-back { background: var(--bg-card); color: var(--text-sec); border: 2px solid var(--border); }
+    .btn-action { background: var(--brand-color); color: #fff; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+    .btn-action:active { box-shadow: 0 0 0; transform: translateY(4px); }
+
+    /* === JUEGO 1: MEMORY === */
+    .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; perspective: 1000px; }
+    .mem-card { aspect-ratio: 1; position: relative; transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer; }
+    .mem-card.flipped { transform: rotateY(180deg); }
+    .mem-face { 
+      position: absolute; width: 100%; height: 100%; border-radius: 16px; 
+      display: flex; align-items: center; justify-content: center; 
+      backface-visibility: hidden; font-size: 2.2rem; 
+      box-shadow: 0 4px 0 rgba(0,0,0,0.1); border: 2px solid var(--border);
+    }
+    .mem-front { background: #fff; color: var(--brand-color); font-size: 2rem; font-weight: 900;}
+    .mem-back { background: #fff; transform: rotateY(180deg); border-color: var(--brand-color); }
+
+    /* === JUEGO 2: TRES EN RAYA === */
+    .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; aspect-ratio: 1; }
+    .ttt-cell { 
+      background: var(--bg-card); border-radius: 16px; border: 3px solid var(--border); 
+      display: flex; align-items: center; justify-content: center; 
+      font-size: 3.5rem; font-weight: 900; cursor: pointer; color: var(--text-main);
+    }
+    .ttt-cell.winner { background: var(--brand-color); color: white; border-color: var(--brand-color); }
+
+    /* === JUEGO 3: PIEDRA PAPEL TIJERA (DUELO) === */
+    .rps-score-board { display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px; background: var(--bg-card); padding: 15px; border-radius: 16px; border: 2px solid var(--border); }
+    .score-box { text-align: center; }
+    .score-num { font-size: 1.5rem; font-weight: 700; color: var(--brand-color); }
+    .rps-arena { height: 150px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 4rem; }
+    .rps-controls { display: flex; gap: 10px; }
+    .rps-btn { font-size: 2rem; width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--border); background: #fff; cursor: pointer; transition: 0.2s; }
+    .rps-btn:active { transform: scale(0.9); border-color: var(--brand-color); }
+
+    /* === JUEGO 4: WHACK A MOLE (Caza Ingredientes) === */
+    .mole-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+    .hole { 
+      aspect-ratio: 1; background: var(--border); border-radius: 50%; position: relative; overflow: hidden; 
+      border-bottom: 5px solid rgba(0,0,0,0.1);
+    }
+    .mole {
+      position: absolute; top: 100%; width: 100%; height: 100%;
+      background-size: 70%; background-repeat: no-repeat; background-position: center bottom;
+      transition: top 0.1s; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 3rem;
+    }
+    .hole.up .mole { top: 10px; }
+    .mole-score { font-size: 2rem; font-weight: 800; color: var(--brand-color); margin-bottom: 10px; }
+
+    /* Animaciones */
+    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
   </style>
 </head>
@@ -173,181 +173,355 @@
 
   <header>
     <h1 id="restaurantName">Restaurante</h1>
-    <div class="subtitle">🎮 Zona de Juegos</div>
+    <div class="subtitle" id="headerSubtitle">🎮 Zona de Juegos</div>
   </header>
 
-  <div class="game-board" id="gameBoard">
+  <div class="hub-grid" id="hubMenu">
+    
+    <div class="game-card" onclick="loadGame('memory')">
+      <div class="game-icon">🎴</div>
+      <div class="game-title">Parejas</div>
+      <div class="game-tag">Memoria</div>
     </div>
 
-  <div class="controls">
-    <button class="btn btn-exit" onclick="goBack()">Salir</button>
-    <button class="btn btn-restart" onclick="initGame()">Reiniciar 🔄</button>
+    <div class="game-card" onclick="loadGame('ttt')">
+      <div class="game-icon">⭕</div>
+      <div class="game-title">3 en Raya</div>
+      <div class="game-tag">Estrategia</div>
+    </div>
+
+    <div class="game-card" onclick="loadGame('rps')">
+      <div class="game-icon">🥊</div>
+      <div class="game-title">Duelo</div>
+      <div class="game-tag">Al mejor de 3</div>
+    </div>
+
+    <div class="game-card" onclick="loadGame('mole')">
+      <div class="game-icon">⚡</div>
+      <div class="game-title">Caza Chef</div>
+      <div class="game-tag">Reflejos</div>
+    </div>
+
+    <button class="btn btn-back" style="grid-column: span 2; margin-top:10px;" onclick="goHome()">
+      ⬅️ Volver a la Carta
+    </button>
   </div>
 
-  <div class="modal" id="winModal">
-    <div class="modal-content">
-      <h2 style="color:#333; margin-top:0">🎉 ¡GANASTE! 🎉</h2>
-      <p style="color:#666">¡Eres muy rápido!</p>
-      <button class="btn btn-restart" onclick="initGame(); document.getElementById('winModal').classList.remove('show')">Jugar otra vez</button>
+
+  <div class="game-wrapper" id="game-memory">
+    <div class="memory-grid" id="memoryBoard"></div>
+    <div class="controls">
+      <button class="btn btn-back" onclick="showHub()">Salir</button>
+      <button class="btn btn-action" onclick="initMemory()">Reiniciar 🔄</button>
     </div>
   </div>
+
+
+  <div class="game-wrapper" id="game-ttt">
+    <div style="margin-bottom:15px; font-size:1.2rem; font-weight:700;" id="tttStatus">Tu turno (X)</div>
+    <div class="ttt-grid" id="tttBoard"></div>
+    <div class="controls">
+      <button class="btn btn-back" onclick="showHub()">Salir</button>
+      <button class="btn btn-action" onclick="initTTT()">Reiniciar 🔄</button>
+    </div>
+  </div>
+
+
+  <div class="game-wrapper" id="game-rps">
+    <div class="rps-score-board">
+      <div class="score-box">TÚ<br><span id="userScore" class="score-num">0</span></div>
+      <div class="score-box">VS</div>
+      <div class="score-box">CPU<br><span id="cpuScore" class="score-num">0</span></div>
+    </div>
+    <div class="rps-arena">
+      <span id="pHand">🤜</span>
+      <span id="cHand">🤛</span>
+    </div>
+    <div style="margin:20px 0; font-weight:700; color:var(--brand-color);" id="rpsMsg">¡Elige tu arma!</div>
+    <div class="rps-controls">
+      <button class="rps-btn" onclick="playRPS('✊')">✊</button>
+      <button class="rps-btn" onclick="playRPS('✋')">✋</button>
+      <button class="rps-btn" onclick="playRPS('✌️')">✌️</button>
+    </div>
+    <div class="controls">
+      <button class="btn btn-back" onclick="showHub()">Salir</button>
+    </div>
+  </div>
+
+
+  <div class="game-wrapper" id="game-mole">
+    <div class="mole-score">Puntos: <span id="scoreBoard">0</span></div>
+    <div style="margin-bottom:10px; color:var(--text-sec)">Tiempo: <span id="timeBoard">30</span>s</div>
+    <div class="mole-grid" id="moleGrid">
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+      <div class="hole"><div class="mole">🍔</div></div>
+    </div>
+    <div class="controls">
+      <button class="btn btn-back" onclick="stopMole(); showHub()">Salir</button>
+      <button class="btn btn-action" onclick="initMole()">¡Jugar! ▶️</button>
+    </div>
+  </div>
+
 
 <script>
-  /* --- 1. CONFIGURACIÓN VISUAL --- */
-  // Iconos específicos para el juego de memoria según restaurante
-  const gameIcons = {
-    'hamburgueseria': ['🍔', '🍟', '🥤', '🌭', '🥓', '🧀'],
-    'pizzeria':       ['🍕', '🍅', '🧀', '🍝', '🍄', '👨‍🍳'],
-    'asiatico':       ['🍣', '🍜', '🍤', '🍚', '🥢', '🍱'],
-    'cafe':           ['☕', '🥐', '🍩', '🥞', '🍓', '🍪'],
-    'restaurante':    ['🍗', '🥗', '🥩', '🍰', '🍷', '🍲'], // Genérico
-    'default':        ['🍎', '🍌', '🍇', '🍉', '🍒', '🍓']
-  };
+/* --- CONFIGURACIÓN GLOBAL --- */
+const params = new URLSearchParams(window.location.search);
+let currentBrandColor = '#FF8C00';
+let currentCategory = 'hamburgueseria';
 
-  const palettes = {
-    'hamburgueseria': '#FF8C00',
-    'pizzeria':       '#D32F2F',
-    'asiatico':       '#E91E63',
-    'cafe':           '#8D6E63',
-    'restaurante':    '#2E7D32',
-    'default':        '#92d668'
-  };
+const themeIcons = {
+  'hamburgueseria': '🍔', 'pizzeria': '🍕', 'asiatico': '🍣', 'cafe': '☕', 'default': '⭐'
+};
 
-  const params = new URLSearchParams(window.location.search);
-  let currentCategory = 'default';
+function init() {
+  if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  /* --- 2. LÓGICA DE INICIO --- */
-  function initPage() {
-    // Seguridad
-    if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
+  const name = params.get('n') || "Restaurante";
+  document.getElementById('restaurantName').innerText = name;
+  
+  currentCategory = params.get('categoria') || 'default';
 
-    // Nombre
-    const name = params.get('n') || "Restaurante";
-    document.getElementById('restaurantName').innerText = "Zona Kids: " + name;
-
-    // Colores y Tema
-    currentCategory = params.get('categoria') || 'default';
-    const color = palettes[currentCategory] || palettes['default'];
-    
-    // Aplicar color
-    document.documentElement.style.setProperty('--primary', color);
-
-    // Tema oscuro
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-
-    // Iniciar Juego
-    initGame();
+  if(params.get('btn')) {
+     currentBrandColor = '#' + params.get('btn');
+     document.documentElement.style.setProperty('--brand-color', currentBrandColor);
   }
 
-  /* --- 3. LÓGICA DEL JUEGO (MEMORY) --- */
-  let cards = [];
-  let flippedCards = [];
-  let matchedPairs = 0;
-  let lockBoard = false;
+  const theme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+}
 
-  function initGame() {
-    const board = document.getElementById('gameBoard');
-    board.innerHTML = '';
-    matchedPairs = 0;
-    flippedCards = [];
-    lockBoard = false;
-    document.getElementById('winModal').classList.remove('show');
+function goHome() {
+  window.location.href = `principal.html${window.location.search}`;
+}
 
-    // 1. Obtener iconos y duplicarlos (para hacer parejas)
-    let icons = gameIcons[currentCategory] || gameIcons['default'];
-    // Si la pantalla es muy pequeña o queremos grid 4x3, usamos 6 parejas (12 cartas)
-    // Usamos slice(0,6) para asegurar que tenemos 6 iconos distintos
-    let deck = [...icons.slice(0,6), ...icons.slice(0,6)];
-    
-    // 2. Barajar (Algoritmo Fisher-Yates)
-    deck.sort(() => 0.5 - Math.random());
+function showHub() {
+  document.querySelectorAll('.game-wrapper').forEach(el => el.classList.remove('active'));
+  document.getElementById('hubMenu').style.display = 'grid';
+  document.getElementById('headerSubtitle').innerText = "🎮 Zona de Juegos";
+}
 
-    // 3. Crear HTML
-    deck.forEach((icon, index) => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      card.dataset.icon = icon;
-      
-      // Front (Interrogación o Logo simple)
-      const front = document.createElement('div');
-      front.classList.add('card-face', 'card-front');
-      front.innerHTML = '❓'; // O podrías poner el logo del restaurante si tuvieras
-
-      // Back (Icono del juego)
-      const back = document.createElement('div');
-      back.classList.add('card-face', 'card-back');
-      back.innerHTML = icon;
-
-      card.appendChild(front);
-      card.appendChild(back);
-      
-      card.addEventListener('click', flipCard);
-      board.appendChild(card);
-    });
+function loadGame(gameId) {
+  document.getElementById('hubMenu').style.display = 'none';
+  document.getElementById(`game-${gameId}`).classList.add('active');
+  
+  if(gameId === 'memory') initMemory();
+  if(gameId === 'ttt') initTTT();
+  if(gameId === 'rps') initRPS();
+  if(gameId === 'mole') { 
+    // Set icon based on category for mole
+    const icon = themeIcons[currentCategory] || themeIcons['default'];
+    document.querySelectorAll('.mole').forEach(m => m.innerText = icon);
+    document.getElementById('scoreBoard').innerText = '0';
+    document.getElementById('timeBoard').innerText = '30';
   }
+}
 
-  function flipCard() {
-    if (lockBoard) return;
-    if (this === flippedCards[0]) return; // No clickar la misma
+/* ============================
+   JUEGO 1: MEMORY
+   ============================ */
+const memoryIcons = ['🍕','🍔','🍟','🌭','🥓','🥗']; 
+let flipped = [], matched = 0, lock = false;
 
-    this.classList.add('flipped');
-    flippedCards.push(this);
+function initMemory() {
+  document.getElementById('headerSubtitle').innerText = "🎴 Memory";
+  const board = document.getElementById('memoryBoard');
+  board.innerHTML = '';
+  matched = 0; flipped = []; lock = false;
 
-    if (flippedCards.length === 2) {
-      checkForMatch();
-    }
-  }
+  let deck = [...memoryIcons, ...memoryIcons].sort(() => 0.5 - Math.random());
 
-  function checkForMatch() {
-    let isMatch = flippedCards[0].dataset.icon === flippedCards[1].dataset.icon;
+  deck.forEach(icon => {
+    const card = document.createElement('div');
+    card.classList.add('mem-card');
+    card.innerHTML = `<div class="mem-face mem-front">❓</div><div class="mem-face mem-back">${icon}</div>`;
+    card.addEventListener('click', () => flipCard(card, icon));
+    board.appendChild(card);
+  });
+}
 
-    isMatch ? disableCards() : unflipCards();
-  }
+function flipCard(card, icon) {
+  if (lock || card.classList.contains('flipped') || flipped.includes(card)) return;
+  card.classList.add('flipped');
+  flipped.push({card, icon});
+  if (flipped.length === 2) { lock = true; checkMatch(); }
+}
 
-  function disableCards() {
-    // Son pareja
-    matchedPairs++;
-    
-    // Dejar un pequeño delay para que se vea el match antes de desaparecer (opcional) o dejarlas visibles
+function checkMatch() {
+  const [c1, c2] = flipped;
+  if (c1.icon === c2.icon) {
+    matched++; flipped = []; lock = false;
+    if (matched === 6) setTimeout(() => alert("¡Ganaste! 🎉"), 500);
+  } else {
     setTimeout(() => {
-        flippedCards[0].classList.add('matched');
-        flippedCards[1].classList.add('matched');
-        resetBoard();
-        checkWin();
-    }, 600);
-  }
-
-  function unflipCards() {
-    lockBoard = true;
-    setTimeout(() => {
-      flippedCards[0].classList.remove('flipped');
-      flippedCards[1].classList.remove('flipped');
-      resetBoard();
+      c1.card.classList.remove('flipped');
+      c2.card.classList.remove('flipped');
+      flipped = []; lock = false;
     }, 1000);
   }
+}
 
-  function resetBoard() {
-    [flippedCards, lockBoard] = [[], false];
+/* ============================
+   JUEGO 2: TRES EN RAYA
+   ============================ */
+let tttBoard = Array(9).fill(null);
+let tttActive = true;
+
+function initTTT() {
+  document.getElementById('headerSubtitle').innerText = "⭕ Tres en Raya";
+  tttBoard.fill(null); tttActive = true;
+  document.getElementById('tttStatus').innerText = "Tu turno (X)";
+  const board = document.getElementById('tttBoard');
+  board.innerHTML = '';
+  for(let i=0; i<9; i++) {
+    const cell = document.createElement('div');
+    cell.classList.add('ttt-cell');
+    cell.addEventListener('click', () => handleTTTClick(i, cell));
+    board.appendChild(cell);
   }
+}
 
-  function checkWin() {
-    // Si tenemos 6 parejas, hemos ganado
-    if (matchedPairs === 6) {
-      setTimeout(() => {
-        document.getElementById('winModal').classList.add('show');
-      }, 300);
+function handleTTTClick(i, cell) {
+  if(!tttActive || tttBoard[i]) return;
+  makeMove(i, cell, 'X');
+  if(checkTTTWin('X')) { tttActive=false; document.getElementById('tttStatus').innerText="¡Ganaste!"; return; }
+  
+  // CPU
+  setTimeout(() => {
+    if(!tttActive) return;
+    let empties = tttBoard.map((v,k)=>v===null?k:null).filter(v=>v!==null);
+    if(empties.length===0) return;
+    let move = empties[Math.floor(Math.random()*empties.length)];
+    let cpuCell = document.getElementById('tttBoard').children[move];
+    makeMove(move, cpuCell, 'O');
+    if(checkTTTWin('O')) { tttActive=false; document.getElementById('tttStatus').innerText="Gana CPU"; }
+  }, 500);
+}
+
+function makeMove(i, cell, p) {
+  tttBoard[i] = p;
+  cell.innerText = p==='X'?'❌':'⭕';
+  cell.style.color = p==='X'?'var(--brand-color)':'var(--text-sec)';
+}
+
+function checkTTTWin(p) {
+  const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return wins.some(c => c.every(i => tttBoard[i] === p));
+}
+
+/* ============================
+   JUEGO 3: DUELO (RPS)
+   ============================ */
+let uScore = 0, cScore = 0;
+
+function initRPS() {
+  document.getElementById('headerSubtitle').innerText = "🥊 Duelo";
+  uScore=0; cScore=0; updateScore();
+  document.getElementById('rpsMsg').innerText = "¡Elige tu arma!";
+}
+
+function playRPS(uChoice) {
+  if(uScore===3 || cScore===3) return;
+  const opts = ['✊','✋','✌️'];
+  const cChoice = opts[Math.floor(Math.random()*3)];
+  
+  document.getElementById('pHand').innerText = uChoice;
+  document.getElementById('cHand').innerText = cChoice;
+
+  if(uChoice === cChoice) {
+    document.getElementById('rpsMsg').innerText = "Empate";
+  } else if(
+    (uChoice==='✊' && cChoice==='✌️') || 
+    (uChoice==='✋' && cChoice==='✊') || 
+    (uChoice==='✌️' && cChoice==='✋')) {
+      uScore++; document.getElementById('rpsMsg').innerText = "¡Punto!";
+  } else {
+      cScore++; document.getElementById('rpsMsg').innerText = "Punto CPU";
+  }
+  updateScore();
+}
+
+function updateScore(){
+  document.getElementById('userScore').innerText = uScore;
+  document.getElementById('cpuScore').innerText = cScore;
+  if(uScore===3) document.getElementById('rpsMsg').innerText = "¡VICTORIA! 🏆";
+  if(cScore===3) document.getElementById('rpsMsg').innerText = "DERROTA 💀";
+}
+
+/* ============================
+   JUEGO 4: WHACK A MOLE
+   ============================ */
+let lastHole;
+let timeUp = false;
+let score = 0;
+let moleTimer;
+
+function randomTime(min, max) { return Math.round(Math.random() * (max - min) + min); }
+function randomHole(holes) {
+  const idx = Math.floor(Math.random() * holes.length);
+  const hole = holes[idx];
+  if (hole === lastHole) return randomHole(holes);
+  lastHole = hole;
+  return hole;
+}
+
+function peep() {
+  const holes = document.querySelectorAll('.hole');
+  const time = randomTime(500, 1000);
+  const hole = randomHole(holes);
+  hole.classList.add('up');
+  setTimeout(() => {
+    hole.classList.remove('up');
+    if (!timeUp) peep();
+  }, time);
+}
+
+function initMole() {
+  document.getElementById('headerSubtitle').innerText = "⚡ Caza Ingredientes";
+  score = 0;
+  document.getElementById('scoreBoard').innerText = 0;
+  timeUp = false;
+  
+  let timeLeft = 30;
+  document.getElementById('timeBoard').innerText = timeLeft;
+  
+  peep();
+  
+  moleTimer = setInterval(() => {
+    timeLeft--;
+    document.getElementById('timeBoard').innerText = timeLeft;
+    if(timeLeft <= 0) {
+      clearInterval(moleTimer);
+      timeUp = true;
+      alert("¡Tiempo! Puntuación: " + score);
     }
-  }
+  }, 1000);
 
-  function goBack() {
-    // Volver a principal manteniendo los parámetros
-    window.location.href = `principal.html${window.location.search}`;
-  }
+  // Click events
+  document.querySelectorAll('.mole').forEach(mole => {
+    mole.onclick = function(e) {
+      if(!e.isTrusted) return; 
+      score++;
+      this.parentNode.classList.remove('up');
+      document.getElementById('scoreBoard').innerText = score;
+      if(navigator.vibrate) navigator.vibrate(50);
+    }
+  });
+}
 
-  // Arrancar
-  window.addEventListener('load', initPage);
+function stopMole() {
+  timeUp = true;
+  clearInterval(moleTimer);
+}
 
+// Arrancar
+init();
 </script>
 </body>
 </html>
