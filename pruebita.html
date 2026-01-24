@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa Taply | NFC & QR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-color: #2E7D32;
+            --table-wood: #5d4037;
+            --table-wood-dark: #3e2723;
+            --chair-wood: #4e342e;
+            --floor: #0a0f1d;
+            /* Colores exactos de tu diseño de pegatina */
+            --sticker-bg: #fdfaf5;
+            --sticker-brown: #4a2c22;
+            --sticker-tan: #d9c6b5;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background: var(--floor);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; perspective: 2000px;
+        }
+
+        .spotlight {
+            position: absolute; top: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(255,245,200,0.1) 0%, transparent 80%);
+            pointer-events: none; z-index: 100;
+        }
+
+        /* ESCENA 3D */
+        .restaurant-scene {
+            position: relative;
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(60deg) rotateZ(-20deg);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        /* LA MESA */
+        .table-container {
+            position: absolute; width: 400px; height: 400px;
+            transform-style: preserve-3d; transform: translateZ(120px);
+            cursor: pointer;
+        }
+
+        .table-top {
+            width: 100%; height: 100%;
+            background: var(--table-wood);
+            border-radius: 12px;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            box-shadow: 0 0 0 4px var(--table-wood-dark), 50px 50px 100px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+        }
+
+        /* --- PEGATINA RÉPLICA (Miniatura en mesa) --- */
+        .design-sticker {
+            position: absolute; bottom: 30px; right: 30px;
+            width: 85px; height: 85px;
+            transform: translateZ(2px);
+        }
+
+        .sticker-base {
+            width: 100%; height: 100%;
+            background: var(--sticker-bg);
+            border-radius: 50%;
+            border: 4px solid var(--sticker-tan);
+            box-shadow: inset 0 0 0 2px var(--sticker-brown), 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 5px; box-sizing: border-box;
+        }
+
+        .sticker-name-mini {
+            font-family: 'Playfair Display', serif;
+            font-size: 7px; color: var(--sticker-brown);
+            margin-bottom: 2px; text-transform: uppercase;
+        }
+
+        /* --- OVERLAY AMPLIADO (Simulación de escaneo) --- */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 1000; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .enlarged-card {
+            width: 350px; height: 350px;
+            background: var(--sticker-bg);
+            border-radius: 50%;
+            border: 12px solid var(--sticker-tan);
+            outline: 3px solid var(--sticker-brown);
+            outline-offset: -18px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .enlarged-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px; color: var(--sticker-brown);
+            margin: 0 0 10px 0; text-transform: capitalize;
+        }
+
+        /* QR INTERACTIVO */
+        .qr-wrapper {
+            position: relative;
+            width: 160px; height: 160px;
+            background: white; padding: 10px;
+            border: 1px solid #eee; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .qr-wrapper:hover { transform: scale(1.05); }
+
+        /* Icono NFC Realista en el centro */
+        .nfc-badge {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px; height: 45px;
+            background: white; border: 2px solid var(--sticker-brown);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- BOTONES DE LA INTERFAZ --- */
+        .main-action-container {
+            position: absolute; bottom: 50px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 15px; z-index: 500;
+        }
+
+        .btn-primary {
+            background: var(--brand-color); color: white;
+            padding: 18px 50px; border-radius: 100px;
+            text-decoration: none; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1px; font-size: 0.9em;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-5px); filter: brightness(1.1); }
+
+        .btn-scan-now {
+            background: var(--brand-color); color: white;
+            padding: 18px 60px; border-radius: 100px;
+            text-decoration: none; font-weight: 800; text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: inline-block;
+            transition: 0.3s;
+        }
+
+        .close-hint { color: white; margin-top: 20px; cursor: pointer; opacity: 0.6; font-size: 13px; font-weight: 600; }
+
+        /* SILLAS 3D */
+        .chair { position: absolute; width: 140px; height: 140px; transform-style: preserve-3d; }
+        .chair-seat { width: 100%; height: 100%; background: var(--chair-wood); transform: translateZ(70px); border-radius: 5px; }
+        .chair.top { transform: translateY(-300px); }
+        .chair.left { transform: translateX(-300px) rotateZ(90deg); }
+        .chair.bottom { transform: translateY(300px) rotateZ(180deg); }
+    </style>
+</head>
+<body>
+
+    <div class="spotlight"></div>
+
+    <div class="main-action-container" id="persistent-ui">
+        <a id="direct-link" href="#" class="btn-primary">Ver Entorno Digital</a>
+        <p style="color: white; font-size: 11px; opacity: 0.7; font-weight: 600;">O pulsa en la mesa para escanear</p>
+    </div>
+
+    <div id="overlay">
+        <div class="enlarged-card">
+            <h2 class="dynamic-name enlarged-name">Restaurante</h2>
+            
+            <a id="qr-link" href="#">
+                <div class="qr-wrapper">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TaplyScan" alt="QR">
+                    <div class="nfc-badge">
+                        <svg width="25" height="25" viewBox="0 0 24 24" fill="var(--sticker-brown)"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM17 6.76l-1.41 1.41c.79.8 1.27 1.92 1.27 3.16s-.48 2.36-1.27 3.16L17 15.9c1.17-1.17 1.89-2.8 1.89-4.57s-.72-3.4-1.89-4.57zM14.17 9.6l-1.41 1.41C13.14 11.39 13.38 11.87 13.38 12.37s-.24.98-.62 1.36L14.17 15.14c.77-.77 1.24-1.85 1.24-3.03s-.47-2.26-1.24-3.03zM9 7h2v10H9z"/></svg>
+                    </div>
+                </div>
+            </a>
+
+            <div style="margin-top:15px; text-align:center">
+                <div style="font-size: 10px; font-weight: 800; color: var(--sticker-brown); letter-spacing: 2px;">TECNOLOGÍA NFC + QR</div>
+                <div style="width: 40px; height: 1px; background: var(--sticker-brown); margin: 5px auto;"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <a id="scan-btn-link" href="#" class="btn-scan-now">Escanear ahora</a>
+            <div class="close-hint" onclick="closeLogo()">VOLVER A LA MESA</div>
+        </div>
+    </div>
+
+    <div class="restaurant-scene" id="scene">
+        <div class="chair top"><div class="chair-seat"></div></div>
+        <div class="chair left"><div class="chair-seat"></div></div>
+        <div class="chair bottom"><div class="chair-seat"></div></div>
+
+        <div class="table-container" onclick="openLogo()">
+            <div class="table-top">
+                <div class="design-sticker">
+                    <div class="sticker-base">
+                        <div class="dynamic-name sticker-name-mini">Restaurante</div>
+                        <img style="width: 35px; opacity: 0.9;" src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=TaplyDemo" alt="QR">
+                        <div style="font-size: 4px; font-weight: 900; color: var(--sticker-brown); margin-top: 2px;">NFC CONTACTLESS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const restName = params.get('n') || "Tu Local";
+        const colorHex = params.get('btn') || "2E7D32";
+        const nextUrl = `principal.html${window.location.search}`;
+
+        // Inyectar datos
+        document.querySelectorAll('.dynamic-name').forEach(el => el.textContent = restName);
+        document.documentElement.style.setProperty('--brand-color', '#' + colorHex);
+        
+        // Configurar enlaces
+        document.getElementById('direct-link').href = nextUrl;
+        document.getElementById('qr-link').href = nextUrl;
+        document.getElementById('scan-btn-link').href = nextUrl;
+
+        function openLogo() {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('persistent-ui').style.display = 'none';
+            document.getElementById('scene').style.transform = 'rotateX(60deg) rotateZ(-20deg) scale(0.7) translateZ(-100px)';
+        }
+
+        function closeLogo() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('persistent-ui').style.display = 'flex';
+            document.getElementById('scene').style.transform = 'rotateX(60deg) rotateZ(-20deg) scale(1)';
+        }
+    </script>
+</body>
+</html>

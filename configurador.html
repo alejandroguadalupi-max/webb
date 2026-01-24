@@ -20,7 +20,6 @@
   --border: #e5e7eb;
 }
 
-/* Reset suave */
 * { box-sizing: border-box; }
 
 body {
@@ -35,224 +34,87 @@ body {
   padding: 20px;
 }
 
-/* Card */
 .container {
   max-width: 420px;
   width: 100%;
   background: var(--bg-card);
   border-radius: 22px;
   padding: 34px 28px;
-  box-shadow:
-    0 20px 30px -20px rgba(0,0,0,0.25),
-    0 10px 15px -10px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 30px -20px rgba(0,0,0,0.25), 0 10px 15px -10px rgba(0,0,0,0.1);
   border: 1px solid var(--border);
 }
 
-/* Header */
-h1 {
-  margin: 0 0 8px;
-  font-size: 1.7em;
-  font-weight: 700;
-  text-align: center;
-  letter-spacing: -0.6px;
-}
+h1 { margin: 0 0 8px; font-size: 1.7em; font-weight: 700; text-align: center; letter-spacing: -0.6px; }
+p.description { font-size: 0.95em; color: var(--text-sec); margin-bottom: 30px; text-align: center; line-height: 1.5; }
 
-p.description {
-  font-size: 0.95em;
-  color: var(--text-sec);
-  margin-bottom: 30px;
-  text-align: center;
-  line-height: 1.5;
-}
-
-/* Inputs */
-.input-group {
-  margin-bottom: 22px;
-}
-
-label {
-  display: block;
-  font-size: 0.8em;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
+.input-group { margin-bottom: 22px; }
+label { display: block; font-size: 0.8em; font-weight: 600; margin-bottom: 6px; }
 
 input[type="text"], select {
-  width: 100%;
-  padding: 13px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  font-size: 0.95em;
-  background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  appearance: none;
+  width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--border);
+  font-size: 0.95em; background: #fff; transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
 }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
+input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
-/* Select arrow */
 select {
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236b7280' d='M5.5 7.5l4.5 4.5 4.5-4.5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 14px;
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 14px;
 }
 
-/* Color section */
-.color-label-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
+.color-picker-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 12px; }
+.color-option { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
+.color-option.selected { transform: scale(1.15); box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-main); }
 
-.color-label-container span {
-  font-size: 0.75em;
-  color: var(--text-sec);
-}
-
-.color-picker-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.color-option {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.color-option:hover {
-  transform: scale(1.1);
-}
-
-.color-option.selected {
-  transform: scale(1.15);
-  box-shadow:
-    0 0 0 2px white,
-    0 0 0 4px var(--text-main);
-}
-
-/* Button */
 button#generateBtn {
-  width: 100%;
-  padding: 15px;
-  margin-top: 28px;
-  border-radius: 14px;
-  border: none;
-  font-size: 1em;
-  font-weight: 700;
-  color: white;
-  background: linear-gradient(180deg, var(--primary), #1e40af);
-  cursor: pointer;
-  box-shadow: 0 12px 20px -10px rgba(37,99,235,0.5);
-  transition: transform 0.15s, box-shadow 0.15s;
+  width: 100%; padding: 15px; margin-top: 28px; border-radius: 14px; border: none; font-size: 1em;
+  font-weight: 700; color: white; background: linear-gradient(180deg, var(--primary), #1e40af);
+  cursor: pointer; box-shadow: 0 12px 20px -10px rgba(37,99,235,0.5);
 }
 
-button#generateBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 28px -12px rgba(37,99,235,0.6);
-}
-
-button#generateBtn:active {
-  transform: scale(0.98);
-}
-
-/* Footer note */
-.footer-note {
-  margin-top: 26px;
-  padding-top: 18px;
-  border-top: 1px dashed var(--border);
-  font-size: 0.8em;
-  color: var(--text-sec);
-  text-align: center;
-  line-height: 1.4;
-  font-style: italic;
-}
-
-/* Toast */
 .toast {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: #111827;
-  color: white;
-  padding: 12px 22px;
-  border-radius: 50px;
-  font-size: 0.9em;
-  opacity: 0;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+  background: #111827; color: white; padding: 12px 22px; border-radius: 50px;
+  opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
 }
-
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 </style>
 </head>
-
 <body>
 
 <div class="container">
   <h1>Configurar Demo</h1>
-  <p class="description">
-    Introduce ciertos datos de tu restaurante para generar una
-    <strong>vista previa automática</strong>.
-  </p>
+  <p class="description">Introduce los datos para generar la <strong>vista previa 3D</strong>.</p>
 
   <div class="input-group">
     <label>Nombre del Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Ej. Pizzería Roma">
+    <input type="text" id="restaurantName" placeholder="Ej. La Parrilla de Alberto">
   </div>
 
   <div class="input-group">
     <label>Tipo de Cocina</label>
     <select id="restaurantType">
       <option value="" disabled selected>Selecciona una opción...</option>
-      <option value="restaurante">Restaurante (Genérico)</option>
+      <option value="restaurante">Restaurante</option>
       <option value="hamburgueseria">Hamburguesería</option>
-      <option value="pizzeria">Pizzería / Italiano</option>
-      <option value="asiatico">Asiático / Sushi</option>
-      <option value="cafe">Cafetería / Brunch</option>
+      <option value="pizzeria">Pizzería</option>
+      <option value="asiatico">Asiático</option>
+      <option value="cafe">Cafetería</option>
     </select>
   </div>
 
   <div class="input-group">
-    <div class="color-label-container">
-      <label>Color de Marca</label>
-      <span>(elige uno)</span>
-    </div>
-
+    <label>Color de Marca</label>
     <div class="color-picker-container">
       <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32"></div>
       <div class="color-option" style="background:#FF8C00" data-color="FF8C00"></div>
       <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
       <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
-      <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
-      <div class="color-option" style="background:#111827" data-color="111827"></div>
       <div class="color-option" style="background:#2962FF" data-color="2962FF"></div>
-      <div class="color-option" style="background:#6200EA" data-color="6200EA"></div>
-      <div class="color-option" style="background:#00897B" data-color="00897B"></div>
-      <div class="color-option" style="background:#FBC02D" data-color="FBC02D"></div>
     </div>
   </div>
 
   <button id="generateBtn">Crear Demo</button>
-
-  <div class="footer-note">
-    ℹ️ Esto es solo un ejemplo rápido. La versión final incluirá logotipo real,
-    fotos profesionales y diseño 100% personalizado.
-  </div>
 </div>
 
 <div id="toast" class="toast">Error</div>
@@ -260,27 +122,14 @@ button#generateBtn:active {
 <script>
 let selectedHex = '2E7D32';
 
+// Selección de color
 document.querySelectorAll('.color-option').forEach(el => {
   el.onclick = () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     selectedHex = el.dataset.color;
-    if (navigator.vibrate) navigator.vibrate(10);
   };
 });
-
-const defaultColors = {
-  restaurante: '2E7D32',
-  hamburgueseria: 'FF8C00',
-  pizzeria: 'D32F2F',
-  asiatico: 'E91E63',
-  cafe: '8D6E63'
-};
-
-restaurantType.onchange = () => {
-  const c = defaultColors[restaurantType.value];
-  if (c) document.querySelector(`[data-color="${c}"]`)?.click();
-};
 
 const toast = document.getElementById('toast');
 function showToast(msg) {
@@ -289,18 +138,21 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-generateBtn.onclick = () => {
-  if (!restaurantName.value.trim()) return showToast('Falta el nombre');
-  if (!restaurantType.value) return showToast('Falta el tipo');
+// LÓGICA DE GENERACIÓN
+document.getElementById('generateBtn').onclick = () => {
+  const nameInput = document.getElementById('restaurantName').value.trim();
+  const typeInput = document.getElementById('restaurantType').value;
 
-  generateBtn.textContent = 'Generando...';
+  if (!nameInput) return showToast('Falta el nombre');
+  if (!typeInput) return showToast('Falta el tipo');
+
+  document.getElementById('generateBtn').textContent = 'Generando...';
+
+  // Redirección a pruebita.html
   setTimeout(() => {
-    window.open(
-      `principal.html?n=${encodeURIComponent(restaurantName.value)}&categoria=${restaurantType.value}&btn=${selectedHex}&auth=true`,
-      '_blank'
-    );
-    generateBtn.textContent = 'Crear Demo';
-  }, 500);
+    const url = `pruebita.html?n=${encodeURIComponent(nameInput)}&categoria=${typeInput}&btn=${selectedHex}&auth=true`;
+    window.location.href = url; // Cambiado a href para que cargue en la misma pestaña
+  }, 600);
 };
 </script>
 
