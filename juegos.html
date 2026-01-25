@@ -3,29 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Zona Kids | Diver-Menú</title>
+  <title>Zona Kids | Taply</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --brand-color: #FF8C00; 
-      --bg-body: #f0f7ff;
-      --bg-card: #ffffff;
+      --bg-body: #ffffff;
+      --bg-card: #f8fafc;
       --text-main: #1e293b;
       --text-sec: #64748b;
       --border: #e2e8f0;
-      --shadow-cartoon: 0 8px 0 rgba(0,0,0,0.06);
-      --radius-fun: 30px;
+      --radius-fun: 24px;
     }
 
     [data-theme="dark"] {
-      --bg-body: #0a1128; /* Azul oscuro profundo */
+      --bg-body: #0a1128;
       --bg-card: #16213e;
       --text-main: #f8fafc;
       --text-sec: #94a3b8;
       --border: #1f2937;
-      --shadow-cartoon: 0 8px 0 rgba(0,0,0,0.3);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -34,309 +32,283 @@
       margin: 0; font-family: 'Fredoka', sans-serif;
       background: var(--bg-body); color: var(--text-main);
       min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; transition: all 0.4s ease;
-      overflow-x: hidden;
+      transition: background 0.4s ease; overflow-x: hidden;
     }
 
+    /* --- HEADER --- */
     header {
-      width: 100%; padding: 20px; text-align: center;
-      background: var(--bg-card); border-bottom: 4px solid var(--border);
-      position: sticky; top: 0; z-index: 100;
+      width: 100%; padding: 15px 20px;
+      background: var(--bg-card); border-bottom: 2px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100;
     }
+    .header-left h1 { margin: 0; font-size: 1.1rem; color: var(--brand-color); text-transform: uppercase; letter-spacing: 1px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .lang-tag { font-weight: 700; font-size: 0.8rem; color: var(--text-sec); border: 2px solid var(--border); padding: 4px 8px; border-radius: 8px; text-transform: uppercase; }
+    .theme-toggle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg-body); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
 
-    .header-title { flex: 1; text-align: center; }
-    h1 { margin: 0; font-size: 1.3rem; color: var(--brand-color); text-transform: uppercase; letter-spacing: 1px; }
-
-    .theme-toggle {
-      width: 45px; height: 45px; border-radius: 50%; border: none;
-      background: var(--bg-body); cursor: pointer; font-size: 1.2rem;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--shadow-cartoon);
-    }
-
-    /* --- MENU HUB --- */
+    /* --- HUB MENU --- */
     .hub-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-      width: 100%; max-width: 450px; padding: 25px 20px;
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+      width: 100%; max-width: 500px; padding: 25px; margin: 0 auto;
+      animation: popIn 0.5s ease-out;
     }
-
     .game-card {
       background: var(--bg-card); border-radius: var(--radius-fun);
-      padding: 30px 10px; display: flex; flex-direction: column;
-      align-items: center; cursor: pointer; border: 3px solid var(--border);
-      box-shadow: var(--shadow-cartoon); transition: all 0.2s;
+      padding: 30px 15px; display: flex; flex-direction: column;
+      align-items: center; cursor: pointer; border: 2px solid var(--border);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.05); transition: 0.2s;
     }
-    .game-card:active { transform: translateY(6px); box-shadow: none; }
-    .game-icon { font-size: 3.5rem; margin-bottom: 10px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1)); }
-    .game-title { font-weight: 700; font-size: 1.1rem; }
+    .game-card:active { transform: scale(0.95); }
+    .game-icon { font-size: 3.5rem; margin-bottom: 10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1)); }
+    .game-title { font-weight: 700; font-size: 1rem; }
 
-    /* --- CONTENEDORES --- */
-    .game-wrapper {
-      display: none; flex-direction: column; align-items: center;
-      width: 100%; max-width: 450px; padding: 15px; flex: 1;
-    }
+    /* --- GAME WRAPPERS --- */
+    .game-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 450px; padding: 20px; flex: 1; margin: 0 auto; }
     .game-wrapper.active { display: flex; animation: slideUp 0.4s ease-out; }
 
-    .btn {
-      padding: 18px; border-radius: 22px; border: none;
-      font-weight: 700; font-family: 'Fredoka'; cursor: pointer;
-      font-size: 1.1rem; width: 100%; box-shadow: 0 5px 0 rgba(0,0,0,0.15);
-      transition: 0.2s; display: flex; align-items: center; justify-content: center;
-    }
-    .btn-back { background: #cbd5e1; color: #334155; margin-top: 20px; }
-    .btn-action { background: var(--brand-color); color: #fff; }
-    .btn:active { transform: translateY(3px); box-shadow: none; }
-
-    /* === EL IMPOSTOR === */
-    .setup-box { background: var(--bg-card); padding: 25px; border-radius: 30px; width: 100%; border: 3px solid var(--border); }
-    input[type="text"] {
-      width: 100%; padding: 15px; border-radius: 18px; border: 3px solid var(--border);
-      font-family: 'Fredoka'; font-size: 1.1rem; margin-bottom: 15px; background: var(--bg-body); color: var(--text-main);
-    }
-    .player-tag { background: var(--brand-color); color: white; padding: 8px 15px; border-radius: 12px; margin: 4px; display: inline-block; font-weight: 600; }
-    
-    .role-card { background: var(--brand-color); color: white; padding: 40px 20px; border-radius: 30px; text-align: center; width: 100%; }
-    .secret-box { background: white; color: #1e293b; padding: 30px; border-radius: 20px; font-size: 2rem; font-weight: 700; margin: 25px 0; display: none; border: 6px solid rgba(0,0,0,0.05); }
-
-    /* === DINO RUN === */
-    #dinoCanvas { background: #fff; border-radius: 25px; border: 4px solid var(--border); width: 100%; height: 180px; touch-action: none; }
-
-    /* === MEMORY === */
-    .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
-    .mem-card { aspect-ratio: 1; perspective: 1000px; }
-    .mem-inner { position: relative; width: 100%; height: 100%; transition: transform 0.5s; transform-style: preserve-3d; }
+    /* === JUEGO PAREJAS (MEJORADO) === */
+    .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+    .mem-card { aspect-ratio: 1; perspective: 1000px; cursor: pointer; }
+    .mem-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
     .mem-card.flipped .mem-inner { transform: rotateY(180deg); }
-    .mem-face { position: absolute; width: 100%; height: 100%; border-radius: 20px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border: 3px solid var(--border); background: white; font-size: 2.2rem; }
-    .mem-back { transform: rotateY(180deg); border-color: var(--brand-color); }
+    .mem-face { position: absolute; width: 100%; height: 100%; border-radius: 15px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border: 3px solid var(--border); }
+    .mem-front { background: var(--brand-color); color: white; font-size: 2rem; font-weight: 800; box-shadow: inset 0 0 15px rgba(0,0,0,0.1); }
+    .mem-back { background: white; transform: rotateY(180deg); border-color: var(--brand-color); font-size: 2.5rem; }
 
-    /* === MOLE === */
+    /* === MODAL / GAME OVER === */
+    .modal-end { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px); }
+    .modal-content { background: var(--bg-card); padding: 40px 30px; border-radius: 35px; text-align: center; width: 100%; max-width: 340px; border: 4px solid var(--brand-color); animation: popIn 0.4s; }
+
+    /* BOTONES */
+    .btn { padding: 16px 25px; border-radius: 20px; border: none; font-weight: 700; font-family: 'Fredoka'; cursor: pointer; font-size: 1rem; width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-action { background: var(--brand-color); color: #fff; box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
+    .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text-sec); margin-top: 10px; }
+
+    /* DINO & MOLE */
+    #dinoCanvas { background: #fff; border-radius: 20px; border: 4px solid var(--border); width: 100%; height: 200px; }
     .mole-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
     .hole { aspect-ratio: 1; background: #e2e8f0; border-radius: 50%; position: relative; overflow: hidden; border-bottom: 8px solid #cbd5e1; }
-    [data-theme="dark"] .hole { background: #1f2937; border-bottom-color: #111827; }
-    .mole { position: absolute; top: 100%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: top 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .mole { position: absolute; top: 100%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: top 0.1s; cursor: pointer; }
     .hole.up .mole { top: 0; }
 
-    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body>
 
   <header>
-    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">☀️</button>
-    <div class="header-title">
-        <h1 id="restName">RESTAURANTE</h1>
-        <div style="font-size: 0.8rem; color: var(--text-sec); font-weight: 600;">ZONA KIDS 🎨</div>
+    <div class="header-left">ZONA KIDS</div>
+    <div class="header-right">
+        <div class="lang-tag" id="langDisplay">ES</div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
     </div>
-    <div style="width:45px"></div> </header>
+  </header>
 
-  <div class="hub-grid" id="hubMenu">
-    <div class="game-card" onclick="openGame('memory')">
-      <div class="game-icon">🧩</div>
-      <div class="game-title">Parejas</div>
+  <div id="hubMenu">
+    <div class="hub-grid">
+        <div class="game-card" onclick="openGame('memory')">
+          <div class="game-icon">🧩</div>
+          <div class="game-title" data-t="g1">Parejas</div>
+        </div>
+        <div class="game-card" onclick="openGame('mole')">
+          <div class="game-icon">🍳</div>
+          <div class="game-title" data-t="g2">Caza Chef</div>
+        </div>
+        <div class="game-card" onclick="openGame('impostor')">
+          <div class="game-icon">🤫</div>
+          <div class="game-title" data-t="g3">Impostor</div>
+        </div>
+        <div class="game-card" onclick="openGame('dino')">
+          <div class="game-icon">🦖</div>
+          <div class="game-title" data-t="g4">Dino Run</div>
+        </div>
+        <button class="btn btn-action" style="grid-column: span 2; margin-top: 15px;" onclick="history.back()" data-t="exit">SALIR DE JUEGOS</button>
     </div>
-    <div class="game-card" onclick="openGame('mole')">
-      <div class="game-icon">🔨</div>
-      <div class="game-title">Caza Chef</div>
-    </div>
-    <div class="game-card" onclick="openGame('impostor')">
-      <div class="game-icon">🤫</div>
-      <div class="game-title">Impostor</div>
-    </div>
-    <div class="game-card" onclick="openGame('dino')">
-      <div class="game-icon">🦖</div>
-      <div class="game-title">Dino Run</div>
-    </div>
-    <button class="btn btn-back" style="grid-column: span 2" onclick="history.back()">⬅ Volver a la Carta</button>
   </div>
 
-  <div class="game-wrapper" id="game-impostor">
-    <div id="imp-setup" class="setup-box">
-      <p style="font-weight:700; margin-bottom: 20px;">¿Quiénes van a jugar?</p>
-      <input type="text" id="pNameInput" placeholder="Escribe un nombre...">
-      <button class="btn btn-action" onclick="addP()" style="margin-bottom: 20px;">Añadir Jugador +</button>
-      <div id="pList"></div>
-      <button class="btn btn-action" id="startImpBtn" style="background:#22c55e; margin-top:20px;" disabled onclick="startImp()">¡Empezar Partida!</button>
-    </div>
-
-    <div id="imp-reveal" class="role-card" style="display:none;">
-      <h2 id="turnLabel">Turno de...</h2>
-      <div id="sBox" class="secret-box">PALABRA</div>
-      <button class="btn btn-action" id="revBtn" style="background:white; color:var(--brand-color);" onclick="handleImp()">VER MI SECRETO</button>
-    </div>
-
-    <div id="imp-playing" class="setup-box" style="display:none;">
-      <h2 style="color:var(--brand-color);">¡RONDA DE PISTAS!</h2>
-      <p id="starterLabel" style="font-size:1.4rem; font-weight:700;"></p>
-      <p style="font-size:0.95rem; color:var(--text-sec); line-height: 1.4;">Di una palabra relacionada con tu concepto. ¡El impostor no debe ser descubierto!</p>
-      <button class="btn btn-action" style="margin-top:25px; background:#ef4444" onclick="finishImp()">REVELAR IMPOSTOR</button>
-    </div>
-
-    <div id="imp-result" class="setup-box" style="display:none;">
-      <p style="font-size: 1.2rem;">El impostor era...</p>
-      <h1 id="impNameResult" style="font-size:3.5rem; color:var(--brand-color); margin: 20px 0;">---</h1>
-      <button class="btn btn-action" onclick="exit()">Jugar de Nuevo</button>
-    </div>
-    <button class="btn btn-back" onclick="exit()">Salir</button>
+  <div id="modalEnd" class="modal-end">
+      <div class="modal-content">
+          <h2 id="modalMsg" style="font-size: 2rem; margin: 0 0 10px;">¡FIN!</h2>
+          <p id="modalScore" style="font-size: 1.2rem; color: var(--text-sec); margin-bottom: 25px;"></p>
+          <button class="btn btn-action" id="btnRetry">REINTENTAR 🔄</button>
+          <button class="btn btn-outline" onclick="location.reload()">MENÚ 🏠</button>
+      </div>
   </div>
 
   <div class="game-wrapper" id="game-dino">
-    <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:10px; font-weight:800;">
-        <span>Puntos: <span id="dinoScore">0</span></span>
-        <span>Récord: <span id="dinoHi">0</span></span>
-    </div>
+    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:15px; font-weight:800;"><span>Score: <span id="dScore">0</span></span></div>
     <canvas id="dinoCanvas"></canvas>
-    <button class="btn btn-action" style="margin-top:20px; height:90px; font-size:1.6rem;" onmousedown="dinoJump()" ontouchstart="dinoJump()">¡SALTAR! 👆</button>
-    <button class="btn btn-back" onclick="exit()">Salir</button>
+    <button class="btn btn-action" style="margin-top:30px; height:90px;" onmousedown="dJump()" ontouchstart="dJump()">¡SALTAR! 👆</button>
   </div>
 
-  <div class="game-wrapper" id="game-memory"><div class="memory-grid" id="mBoard"></div><button class="btn btn-back" onclick="exit()">Salir</button></div>
-  <div class="game-wrapper" id="game-mole"><div style="font-size:1.5rem; font-weight:800; margin-bottom:10px;">Caza: <span id="moScore">0</span></div><div class="mole-grid" id="moGrid"></div><button class="btn btn-back" onclick="exit()">Salir</button></div>
+  <div class="game-wrapper" id="game-mole">
+    <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 20px;">Caza: <span id="mScore">0</span></div>
+    <div class="mole-grid" id="mGrid"></div>
+  </div>
+
+  <div class="game-wrapper" id="game-memory">
+    <div class="memory-grid" id="memBoard"></div>
+    <button class="btn btn-outline" style="margin-top:30px" onclick="location.reload()">Volver</button>
+  </div>
+
+  <div class="game-wrapper" id="game-impostor">
+      <div id="imp-setup" style="width:100%;">
+          <input type="text" id="pName" placeholder="Nombre..." style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-family:'Fredoka';">
+          <button class="btn btn-action" onclick="addP()">Añadir +</button>
+          <div id="pList" style="margin:20px 0;"></div>
+          <button class="btn btn-action" id="startImpBtn" disabled onclick="startImp()" style="background:#22c55e">EMPEZAR</button>
+      </div>
+      <div id="imp-play" style="display:none; text-align:center; width:100%;">
+          <h2 id="impTurn">Turno</h2>
+          <div id="impSecret" style="display:none; font-size:1.8rem; margin:20px 0; color:var(--brand-color); font-weight:800; background:#fff; padding:20px; border-radius:20px; border:4px solid var(--brand-color);"></div>
+          <button class="btn btn-action" id="impBtn" onclick="handleImp()">VER PALABRA</button>
+      </div>
+  </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    document.getElementById('restName').innerText = params.get('n') || "ZONA KIDS";
-    const brandColor = params.get('btn') ? '#' + params.get('btn') : '#FF8C00';
-    document.documentElement.style.setProperty('--brand-color', brandColor);
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get('lang') || 'es';
+    const color = urlParams.get('btn') ? '#' + urlParams.get('btn') : '#FF8C00';
+    document.documentElement.style.setProperty('--brand-color', color);
+    document.getElementById('langDisplay').innerText = lang;
 
-    /* MODO OSCURO */
+    const dict = {
+        es: { g1:"Parejas", g2:"Caza Chef", g3:"Impostor", g4:"Dino Run", exit:"SALIR", retry:"REINTENTAR", view:"VER PALABRA", secret:"IMPOSTOR 😈", start:"EMPIEZA: ", reveal:"REVELAR IMPOSTOR", lost:"¡SE ESCAPÓ!", win:"¡GENIO!" },
+        en: { g1:"Memory", g2:"Catch Chef", g3:"Impostor", g4:"Dino Run", exit:"EXIT", retry:"RETRY", view:"VIEW WORD", secret:"IMPOSTER 😈", start:"STARTS: ", reveal:"REVEAL IMPOSTER", lost:"HE ESCAPED!", win:"GENIUS!" }
+    };
+    const t = dict[lang] || dict.es;
+    document.querySelectorAll('[data-t]').forEach(el => el.innerText = t[el.dataset.t]);
+
     function toggleTheme() {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
+        const curr = document.documentElement.getAttribute('data-theme');
+        const next = curr === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
         document.getElementById('themeBtn').innerText = next === 'dark' ? '🌙' : '☀️';
-        localStorage.setItem('kids-theme', next);
     }
-    if(localStorage.getItem('kids-theme') === 'dark') toggleTheme();
 
     function openGame(id) {
-      document.getElementById('hubMenu').style.display = 'none';
-      document.querySelectorAll('.game-wrapper').forEach(w => w.classList.remove('active'));
-      document.getElementById(`game-${id}`).classList.add('active');
-      window[`init_${id}`]();
-    }
-    function exit() { location.reload(); }
-
-    /* IMPOSTOR */
-    let players = [], impIdx = -1, revIdx = 0, isVis = false, sWord = "";
-    const words = ["Pizza", "Hamburguesa", "Sushi", "Taco", "Helado", "Sopa", "Pasta", "Galleta", "Patatas"];
-    
-    function addP() {
-      const input = document.getElementById('pNameInput');
-      if(input.value.trim() && players.length < 10) {
-        players.push(input.value.trim());
-        input.value = "";
-        document.getElementById('pList').innerHTML = players.map(p => `<span class="player-tag">${p}</span>`).join('');
-      }
-      document.getElementById('startImpBtn').disabled = players.length < 3;
+        document.getElementById('hubMenu').style.display = 'none';
+        document.querySelectorAll('.game-wrapper').forEach(w => w.classList.remove('active'));
+        document.getElementById(`game-${id}`).classList.add('active');
+        window[`init_${id}`]();
     }
 
-    function startImp() {
-      impIdx = Math.floor(Math.random() * players.length);
-      sWord = words[Math.floor(Math.random() * words.length)];
-      document.getElementById('imp-setup').style.display = "none";
-      document.getElementById('imp-reveal').style.display = "block";
-      updateRevUI();
-    }
-
-    function updateRevUI() {
-      isVis = false;
-      document.getElementById('turnLabel').innerText = `Pasa el móvil a: ${players[revIdx]}`;
-      document.getElementById('sBox').style.display = "none";
-      document.getElementById('revBtn').innerText = "VER MI SECRETO";
-    }
-
-    function handleImp() {
-      const box = document.getElementById('sBox');
-      const btn = document.getElementById('revBtn');
-      if(!isVis) {
-        box.style.display = "block";
-        box.innerText = (revIdx === impIdx) ? "ERES EL IMPOSTOR 😈" : `Tu palabra: ${sWord}`;
-        btn.innerText = "LISTO (Ocultar)";
-        isVis = true;
-      } else {
-        revIdx++;
-        if(revIdx < players.length) updateRevUI();
-        else {
-          document.getElementById('imp-reveal').style.display = "none";
-          document.getElementById('imp-playing').style.display = "block";
-          document.getElementById('starterLabel').innerText = "Empieza: " + players[Math.floor(Math.random()*players.length)];
-        }
-      }
-    }
-    function finishImp() {
-      document.getElementById('imp-playing').style.display = "none";
-      document.getElementById('imp-result').style.display = "block";
-      document.getElementById('impNameResult').innerText = players[impIdx];
-    }
-
-    /* DINO RUN PRO */
-    let canvas, ctx, dino, obstacles = [], frame = 0, dScore = 0, dActive = false, speed = 6;
-    function init_dino() {
-      canvas = document.getElementById('dinoCanvas');
-      ctx = canvas.getContext('2d');
-      canvas.width = 400; canvas.height = 200;
-      dino = { x: 50, y: 140, dy: 0, jump: -12, gravity: 0.7, grounded: true };
-      obstacles = []; dScore = 0; dActive = true; speed = 6;
-      document.getElementById('dinoHi').innerText = localStorage.getItem('dinoHi') || 0;
-      requestAnimationFrame(dinoLoop);
-    }
-    function dinoJump() { if(dino.grounded) { dino.dy = dino.jump; dino.grounded = false; } }
-    function dinoLoop() {
-      if(!dActive) return;
-      ctx.clearRect(0,0,400,200);
-      ctx.strokeStyle = "#e2e8f0"; ctx.beginPath(); ctx.moveTo(0,185); ctx.lineTo(400,185); ctx.stroke();
-      dino.dy += dino.gravity; dino.y += dino.dy;
-      if(dino.y > 140) { dino.y = 140; dino.dy = 0; dino.grounded = true; }
-      
-      // Dino mirando a la derecha
-      ctx.save(); ctx.translate(dino.x + 22, dino.y + 22); ctx.scale(-1, 1);
-      ctx.font = "42px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText("🦖", 0, 0); ctx.restore();
-
-      if(frame % 70 === 0) obstacles.push({ x: 400, y: 145 });
-      obstacles.forEach((o, i) => {
-        o.x -= speed; ctx.font = "32px Arial"; ctx.fillText("🌵", o.x, o.y + 30);
-        if(o.x < dino.x + 30 && o.x + 30 > dino.x && o.y < dino.y + 35 && o.y + 35 > dino.y) {
-           dActive = false; 
-           if(dScore > (localStorage.getItem('dinoHi') || 0)) localStorage.setItem('dinoHi', dScore);
-           alert("¡Game Over! Puntos: " + dScore); exit();
-        }
-        if(o.x < -50) { obstacles.splice(i, 1); dScore++; document.getElementById('dinoScore').innerText = dScore; speed += 0.1; }
-      });
-      frame++; requestAnimationFrame(dinoLoop);
-    }
-
-    /* MEMORY & MOLE */
+    /* PAREJAS */
     function init_memory() {
-      const icons = ['🍕','🍟','🍦','🍩','🍎','🍓'];
-      const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
-      document.getElementById('mBoard').innerHTML = deck.map(i => `<div class="mem-card" onclick="flip(this)"><div class="mem-inner"><div class="mem-face mem-front">?</div><div class="mem-face mem-back">${i}</div></div></div>`).join('');
+        const icons = ['🍕','🍔','🍟','🍦','🍩','🍎','🥗','🌮'];
+        const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
+        document.getElementById('memBoard').innerHTML = deck.map(i => `<div class="mem-card" onclick="flip(this)"><div class="mem-inner"><div class="mem-face mem-front">?</div><div class="mem-face mem-back">${i}</div></div></div>`).join('');
     }
     let flipped = [];
     function flip(c) {
-      if(flipped.length < 2 && !c.classList.contains('flipped')) {
-        c.classList.add('flipped'); flipped.push(c);
-        if(flipped.length === 2) {
-          if(flipped[0].innerText === flipped[1].innerText) {
-             flipped.forEach(x => x.style.pointerEvents = 'none'); flipped = [];
-             if(document.querySelectorAll('.flipped').length === 12) setTimeout(() => alert("¡Eres un genio!"), 500);
-          }
-          else setTimeout(() => { flipped.forEach(x => x.classList.remove('flipped')); flipped = []; }, 800);
+        if(flipped.length < 2 && !c.classList.contains('flipped')) {
+            c.classList.add('flipped'); flipped.push(c);
+            if(flipped.length === 2) {
+                if(flipped[0].innerText === flipped[1].innerText) {
+                    flipped = []; if(document.querySelectorAll('.flipped').length === 16) setTimeout(()=>showGameOver(t.win, "", 'memory'), 600);
+                } else {
+                    setTimeout(() => { flipped.forEach(x => x.classList.remove('flipped')); flipped = []; }, 800);
+                }
+            }
         }
-      }
     }
+
+    /* CAZA CHEF */
+    let mActive = false, mSpeed = 1200, mScore = 0;
     function init_mole() {
-      let s = 0; document.getElementById('moGrid').innerHTML = Array(9).fill('<div class="hole"><div class="mole" onclick="h(this)">👨‍🍳</div></div>').join('');
-      const t = setInterval(() => {
-        const h = document.querySelectorAll('.hole');
-        const r = h[Math.floor(Math.random()*9)];
-        r.classList.add('up'); setTimeout(() => r.classList.remove('up'), 600);
-      }, 800);
-      setTimeout(() => { clearInterval(t); alert("Puntos: " + s); exit(); }, 20000);
-      window.h = (e) => { e.parentNode.classList.remove('up'); s++; document.getElementById('moScore').innerText = s; if(navigator.vibrate) navigator.vibrate(40); };
+        mActive = true; mScore = 0; mSpeed = 1200;
+        document.getElementById('mGrid').innerHTML = Array(9).fill('<div class="hole"><div class="mole" onclick="hitM(this)">👨‍🍳</div></div>').join('');
+        peepM();
+    }
+    function peepM() {
+        if(!mActive) return;
+        const holes = document.querySelectorAll('.hole');
+        const h = holes[Math.floor(Math.random()*9)];
+        h.classList.add('up');
+        setTimeout(() => {
+            if(h.classList.contains('up') && mActive) { mActive = false; showGameOver(t.lost, mScore, 'mole'); }
+            else if(mActive) peepM();
+        }, mSpeed);
+    }
+    function hitM(e) {
+        if(!mActive) return; mScore++; e.parentNode.classList.remove('up');
+        mSpeed = Math.max(400, mSpeed - 40); document.getElementById('mScore').innerText = mScore;
+        if(navigator.vibrate) navigator.vibrate(40);
+    }
+
+    /* DINO RUN */
+    let dCtx, dActive = false, dScore = 0, dDino, dObs = [], dFrame = 0, dSpeed = 6;
+    function init_dino() {
+        const canv = document.getElementById('dinoCanvas'); dCtx = canv.getContext('2d');
+        canv.width = 400; canv.height = 200;
+        dDino = { x: 40, y: 150, dy: 0, jump: -12, grav: 0.7, grounded: true };
+        dObs = []; dScore = 0; dActive = true; dFrame = 0; dSpeed = 6;
+        requestAnimationFrame(dLoop);
+    }
+    function dJump() { if(dDino.grounded) { dDino.dy = dDino.jump; dDino.grounded = false; } }
+    function dLoop() {
+        if(!dActive) return; dCtx.clearRect(0,0,400,200);
+        dDino.dy += dDino.grav; dDino.y += dDino.dy;
+        if(dDino.y > 150) { dDino.y = 150; dDino.dy = 0; dDino.grounded = true; }
+        dCtx.save(); dCtx.translate(dDino.x+20, dDino.y+20); dCtx.scale(-1,1);
+        dCtx.font = "40px Arial"; dCtx.fillText("🦖", -20, 15); dCtx.restore();
+        if(dFrame % 80 === 0) {
+            let isAir = Math.random() > 0.7;
+            dObs.push({ x: 400, y: isAir ? 90 : 160, type: isAir ? "🦅" : "🌵" });
+        }
+        dObs.forEach((o, i) => {
+            o.x -= dSpeed; dCtx.font = "30px Arial"; dCtx.fillText(o.type, o.x, o.y+20);
+            if(o.x < dDino.x + 25 && o.x + 20 > dDino.x && o.y < dDino.y + 35 && o.y + 25 > dDino.y) {
+                dActive = false; showGameOver("¡BOOM!", dScore, 'dino');
+            }
+            if(o.x < -40) { dObs.splice(i,1); dScore++; dSpeed += 0.1; }
+        });
+        document.getElementById('dScore').innerText = dScore;
+        dFrame++; requestAnimationFrame(dLoop);
+    }
+
+    /* IMPOSTOR */
+    let players = [], impIdx, revIdx, sWord;
+    function addP() {
+        const n = document.getElementById('pName').value.trim();
+        if(n && players.length < 8) { players.push(n); document.getElementById('pName').value = ""; renderP(); }
+        document.getElementById('startImpBtn').disabled = players.length < 3;
+    }
+    function renderP() { document.getElementById('pList').innerHTML = players.map(p => `<span class="player-tag">${p}</span>`).join(''); }
+    function startImp() {
+        impIdx = Math.floor(Math.random()*players.length); revIdx = 0;
+        sWord = ["Pizza", "Sushi", "Taco", "Hamburguesa", "Pasta"][Math.floor(Math.random()*5)];
+        document.getElementById('imp-setup').style.display = "none";
+        document.getElementById('imp-play').style.display = "block";
+        updateImpUI();
+    }
+    function updateImpUI() {
+        document.getElementById('impTurn').innerText = players[revIdx];
+        document.getElementById('impSecret').style.display = "none";
+        document.getElementById('impBtn').innerText = t.view;
+    }
+    function handleImp() {
+        const sec = document.getElementById('impSecret');
+        if(sec.style.display === "none") {
+            sec.style.display = "block"; sec.innerText = revIdx === impIdx ? t.secret : "PALABRA: " + sWord;
+            document.getElementById('impBtn').innerText = "LISTO";
+        } else {
+            revIdx++;
+            if(revIdx < players.length) updateImpUI();
+            else {
+                const starter = players[Math.floor(Math.random()*players.length)];
+                document.getElementById('imp-play').innerHTML = `<h2>${t.start} ${starter}</h2><p>Buscad al impostor...</p><button class="btn btn-action" onclick="showGameOver('${t.reveal}', '${players[impIdx]}', 'impostor')">${t.reveal}</button>`;
+            }
+        }
+    }
+
+    function showGameOver(m, s, id) {
+        document.getElementById('modalEnd').style.display = 'flex';
+        document.getElementById('modalMsg').innerText = m;
+        document.getElementById('modalScore').innerText = s !== "" ? "Resultado: " + s : "";
+        document.getElementById('btnRetry').onclick = () => openGame(id);
     }
   </script>
 </body>
