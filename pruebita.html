@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mesa Taply | NFC & QR</title>
+    <title>Visualizador Mesa Taply</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,16 +12,14 @@
             --table-wood-dark: #3e2723;
             --chair-wood: #4e342e;
             --floor: #0a0f1d;
-            /* Colores de la pegatina según diseño */
             --sticker-bg: #fdfaf5;
             --sticker-brown: #4a2c22;
             --sticker-tan: #d9c6b5;
-            /* Escala dinámica inicial */
             --scene-scale: 1;
         }
 
         @media (max-width: 600px) {
-            :root { --scene-scale: 0.65; } /* Escala reducida para móviles */
+            :root { --scene-scale: 0.6; }
         }
 
         body {
@@ -29,173 +27,171 @@
             background: var(--floor);
             font-family: 'Outfit', sans-serif;
             height: 100vh; width: 100vw;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center;
             overflow: hidden; perspective: 2000px;
-            touch-action: manipulation;
         }
 
-        .spotlight {
-            position: absolute; top: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(255,245,200,0.1) 0%, transparent 80%);
-            pointer-events: none; z-index: 100;
+        /* --- CABECERA --- */
+        .top-header {
+            position: absolute; top: 30px; text-align: center; z-index: 200;
+            width: 100%; animation: fadeInDown 1s ease-out;
+        }
+        .top-header h1 {
+            margin: 0; color: #fff; font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; letter-spacing: 1px;
+        }
+        .premium-badge {
+            display: inline-block; margin-top: 8px; padding: 4px 12px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px; color: #aaa; font-size: 10px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
         }
 
-        /* ESCENA 3D CON ESCALADO DINÁMICO */
+        /* --- LÁMPARAS --- */
+        .lamps-container {
+            position: absolute; top: 0; width: 100%; height: 30%;
+            display: flex; justify-content: space-around; pointer-events: none; z-index: 150;
+        }
+        .lamp {
+            width: 60px; height: 40px; background: #222; border-radius: 50% 50% 5px 5px;
+            position: relative; border-bottom: 4px solid #444;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .lamp::before { /* Cable */
+            content: ''; position: absolute; bottom: 100%; left: 50%;
+            width: 2px; height: 150px; background: #111; transform: translateX(-50%);
+        }
+        .lamp::after { /* Luz */
+            content: ''; position: absolute; top: 80%; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 180px;
+            background: radial-gradient(ellipse at top, rgba(255,245,200,0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* --- ESCENA 3D --- */
         .restaurant-scene {
-            position: relative;
-            width: 100%; height: 100%;
+            position: relative; width: 100%; height: 100%;
             transform-style: preserve-3d;
-            transform: scale(var(--scene-scale)) rotateX(60deg) rotateZ(-20deg);
+            transform: scale(var(--scene-scale)) rotateX(60deg) rotateZ(-20deg) translateY(50px);
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.8s ease-in-out;
         }
 
         /* LA MESA */
         .table-container {
-            position: absolute; width: 380px; height: 380px;
+            position: absolute; width: 400px; height: 400px;
             transform-style: preserve-3d; transform: translateZ(120px);
             cursor: pointer;
         }
-
         .table-top {
             width: 100%; height: 100%;
-            background: var(--table-wood);
-            border-radius: 12px;
+            background: var(--table-wood); border-radius: 12px;
             background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
             box-shadow: 0 0 0 4px var(--table-wood-dark), 50px 50px 100px rgba(0,0,0,0.5);
             transform-style: preserve-3d;
         }
 
-        /* PEGATINA EN LA ESQUINA */
+        /* PEGATINA DISEÑO FINAL */
         .design-sticker {
             position: absolute; bottom: 30px; right: 30px;
-            width: 85px; height: 85px;
-            transform: translateZ(2px);
+            width: 90px; height: 90px; transform: translateZ(2px);
         }
-
         .sticker-base {
-            width: 100%; height: 100%;
-            background: var(--sticker-bg);
-            border-radius: 50%;
-            border: 4px solid var(--sticker-tan);
+            width: 100%; height: 100%; background: var(--sticker-bg);
+            border-radius: 50%; border: 5px solid var(--sticker-tan);
             box-shadow: inset 0 0 0 2px var(--sticker-brown), 0 4px 10px rgba(0,0,0,0.3);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 5px; box-sizing: border-box;
         }
-
         .sticker-name-mini {
-            font-family: 'Playfair Display', serif;
-            font-size: 7px; color: var(--sticker-brown);
-            margin-bottom: 2px; text-transform: uppercase;
-            max-width: 80%; overflow: hidden; white-space: nowrap;
+            font-family: 'Playfair Display', serif; font-size: 8px;
+            color: var(--sticker-brown); margin-bottom: 2px; text-transform: uppercase;
         }
 
-        /* OVERLAY / ZOOM LOGO */
+        /* OVERLAY ZOOM */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92);
-            z-index: 1000; display: none;
+            background: rgba(0,0,0,0.92); z-index: 1000; display: none;
             flex-direction: column; align-items: center; justify-content: center;
             backdrop-filter: blur(10px);
         }
-
         .enlarged-card {
-            width: 85vw; height: 85vw;
-            max-width: 350px; max-height: 350px;
-            background: var(--sticker-bg);
-            border-radius: 50%;
-            border: 10px solid var(--sticker-tan);
-            outline: 3px solid var(--sticker-brown);
-            outline-offset: -16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 85vw; height: 85vw; max-width: 350px; max-height: 350px;
+            background: var(--sticker-bg); border-radius: 50%;
+            border: 10px solid var(--sticker-tan); outline: 3px solid var(--sticker-brown);
+            outline-offset: -16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        @keyframes popIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .enlarged-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem; color: var(--sticker-brown);
-            margin-bottom: 8px; text-align: center;
-            text-transform: capitalize;
-        }
-
         .qr-wrapper {
-            position: relative;
-            width: 45%; aspect-ratio: 1/1;
-            background: white; padding: 10px;
-            border: 1px solid #eee; cursor: pointer;
+            position: relative; width: 45%; aspect-ratio: 1/1;
+            background: white; padding: 10px; border: 1px solid #eee;
         }
-
         .nfc-badge {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 25%; height: 25%;
-            background: white; border: 1.5px solid var(--sticker-brown);
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 25%; height: 25%; background: white; border: 1.5px solid var(--sticker-brown);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
         }
 
-        /* INTERFAZ DE USUARIO */
+        /* UI */
         .persistent-ui {
-            position: absolute; bottom: 40px;
-            width: 90%; max-width: 400px;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 12px; z-index: 500;
+            position: absolute; bottom: 40px; width: 90%; max-width: 400px;
+            display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 500;
         }
-
         .btn-primary {
-            background: var(--brand-color); color: white;
-            width: 100%; padding: 16px; border-radius: 100px;
-            text-decoration: none; font-weight: 800; text-transform: uppercase;
-            text-align: center; font-size: 0.9em; letter-spacing: 1px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            background: var(--brand-color); color: white; width: 100%; padding: 16px;
+            border-radius: 100px; text-decoration: none; font-weight: 800;
+            text-transform: uppercase; text-align: center; font-size: 0.9em;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-5px); }
+
+        .disclaimer {
+            color: rgba(255,255,255,0.4); font-size: 9px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; text-align: center;
         }
 
-        .btn-scan-now {
-            background: var(--brand-color); color: white;
-            padding: 16px 40px; border-radius: 100px;
-            text-decoration: none; font-weight: 800; text-transform: uppercase;
-        }
-
-        /* SILLAS 3D (Solo Superior e Inferior) */
+        /* SILLAS */
         .chair { position: absolute; width: 140px; height: 140px; transform-style: preserve-3d; }
         .chair-seat { width: 100%; height: 100%; background: var(--chair-wood); transform: translateZ(70px); border-radius: 5px; }
         .chair.top { transform: translateY(-280px); }
         .chair.bottom { transform: translateY(280px) rotateZ(180deg); }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
+    <div class="top-header">
+        <h1 class="dynamic-name">Nombre del Restaurante</h1>
+        <div class="premium-badge">Ejemplo de cómo quedaría nuestro diseño en la mesa</div>
+    </div>
+
+    <div class="lamps-container">
+        <div class="lamp"></div>
+        <div class="lamp"></div>
+    </div>
 
     <div class="spotlight"></div>
 
     <div class="persistent-ui" id="main-ui">
         <a id="direct-link" href="#" class="btn-primary">Ver Entorno Digital</a>
-        <p style="color: white; font-size: 10px; opacity: 0.6; font-weight: 600; margin: 0;">O pulsa en la mesa para ampliar el diseño</p>
+        <div class="disclaimer">Esto es tan solo un ejemplo simple para que se haga una idea de lo que vendemos. Nuestros diseños finales son 100% personalizados y más profesionales. En la web podrá ver algunos de los diseños que hemos hecho a otros negocios</div>
     </div>
 
     <div id="overlay">
         <div class="enlarged-card">
-            <h2 class="dynamic-name enlarged-name">Restaurante</h2>
-            
-            <a id="qr-link" href="#">
+            <h2 class="dynamic-name" style="font-family:'Playfair Display'; color:var(--sticker-brown); font-size:1.4rem; margin-bottom:10px;">Restaurante</h2>
+            <a id="qr-link" href="#" style="width: 100%; display: flex; justify-content: center; text-decoration: none;">
                 <div class="qr-wrapper">
-                    <img style="width:100%" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TaplyScan" alt="QR">
+                    <img style="width:100%" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TaplyDemo" alt="QR">
                     <div class="nfc-badge">
                         <svg width="60%" height="60%" viewBox="0 0 24 24" fill="var(--sticker-brown)"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM17 6.76l-1.41 1.41c.79.8 1.27 1.92 1.27 3.16s-.48 2.36-1.27 3.16L17 15.9c1.17-1.17 1.89-2.8 1.89-4.57s-.72-3.4-1.89-4.57zM14.17 9.6l-1.41 1.41C13.14 11.39 13.38 11.87 13.38 12.37s-.24.98-.62 1.36L14.17 15.14c.77-.77 1.24-1.85 1.24-3.03s-.47-2.26-1.24-3.03zM9 7h2v10H9z"/></svg>
                     </div>
                 </div>
             </a>
-
-            <div style="margin-top:12px; text-align:center">
-                <div style="font-size: 9px; font-weight: 800; color: var(--sticker-brown); letter-spacing: 2px;">TECNOLOGÍA NFC + QR</div>
-            </div>
+            <p style="font-size: 8px; font-weight: 800; color: var(--sticker-brown); letter-spacing: 2px; margin-top: 15px;">TECNOLOGÍA NFC + QR</p>
         </div>
-
-        <div style="margin-top: 30px; text-align: center; width: 90%;">
-            <a id="scan-btn-link" href="#" class="btn-scan-now">Escanear ahora</a>
-            <div style="color:white; margin-top:20px; font-size:12px; opacity:0.6; cursor:pointer;" onclick="closeLogo()">VOLVER A LA MESA</div>
-        </div>
+        <div style="color:white; margin-top:30px; font-size:12px; opacity:0.6; cursor:pointer; font-weight:800; letter-spacing:1px;" onclick="closeLogo()">CERRAR VISTA</div>
     </div>
 
     <div class="restaurant-scene" id="scene">
@@ -226,19 +222,17 @@
         
         document.getElementById('direct-link').href = nextUrl;
         document.getElementById('qr-link').href = nextUrl;
-        document.getElementById('scan-btn-link').href = nextUrl;
 
         function openLogo() {
             document.getElementById('overlay').style.display = 'flex';
             document.getElementById('main-ui').style.visibility = 'hidden';
-            // Zoom out de la mesa al abrir el logo para enfoque
             document.getElementById('scene').style.transform = 'scale(0.5) rotateX(60deg) rotateZ(-20deg) translateZ(-200px)';
         }
 
         function closeLogo() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('main-ui').style.visibility = 'visible';
-            const scale = window.innerWidth < 600 ? 0.65 : 1;
+            const scale = window.innerWidth < 600 ? 0.6 : 1;
             document.getElementById('scene').style.transform = `scale(${scale}) rotateX(60deg) rotateZ(-20deg)`;
         }
     </script>
