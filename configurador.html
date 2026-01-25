@@ -62,7 +62,13 @@ select {
   background-repeat: no-repeat; background-position: right 14px center; background-size: 14px;
 }
 
-.color-picker-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 12px; }
+/* Contenedor de colores actualizado a 2 filas */
+.color-picker-container { 
+  display: grid; 
+  grid-template-columns: repeat(5, 1fr); 
+  gap: 12px; 
+  margin-top: 12px; 
+}
 .color-option { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
 .color-option.selected { transform: scale(1.15); box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-main); }
 
@@ -70,6 +76,17 @@ button#generateBtn {
   width: 100%; padding: 15px; margin-top: 28px; border-radius: 14px; border: none; font-size: 1em;
   font-weight: 700; color: white; background: linear-gradient(180deg, var(--primary), #1e40af);
   cursor: pointer; box-shadow: 0 12px 20px -10px rgba(37,99,235,0.5);
+}
+
+/* Estilo para el aviso inferior */
+.info-note {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-sec);
+  line-height: 1.5;
+  text-align: center;
 }
 
 .toast {
@@ -84,7 +101,7 @@ button#generateBtn {
 
 <div class="container">
   <h1>Configurar Demo</h1>
-  <p class="description">Introduce los datos para generar la <strong>vista previa 3D</strong>.</p>
+  <p class="description">Introduce los datos para generar un <strong>ejemplo personalizado</strong> </p>
 
   <div class="input-group">
     <label>Nombre del Restaurante</label>
@@ -111,10 +128,19 @@ button#generateBtn {
       <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
       <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
       <div class="color-option" style="background:#2962FF" data-color="2962FF"></div>
+      <div class="color-option" style="background:#111827" data-color="111827"></div>
+      <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
+      <div class="color-option" style="background:#6200EA" data-color="6200EA"></div>
+      <div class="color-option" style="background:#00897B" data-color="00897B"></div>
+      <div class="color-option" style="background:#FBC02D" data-color="FBC02D"></div>
     </div>
   </div>
 
   <button id="generateBtn">Crear Demo</button>
+
+  <div class="info-note">
+    ℹ️ Ten en cuenta que esto es solo un ejemplo básico para que puedas visualizar el concepto. Nuestro diseño final es mucho más <b>profesional, detallado y 100% personalizado</b> para tu negocio.
+  </div>
 </div>
 
 <div id="toast" class="toast">Error</div>
@@ -122,7 +148,6 @@ button#generateBtn {
 <script>
 let selectedHex = '2E7D32';
 
-// Selección de color
 document.querySelectorAll('.color-option').forEach(el => {
   el.onclick = () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
@@ -138,7 +163,6 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// LÓGICA DE GENERACIÓN
 document.getElementById('generateBtn').onclick = () => {
   const nameInput = document.getElementById('restaurantName').value.trim();
   const typeInput = document.getElementById('restaurantType').value;
@@ -148,10 +172,9 @@ document.getElementById('generateBtn').onclick = () => {
 
   document.getElementById('generateBtn').textContent = 'Generando...';
 
-  // Redirección a pruebita.html
   setTimeout(() => {
     const url = `pruebita.html?n=${encodeURIComponent(nameInput)}&categoria=${typeInput}&btn=${selectedHex}&auth=true`;
-    window.location.href = url; // Cambiado a href para que cargue en la misma pestaña
+    window.location.href = url;
   }, 600);
 };
 </script>
