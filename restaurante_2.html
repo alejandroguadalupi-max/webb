@@ -13,7 +13,7 @@
 <style>
   :root {
     --primary-color: #68B553; 
-    --secondary-color: #68B553; /* Ahora igualado por defecto */
+    --secondary-color: #68B553; 
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
     --text-main: #1e293b;
@@ -64,7 +64,6 @@
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: transform 0.2s; font-size: 1.2rem;
   }
-  .theme-btn:active { transform: scale(0.9); }
 
   .review-container {
     width: 100%; min-height: 100vh;
@@ -102,19 +101,37 @@
     color: var(--btn-text); border: none; transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
     background-color: var(--primary-color);
-    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2);
   }
 
+  .btn-google { box-shadow: 0 10px 20px -5px var(--primary-color); }
   .btn:active { transform: scale(0.98); }
 
-  /* Ajuste de sombra específica para usar el color dinámico con transparencia */
-  .btn-google, .btn-private {
-    box-shadow: 0 10px 20px -5px var(--primary-color);
-    opacity: 0.95;
-  }
-  .btn-google:active, .btn-private:active { opacity: 1; }
-
   .note { font-size: 0.85em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300;}
+
+  /* --- ESTILOS DEL MODAL DE AVISO --- */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; padding: 20px;
+  }
+
+  .modal-card {
+    background: var(--bg-card); border-radius: 28px;
+    padding: 35px 25px; width: 100%; max-width: 380px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    text-align: center; border: 1px solid var(--border);
+    animation: fadeInUp 0.4s ease;
+  }
+
+  .modal-card h3 { margin: 0 0 15px; font-size: 1.3em; color: var(--primary-color); }
+  .modal-card p { font-size: 1rem; line-height: 1.6; color: var(--text-main); margin-bottom: 25px; }
+  
+  .btn-modal-close {
+    background: var(--primary-color); color: white;
+    width: 100%; padding: 15px; border-radius: 14px;
+    font-weight: 700; border: none; cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -124,13 +141,21 @@
   <button class="theme-btn" id="themeBtn">☀️</button>
 </div>
 
+<div id="demoModal" class="modal-overlay">
+  <div class="modal-card">
+    <h3 data-lang="modalTitle">Demo Taply</h3>
+    <p data-lang="modalText">Esta es una demo de Taply. El enlace directo a tu negocio en Google se habilitará en la versión final, una vez que te unas a nosotros y configures tu producto.</p>
+    <button class="btn-modal-close" onclick="closeModal()" data-lang="modalBtn">Entendido</button>
+  </div>
+</div>
+
 <main class="review-container">
   <div class="content-wrapper">
     
     <section class="option-box box-public">
       <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
       <p data-lang="publicText">Tu opinión ayuda a otros clientes a encontrarnos.</p>
-      <a id="btnGoogle" class="btn btn-google" data-lang="publicBtn" href="#" target="_blank">Publicar en Google</a>
+      <button id="btnGoogle" class="btn btn-google" data-lang="publicBtn">Publicar en Google</button>
       <div class="note" data-lang="publicNote">Queda visible para todos.</div>
     </section>
 
@@ -147,75 +172,79 @@
 </main>
 
 <script>
-const palettes = {
-    'hamburgueseria': '#FF8C00', 
-    'pizzeria':       '#D32F2F', 
-    'asiatico':       '#E91E63', 
-    'cafe':           '#8D6E63', 
-    'restaurante':    '#2E7D32', 
-    'default':        '#68B553'
-};
-
-const GOOGLE_LINK = "https://search.google.com/local/writereview?placeid=TU_ID_AQUI"; 
-
 const translations = {
-  es: { publicTitle: "⭐ Reseña pública", publicText: "Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn: "Publicar en Google", publicNote: "Queda visible para todos.", privateTitle: "📝 Comentario privado", privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn: "Hablar con el equipo", privateNote: "Solo lo vemos nosotros." },
-  en: { publicTitle: "⭐ Public review", publicText: "Your review helps other customers find us.", publicBtn: "Post on Google", publicNote: "Visible to everyone.", privateTitle: "📝 Private feedback", privateText: "Had an issue? Your feedback helps us improve directly.", privateBtn: "Tell the Team", privateNote: "Only we can see it." },
-  de: { publicTitle: "⭐ Öffentliche Bewertung", publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn: "Auf Google posten", publicNote: "Für alle sichtbar.", privateTitle: "📝 Privates Feedback", privateText: "Gab es ein Problem? Helfen Sie uns direkt.", privateBtn: "Dem Team mitteilen", privateNote: "Nur wir sehen es." },
-  fr: { publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour todos.", privateTitle: "📝 Retour privé", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
-  it: { publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a mejorar.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi." }
+  es: { 
+    publicTitle: "⭐ Reseña pública", publicText: "Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn: "Publicar en Google", publicNote: "Queda visible para todos.", 
+    privateTitle: "📝 Comentario privado", privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn: "Hablar con el equipo", privateNote: "Solo lo vemos nosotros.",
+    modalTitle: "Demo de Taply", modalText: "Esta es una demo de Taply. El enlace directo a tu negocio en Google se habilitará en la versión final, una vez que te unas a nosotros y configures tu producto.", modalBtn: "Entendido"
+  },
+  en: { 
+    publicTitle: "⭐ Public review", publicText: "Your review helps other customers find us.", publicBtn: "Post on Google", publicNote: "Visible to everyone.", 
+    privateTitle: "📝 Private feedback", privateText: "Had an issue? Your feedback helps us improve directly.", privateBtn: "Tell the Team", privateNote: "Only we can see it.",
+    modalTitle: "Taply Demo", modalText: "This is a Taply demo. The direct link to your Google business will be enabled in the final version, once you join us and configure your product.", modalBtn: "Got it"
+  },
+  de: { 
+    publicTitle: "⭐ Öffentliche Bewertung", publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn: "Auf Google posten", publicNote: "Für alle sichtbar.", 
+    privateTitle: "📝 Privates Feedback", privateText: "Gab es ein Problem? Helfen Sie uns direkt.", privateBtn: "Dem Team mitteilen", privateNote: "Nur wir sehen es.",
+    modalTitle: "Taply Demo", modalText: "Dies ist eine Taply-Demo. Der direkte Link zu Ihrem Google-Unternehmen wird in der endgültigen Version aktiviert, sobald Sie sich uns anschließen und Ihr Produkt konfigurieren.", modalBtn: "Verstanden"
+  },
+  fr: { 
+    publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour tous.", 
+    privateTitle: "📝 Retour privé", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous.",
+    modalTitle: "Démo Taply", modalText: "Ceci est une démo de Taply. Le lien direct vers votre fiche Google sera activé dans la version finale, une fois que vous nous aurez rejoint et configuré votre produit.", modalBtn: "Compris"
+  },
+  it: { 
+    publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", 
+    privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a mejorar.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi.",
+    modalTitle: "Demo Taply", modalText: "Questa è una demo di Taply. Il link diretto alla tua attività su Google sarà abilitato nella versione finale, una vez que ti unirai a noi e configurerai il tuo prodotto.", modalBtn: "Ho capito"
+  }
 };
 
 function init() {
   const params = new URLSearchParams(window.location.search);
-
   if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
 
-  const name = params.get('n') || "Restaurante";
-  document.title = "Opinión - " + name;
-
-  // Aplicar Color del usuario a AMBOS botones y secciones
-  const category = params.get('categoria') || 'default';
-  let color = params.get('btn') ? '#' + params.get('btn') : (palettes[category] || palettes['default']);
-
+  const color = params.get('btn') ? '#' + params.get('btn') : '#68B553';
   document.documentElement.style.setProperty('--primary-color', color);
-  document.documentElement.style.setProperty('--secondary-color', color); // Igualamos el color
-  document.getElementById('metaThemeColor').setAttribute('content', color);
+  document.documentElement.style.setProperty('--secondary-color', color);
 
   detectAndSetLanguage();
   applyTheme();
 
   document.getElementById("btnPrivate").href = "feedback.html" + window.location.search;
-  document.getElementById("btnGoogle").href = GOOGLE_LINK;
+  
+  document.getElementById("btnGoogle").onclick = () => {
+    document.getElementById("demoModal").style.display = "flex";
+  };
+}
+
+function closeModal() {
+  document.getElementById("demoModal").style.display = "none";
 }
 
 function detectAndSetLanguage() {
   let lang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
   if (!translations[lang]) lang = 'es';
   
-  localStorage.setItem('userLang', lang);
   document.getElementById('langDisplay').textContent = lang.toUpperCase();
-  
   document.querySelectorAll("[data-lang]").forEach(el => {
     if (translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
   });
 }
 
-const themeBtn = document.getElementById('themeBtn');
 function applyTheme() {
-  let savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  let savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
-  themeBtn.innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
+  document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
 }
 
-themeBtn.addEventListener('click', () => {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
+document.getElementById('themeBtn').onclick = () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   localStorage.setItem('theme', next);
   applyTheme();
-});
+};
 
-window.addEventListener("pageshow", init);
+window.onload = init;
 </script>
 </body>
 </html>
