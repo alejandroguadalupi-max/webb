@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Configurador Demo</title>
+<title>Configurador Taply</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,87 +12,116 @@
 <style>
 :root {
   --primary: #2563eb;
-  --bg-start: #f8fafc;
-  --bg-end: #eef2f7;
+  --primary-hover: #1d4ed8;
+  --bg-body: #f1f5f9;
   --bg-card: #ffffff;
-  --text-main: #111827;
-  --text-sec: #6b7280;
-  --border: #e5e7eb;
+  --text-main: #0f172a;
+  --text-sec: #64748b;
+  --border: #e2e8f0;
+  --input-bg: #f8fafc;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  background-color: var(--bg-body);
+  background-image: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.1) 0, transparent 50%), 
+                    radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.1) 0, transparent 50%);
   color: var(--text-main);
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 16px;
 }
 
 .container {
-  max-width: 420px;
+  max-width: 400px;
   width: 100%;
   background: var(--bg-card);
-  border-radius: 22px;
-  padding: 34px 28px;
-  box-shadow: 0 20px 30px -20px rgba(0,0,0,0.25), 0 10px 15px -10px rgba(0,0,0,0.1);
-  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 30px 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255,255,255,0.7);
 }
 
-h1 { margin: 0 0 8px; font-size: 1.7em; font-weight: 700; text-align: center; letter-spacing: -0.6px; }
-p.description { font-size: 0.95em; color: var(--text-sec); margin-bottom: 30px; text-align: center; line-height: 1.5; }
+header { text-align: center; margin-bottom: 24px; }
+h1 { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); }
+p.description { font-size: 0.85rem; color: var(--text-sec); margin-top: 6px; }
 
-.input-group { margin-bottom: 22px; }
-label { display: block; font-size: 0.8em; font-weight: 600; margin-bottom: 6px; }
+.input-group { margin-bottom: 18px; }
+label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sec); }
 
 input[type="text"], select {
-  width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--border);
-  font-size: 0.95em; background: #fff; transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
+  width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border);
+  font-size: 0.9rem; background: var(--input-bg); color: var(--text-main);
+  transition: all 0.2s ease; appearance: none;
 }
 
-input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+input:focus, select:focus { 
+  outline: none; 
+  border-color: var(--primary); 
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08); 
+}
 
 select {
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236b7280' d='M5.5 7.5l4.5 4.5 4.5-4.5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center; background-size: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
 }
 
-/* Contenedor de colores actualizado a 2 filas */
+/* Color Picker Optimizada */
 .color-picker-container { 
   display: grid; 
   grid-template-columns: repeat(5, 1fr); 
-  gap: 12px; 
-  margin-top: 12px; 
+  gap: 10px; 
+  margin-top: 8px; 
 }
-.color-option { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
-.color-option.selected { transform: scale(1.15); box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-main); }
+.color-option { 
+  width: 100%; 
+  aspect-ratio: 1; 
+  border-radius: 10px; 
+  cursor: pointer; 
+  border: 2px solid transparent; 
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+  position: relative;
+}
+.color-option:hover { transform: translateY(-2px); }
+.color-option.selected { 
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--primary);
+  z-index: 1;
+}
 
 button#generateBtn {
-  width: 100%; padding: 15px; margin-top: 28px; border-radius: 14px; border: none; font-size: 1em;
-  font-weight: 700; color: white; background: linear-gradient(180deg, var(--primary), #1e40af);
-  cursor: pointer; box-shadow: 0 12px 20px -10px rgba(37,99,235,0.5);
+  width: 100%; padding: 14px; margin-top: 24px; border-radius: 14px; border: none; 
+  font-size: 0.95rem; font-weight: 700; color: white; 
+  background: var(--primary);
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.25);
 }
+button#generateBtn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+button#generateBtn:active { transform: translateY(1px); }
 
-/* Estilo para el aviso inferior */
+/* Aviso inferior estilizado */
 .info-note {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-  font-size: 0.78rem;
+  margin-top: 20px;
+  padding: 14px;
+  background: var(--input-bg);
+  border-radius: 14px;
+  font-size: 0.72rem;
   color: var(--text-sec);
-  line-height: 1.5;
-  text-align: center;
+  line-height: 1.4;
+  border: 1px solid var(--border);
 }
 
 .toast {
-  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-  background: #111827; color: white; padding: 12px 22px; border-radius: 50px;
-  opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--text-main); color: white; padding: 10px 20px; border-radius: 12px;
+  font-size: 0.85rem; font-weight: 500; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1000;
 }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 </style>
@@ -100,18 +129,20 @@ button#generateBtn {
 <body>
 
 <div class="container">
-  <h1>Configurar Demo</h1>
-  <p class="description">Introduce los datos para generar un <strong>ejemplo personalizado</strong> </p>
+  <header>
+    <h1>Configurar Demo</h1>
+    <p class="description">Genera tu vista previa en segundos.</p>
+  </header>
 
   <div class="input-group">
-    <label>Nombre del Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Ej. La Parrilla de Alberto">
+    <label>Restaurante</label>
+    <input type="text" id="restaurantName" placeholder="Nombre de tu negocio">
   </div>
 
   <div class="input-group">
-    <label>Tipo de Cocina</label>
+    <label>Categoría</label>
     <select id="restaurantType">
-      <option value="" disabled selected>Selecciona una opción...</option>
+      <option value="" disabled selected>Tipo de cocina...</option>
       <option value="restaurante">Restaurante</option>
       <option value="hamburgueseria">Hamburguesería</option>
       <option value="pizzeria">Pizzería</option>
@@ -128,18 +159,18 @@ button#generateBtn {
       <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
       <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
       <div class="color-option" style="background:#2962FF" data-color="2962FF"></div>
-      <div class="color-option" style="background:#111827" data-color="111827"></div>
+      <div class="color-option" style="background:#0f172a" data-color="0f172a"></div>
       <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
-      <div class="color-option" style="background:#6200EA" data-color="6200EA"></div>
-      <div class="color-option" style="background:#00897B" data-color="00897B"></div>
-      <div class="color-option" style="background:#FBC02D" data-color="FBC02D"></div>
+      <div class="color-option" style="background:#7C4DFF" data-color="7C4DFF"></div>
+      <div class="color-option" style="background:#00BFA5" data-color="00BFA5"></div>
+      <div class="color-option" style="background:#FFD600" data-color="FFD600"></div>
     </div>
   </div>
 
-  <button id="generateBtn">Crear Demo</button>
+  <button id="generateBtn">Crear Demo Gratis</button>
 
   <div class="info-note">
-    ℹ️ Ten en cuenta que esto es solo un ejemplo básico para que puedas visualizar el concepto. Nuestro diseño final es mucho más <b>profesional, detallado y 100% personalizado</b> para tu negocio.
+    <strong>Nota:</strong> Este es un ejemplo básico. Nuestros diseños finales son mucho más profesionales, detallados y 100% personalizados para cada cliente.
   </div>
 </div>
 
@@ -167,15 +198,15 @@ document.getElementById('generateBtn').onclick = () => {
   const nameInput = document.getElementById('restaurantName').value.trim();
   const typeInput = document.getElementById('restaurantType').value;
 
-  if (!nameInput) return showToast('Falta el nombre');
-  if (!typeInput) return showToast('Falta el tipo');
+  if (!nameInput) return showToast('Introduce un nombre');
+  if (!typeInput) return showToast('Selecciona una categoría');
 
-  document.getElementById('generateBtn').textContent = 'Generando...';
+  document.getElementById('generateBtn').textContent = 'Preparando entorno...';
 
   setTimeout(() => {
     const url = `pruebita.html?n=${encodeURIComponent(nameInput)}&categoria=${typeInput}&btn=${selectedHex}&auth=true`;
     window.location.href = url;
-  }, 600);
+  }, 800);
 };
 </script>
 
