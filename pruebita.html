@@ -11,73 +11,82 @@
             --table-wood: #5d4037;
             --table-wood-dark: #3e2723;
             --chair-wood: #4e342e;
-            --floor: #0a0f1d;
             --sticker-bg: #fdfaf5;
             --sticker-brown: #4a2c22;
             --sticker-tan: #d9c6b5;
             --scene-scale: 1;
+            /* Colores por defecto (Modo Claro) */
+            --bg-current: #ffffff;
+            --text-current: #1a1a1a;
         }
 
         @media (max-width: 600px) {
-            :root { --scene-scale: 0.6; }
+            :root { --scene-scale: 0.55; }
         }
 
         body {
             margin: 0; padding: 0;
-            background: var(--floor);
+            background: var(--bg-current);
+            color: var(--text-current);
             font-family: 'Outfit', sans-serif;
             height: 100vh; width: 100vw;
             display: flex; flex-direction: column; align-items: center;
             overflow: hidden; perspective: 2000px;
+            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* --- CABECERA --- */
         .top-header {
-            position: absolute; top: 30px; text-align: center; z-index: 200;
+            position: absolute; 
+            top: 100px; /* Posición ajustada para mejor equilibrio */
+            text-align: center; z-index: 200;
             width: 100%; animation: fadeInDown 1s ease-out;
+            pointer-events: none;
         }
         .top-header h1 {
-            margin: 0; color: #fff; font-family: 'Playfair Display', serif;
+            margin: 0; color: inherit; font-family: 'Playfair Display', serif;
             font-size: 1.8rem; letter-spacing: 1px;
+            transition: color 0.6s;
         }
         .premium-badge {
             display: inline-block; margin-top: 8px; padding: 4px 12px;
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 4px; color: #aaa; font-size: 10px; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase;
+            background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 4px; color: #777; font-size: 10px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
         }
 
-        /* --- LÁMPARAS --- */
+        /* --- LÁMPARAS INTERACTIVAS --- */
         .lamps-container {
-            position: absolute; top: 0; width: 100%; height: 30%;
-            display: flex; justify-content: space-around; pointer-events: none; z-index: 150;
+            position: absolute; top: 0; width: 100%; height: 25%;
+            display: flex; justify-content: space-around; z-index: 250;
         }
         .lamp {
-            width: 60px; height: 40px; background: #222; border-radius: 50% 50% 5px 5px;
-            position: relative; border-bottom: 4px solid #444;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            width: 70px; height: 45px; background: #333; border-radius: 50% 50% 5px 5px;
+            position: relative; border-bottom: 4px solid #111;
+            cursor: pointer; pointer-events: auto;
+            transition: transform 0.3s;
         }
+        .lamp:hover { transform: scale(1.05); }
         .lamp::before { /* Cable */
             content: ''; position: absolute; bottom: 100%; left: 50%;
-            width: 2px; height: 150px; background: #111; transform: translateX(-50%);
+            width: 2px; height: 100px; background: #111; transform: translateX(-50%);
         }
-        .lamp::after { /* Luz */
-            content: ''; position: absolute; top: 80%; left: 50%; transform: translateX(-50%);
-            width: 120px; height: 180px;
-            background: radial-gradient(ellipse at top, rgba(255,245,200,0.2) 0%, transparent 70%);
-            border-radius: 50%;
+        .lamp-glow {
+            position: absolute; top: 80%; left: 50%; transform: translateX(-50%);
+            width: 150px; height: 250px;
+            background: radial-gradient(ellipse at top, rgba(255,240,150,0.3) 0%, transparent 70%);
+            border-radius: 50%; opacity: 1; transition: opacity 0.6s;
         }
 
         /* --- ESCENA 3D --- */
         .restaurant-scene {
             position: relative; width: 100%; height: 100%;
             transform-style: preserve-3d;
-            transform: scale(var(--scene-scale)) rotateX(60deg) rotateZ(-20deg) translateY(50px);
+            transform: scale(var(--scene-scale)) rotateX(60deg) rotateZ(-20deg) translateY(60px);
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.8s ease-in-out;
         }
 
-        /* LA MESA */
         .table-container {
             position: absolute; width: 400px; height: 400px;
             transform-style: preserve-3d; transform: translateZ(120px);
@@ -87,26 +96,68 @@
             width: 100%; height: 100%;
             background: var(--table-wood); border-radius: 12px;
             background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-            box-shadow: 0 0 0 4px var(--table-wood-dark), 50px 50px 100px rgba(0,0,0,0.5);
+            box-shadow: 0 0 0 4px var(--table-wood-dark), 50px 50px 100px rgba(0,0,0,0.1);
             transform-style: preserve-3d;
+            transition: box-shadow 0.6s;
         }
 
-        /* PEGATINA DISEÑO FINAL */
+        /* PEGATINA */
         .design-sticker {
             position: absolute; bottom: 30px; right: 30px;
-            width: 90px; height: 90px; transform: translateZ(2px);
+            width: 95px; height: 95px; transform: translateZ(2px);
         }
         .sticker-base {
             width: 100%; height: 100%; background: var(--sticker-bg);
             border-radius: 50%; border: 5px solid var(--sticker-tan);
-            box-shadow: inset 0 0 0 2px var(--sticker-brown), 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: inset 0 0 0 2px var(--sticker-brown), 0 4px 10px rgba(0,0,0,0.2);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 5px; box-sizing: border-box;
+            padding: 8px; box-sizing: border-box;
         }
         .sticker-name-mini {
             font-family: 'Playfair Display', serif; font-size: 8px;
             color: var(--sticker-brown); margin-bottom: 2px; text-transform: uppercase;
+            font-weight: 700; text-align: center;
         }
+
+        /* --- UI INFERIOR --- */
+        .persistent-ui {
+            position: absolute; 
+            bottom: 70px; /* Subido para que no esté pegado abajo */
+            width: 90%; max-width: 400px;
+            display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 500;
+        }
+        .btn-primary {
+            background: var(--brand-color); color: white; width: 100%; padding: 18px;
+            border-radius: 100px; text-decoration: none; font-weight: 800;
+            text-transform: uppercase; text-align: center; font-size: 0.9em;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+
+        .disclaimer {
+            color: #888; font-size: 9px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 5px; 
+            text-align: center; line-height: 1.4; max-width: 85%;
+        }
+
+        /* --- ESTADO LUCES APAGADAS (Azul Oscuro) --- */
+        body.lights-off {
+            --bg-current: #0a1128;
+            --text-current: #ffffff;
+        }
+        .lights-off .lamp { background: #111; border-color: #000; }
+        .lights-off .lamp-glow { opacity: 0; }
+        .lights-off .table-top { box-shadow: 0 0 0 4px var(--table-wood-dark), 50px 50px 100px rgba(0,0,0,0.7); }
+        .lights-off .premium-badge { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.1); color: #aaa; }
+        .lights-off .disclaimer { color: #555; }
+
+        /* SILLAS */
+        .chair { position: absolute; width: 140px; height: 140px; transform-style: preserve-3d; }
+        .chair-seat { width: 100%; height: 100%; background: var(--chair-wood); transform: translateZ(70px); border-radius: 5px; box-shadow: 10px 10px 30px rgba(0,0,0,0.1); }
+        .chair.top { transform: translateY(-280px); }
+        .chair.bottom { transform: translateY(280px) rotateZ(180deg); }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* OVERLAY ZOOM */
         #overlay {
@@ -116,80 +167,40 @@
             backdrop-filter: blur(10px);
         }
         .enlarged-card {
-            width: 85vw; height: 85vw; max-width: 350px; max-height: 350px;
+            width: 85vw; height: 85vw; max-width: 350px;
             background: var(--sticker-bg); border-radius: 50%;
             border: 10px solid var(--sticker-tan); outline: 3px solid var(--sticker-brown);
             outline-offset: -16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .qr-wrapper {
-            position: relative; width: 45%; aspect-ratio: 1/1;
-            background: white; padding: 10px; border: 1px solid #eee;
-        }
-        .nfc-badge {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 25%; height: 25%; background: white; border: 1.5px solid var(--sticker-brown);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* UI */
-        .persistent-ui {
-            position: absolute; bottom: 40px; width: 90%; max-width: 400px;
-            display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 500;
-        }
-        .btn-primary {
-            background: var(--brand-color); color: white; width: 100%; padding: 16px;
-            border-radius: 100px; text-decoration: none; font-weight: 800;
-            text-transform: uppercase; text-align: center; font-size: 0.9em;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: 0.3s;
-        }
-        .btn-primary:hover { transform: translateY(-5px); }
-
-        .disclaimer {
-            color: rgba(255,255,255,0.4); font-size: 9px; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; text-align: center;
-        }
-
-        /* SILLAS */
-        .chair { position: absolute; width: 140px; height: 140px; transform-style: preserve-3d; }
-        .chair-seat { width: 100%; height: 100%; background: var(--chair-wood); transform: translateZ(70px); border-radius: 5px; }
-        .chair.top { transform: translateY(-280px); }
-        .chair.bottom { transform: translateY(280px) rotateZ(180deg); }
-
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
     <div class="top-header">
         <h1 class="dynamic-name">Nombre del Restaurante</h1>
-        <div class="premium-badge">Ejemplo de cómo quedaría nuestro diseño en la mesa</div>
+        <div class="premium-badge">Visualización de diseño en mesa</div>
     </div>
 
     <div class="lamps-container">
-        <div class="lamp"></div>
-        <div class="lamp"></div>
+        <div class="lamp" onclick="toggleLights()">
+            <div class="lamp-glow"></div>
+        </div>
+        <div class="lamp" onclick="toggleLights()">
+            <div class="lamp-glow"></div>
+        </div>
     </div>
-
-    <div class="spotlight"></div>
 
     <div class="persistent-ui" id="main-ui">
         <a id="direct-link" href="#" class="btn-primary">Ver Entorno Digital</a>
-        <div class="disclaimer">Esto es tan solo un ejemplo simple para que se haga una idea de lo que vendemos. Nuestros diseños finales son 100% personalizados y más profesionales. En la web podrá ver algunos de los diseños que hemos hecho a otros negocios</div>
+        <div class="disclaimer">Esto es tan solo un ejemplo base. Nuestros diseños finales son 100% profesionales y personalizados.</div>
     </div>
 
     <div id="overlay">
         <div class="enlarged-card">
             <h2 class="dynamic-name" style="font-family:'Playfair Display'; color:var(--sticker-brown); font-size:1.4rem; margin-bottom:10px;">Restaurante</h2>
-            <a id="qr-link" href="#" style="width: 100%; display: flex; justify-content: center; text-decoration: none;">
-                <div class="qr-wrapper">
-                    <img style="width:100%" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TaplyDemo" alt="QR">
-                    <div class="nfc-badge">
-                        <svg width="60%" height="60%" viewBox="0 0 24 24" fill="var(--sticker-brown)"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM17 6.76l-1.41 1.41c.79.8 1.27 1.92 1.27 3.16s-.48 2.36-1.27 3.16L17 15.9c1.17-1.17 1.89-2.8 1.89-4.57s-.72-3.4-1.89-4.57zM14.17 9.6l-1.41 1.41C13.14 11.39 13.38 11.87 13.38 12.37s-.24.98-.62 1.36L14.17 15.14c.77-.77 1.24-1.85 1.24-3.03s-.47-2.26-1.24-3.03zM9 7h2v10H9z"/></svg>
-                    </div>
-                </div>
-            </a>
-            <p style="font-size: 8px; font-weight: 800; color: var(--sticker-brown); letter-spacing: 2px; margin-top: 15px;">TECNOLOGÍA NFC + QR</p>
+            <img style="width:50%; margin: 10px 0;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TaplyDemo" alt="QR">
+            <p style="font-size: 8px; font-weight: 800; color: var(--sticker-brown); letter-spacing: 2px; margin-top: 10px;">TECNOLOGÍA NFC + QR</p>
         </div>
         <div style="color:white; margin-top:30px; font-size:12px; opacity:0.6; cursor:pointer; font-weight:800; letter-spacing:1px;" onclick="closeLogo()">CERRAR VISTA</div>
     </div>
@@ -219,21 +230,24 @@
 
         document.querySelectorAll('.dynamic-name').forEach(el => el.textContent = restName);
         document.documentElement.style.setProperty('--brand-color', '#' + colorHex);
-        
         document.getElementById('direct-link').href = nextUrl;
-        document.getElementById('qr-link').href = nextUrl;
+
+        // Función para apagar/encender luces
+        function toggleLights() {
+            document.body.classList.toggle('lights-off');
+        }
 
         function openLogo() {
             document.getElementById('overlay').style.display = 'flex';
             document.getElementById('main-ui').style.visibility = 'hidden';
-            document.getElementById('scene').style.transform = 'scale(0.5) rotateX(60deg) rotateZ(-20deg) translateZ(-200px)';
+            document.getElementById('scene').style.transform = 'scale(0.4) rotateX(60deg) rotateZ(-20deg) translateZ(-200px)';
         }
 
         function closeLogo() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('main-ui').style.visibility = 'visible';
-            const scale = window.innerWidth < 600 ? 0.6 : 1;
-            document.getElementById('scene').style.transform = `scale(${scale}) rotateX(60deg) rotateZ(-20deg)`;
+            const scale = window.innerWidth < 600 ? 0.55 : 1;
+            document.getElementById('scene').style.transform = `scale(${scale}) rotateX(60deg) rotateZ(-20deg) translateY(60px)`;
         }
     </script>
 </body>
