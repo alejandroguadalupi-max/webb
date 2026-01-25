@@ -38,25 +38,25 @@ body {
 }
 
 .container {
-  max-width: 400px;
+  max-width: 380px;
   width: 100%;
   background: var(--bg-card);
   border-radius: 28px;
-  padding: 30px 24px;
+  padding: 28px 24px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255,255,255,0.7);
 }
 
-header { text-align: center; margin-bottom: 24px; }
-h1 { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); }
-p.description { font-size: 0.85rem; color: var(--text-sec); margin-top: 6px; }
+header { text-align: center; margin-bottom: 22px; }
+h1 { margin: 0; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); }
+p.description { font-size: 0.8rem; color: var(--text-sec); margin-top: 4px; }
 
-.input-group { margin-bottom: 18px; }
-label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sec); }
+.input-group { margin-bottom: 16px; }
+label { display: block; font-size: 0.7rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sec); }
 
 input[type="text"], select {
-  width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border);
-  font-size: 0.9rem; background: var(--input-bg); color: var(--text-main);
+  width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--border);
+  font-size: 0.85rem; background: var(--input-bg); color: var(--text-main);
   transition: all 0.2s ease; appearance: none;
 }
 
@@ -72,21 +72,21 @@ select {
   background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
 }
 
-/* Color Picker Optimizada */
+/* Selector de colores CUADRADO y pequeño */
 .color-picker-container { 
   display: grid; 
   grid-template-columns: repeat(5, 1fr); 
   gap: 10px; 
-  margin-top: 8px; 
+  margin-top: 8px;
+  justify-items: center;
 }
 .color-option { 
-  width: 100%; 
-  aspect-ratio: 1; 
-  border-radius: 10px; 
+  width: 32px; 
+  height: 32px; 
+  border-radius: 8px; /* Cuadrado con bordes suaves */
   cursor: pointer; 
   border: 2px solid transparent; 
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-  position: relative;
 }
 .color-option:hover { transform: translateY(-2px); }
 .color-option.selected { 
@@ -96,22 +96,20 @@ select {
 }
 
 button#generateBtn {
-  width: 100%; padding: 14px; margin-top: 24px; border-radius: 14px; border: none; 
-  font-size: 0.95rem; font-weight: 700; color: white; 
+  width: 100%; padding: 13px; margin-top: 22px; border-radius: 14px; border: none; 
+  font-size: 0.9rem; font-weight: 700; color: white; 
   background: var(--primary);
   cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
 }
 button#generateBtn:hover { background: var(--primary-hover); transform: translateY(-1px); }
-button#generateBtn:active { transform: translateY(1px); }
 
-/* Aviso inferior estilizado */
 .info-note {
   margin-top: 20px;
-  padding: 14px;
+  padding: 12px;
   background: var(--input-bg);
   border-radius: 14px;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--text-sec);
   line-height: 1.4;
   border: 1px solid var(--border);
@@ -120,7 +118,7 @@ button#generateBtn:active { transform: translateY(1px); }
 .toast {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
   background: var(--text-main); color: white; padding: 10px 20px; border-radius: 12px;
-  font-size: 0.85rem; font-weight: 500; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 0.8rem; font-weight: 500; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 1000;
 }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
@@ -131,18 +129,18 @@ button#generateBtn:active { transform: translateY(1px); }
 <div class="container">
   <header>
     <h1>Configurar Demo</h1>
-    <p class="description">Genera tu vista previa en segundos.</p>
+    <p class="description">Genera tu ejemplo personalizado.</p>
   </header>
 
   <div class="input-group">
-    <label>Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Nombre de tu negocio">
+    <label>Nombre del Restaurante</label>
+    <input type="text" id="restaurantName" placeholder="Ej. La Parrilla de Alberto">
   </div>
 
   <div class="input-group">
-    <label>Categoría</label>
+    <label>Tipo de Cocina</label>
     <select id="restaurantType">
-      <option value="" disabled selected>Tipo de cocina...</option>
+      <option value="" disabled selected>Selecciona una opción...</option>
       <option value="restaurante">Restaurante</option>
       <option value="hamburgueseria">Hamburguesería</option>
       <option value="pizzeria">Pizzería</option>
@@ -167,10 +165,10 @@ button#generateBtn:active { transform: translateY(1px); }
     </div>
   </div>
 
-  <button id="generateBtn">Crear Demo Gratis</button>
+  <button id="generateBtn">Crear Demo</button>
 
   <div class="info-note">
-    <strong>Nota:</strong> Este es un ejemplo básico. Nuestros diseños finales son mucho más profesionales, detallados y 100% personalizados para cada cliente.
+    ℹ️ Ten en cuenta que esto es solo un ejemplo básico para que puedas visualizar el concepto. Nuestro diseño final es mucho más <b>profesional y personalizado</b>.
   </div>
 </div>
 
@@ -179,6 +177,7 @@ button#generateBtn:active { transform: translateY(1px); }
 <script>
 let selectedHex = '2E7D32';
 
+// Lógica de selección
 document.querySelectorAll('.color-option').forEach(el => {
   el.onclick = () => {
     document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
@@ -199,14 +198,14 @@ document.getElementById('generateBtn').onclick = () => {
   const typeInput = document.getElementById('restaurantType').value;
 
   if (!nameInput) return showToast('Introduce un nombre');
-  if (!typeInput) return showToast('Selecciona una categoría');
+  if (!typeInput) return showToast('Selecciona una opción');
 
-  document.getElementById('generateBtn').textContent = 'Preparando entorno...';
+  document.getElementById('generateBtn').textContent = 'Generando...';
 
   setTimeout(() => {
     const url = `pruebita.html?n=${encodeURIComponent(nameInput)}&categoria=${typeInput}&btn=${selectedHex}&auth=true`;
     window.location.href = url;
-  }, 800);
+  }, 600);
 };
 </script>
 

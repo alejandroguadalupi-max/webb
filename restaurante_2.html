@@ -13,7 +13,7 @@
 <style>
   :root {
     --primary-color: #68B553; 
-    --secondary-color: #e89f4b; 
+    --secondary-color: #68B553; /* Ahora igualado por defecto */
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
     --text-main: #1e293b;
@@ -83,9 +83,7 @@
     transition: transform 0.3s ease; position: relative; overflow: hidden;
   }
   
-  .option-box::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; }
-  .box-public::before { background: var(--primary-color); }
-  .box-private::before { background: var(--secondary-color); }
+  .option-box::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; background: var(--primary-color); }
 
   .option-box h2 { font-size: 1.4em; font-weight: 700; margin: 10px 0 8px 0; }
   .option-box p { font-size: 0.95em; color: var(--text-sec); margin: 0 0 20px 0; line-height: 1.5; }
@@ -103,20 +101,18 @@
     border-radius: 16px; font-weight: 700; font-size: 1.05em; text-align: center;
     color: var(--btn-text); border: none; transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
+    background-color: var(--primary-color);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2);
   }
 
-  .btn-google {
-    background-color: var(--primary-color);
-    box-shadow: 0 10px 20px -5px var(--primary-color); 
+  .btn:active { transform: scale(0.98); }
+
+  /* Ajuste de sombra específica para usar el color dinámico con transparencia */
+  .btn-google, .btn-private {
+    box-shadow: 0 10px 20px -5px var(--primary-color);
     opacity: 0.95;
   }
-  .btn-google:active { transform: scale(0.98); opacity: 1; }
-
-  .btn-private {
-    background-color: var(--secondary-color);
-    box-shadow: 0 10px 20px -5px rgba(232, 159, 75, 0.4);
-  }
-  .btn-private:active { transform: scale(0.98); }
+  .btn-google:active, .btn-private:active { opacity: 1; }
 
   .note { font-size: 0.85em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300;}
 </style>
@@ -151,7 +147,6 @@
 </main>
 
 <script>
-/* --- 1. CONFIGURACIÓN --- */
 const palettes = {
     'hamburgueseria': '#FF8C00', 
     'pizzeria':       '#D32F2F', 
@@ -167,11 +162,10 @@ const translations = {
   es: { publicTitle: "⭐ Reseña pública", publicText: "Tu opinión ayuda a otros clientes a encontrarnos.", publicBtn: "Publicar en Google", publicNote: "Queda visible para todos.", privateTitle: "📝 Comentario privado", privateText: "¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.", privateBtn: "Hablar con el equipo", privateNote: "Solo lo vemos nosotros." },
   en: { publicTitle: "⭐ Public review", publicText: "Your review helps other customers find us.", publicBtn: "Post on Google", publicNote: "Visible to everyone.", privateTitle: "📝 Private feedback", privateText: "Had an issue? Your feedback helps us improve directly.", privateBtn: "Tell the Team", privateNote: "Only we can see it." },
   de: { publicTitle: "⭐ Öffentliche Bewertung", publicText: "Ihre Meinung hilft anderen Kunden, uns zu finden.", publicBtn: "Auf Google posten", publicNote: "Für alle sichtbar.", privateTitle: "📝 Privates Feedback", privateText: "Gab es ein Problem? Helfen Sie uns direkt.", privateBtn: "Dem Team mitteilen", privateNote: "Nur wir sehen es." },
-  fr: { publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour tous.", privateTitle: "📝 Retour privado", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
+  fr: { publicTitle: "⭐ Avis public", publicText: "Votre avis aide les autres clients à nous trouver.", publicBtn: "Publier sur Google", publicNote: "Visible pour todos.", privateTitle: "📝 Retour privé", privateText: "Un problème ? Aidez-nous à nous améliorer.", privateBtn: "Parler à l'équipe", privateNote: "Seulement visible par nous." },
   it: { publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a mejorar.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi." }
 };
 
-/* --- 2. LÓGICA PRINCIPAL --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
 
@@ -180,19 +174,17 @@ function init() {
   const name = params.get('n') || "Restaurante";
   document.title = "Opinión - " + name;
 
-  // Aplicar Color
+  // Aplicar Color del usuario a AMBOS botones y secciones
   const category = params.get('categoria') || 'default';
   let color = params.get('btn') ? '#' + params.get('btn') : (palettes[category] || palettes['default']);
 
   document.documentElement.style.setProperty('--primary-color', color);
+  document.documentElement.style.setProperty('--secondary-color', color); // Igualamos el color
   document.getElementById('metaThemeColor').setAttribute('content', color);
 
-  // Configurar Idioma y Tema
   detectAndSetLanguage();
   applyTheme();
 
-  // --- CONFIGURAR ENLACES ---
-  // El botón privado ahora envía todos los parámetros actuales a feedback.html
   document.getElementById("btnPrivate").href = "feedback.html" + window.location.search;
   document.getElementById("btnGoogle").href = GOOGLE_LINK;
 }
