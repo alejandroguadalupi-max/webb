@@ -15,7 +15,6 @@
             --sticker-brown: #4a2c22;
             --sticker-tan: #d9c6b5;
             --scene-scale: 1;
-            /* Colores por defecto (Modo Claro) */
             --bg-current: #ffffff;
             --text-current: #1a1a1a;
         }
@@ -38,7 +37,7 @@
         /* --- CABECERA --- */
         .top-header {
             position: absolute; 
-            top: 100px; /* Posición ajustada para mejor equilibrio */
+            top: 100px;
             text-align: center; z-index: 200;
             width: 100%; animation: fadeInDown 1s ease-out;
             pointer-events: none;
@@ -55,7 +54,7 @@
             letter-spacing: 1px; text-transform: uppercase;
         }
 
-        /* --- LÁMPARAS INTERACTIVAS --- */
+        /* --- LÁMPARAS --- */
         .lamps-container {
             position: absolute; top: 0; width: 100%; height: 25%;
             display: flex; justify-content: space-around; z-index: 250;
@@ -67,7 +66,7 @@
             transition: transform 0.3s;
         }
         .lamp:hover { transform: scale(1.05); }
-        .lamp::before { /* Cable */
+        .lamp::before {
             content: ''; position: absolute; bottom: 100%; left: 50%;
             width: 2px; height: 100px; background: #111; transform: translateX(-50%);
         }
@@ -101,7 +100,7 @@
             transition: box-shadow 0.6s;
         }
 
-        /* PEGATINA */
+        /* PEGATINA EN LA MESA (PEQUEÑA) */
         .design-sticker {
             position: absolute; bottom: 30px; right: 30px;
             width: 95px; height: 95px; transform: translateZ(2px);
@@ -121,9 +120,7 @@
 
         /* --- UI INFERIOR --- */
         .persistent-ui {
-            position: absolute; 
-            bottom: 70px; /* Subido para que no esté pegado abajo */
-            width: 90%; max-width: 400px;
+            position: absolute; bottom: 70px; width: 90%; max-width: 400px;
             display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 500;
         }
         .btn-primary {
@@ -140,11 +137,8 @@
             text-align: center; line-height: 1.4; max-width: 85%;
         }
 
-        /* --- ESTADO LUCES APAGADAS (Azul Oscuro) --- */
-        body.lights-off {
-            --bg-current: #0a1128;
-            --text-current: #ffffff;
-        }
+        /* --- LUCES APAGADAS --- */
+        body.lights-off { --bg-current: #0a1128; --text-current: #ffffff; }
         .lights-off .lamp { background: #111; border-color: #000; }
         .lights-off .lamp-glow { opacity: 0; }
         .lights-off .table-top { box-shadow: 0 0 0 4px var(--table-wood-dark), 50px 50px 100px rgba(0,0,0,0.7); }
@@ -159,20 +153,44 @@
 
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* OVERLAY ZOOM */
+        /* --- OVERLAY CON FOTO PERSONALIZADA --- */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.92); z-index: 1000; display: none;
             flex-direction: column; align-items: center; justify-content: center;
             backdrop-filter: blur(10px);
         }
-        .enlarged-card {
-            width: 85vw; height: 85vw; max-width: 350px;
-            background: var(--sticker-bg); border-radius: 50%;
-            border: 10px solid var(--sticker-tan); outline: 3px solid var(--sticker-brown);
-            outline-offset: -16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        
+        .sticker-container {
+            position: relative;
+            width: 85vw; height: 85vw; max-width: 350px; max-height: 350px;
+            border-radius: 50%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden; 
         }
+
+        .sticker-img {
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
+
+        .sticker-text-overlay {
+            position: absolute;
+            /* AQUÍ ESTÁ EL AJUSTE: top: 10% */
+            top: 10%; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5rem; 
+            color: #4a2c22; 
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8); 
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body id="mainBody">
@@ -183,12 +201,8 @@
     </div>
 
     <div class="lamps-container">
-        <div class="lamp" onclick="toggleLights()">
-            <div class="lamp-glow"></div>
-        </div>
-        <div class="lamp" onclick="toggleLights()">
-            <div class="lamp-glow"></div>
-        </div>
+        <div class="lamp" onclick="toggleLights()"><div class="lamp-glow"></div></div>
+        <div class="lamp" onclick="toggleLights()"><div class="lamp-glow"></div></div>
     </div>
 
     <div class="persistent-ui" id="main-ui">
@@ -197,10 +211,9 @@
     </div>
 
     <div id="overlay">
-        <div class="enlarged-card">
-            <h2 class="dynamic-name" style="font-family:'Playfair Display'; color:var(--sticker-brown); font-size:1.4rem; margin-bottom:10px;">Restaurante</h2>
-            <img style="width:50%; margin: 10px 0;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TaplyDemo" alt="QR">
-            <p style="font-size: 8px; font-weight: 800; color: var(--sticker-brown); letter-spacing: 2px; margin-top: 10px;">TECNOLOGÍA NFC + QR</p>
+        <div class="sticker-container">
+            <img src="img/diseño.png" alt="Diseño Mesa" class="sticker-img">
+            <div class="sticker-text-overlay dynamic-name">Restaurante</div>
         </div>
         <div style="color:white; margin-top:30px; font-size:12px; opacity:0.6; cursor:pointer; font-weight:800; letter-spacing:1px;" onclick="closeLogo()">CERRAR VISTA</div>
     </div>
@@ -232,7 +245,6 @@
         document.documentElement.style.setProperty('--brand-color', '#' + colorHex);
         document.getElementById('direct-link').href = nextUrl;
 
-        // Función para apagar/encender luces
         function toggleLights() {
             document.body.classList.toggle('lights-off');
         }
