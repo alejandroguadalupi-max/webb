@@ -257,17 +257,37 @@ textarea.notes:focus { border-color: var(--brand-color); }
 const config = {
   menus: {
     'pizzeria': [
-       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido", en:"Melted cheese"} },
-       { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella", en:"Tomato, mozzarella"} },
-       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara", en:"Carbonara"}, desc: {es:"Auténtica", en:"Authentic"} }
+       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato"} },
+       { id: 102, cat: 'entrantes', tags: [], price: 12.00, name: {es:"Carpaccio di Manzo", en:"Beef Carpaccio"}, desc: {es:"Láminas finas con parmesano", en:"Thin slices with parmesan"} },
+       { id: 103, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Bruschetta", en:"Bruschetta"}, desc: {es:"Tomate, ajo y albahaca", en:"Tomato, garlic, basil"} },
+       
+       { id: 104, cat: 'principales', tags: ['v'], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil"} },
+       { id: 105, cat: 'principales', tags: [], price: 13.50, name: {es:"Pizza Diavola", en:"Pizza Diavola"}, desc: {es:"Picante con salami", en:"Spicy salami"} },
+       { id: 106, cat: 'principales', tags: [], price: 14.00, name: {es:"Pizza Prosciutto", en:"Pizza Prosciutto"}, desc: {es:"Jamón dulce y champiñones", en:"Ham and mushrooms"} },
+       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara Original", en:"Authentic Carbonara"}, desc: {es:"Huevo, pecorino, guanciale", en:"Egg, pecorino, guanciale"} },
+       
+       { id: 108, cat: 'postres', tags: [], price: 6.00, name: {es:"Tiramisú", en:"Tiramisu"}, desc: {es:"Clásico italiano", en:"Italian classic"} },
+       { id: 109, cat: 'postres', tags: [], price: 5.50, name: {es:"Panna Cotta", en:"Panna Cotta"}, desc: {es:"Con frutos rojos", en:"With red berries"} }
     ],
     'hamburgueseria': [
-       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos", en:"Nachos"}, desc: {es:"Guacamole", en:"Guacamole"} },
-       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon", en:"Cheddar, bacon"} }
+       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos Supremos", en:"Supreme Nachos"}, desc: {es:"Guacamole, crema agria, jalapeños", en:"Guacamole, sour cream, jalapeños"} },
+       { id: 202, cat: 'entrantes', tags: [], price: 9.00, name: {es:"Alitas BBQ", en:"BBQ Wings"}, desc: {es:"Salsa barbacoa casera", en:"Homemade BBQ sauce"} },
+       { id: 203, cat: 'entrantes', tags: ['v'], price: 6.50, name: {es:"Aros de Cebolla", en:"Onion Rings"}, desc: {es:"Crujientes con salsa tártara", en:"Crispy with tartare sauce"} },
+
+       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon, lechuga", en:"Cheddar, bacon, lettuce"} },
+       { id: 205, cat: 'principales', tags: [], price: 14.00, name: {es:"Burger Trufada", en:"Truffle Burger"}, desc: {es:"Queso brie y aceite de trufa", en:"Brie cheese & truffle oil"} },
+       { id: 206, cat: 'principales', tags: [], price: 13.50, name: {es:"Burger de Pollo", en:"Chicken Burger"}, desc: {es:"Pollo crujiente y mayonesa", en:"Crispy chicken & mayo"} },
+       
+       { id: 207, cat: 'postres', tags: [], price: 6.50, name: {es:"Cheesecake NY", en:"NY Cheesecake"}, desc: {es:"Con mermelada de fresa", en:"With strawberry jam"} },
+       { id: 208, cat: 'postres', tags: [], price: 6.00, name: {es:"Brownie", en:"Brownie"}, desc: {es:"Con helado de vainilla", en:"With vanilla ice cream"} }
     ],
     'comunes': [
        { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke"}, desc: {es:"33cl", en:"33cl"} },
-       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water"}, desc: {es:"50cl", en:"50cl"} }
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Fanta Naranja", en:"Fanta Orange"}, desc: {es:"33cl", en:"33cl"} },
+       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua Mineral", en:"Still Water"}, desc: {es:"50cl", en:"50cl"} },
+       { id: 904, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Agua con Gas", en:"Sparkling Water"}, desc: {es:"50cl", en:"50cl"} },
+       { id: 905, cat: 'bebidas', tags: ['gf'], price: 3.50, name: {es:"Cerveza Caña", en:"Draft Beer"}, desc: {es:"33cl", en:"33cl"} },
+       { id: 906, cat: 'bebidas', tags: ['gf'], price: 4.00, name: {es:"Vino Tinto", en:"Red Wine"}, desc: {es:"Copa Rioja", en:"Rioja Glass"} }
     ]
   }
 };
@@ -279,35 +299,40 @@ const uiDict = {
     btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
     trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
     add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)",
-    all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
+    all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano",
+    loading: "Traduciendo nota..."
   },
   en: { 
     ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
     btn:"View Order", title:"Your Order", clear:"Clear all", 
     trans:"Show Waiter (ES)", confirm:"Clear everything?",
     add: "Add", place: "Notes (e.g. no ice, well done...)",
-    all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
+    all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan",
+    loading: "Translating note..."
   },
   de: { 
     ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
     btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
     trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
     add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)",
-    all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
+    all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan",
+    loading: "Notiz wird übersetzt..."
   },
   fr: { 
     ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
     btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", 
     trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?",
     add: "Ajouter", place: "Notes (ex. pas de glace...)",
-    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
+    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan",
+    loading: "Traduction de la note..."
   },
   it: { 
     ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", 
     btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", 
     trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?",
     add: "Aggiungi", place: "Note (es. senza ghiaccio...)",
-    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
+    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano",
+    loading: "Traduzione nota..."
   }
 };
 
@@ -320,6 +345,9 @@ let userCategory = 'restaurante';
 
 /* --- INIT --- */
 function init() {
+  // Limpiar carrito si ha caducado (5 horas)
+  checkCartExpiration();
+
   const params = new URLSearchParams(window.location.search);
   lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
@@ -369,7 +397,6 @@ function render() {
 
   items.forEach(p => {
     const qty = cart[p.id] || 0;
-    // Traducir nombre y descripción del plato
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
 
@@ -472,34 +499,34 @@ async function enterWaiterMode() {
   
   document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
-  // LOGICA DE TRADUCCIÓN REAL CON API
   const notes = document.getElementById('notesField').value;
   const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
+  const t = uiDict[lang] || uiDict['es']; // Texto traducido
   
   if (notes && notes.trim() !== "") {
     waiterNotesDisplay.style.display = 'block';
-    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">Traduciendo nota... ⏳</div>`;
+    // Muestra "Traduciendo..." en el idioma del cliente
+    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">${t.loading} ⏳</div>`;
     
     try {
-        // Usamos API MyMemory (Gratuita, sin Key)
-        // Traduce del idioma actual (lang) al español (es)
+        // API MyMemory
         const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(notes)}&langpair=${lang}|es`);
         const data = await res.json();
         
-        let translatedText = notes; // Fallback
+        let translatedText = notes;
         if (data.responseData && data.responseData.translatedText) {
             translatedText = data.responseData.translatedText;
         }
 
+        // Muestra el resultado final (sin poner "(Traducido)")
         waiterNotesDisplay.innerHTML = `
           <div class="waiter-note-box">
-            <span class="waiter-note-label">📝 Nota del Cliente (Traducido):</span>
+            <span class="waiter-note-label">📝 Nota del Cliente:</span>
             "${translatedText}"
             <div style="font-size:0.8rem; color:#888; margin-top:5px; font-style:italic">Original: "${notes}"</div>
           </div>
         `;
     } catch (err) {
-        // Fallback si falla la API
         waiterNotesDisplay.innerHTML = `
           <div class="waiter-note-box">
             <span class="waiter-note-label">📝 Nota del Cliente:</span>
@@ -532,22 +559,14 @@ function exitWaiterMode() {
 
 function translateUI() {
   const t = uiDict[lang] || uiDict['es'];
-  
-  // Categorías
   document.getElementById('f-ent').innerText = t.ent;
   document.getElementById('f-main').innerText = t.main;
   document.getElementById('f-des').innerText = t.des;
   document.getElementById('f-drk').innerText = t.drk;
-  
-  // Botones y Títulos
   document.getElementById('btnText').innerText = t.btn;
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
-  
-  // Placeholder de Notas
   document.getElementById('notesField').placeholder = t.place;
-  
-  // Opciones del Select de Alergias
   document.getElementById('opt-all').innerText = t.all;
   document.getElementById('opt-gf').innerText = t.gf;
   document.getElementById('opt-lf').innerText = t.lf;
@@ -557,15 +576,47 @@ function translateUI() {
   if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
 }
 
-/* --- UTILIDADES --- */
-function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
-function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
+/* --- UTILIDADES & PERSISTENCIA TEMPORAL --- */
+const CART_TTL = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
+
+function saveCart() { 
+  const data = {
+    cart: cart,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('demo_cart', JSON.stringify(data)); 
+}
+
+function loadCart() { 
+  const s = localStorage.getItem('demo_cart'); 
+  if(s) {
+    const data = JSON.parse(s);
+    cart = data.cart || {};
+  }
+}
+
+function checkCartExpiration() {
+  const s = localStorage.getItem('demo_cart');
+  if(s) {
+    const data = JSON.parse(s);
+    const now = Date.now();
+    // Si ha pasado más de 5 horas desde la última modificación
+    if (now - data.timestamp > CART_TTL) {
+      localStorage.removeItem('demo_cart');
+      localStorage.removeItem('demo_notes'); // También borramos notas
+      cart = {};
+    }
+  }
+}
+
 function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
 
 function clearCart() { 
   const t = uiDict[lang] || uiDict['es'];
   if(confirm(t.confirm)) { 
-    cart={}; saveCart(); render(); updateFloat(); closeSheet(); 
+    cart={}; 
+    localStorage.removeItem('demo_cart'); // Borrado real
+    render(); updateFloat(); closeSheet(); 
   } 
 }
 
