@@ -2,72 +2,118 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Zona Kids | Taply</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --brand-color: #FF8C00; 
-      --bg-body: #ffffff;
-      --bg-card: #f8fafc;
+      --bg-body: #f8fafc; /* Coincide con el diseño light de compartir */
+      --bg-card: #ffffff;
       --text-main: #1e293b;
       --text-sec: #64748b;
       --border: #e2e8f0;
       --radius-fun: 24px;
+      --shadow-soft: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     [data-theme="dark"] {
-      --bg-body: #0a1128;
-      --bg-card: #16213e;
+      --bg-body: #0f172a; /* Coincide con el diseño dark de compartir */
+      --bg-card: #1e293b;
       --text-main: #f8fafc;
       --text-sec: #94a3b8;
-      --border: #1f2937;
+      --border: #334155;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
-    body {
-      margin: 0; font-family: 'Fredoka', sans-serif;
-      background: var(--bg-body); color: var(--text-main);
-      min-height: 100vh; display: flex; flex-direction: column;
-      transition: background 0.4s ease; overflow-x: hidden;
+    /* CORRECCIÓN DE LA LÍNEA / EFECTO RARO:
+       Aplicamos el fondo al HTML y al BODY y sincronizamos la transición. */
+    html {
+        background-color: var(--bg-body);
+        transition: background-color 0.3s ease;
     }
 
-    /* --- HEADER LIMPIO (SIN LÍNEA) --- */
-    header {
-      width: 100%; padding: 15px 20px;
-      background: var(--bg-body); 
-      /* La línea border-bottom ha sido eliminada aquí */
-      display: flex; justify-content: flex-end; /* Alineado todo a la derecha */
-      align-items: center;
-      position: sticky; top: 0; z-index: 100;
+    body {
+      margin: 0; 
+      font-family: 'Outfit', sans-serif; /* Fuente principal unificada */
+      background-color: var(--bg-body); 
+      color: var(--text-main);
+      min-height: 100vh; 
+      min-height: 100dvh;
+      display: flex; flex-direction: column;
+      /* Transición suave para evitar parpadeos de bordes */
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      overflow-x: hidden;
+      
+      /* Ajustes para notch de iPhone */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
     }
-    
-    /* Controles a la derecha */
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    
-    .lang-tag { font-weight: 700; font-size: 0.8rem; color: var(--text-sec); border: 2px solid var(--border); padding: 4px 8px; border-radius: 8px; text-transform: uppercase; }
-    .theme-toggle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg-body); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+
+    /* --- HEADER / CONTROLES SUPERIORES --- */
+    /* Diseño idéntico a la página de compartir */
+    .top-controls {
+      width: 100%; 
+      padding: 15px 20px;
+      display: flex; 
+      justify-content: flex-end; /* Alineado a la derecha */
+      align-items: center; 
+      gap: 12px; 
+      position: sticky; top: 0; z-index: 100;
+      background-color: var(--bg-body); /* Fondo sólido para tapar contenido al hacer scroll */
+      transition: background-color 0.3s ease; /* Transición sincronizada */
+    }
+
+    /* Estilo Pastilla (Igual que compartir) */
+    .lang-badge {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      background: var(--bg-card); 
+      border: 1px solid var(--border);
+      color: var(--text-sec); 
+      padding: 5px 10px; 
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    /* Estilo Botón Redondo (Igual que compartir) */
+    .theme-btn { 
+      background: var(--bg-card); 
+      border: 1px solid var(--border); 
+      cursor: pointer; padding: 0; 
+      color: var(--text-main); 
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; 
+      border-radius: 50%; 
+      font-size: 1.1rem;
+      transition: transform 0.2s, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    .theme-btn:active { transform: scale(0.9); }
 
     /* --- HUB MENU --- */
     .hub-grid {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
-      width: 100%; max-width: 500px; padding: 25px; margin: 0 auto;
+      width: 100%; max-width: 500px; padding: 20px; margin: 0 auto;
       animation: popIn 0.5s ease-out;
     }
     .game-card {
       background: var(--bg-card); border-radius: var(--radius-fun);
       padding: 30px 15px; display: flex; flex-direction: column;
-      align-items: center; cursor: pointer; border: 2px solid var(--border);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.05); transition: 0.2s;
+      align-items: center; cursor: pointer; 
+      border: 1px solid var(--border); /* Borde más sutil */
+      box-shadow: var(--shadow-soft); 
+      transition: transform 0.2s, background-color 0.3s ease, border-color 0.3s ease;
     }
-    .game-card:active { transform: scale(0.95); }
-    .game-icon { font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1)); }
-    .game-title { font-weight: 700; font-size: 1rem; text-align: center;}
+    .game-card:active { transform: scale(0.96); }
+    .game-icon { font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); }
+    /* Mantenemos Fredoka solo para títulos para el toque "Kids" */
+    .game-title { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.1rem; text-align: center;}
 
-    /* --- CONTENEDORES --- */
+    /* --- CONTENEDORES DE JUEGO --- */
     .game-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 450px; padding: 15px; flex: 1; margin: 0 auto; justify-content: center;}
     .game-wrapper.active { display: flex; animation: slideUp 0.4s ease-out; }
 
@@ -76,45 +122,47 @@
     .mem-card { aspect-ratio: 1; perspective: 1000px; cursor: pointer; height: 85px; }
     .mem-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
     .mem-card.flipped .mem-inner { transform: rotateY(180deg); }
-    .mem-face { position: absolute; width: 100%; height: 100%; border-radius: 15px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border: 3px solid var(--border); }
-    .mem-front { background: var(--brand-color); color: white; font-size: 1.5rem; font-weight: 800; box-shadow: inset 0 0 15px rgba(0,0,0,0.1); }
-    .mem-back { background: white; transform: rotateY(180deg); border-color: var(--brand-color); font-size: 2.2rem; }
+    .mem-face { position: absolute; width: 100%; height: 100%; border-radius: 15px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); background: var(--bg-card); transition: background-color 0.3s ease, border-color 0.3s ease;}
+    .mem-front { background: var(--brand-color); color: white; font-size: 1.5rem; font-weight: 800; border: none; }
+    .mem-back { transform: rotateY(180deg); font-size: 2.2rem; }
 
     /* === MODAL END === */
-    .modal-end { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px); }
-    .modal-content { background: var(--bg-card); padding: 40px 30px; border-radius: 35px; text-align: center; width: 100%; max-width: 340px; border: 4px solid var(--brand-color); }
+    .modal-end { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+    .modal-content { background: var(--bg-card); padding: 40px 30px; border-radius: 35px; text-align: center; width: 100%; max-width: 340px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .modal-content h2 { font-family: 'Fredoka'; color: var(--brand-color); font-size: 2rem; margin: 0 0 10px 0; }
+    .modal-content p { font-size: 1.2rem; margin-bottom: 25px; font-weight: 600; }
 
-    /* BOTONES */
-    .btn { padding: 16px 25px; border-radius: 20px; border: none; font-weight: 700; font-family: 'Fredoka'; cursor: pointer; font-size: 1rem; width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .btn-action { background: var(--brand-color); color: #fff; box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
+    /* BOTONES GENERALES */
+    .btn { padding: 16px 25px; border-radius: 16px; border: none; font-weight: 700; font-family: 'Outfit', sans-serif; cursor: pointer; font-size: 1rem; width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-action { background: var(--brand-color); color: #fff; box-shadow: 0 4px 15px -3px var(--brand-color); }
     .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text-sec); margin-top: 10px; }
-    .btn:active { transform: translateY(3px); box-shadow: none; }
+    .btn:active { transform: scale(0.98); box-shadow: none; opacity: 0.9; }
 
     /* PANTALLAS DE INICIO JUEGO */
-    .game-intro { text-align: center; width: 100%; background: var(--bg-card); padding: 30px; border-radius: 30px; border: 2px solid var(--border); }
+    .game-intro { text-align: center; width: 100%; background: var(--bg-card); padding: 30px; border-radius: 30px; border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
+    .game-intro h2 { font-family: 'Fredoka'; font-size: 1.8rem; margin: 10px 0; }
 
     /* DINO & MOLE */
-    #dinoCanvas { background: #fff; border-radius: 20px; border: 4px solid var(--border); width: 100%; height: 180px; }
+    #dinoCanvas { background: #fff; border-radius: 20px; border: 2px solid var(--border); width: 100%; height: 180px; }
     .mole-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
-    .hole { aspect-ratio: 1; background: #e2e8f0; border-radius: 50%; position: relative; overflow: hidden; border-bottom: 8px solid #cbd5e1; }
-    .mole { position: absolute; top: 100%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: top 0.1s; cursor: pointer; }
-    .hole.up .mole { top: 0; }
+    .hole { aspect-ratio: 1; background: var(--border); border-radius: 50%; position: relative; overflow: hidden; box-shadow: inset 0 10px 10px rgba(0,0,0,0.1); }
+    .mole { position: absolute; top: 100%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: top 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+    .hole.up .mole { top: 10%; }
 
-    .player-tag { background: var(--brand-color); color: white; padding: 8px 15px; border-radius: 12px; margin: 4px; display: inline-block; font-weight: 600; }
-    .setup-box { background: var(--bg-card); padding: 20px; border-radius: 25px; width: 100%; border: 3px solid var(--border); text-align: center; }
+    .player-tag { background: var(--brand-color); color: white; padding: 6px 14px; border-radius: 50px; margin: 4px; display: inline-block; font-weight: 600; font-size: 0.9rem; }
+    .setup-box { background: var(--bg-card); padding: 25px; border-radius: 25px; width: 100%; border: 1px solid var(--border); text-align: center; }
+    input[type="text"] { font-family: 'Outfit'; background: var(--bg-body); color: var(--text-main); }
 
-    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-right">
-        <div class="lang-tag" id="langDisplay">ES</div>
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
-    </div>
-  </header>
+  <div class="top-controls">
+      <div class="lang-badge" id="langDisplay">ES</div>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+  </div>
 
   <div id="hubMenu">
     <div class="hub-grid">
@@ -176,7 +224,7 @@
   <div class="game-wrapper" id="game-impostor">
       <div id="imp-setup" style="width:100%;">
           <div class="setup-box">
-              <input type="text" id="pName" placeholder="Nombre..." style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-family:'Fredoka';">
+              <input type="text" id="pName" placeholder="Nombre..." style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-size:1rem;">
               <button class="btn btn-action" onclick="addP()" data-t="add_btn">Añadir +</button>
               <div id="pList" style="margin:20px 0;"></div>
               <button class="btn btn-action" id="startImpBtn" disabled onclick="startImp()" style="background:#22c55e" data-t="start">EMPEZAR</button>
@@ -184,8 +232,8 @@
           </div>
       </div>
       <div id="imp-play" style="display:none; text-align:center; width:100%;">
-          <h2 id="impTurn">Turno</h2>
-          <div id="impSecret" style="display:none; font-size:1.8rem; margin:20px 0; color:var(--brand-color); font-weight:800; background:#fff; padding:20px; border-radius:20px; border:4px solid var(--brand-color);"></div>
+          <h2 id="impTurn" style="font-family:'Fredoka'; font-size:2rem;">Turno</h2>
+          <div id="impSecret" style="display:none; font-size:1.8rem; margin:20px 0; color:var(--brand-color); font-weight:800; background:var(--bg-body); padding:20px; border-radius:20px; border:2px dashed var(--brand-color);"></div>
           <button class="btn btn-action" id="impBtn" onclick="handleImp()">VER PALABRA</button>
       </div>
   </div>
