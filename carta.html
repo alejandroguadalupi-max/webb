@@ -11,16 +11,12 @@
 
 <style>
 :root {
-  /* Se sobrescribe por JS */
   --brand-color: #68B553; 
-  
   --bg-body: #f8fafc;
   --bg-card: #ffffff;
   --text-main: #1e293b;
   --text-sec: #64748b;
   --border: #e2e8f0;
-  
-  /* Sombras Premium */
   --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.05);
   --shadow-float: 0 15px 35px -5px rgba(0,0,0,0.15);
 }
@@ -37,152 +33,91 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-  margin: 0; 
-  background: var(--bg-body); 
-  color: var(--text-main); 
-  font-family: 'Outfit', sans-serif;
-  transition: background 0.3s ease; 
-  padding-bottom: 140px; 
-  -webkit-font-smoothing: antialiased;
+  margin: 0; background: var(--bg-body); color: var(--text-main); 
+  font-family: 'Outfit', sans-serif; transition: background 0.3s ease; 
+  padding-bottom: 140px; -webkit-font-smoothing: antialiased;
 }
 
 /* --- HEADER --- */
 .header {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 15px 20px; 
+  background: rgba(255, 255, 255, 0.9); padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
-  position: sticky; top: 0; z-index: 800;
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 800; border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
 [data-theme="dark"] .header { background: rgba(30, 41, 59, 0.9); }
 
 .brand-area { display: flex; flex-direction: column; }
-.brand-name {
-  font-size: 1.3rem; font-weight: 800; 
-  color: var(--brand-color); 
-  margin: 0; line-height: 1.1;
-  text-transform: capitalize;
-}
+.brand-name { font-size: 1.3rem; font-weight: 800; color: var(--brand-color); margin: 0; line-height: 1.1; text-transform: capitalize; }
 .brand-category { font-size: 0.8rem; color: var(--text-sec); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
 .header-right { display: flex; align-items: center; gap: 10px; }
-
 .theme-btn { 
   background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
   color: var(--text-main); display: flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
-  transition: transform 0.2s;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; transition: transform 0.2s;
 }
 .theme-btn:active { transform: scale(0.9); }
 
 /* --- CONTROLES --- */
 .controls-container {
-  position: sticky; top: 62px; z-index: 790;
-  background: var(--bg-body);
-  padding: 10px 0;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
+  position: sticky; top: 62px; z-index: 790; background: var(--bg-body);
+  padding: 10px 0; border-bottom: 1px solid transparent; transition: border-color 0.3s;
 }
-
 .allergy-wrapper { padding: 0 20px 10px 20px; }
 .allergy-select {
   width: 100%; appearance: none; -webkit-appearance: none;
   background: var(--bg-card); border: 1px solid var(--border); 
-  color: var(--text-main); font-family: inherit;
-  font-size: 0.9rem; font-weight: 500;
+  color: var(--text-main); font-size: 0.9rem; font-weight: 500;
   padding: 12px 16px; border-radius: 12px; cursor: pointer; outline: none;
   box-shadow: var(--shadow-card);
-  /* Icono flecha SVG data uri */
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 10px auto;
 }
-
-.filters-scroll { 
-  display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; 
-  scrollbar-width: none; -ms-overflow-style: none;
-}
+.filters-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
 .filters-scroll::-webkit-scrollbar { display: none; }
-
 .filter-pill {
-  padding: 10px 20px; 
-  background: var(--bg-card); 
-  border: 1px solid var(--border); 
-  border-radius: 50px; 
-  white-space: nowrap; 
-  font-size: 0.9rem; font-weight: 600; 
+  padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); 
+  border-radius: 50px; white-space: nowrap; font-size: 0.9rem; font-weight: 600; 
   color: var(--text-sec); cursor: pointer; transition: all 0.2s;
 }
-.filter-pill.active { 
-  color: #fff; 
-  background: var(--brand-color); 
-  border-color: var(--brand-color); 
-  box-shadow: 0 4px 12px -3px var(--brand-color); 
-}
+.filter-pill.active { color: #fff; background: var(--brand-color); border-color: var(--brand-color); box-shadow: 0 4px 12px -3px var(--brand-color); }
 
 /* --- MENU LIST --- */
-.menu-grid { 
-  display: flex; flex-direction: column; gap: 15px; 
-  padding: 10px 20px; max-width: 800px; margin: 0 auto; 
-}
-
+.menu-grid { display: flex; flex-direction: column; gap: 15px; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
 .dish-card {
   background: var(--bg-card); border-radius: 16px; padding: 16px;
   display: grid; grid-template-columns: 1fr auto; gap: 15px;
-  box-shadow: var(--shadow-card); border: 1px solid transparent; 
-  transition: transform 0.2s;
-  align-items: start;
+  box-shadow: var(--shadow-card); align-items: start;
 }
-
 .dish-info { display: flex; flex-direction: column; gap: 5px; }
 .dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); }
 .dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
 .dish-price { font-weight: 700; font-size: 1rem; color: var(--text-main); margin-top: 5px; }
 
-/* Controles (+/-) */
-.action-area {
-  display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start;
-  min-width: 90px;
-}
-
-/* Botón "Añadir" */
+.action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
 .btn-add-simple {
-  background: rgba(0,0,0,0.03); 
-  color: var(--brand-color);
-  font-weight: 700; font-size: 0.9rem;
-  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
-  cursor: pointer; transition: 0.2s;
-  width: 100%;
+  background: rgba(0,0,0,0.03); color: var(--brand-color); font-weight: 700; font-size: 0.9rem;
+  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; width: 100%;
 }
-.btn-add-simple:active { transform: scale(0.95); background: rgba(0,0,0,0.05); }
-
-/* Selector Cantidad [ - 1 + ] */
 .qty-selector {
   display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg-body); border: 1px solid var(--border);
-  border-radius: 8px; padding: 3px; width: 100%;
+  background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; padding: 3px; width: 100%;
 }
 .qty-selector button {
-  width: 28px; height: 28px; border-radius: 6px; border: none;
-  background: var(--bg-card); color: var(--text-main);
-  font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
+  width: 28px; height: 28px; border-radius: 6px; border: none; background: var(--bg-card); color: var(--text-main);
+  font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
 }
-.qty-selector button:active { transform: scale(0.9); }
 .qty-selector button.plus { color: var(--brand-color); }
 .qty-selector span { font-weight: 600; font-size: 0.95rem; }
 
 /* --- CESTA FLOTANTE --- */
 #cart-float {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px) scale(0.9);
-  background: var(--text-main); color: var(--bg-card); 
-  padding: 14px 24px; border-radius: 100px; 
+  background: var(--text-main); color: var(--bg-card); padding: 14px 24px; border-radius: 100px; 
   display: flex; align-items: center; gap: 12px; justify-content: center;
   box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; 
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-weight: 600; font-size: 1rem; width: max-content;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; font-size: 1rem; width: max-content;
 }
 #cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
 .badge-count { background: var(--brand-color); color: #fff; padding: 3px 9px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
@@ -203,6 +138,7 @@ body {
 
 .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
 .sheet-title { margin: 0; font-size: 1.3rem; font-weight: 700; }
+.close-small { cursor:pointer; padding:5px; font-size:1.5rem; } /* Clase para ocultarla luego */
 
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-body); border-radius: 12px; }
@@ -214,23 +150,18 @@ textarea.notes {
 }
 textarea.notes:focus { border-color: var(--brand-color); }
 
-/* Botones de acción Modal */
 .btn-action-wrapper { display: flex; flex-direction: column; gap: 10px; }
-
 .btn-waiter {
   width: 100%; padding: 16px; border-radius: 14px; 
-  background: #111827; color: white; /* Negro elegante por defecto */
-  border: none; font-weight: 700; font-size: 1.1rem; cursor: pointer; 
+  background: #111827; color: white; border: none; font-weight: 700; font-size: 1.1rem; cursor: pointer; 
   display: flex; align-items: center; justify-content: center; gap: 10px;
   box-shadow: var(--shadow-card);
 }
-
 .clear-btn { background: transparent; border: none; color: var(--text-sec); text-decoration: underline; cursor: pointer; align-self: center; font-size: 0.9rem; margin-top: 5px;}
 
 /* --- MODO CAMARERO (ZOOM) --- */
-/* Cuando se activa, el sheet ocupa todo y es enorme */
 .sheet.waiter-mode { 
-  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 70px; 
+  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 80px; 
 }
 .sheet.waiter-mode .order-item { 
   padding: 25px 10px; background: transparent; border-bottom: 2px solid var(--border); border-radius: 0; 
@@ -238,13 +169,19 @@ textarea.notes:focus { border-color: var(--brand-color); }
 .sheet.waiter-mode .order-name { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
 .sheet.waiter-mode .qty-display { font-size: 2rem; font-weight: 900; color: var(--brand-color); margin-right: 20px; }
 
+/* Notas en modo camarero */
+.waiter-note-box {
+  background: #FFF4E5; border: 2px solid #FFCC80; color: #663C00;
+  padding: 15px; margin: 10px 0 20px 0; border-radius: 12px; font-size: 1.1rem;
+}
+.waiter-note-label { font-weight: 800; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.8rem; opacity: 0.7; }
+
 /* Botón cerrar modo camarero */
 #closeWaiterBtn {
-  position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: #000; color: #fff;
-  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; z-index: 3001;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; background: #000; color: #fff;
+  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; z-index: 3001;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3); border: none;
 }
-
 </style>
 </head>
 <body>
@@ -278,8 +215,7 @@ textarea.notes:focus { border-color: var(--brand-color); }
   </div>
 </div>
 
-<div class="menu-grid" id="menuContainer">
-  </div>
+<div class="menu-grid" id="menuContainer"></div>
 
 <div id="cart-float" onclick="openSheet()">
   <span class="badge-count" id="countBadge">0</span>
@@ -292,18 +228,20 @@ textarea.notes:focus { border-color: var(--brand-color); }
   <div class="sheet" id="orderSheet">
     <div class="sheet-header">
       <h3 class="sheet-title" id="modalTitle">Tu Pedido</h3>
-      <div onclick="closeSheet()" style="cursor:pointer; padding:5px; font-size:1.5rem">✕</div>
+      <div class="close-small" id="userCloseBtn" onclick="closeSheet()">✕</div>
     </div>
     
     <div class="order-list" id="orderList"></div>
 
     <div id="notesArea">
-      <textarea class="notes" id="notesField" placeholder="Notas (ej. sin hielo, carne muy hecha...)" oninput="saveNotes()"></textarea>
+      <textarea class="notes" id="notesField" placeholder="Notas (ej. sin hielo...)" oninput="saveNotes()"></textarea>
     </div>
     
+    <div id="waiterNotesDisplay" style="display:none;"></div>
+
     <div class="btn-action-wrapper">
       <button class="btn-waiter" id="btnShowWaiter" style="display:none;" onclick="enterWaiterMode()">
-        <span>🗣️</span> Mostrar al Camarero
+        <span id="btnWaiterText">🗣️ Mostrar al Camarero</span>
       </button>
       
       <button onclick="clearCart()" class="clear-btn" id="clearTxt">Borrar todo</button>
@@ -312,59 +250,21 @@ textarea.notes:focus { border-color: var(--brand-color); }
 </div>
 
 <script>
-/* --- CONFIGURACIÓN DE MENÚS Y COLORES --- */
+/* --- CONFIGURACIÓN --- */
 const config = {
-  // Menús (Ampliado)
   menus: {
     'pizzeria': [
-       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato"} },
-       { id: 102, cat: 'entrantes', tags: [], price: 12.00, name: {es:"Carpaccio", en:"Carpaccio"}, desc: {es:"Ternera con parmesano", en:"Beef with parmesan"} },
-       { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil"} },
-       { id: 105, cat: 'principales', tags: [], price: 13.50, name: {es:"Pizza Diavola", en:"Pizza Diavola"}, desc: {es:"Picante con salami", en:"Spicy salami"} },
-       { id: 106, cat: 'principales', tags: ['v'], price: 14.00, name: {es:"Pizza 4 Quesos", en:"4 Cheese Pizza"}, desc: {es:"Mozzarella, gorgonzola...", en:"Mozzarella, gorgonzola..."} },
-       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara", en:"Carbonara"}, desc: {es:"Auténtica con huevo", en:"Authentic with egg"} },
-       { id: 108, cat: 'postres', tags: [], price: 6.00, name: {es:"Tiramisú", en:"Tiramisu"}, desc: {es:"Casero", en:"Homemade"} },
-       { id: 109, cat: 'postres', tags: [], price: 5.50, name: {es:"Panna Cotta", en:"Panna Cotta"}, desc: {es:"Frutos rojos", en:"Red berries"} }
+       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido", en:"Melted cheese"} },
+       { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella", en:"Tomato, mozzarella"} },
+       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara", en:"Carbonara"}, desc: {es:"Auténtica", en:"Authentic"} }
     ],
     'hamburgueseria': [
-       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos", en:"Nachos"}, desc: {es:"Con guacamole y cheddar", en:"Guacamole & cheddar"} },
-       { id: 202, cat: 'entrantes', tags: [], price: 9.00, name: {es:"Alitas BBQ", en:"BBQ Wings"}, desc: {es:"Salsa barbacoa casera", en:"Homemade BBQ sauce"} },
-       { id: 203, cat: 'entrantes', tags: ['v'], price: 6.50, name: {es:"Aros de Cebolla", en:"Onion Rings"}, desc: {es:"Crujientes", en:"Crispy"} },
-       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon, lechuga", en:"Cheddar, bacon, lettuce"} },
-       { id: 205, cat: 'principales', tags: [], price: 14.00, name: {es:"Burger Trufada", en:"Truffle Burger"}, desc: {es:"Queso brie y trufa", en:"Brie & truffle"} },
-       { id: 206, cat: 'principales', tags: ['v'], price: 13.00, name: {es:"Burger Vegana", en:"Vegan Burger"}, desc: {es:"Heura y aguacate", en:"Heura & avocado"} },
-       { id: 207, cat: 'principales', tags: [], price: 11.50, name: {es:"Pollo Crispy", en:"Crispy Chicken"}, desc: {es:"Pechuga empanada", en:"Breaded chicken"} },
-       { id: 208, cat: 'postres', tags: [], price: 6.00, name: {es:"Brownie", en:"Brownie"}, desc: {es:"Con helado de vainilla", en:"With vanilla ice cream"} },
-       { id: 209, cat: 'postres', tags: [], price: 6.50, name: {es:"Cheesecake", en:"Cheesecake"}, desc: {es:"Estilo New York", en:"NY Style"} }
+       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos", en:"Nachos"}, desc: {es:"Guacamole", en:"Guacamole"} },
+       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon", en:"Cheddar, bacon"} }
     ],
-    'asiatico': [
-       { id: 301, cat: 'entrantes', tags: [], price: 5.50, name: {es:"Gyozas", en:"Gyozas"}, desc: {es:"Pollo y verduras", en:"Chicken & veg"} },
-       { id: 302, cat: 'entrantes', tags: ['v'], price: 4.50, name: {es:"Edamame", en:"Edamame"}, desc: {es:"Con sal", en:"Salted"} },
-       { id: 303, cat: 'entrantes', tags: [], price: 6.00, name: {es:"Rollitos", en:"Spring Rolls"}, desc: {es:"Vietnamitas", en:"Vietnamese"} },
-       { id: 304, cat: 'principales', tags: [], price: 13.00, name: {es:"Ramen", en:"Ramen"}, desc: {es:"Tonkotsu (Cerdo)", en:"Tonkotsu (Pork)"} },
-       { id: 305, cat: 'principales', tags: ['gf'], price: 16.00, name: {es:"Sushi Mix", en:"Sushi Mix"}, desc: {es:"12 piezas variadas", en:"12 assorted pieces"} },
-       { id: 306, cat: 'principales', tags: [], price: 11.50, name: {es:"Pollo Teriyaki", en:"Teriyaki Chicken"}, desc: {es:"Con arroz", en:"With rice"} },
-       { id: 307, cat: 'principales', tags: ['v'], price: 10.00, name: {es:"Yakisoba", en:"Yakisoba"}, desc: {es:"Fideos y verduras", en:"Veggie noodles"} },
-       { id: 308, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Mochis", en:"Mochis"}, desc: {es:"Té verde", en:"Green tea"} },
-       { id: 309, cat: 'postres', tags: [], price: 5.00, name: {es:"Dorayaki", en:"Dorayaki"}, desc: {es:"Chocolate", en:"Chocolate"} }
-    ],
-    'cafe': [
-       { id: 401, cat: 'entrantes', tags: ['v'], price: 2.50, name: {es:"Croissant", en:"Croissant"}, desc: {es:"Mantequilla", en:"Butter"} },
-       { id: 402, cat: 'entrantes', tags: ['v'], price: 3.50, name: {es:"Carrot Cake", en:"Carrot Cake"}, desc: {es:"Casera", en:"Homemade"} },
-       { id: 403, cat: 'entrantes', tags: [], price: 4.00, name: {es:"Cookie", en:"Cookie"}, desc: {es:"Chocolate", en:"Chocolate"} },
-       { id: 404, cat: 'principales', tags: ['v'], price: 7.50, name: {es:"Tostada Aguacate", en:"Avocado Toast"}, desc: {es:"Huevo poché", en:"Poached egg"} },
-       { id: 405, cat: 'principales', tags: [], price: 9.00, name: {es:"Sandwich Club", en:"Club Sandwich"}, desc: {es:"Pollo y bacon", en:"Chicken & bacon"} },
-       { id: 406, cat: 'principales', tags: ['v'], price: 8.00, name: {es:"Açaí Bowl", en:"Acai Bowl"}, desc: {es:"Frutas y granola", en:"Fruits & granola"} },
-       { id: 407, cat: 'bebidas', tags: ['gf'], price: 4.50, name: {es:"Smoothie", en:"Smoothie"}, desc: {es:"Verde detox", en:"Green detox"} },
-       { id: 408, cat: 'bebidas', tags: ['gf'], price: 3.50, name: {es:"Latte", en:"Latte"}, desc: {es:"Especialidad", en:"Specialty"} },
-       { id: 409, cat: 'postres', tags: [], price: 4.00, name: {es:"Yogurt", en:"Yogurt"}, desc: {es:"Miel y nueces", en:"Honey & walnuts"} }
-    ],
-    // Comunes
     'comunes': [
        { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke"}, desc: {es:"33cl", en:"33cl"} },
-       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water"}, desc: {es:"50cl", en:"50cl"} },
-       { id: 903, cat: 'bebidas', tags: ['gf'], price: 3.00, name: {es:"Cerveza", en:"Beer"}, desc: {es:"Nacional", en:"Local"} },
-       { id: 904, cat: 'bebidas', tags: ['gf'], price: 3.50, name: {es:"Vino Tinto", en:"Red Wine"}, desc: {es:"Copa Rioja", en:"Rioja Glass"} }
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water"}, desc: {es:"50cl", en:"50cl"} }
     ]
   }
 };
@@ -379,53 +279,32 @@ let userCategory = 'restaurante';
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
-  
-  // Idioma
   lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
-  // Info Restaurante
   const name = params.get('n') || "Restaurante";
   userCategory = params.get('categoria') || 'restaurante';
-  
   document.getElementById('brandNameDisplay').innerText = name;
   document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
   
-  // Color Dinámico
   const root = document.documentElement.style;
-  if(params.get('btn')) {
-     const customColor = '#' + params.get('btn');
-     root.setProperty('--brand-color', customColor);
-  } else {
-     const defaults = {'pizzeria':'#D32F2F', 'hamburgueseria':'#FF8C00', 'asiatico':'#E91E63', 'cafe':'#8D6E63'};
-     root.setProperty('--brand-color', defaults[userCategory] || '#68B553');
-  }
+  if(params.get('btn')) root.setProperty('--brand-color', '#' + params.get('btn'));
+  else root.setProperty('--brand-color', '#68B553');
 
-  // Cargar Menú
   const specificMenu = config.menus[userCategory] || config.menus['hamburgueseria'];
   currentMenu = [...specificMenu, ...config.menus['comunes']];
 
-  // Cargar Carrito y UI
   loadCart();
   translateUI();
-  
-  if(!hasItems('principales')) {
-     if(hasItems('entrantes')) activeCategory = 'entrantes';
-     else if(hasItems('bebidas')) activeCategory = 'bebidas';
-  }
-  
   updateFilterUI();
   render();
   updateFloat();
 }
 
-function hasItems(cat) { return currentMenu.some(i => i.cat === cat); }
-
-/* --- RENDERIZADO MEJORADO (+/-) --- */
+/* --- RENDER --- */
 function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
-  
   const allergyFilter = document.getElementById('allergyFilter').value;
 
   const items = currentMenu.filter(item => {
@@ -435,7 +314,7 @@ function render() {
   });
 
   if(items.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec); opacity:0.7">No hay productos disponibles.</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; opacity:0.7">No hay productos.</div>`;
     return;
   }
 
@@ -444,19 +323,9 @@ function render() {
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
 
-    // Renderizar Control (+/-) o Botón simple
-    let controlHTML;
-    if (qty === 0) {
-      controlHTML = `<button class="btn-add-simple" onclick="add(${p.id})">Añadir</button>`;
-    } else {
-      controlHTML = `
-        <div class="qty-selector">
-          <button onclick="remove(${p.id})">-</button>
-          <span>${qty}</span>
-          <button class="plus" onclick="add(${p.id})">+</button>
-        </div>
-      `;
-    }
+    let controlHTML = qty === 0 
+      ? `<button class="btn-add-simple" onclick="add(${p.id})">Añadir</button>`
+      : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
 
     container.innerHTML += `
       <div class="dish-card">
@@ -465,9 +334,7 @@ function render() {
           <div class="dish-desc">${pDesc}</div>
           <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
-        <div class="action-area">
-          ${controlHTML}
-        </div>
+        <div class="action-area">${controlHTML}</div>
       </div>
     `;
   });
@@ -476,56 +343,33 @@ function render() {
 function updateFilterUI() {
   document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
   const map = { 'bebidas':'f-drk', 'entrantes':'f-ent', 'principales':'f-main', 'postres':'f-des' };
-  const activeId = map[activeCategory];
-  if(activeId) document.getElementById(activeId).classList.add('active');
+  if(map[activeCategory]) document.getElementById(map[activeCategory]).classList.add('active');
 }
 
-function filter(cat) {
-  activeCategory = cat;
-  updateFilterUI();
-  render();
-}
+function filter(cat) { activeCategory = cat; updateFilterUI(); render(); }
 
-/* --- LOGICA CARRITO --- */
-function add(id) {
-  cart[id] = (cart[id] || 0) + 1;
-  saveCart();
-  render(); 
-  updateFloat();
-  if(document.querySelector('.overlay.open')) renderList(); 
-}
-
-function remove(id) {
-  if(cart[id]) {
-    cart[id]--;
-    if(cart[id] <= 0) delete cart[id];
-  }
-  saveCart();
-  render();
-  updateFloat();
-  if(document.querySelector('.overlay.open')) renderList(); 
-}
+/* --- CARRITO --- */
+function add(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
+function remove(id) { if(cart[id]) { cart[id]--; if(cart[id] <= 0) delete cart[id]; } saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
 
 function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
   document.getElementById('countBadge').innerText = count;
   const btn = document.getElementById('cart-float');
-  if(count > 0) btn.classList.add('visible');
-  else btn.classList.remove('visible');
+  count > 0 ? btn.classList.add('visible') : btn.classList.remove('visible');
 }
 
-/* --- LOGICA MODAL/SHEET --- */
+/* --- MODAL Y MODO CAMARERO --- */
 function renderList() {
   const list = document.getElementById('orderList');
   list.innerHTML = '';
   
   const isWaiter = document.body.classList.contains('waiter-active');
-  const displayLang = isWaiter ? 'es' : lang; // Si es modo camarero, forzar español
+  const displayLang = isWaiter ? 'es' : lang; // Camarero siempre ve español
 
   if(Object.keys(cart).length === 0) {
     list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
-    closeSheet(); 
-    return;
+    closeSheet(); return;
   }
 
   const items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
@@ -535,47 +379,36 @@ function renderList() {
     const pName = p.name[displayLang] || p.name['es'];
     
     if(isWaiter) {
-      // DISEÑO GIGANTE CAMARERO
       list.innerHTML += `
         <div class="order-item">
           <div style="display:flex; align-items:center">
              <span class="qty-display">x${qty}</span>
              <span class="order-name">${pName}</span>
           </div>
-        </div>
-      `;
+        </div>`;
     } else {
-      // DISEÑO NORMAL (User)
       list.innerHTML += `
         <div class="order-item">
           <span class="order-name" style="flex:1">${pName}</span>
           <div class="qty-selector" style="width:100px;">
-            <button onclick="remove(${p.id})">-</button>
-            <span>${qty}</span>
-            <button class="plus" onclick="add(${p.id})">+</button>
+            <button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button>
           </div>
-        </div>
-      `;
+        </div>`;
     }
   });
 }
 
 function openSheet() { 
   document.getElementById('overlay').classList.add('open'); 
-  
-  // LOGICA MOSTRAR BOTÓN CAMARERO
   const waiterBtn = document.getElementById('btnShowWaiter');
-  if (lang === 'es') {
-    waiterBtn.style.display = 'none'; // Si ya hablas español, no hace falta
-  } else {
-    waiterBtn.style.display = 'flex'; // Si no, muéstralo
-  }
-
+  // Mostrar botón si NO es español
+  if (lang !== 'es') waiterBtn.style.display = 'flex';
+  else waiterBtn.style.display = 'none';
+  
   renderList();
 }
 
 function closeSheet() { 
-  // Al cerrar, salir del modo camarero por si acaso
   exitWaiterMode();
   document.getElementById('overlay').classList.remove('open'); 
 }
@@ -584,40 +417,54 @@ function enterWaiterMode() {
   document.body.classList.add('waiter-active');
   document.getElementById('orderSheet').classList.add('waiter-mode');
   
-  // Ocultar elementos que no necesita el camarero
+  // Ocultar controles de usuario
   document.getElementById('btnShowWaiter').style.display = 'none';
   document.getElementById('notesArea').style.display = 'none';
   document.getElementById('clearTxt').style.display = 'none';
+  document.getElementById('userCloseBtn').style.display = 'none'; // Ocultar X pequeña
   
-  // Mostrar botón cerrar grande
-  document.getElementById('closeWaiterBtn').style.display = 'flex';
+  // Mostrar controles de camarero
+  document.getElementById('closeWaiterBtn').style.display = 'flex'; // Mostrar X grande
   
-  renderList(); // Re-renderizar en español y grande
+  // Gestionar Notas
+  const notes = document.getElementById('notesField').value;
+  const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
+  
+  if (notes && notes.trim() !== "") {
+    waiterNotesDisplay.style.display = 'block';
+    waiterNotesDisplay.innerHTML = `
+      <div class="waiter-note-box">
+        <span class="waiter-note-label">⚠️ Nota del Cliente (Traducir si es necesario):</span>
+        "${notes}"
+      </div>
+    `;
+  } else {
+    waiterNotesDisplay.style.display = 'none';
+  }
+  
+  renderList();
 }
 
 function exitWaiterMode() {
   document.body.classList.remove('waiter-active');
   document.getElementById('orderSheet').classList.remove('waiter-mode');
-  document.getElementById('closeWaiterBtn').style.display = 'none';
   
-  // Restaurar visibilidad
+  // Restaurar UI usuario
+  document.getElementById('closeWaiterBtn').style.display = 'none';
+  document.getElementById('waiterNotesDisplay').style.display = 'none';
+  
   document.getElementById('notesArea').style.display = 'block';
   document.getElementById('clearTxt').style.display = 'block';
-  // El botón de camarero se gestiona al abrir, pero lo restauramos si el idioma no es ES
+  document.getElementById('userCloseBtn').style.display = 'block';
+  
   if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';
   
   renderList();
 }
 
-/* --- UTILIDADES --- */
-function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
-function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
-function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
-function clearCart() { if(confirm("¿Borrar todo?")) { cart={}; saveCart(); render(); updateFloat(); closeSheet(); } }
-
 /* --- IDIOMAS --- */
 const uiDict = {
-  es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero (ES)" },
+  es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero" },
   en: { ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)" },
   de: { ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)" },
   fr: { ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", trans:"Montrer au serveur (ES)" },
@@ -633,16 +480,25 @@ function translateUI() {
   document.getElementById('btnText').innerText = t.btn;
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
+  
+  // Actualizar texto del botón dinámicamente con icono
+  const waiterBtnSpan = document.querySelector('#btnShowWaiter span');
+  if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
 }
 
-/* --- TEMA --- */
+/* --- UTILIDADES --- */
+function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
+function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
+function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
+function clearCart() { if(confirm("¿Borrar todo?")) { cart={}; saveCart(); render(); updateFloat(); closeSheet(); } }
+
+// TEMA
 const themeBtn = document.getElementById('themeBtn');
 function applyTheme() {
   let saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', saved);
   themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
 }
-
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
@@ -650,7 +506,6 @@ themeBtn.addEventListener('click', () => {
   applyTheme();
 });
 
-// GO
 init();
 </script>
 </body>
