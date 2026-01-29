@@ -138,7 +138,7 @@ body {
 
 .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
 .sheet-title { margin: 0; font-size: 1.3rem; font-weight: 700; }
-.close-small { cursor:pointer; padding:5px; font-size:1.5rem; } /* Clase para ocultarla luego */
+.close-small { cursor:pointer; padding:5px; font-size:1.5rem; }
 
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-body); border-radius: 12px; }
@@ -279,18 +279,31 @@ let userCategory = 'restaurante';
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
+  
+  // 1. Idioma
   lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
+  // 2. Info Restaurante
   const name = params.get('n') || "Restaurante";
   userCategory = params.get('categoria') || 'restaurante';
   document.getElementById('brandNameDisplay').innerText = name;
   document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
   
+  // 3. Color Dinámico
   const root = document.documentElement.style;
   if(params.get('btn')) root.setProperty('--brand-color', '#' + params.get('btn'));
   else root.setProperty('--brand-color', '#68B553');
 
+  // 4. Tema (Detectar parámetro URL)
+  // Si viene ?theme=dark, forzamos dark. Si no, usamos preferencia guardada.
+  const urlTheme = params.get('theme');
+  if (urlTheme) {
+    localStorage.setItem('theme', urlTheme);
+  }
+  applyTheme();
+
+  // 5. Cargar Menú
   const specificMenu = config.menus[userCategory] || config.menus['hamburgueseria'];
   currentMenu = [...specificMenu, ...config.menus['comunes']];
 
@@ -365,7 +378,7 @@ function renderList() {
   list.innerHTML = '';
   
   const isWaiter = document.body.classList.contains('waiter-active');
-  const displayLang = isWaiter ? 'es' : lang; // Camarero siempre ve español
+  const displayLang = isWaiter ? 'es' : lang;
 
   if(Object.keys(cart).length === 0) {
     list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
@@ -401,7 +414,6 @@ function renderList() {
 function openSheet() { 
   document.getElementById('overlay').classList.add('open'); 
   const waiterBtn = document.getElementById('btnShowWaiter');
-  // Mostrar botón si NO es español
   if (lang !== 'es') waiterBtn.style.display = 'flex';
   else waiterBtn.style.display = 'none';
   
@@ -417,16 +429,13 @@ function enterWaiterMode() {
   document.body.classList.add('waiter-active');
   document.getElementById('orderSheet').classList.add('waiter-mode');
   
-  // Ocultar controles de usuario
   document.getElementById('btnShowWaiter').style.display = 'none';
   document.getElementById('notesArea').style.display = 'none';
   document.getElementById('clearTxt').style.display = 'none';
-  document.getElementById('userCloseBtn').style.display = 'none'; // Ocultar X pequeña
+  document.getElementById('userCloseBtn').style.display = 'none'; 
   
-  // Mostrar controles de camarero
-  document.getElementById('closeWaiterBtn').style.display = 'flex'; // Mostrar X grande
+  document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
-  // Gestionar Notas
   const notes = document.getElementById('notesField').value;
   const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
   
@@ -449,7 +458,6 @@ function exitWaiterMode() {
   document.body.classList.remove('waiter-active');
   document.getElementById('orderSheet').classList.remove('waiter-mode');
   
-  // Restaurar UI usuario
   document.getElementById('closeWaiterBtn').style.display = 'none';
   document.getElementById('waiterNotesDisplay').style.display = 'none';
   
@@ -464,11 +472,11 @@ function exitWaiterMode() {
 
 /* --- IDIOMAS --- */
 const uiDict = {
-  es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero" },
-  en: { ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)" },
-  de: { ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)" },
-  fr: { ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", trans:"Montrer au serveur (ES)" },
-  it: { ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", trans:"Mostra al cameriere (ES)" }
+  es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?" },
+  en: { ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?" },
+  de: { ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?" },
+  fr: { ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?" },
+  it: { ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?" }
 };
 
 function translateUI() {
@@ -481,7 +489,6 @@ function translateUI() {
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
   
-  // Actualizar texto del botón dinámicamente con icono
   const waiterBtnSpan = document.querySelector('#btnShowWaiter span');
   if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
 }
@@ -490,7 +497,13 @@ function translateUI() {
 function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
 function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
 function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
-function clearCart() { if(confirm("¿Borrar todo?")) { cart={}; saveCart(); render(); updateFloat(); closeSheet(); } }
+
+function clearCart() { 
+  const t = uiDict[lang] || uiDict['es'];
+  if(confirm(t.confirm)) { 
+    cart={}; saveCart(); render(); updateFloat(); closeSheet(); 
+  } 
+}
 
 // TEMA
 const themeBtn = document.getElementById('themeBtn');
