@@ -1,213 +1,640 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Configurador Taply</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
+<title>Carta Digital</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --bg-body: #f1f5f9;
+  --brand-color: #68B553; 
+  --bg-body: #f8fafc;
   --bg-card: #ffffff;
-  --text-main: #0f172a;
+  --text-main: #1e293b;
   --text-sec: #64748b;
   --border: #e2e8f0;
-  --input-bg: #f8fafc;
+  --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.05);
+  --shadow-float: 0 15px 35px -5px rgba(0,0,0,0.15);
+}
+
+[data-theme="dark"] {
+  --bg-body: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-sec: #94a3b8;
+  --border: #334155;
+  --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.3);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-body);
-  background-image: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.1) 0, transparent 50%), 
-                    radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.1) 0, transparent 50%);
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 16px;
+  margin: 0; background: var(--bg-body); color: var(--text-main); 
+  font-family: 'Outfit', sans-serif; transition: background 0.3s ease; 
+  padding-bottom: 140px; -webkit-font-smoothing: antialiased;
 }
 
-.container {
-  max-width: 380px;
-  width: 100%;
-  background: var(--bg-card);
-  border-radius: 28px;
-  padding: 28px 24px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255,255,255,0.7);
+/* --- HEADER --- */
+.header {
+  background: rgba(255, 255, 255, 0.9); padding: 15px 20px; 
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 800; border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
+[data-theme="dark"] .header { background: rgba(30, 41, 59, 0.9); }
 
-header { text-align: center; margin-bottom: 22px; }
-h1 { margin: 0; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); }
-p.description { font-size: 0.8rem; color: var(--text-sec); margin-top: 4px; }
+.brand-area { display: flex; flex-direction: column; }
+.brand-name { font-size: 1.3rem; font-weight: 800; color: var(--brand-color); margin: 0; line-height: 1.1; text-transform: capitalize; }
+.brand-category { font-size: 0.8rem; color: var(--text-sec); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
-.input-group { margin-bottom: 16px; }
-label { display: block; font-size: 0.7rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-sec); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.theme-btn { 
+  background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
+  color: var(--text-main); display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; transition: transform 0.2s;
+}
+.theme-btn:active { transform: scale(0.9); }
 
-input[type="text"], select {
-  width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--border);
-  font-size: 0.85rem; background: var(--input-bg); color: var(--text-main);
-  transition: all 0.2s ease; appearance: none;
+/* --- CONTROLES --- */
+.controls-container {
+  position: sticky; top: 62px; z-index: 790; background: var(--bg-body);
+  padding: 10px 0; border-bottom: 1px solid transparent; transition: border-color 0.3s;
 }
+.allergy-wrapper { padding: 0 20px 10px 20px; }
+.allergy-select {
+  width: 100%; appearance: none; -webkit-appearance: none;
+  background: var(--bg-card); border: 1px solid var(--border); 
+  color: var(--text-main); font-size: 0.9rem; font-weight: 500;
+  padding: 12px 16px; border-radius: 12px; cursor: pointer; outline: none;
+  box-shadow: var(--shadow-card);
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 10px auto;
+}
+.filters-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
+.filters-scroll::-webkit-scrollbar { display: none; }
+.filter-pill {
+  padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); 
+  border-radius: 50px; white-space: nowrap; font-size: 0.9rem; font-weight: 600; 
+  color: var(--text-sec); cursor: pointer; transition: all 0.2s;
+}
+.filter-pill.active { color: #fff; background: var(--brand-color); border-color: var(--brand-color); box-shadow: 0 4px 12px -3px var(--brand-color); }
 
-input:focus, select:focus { 
-  outline: none; 
-  border-color: var(--primary); 
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08); 
+/* --- MENU LIST --- */
+.menu-grid { display: flex; flex-direction: column; gap: 15px; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
+.dish-card {
+  background: var(--bg-card); border-radius: 16px; padding: 16px;
+  display: grid; grid-template-columns: 1fr auto; gap: 15px;
+  box-shadow: var(--shadow-card); align-items: start;
 }
+.dish-info { display: flex; flex-direction: column; gap: 5px; }
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); }
+.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
+.dish-price { font-weight: 700; font-size: 1rem; color: var(--text-main); margin-top: 5px; }
 
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+.action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
+.btn-add-simple {
+  background: rgba(0,0,0,0.03); color: var(--brand-color); font-weight: 700; font-size: 0.9rem;
+  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; width: 100%;
 }
+.qty-selector {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; padding: 3px; width: 100%;
+}
+.qty-selector button {
+  width: 28px; height: 28px; border-radius: 6px; border: none; background: var(--bg-card); color: var(--text-main);
+  font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.qty-selector button.plus { color: var(--brand-color); }
+.qty-selector span { font-weight: 600; font-size: 0.95rem; }
 
-/* Selector de colores CUADRADO y pequeño */
-.color-picker-container { 
-  display: grid; 
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 10px; 
-  margin-top: 8px;
-  justify-items: center;
+/* --- CESTA FLOTANTE --- */
+#cart-float {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px) scale(0.9);
+  background: var(--text-main); color: var(--bg-card); padding: 14px 24px; border-radius: 100px; 
+  display: flex; align-items: center; gap: 12px; justify-content: center;
+  box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; 
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; font-size: 1rem; width: max-content;
 }
-.color-option { 
-  width: 32px; 
-  height: 32px; 
-  border-radius: 8px; /* Cuadrado con bordes suaves */
-  cursor: pointer; 
-  border: 2px solid transparent; 
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-}
-.color-option:hover { transform: translateY(-2px); }
-.color-option.selected { 
-  transform: scale(1.1);
-  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--primary);
-  z-index: 1;
-}
+#cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
+.badge-count { background: var(--brand-color); color: #fff; padding: 3px 9px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
 
-button#generateBtn {
-  width: 100%; padding: 13px; margin-top: 22px; border-radius: 14px; border: none; 
-  font-size: 0.9rem; font-weight: 700; color: white; 
-  background: var(--primary);
-  cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+/* --- MODAL (ORDER SHEET) --- */
+.overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; justify-content: center; align-items: flex-end;
 }
-button#generateBtn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.overlay.open { opacity: 1; pointer-events: auto; }
 
-.info-note {
-  margin-top: 20px;
-  padding: 12px;
-  background: var(--input-bg);
-  border-radius: 14px;
-  font-size: 0.7rem;
-  color: var(--text-sec);
-  line-height: 1.4;
-  border: 1px solid var(--border);
+.sheet {
+  background: var(--bg-card); width: 100%; max-width: 600px; max-height: 85vh; border-radius: 24px 24px 0 0;
+  padding: 25px; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
 }
+.overlay.open .sheet { transform: translateY(0); }
 
-.toast {
-  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
-  background: var(--text-main); color: white; padding: 10px 20px; border-radius: 12px;
-  font-size: 0.8rem; font-weight: 500; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 1000;
+.sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+.sheet-title { margin: 0; font-size: 1.3rem; font-weight: 700; }
+.close-small { cursor:pointer; padding:5px; font-size:1.5rem; }
+
+.order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-body); border-radius: 12px; }
+.order-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
+
+textarea.notes {
+  width: 100%; padding: 15px; border-radius: 12px; background: var(--bg-body); border: 2px solid var(--border);
+  color: var(--text-main); font-family: inherit; resize: none; outline: none; margin-bottom: 15px; font-size: 0.95rem;
 }
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+textarea.notes:focus { border-color: var(--brand-color); }
+
+.btn-action-wrapper { display: flex; flex-direction: column; gap: 10px; }
+.btn-waiter {
+  width: 100%; padding: 16px; border-radius: 14px; 
+  background: #111827; color: white; border: none; font-weight: 700; font-size: 1.1rem; cursor: pointer; 
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: var(--shadow-card);
+}
+.clear-btn { background: transparent; border: none; color: var(--text-sec); text-decoration: underline; cursor: pointer; align-self: center; font-size: 0.9rem; margin-top: 5px;}
+
+/* --- MODO CAMARERO (ZOOM) --- */
+.sheet.waiter-mode { 
+  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 80px; 
+}
+.sheet.waiter-mode .order-item { 
+  padding: 25px 10px; background: transparent; border-bottom: 2px solid var(--border); border-radius: 0; 
+}
+.sheet.waiter-mode .order-name { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+.sheet.waiter-mode .qty-display { font-size: 2rem; font-weight: 900; color: var(--brand-color); margin-right: 20px; }
+
+/* Notas en modo camarero */
+.waiter-note-box {
+  background: #FFF4E5; border: 2px solid #FFCC80; color: #663C00;
+  padding: 15px; margin: 10px 0 20px 0; border-radius: 12px; font-size: 1.1rem;
+  animation: flash 1s;
+}
+@keyframes flash { from { background-color: #ffe0b2; } to { background-color: #FFF4E5; } }
+
+.waiter-note-label { font-weight: 800; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.8rem; opacity: 0.7; }
+
+/* Botón cerrar modo camarero */
+#closeWaiterBtn {
+  position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; background: #000; color: #fff;
+  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; z-index: 3001;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3); border: none;
+}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <h1>Configurar Demo</h1>
-    <p class="description">Genera tu ejemplo personalizado.</p>
-  </header>
-
-  <div class="input-group">
-    <label>Nombre del Restaurante</label>
-    <input type="text" id="restaurantName" placeholder="Ej. La Parrilla de Alberto">
+<header class="header">
+  <div class="brand-area">
+    <h1 class="brand-name" id="brandNameDisplay">Restaurante</h1>
+    <span class="brand-category" id="catDisplay">Menu</span>
   </div>
+  <div class="header-right">
+    <div class="lang-badge" id="langDisplay">ES</div>
+    <button class="theme-btn" id="themeBtn">☀️</button>
+  </div>
+</header>
 
-  <div class="input-group">
-    <label>Tipo de Cocina</label>
-    <select id="restaurantType">
-      <option value="" disabled selected>Selecciona una opción...</option>
-      <option value="restaurante">Restaurante</option>
-      <option value="hamburgueseria">Hamburguesería</option>
-      <option value="pizzeria">Pizzería</option>
-      <option value="asiatico">Asiático</option>
-      <option value="cafe">Cafetería</option>
+<div class="controls-container">
+  <div class="allergy-wrapper">
+    <select id="allergyFilter" class="allergy-select" onchange="render()">
+      <option value="" id="opt-all">🌱 Filtrar Alergias</option>
+      <option value="gf" id="opt-gf">🌾 Sin Gluten</option>
+      <option value="lf" id="opt-lf">🥛 Sin Lactosa</option>
+      <option value="v" id="opt-v">🥦 Vegano</option>
     </select>
   </div>
 
-  <div class="input-group">
-    <label>Color de Marca</label>
-    <div class="color-picker-container">
-      <div class="color-option selected" style="background:#2E7D32" data-color="2E7D32"></div>
-      <div class="color-option" style="background:#FF8C00" data-color="FF8C00"></div>
-      <div class="color-option" style="background:#D32F2F" data-color="D32F2F"></div>
-      <div class="color-option" style="background:#E91E63" data-color="E91E63"></div>
-      <div class="color-option" style="background:#2962FF" data-color="2962FF"></div>
-      <div class="color-option" style="background:#0f172a" data-color="0f172a"></div>
-      <div class="color-option" style="background:#8D6E63" data-color="8D6E63"></div>
-      <div class="color-option" style="background:#7C4DFF" data-color="7C4DFF"></div>
-      <div class="color-option" style="background:#00BFA5" data-color="00BFA5"></div>
-      <div class="color-option" style="background:#FFD600" data-color="FFD600"></div>
-    </div>
-  </div>
-
-  <button id="generateBtn">Crear Demo</button>
-
-  <div class="info-note">
-    ℹ️ Ten en cuenta que esto es solo un ejemplo básico para que puedas visualizar el concepto. Nuestro diseño final es mucho más <b>profesional y personalizado</b>.
+  <div class="filters-scroll">
+    <button class="filter-pill active" onclick="filter('bebidas')" id="f-drk">Bebidas</button>
+    <button class="filter-pill" onclick="filter('entrantes')" id="f-ent">Entrantes</button>
+    <button class="filter-pill" onclick="filter('principales')" id="f-main">Principales</button>
+    <button class="filter-pill" onclick="filter('postres')" id="f-des">Postres</button>
   </div>
 </div>
 
-<div id="toast" class="toast">Error</div>
+<div class="menu-grid" id="menuContainer"></div>
+
+<div id="cart-float" onclick="openSheet()">
+  <span class="badge-count" id="countBadge">0</span>
+  <span id="btnText">Ver Pedido</span>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
+  <button id="closeWaiterBtn" onclick="exitWaiterMode()">✕</button>
+
+  <div class="sheet" id="orderSheet">
+    <div class="sheet-header">
+      <h3 class="sheet-title" id="modalTitle">Tu Pedido</h3>
+      <div class="close-small" id="userCloseBtn" onclick="closeSheet()">✕</div>
+    </div>
+    
+    <div class="order-list" id="orderList"></div>
+
+    <div id="notesArea">
+      <textarea class="notes" id="notesField" oninput="saveNotes()"></textarea>
+    </div>
+    
+    <div id="waiterNotesDisplay" style="display:none;"></div>
+
+    <div class="btn-action-wrapper">
+      <button class="btn-waiter" id="btnShowWaiter" style="display:none;" onclick="enterWaiterMode()">
+        <span id="btnWaiterText">🗣️ Mostrar al Camarero</span>
+      </button>
+      
+      <button onclick="clearCart()" class="clear-btn" id="clearTxt">Borrar todo</button>
+    </div>
+  </div>
+</div>
 
 <script>
-let selectedHex = '2E7D32';
+/* --- CONFIGURACIÓN --- */
+const config = {
+  menus: {
+    'pizzeria': [
+       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato"} },
+       { id: 102, cat: 'entrantes', tags: [], price: 12.00, name: {es:"Carpaccio di Manzo", en:"Beef Carpaccio"}, desc: {es:"Láminas finas con parmesano", en:"Thin slices with parmesan"} },
+       { id: 103, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Bruschetta", en:"Bruschetta"}, desc: {es:"Tomate, ajo y albahaca", en:"Tomato, garlic, basil"} },
+       
+       { id: 104, cat: 'principales', tags: ['v'], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil"} },
+       { id: 105, cat: 'principales', tags: [], price: 13.50, name: {es:"Pizza Diavola", en:"Pizza Diavola"}, desc: {es:"Picante con salami", en:"Spicy salami"} },
+       { id: 106, cat: 'principales', tags: [], price: 14.00, name: {es:"Pizza Prosciutto", en:"Pizza Prosciutto"}, desc: {es:"Jamón dulce y champiñones", en:"Ham and mushrooms"} },
+       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara Original", en:"Authentic Carbonara"}, desc: {es:"Huevo, pecorino, guanciale", en:"Egg, pecorino, guanciale"} },
+       
+       { id: 108, cat: 'postres', tags: [], price: 6.00, name: {es:"Tiramisú", en:"Tiramisu"}, desc: {es:"Clásico italiano", en:"Italian classic"} },
+       { id: 109, cat: 'postres', tags: [], price: 5.50, name: {es:"Panna Cotta", en:"Panna Cotta"}, desc: {es:"Con frutos rojos", en:"With red berries"} }
+    ],
+    'hamburgueseria': [
+       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos Supremos", en:"Supreme Nachos"}, desc: {es:"Guacamole, crema agria, jalapeños", en:"Guacamole, sour cream, jalapeños"} },
+       { id: 202, cat: 'entrantes', tags: [], price: 9.00, name: {es:"Alitas BBQ", en:"BBQ Wings"}, desc: {es:"Salsa barbacoa casera", en:"Homemade BBQ sauce"} },
+       { id: 203, cat: 'entrantes', tags: ['v'], price: 6.50, name: {es:"Aros de Cebolla", en:"Onion Rings"}, desc: {es:"Crujientes con salsa tártara", en:"Crispy with tartare sauce"} },
 
-// Lógica de selección
-document.querySelectorAll('.color-option').forEach(el => {
-  el.onclick = () => {
-    document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedHex = el.dataset.color;
-  };
-});
+       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon, lechuga", en:"Cheddar, bacon, lettuce"} },
+       { id: 205, cat: 'principales', tags: [], price: 14.00, name: {es:"Burger Trufada", en:"Truffle Burger"}, desc: {es:"Queso brie y aceite de trufa", en:"Brie cheese & truffle oil"} },
+       { id: 206, cat: 'principales', tags: [], price: 13.50, name: {es:"Burger de Pollo", en:"Chicken Burger"}, desc: {es:"Pollo crujiente y mayonesa", en:"Crispy chicken & mayo"} },
+       
+       { id: 207, cat: 'postres', tags: [], price: 6.50, name: {es:"Cheesecake NY", en:"NY Cheesecake"}, desc: {es:"Con mermelada de fresa", en:"With strawberry jam"} },
+       { id: 208, cat: 'postres', tags: [], price: 6.00, name: {es:"Brownie", en:"Brownie"}, desc: {es:"Con helado de vainilla", en:"With vanilla ice cream"} }
+    ],
+    'comunes': [
+       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke"}, desc: {es:"33cl", en:"33cl"} },
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Fanta Naranja", en:"Fanta Orange"}, desc: {es:"33cl", en:"33cl"} },
+       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua Mineral", en:"Still Water"}, desc: {es:"50cl", en:"50cl"} },
+       { id: 904, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Agua con Gas", en:"Sparkling Water"}, desc: {es:"50cl", en:"50cl"} },
+       { id: 905, cat: 'bebidas', tags: ['gf'], price: 3.50, name: {es:"Cerveza Caña", en:"Draft Beer"}, desc: {es:"33cl", en:"33cl"} },
+       { id: 906, cat: 'bebidas', tags: ['gf'], price: 4.00, name: {es:"Vino Tinto", en:"Red Wine"}, desc: {es:"Copa Rioja", en:"Rioja Glass"} }
+    ]
+  }
+};
 
-const toast = document.getElementById('toast');
-function showToast(msg) {
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000);
+/* --- IDIOMAS --- */
+const uiDict = {
+  es: { 
+    ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
+    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
+    trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
+    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)",
+    all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano",
+    loading: "Traduciendo nota..."
+  },
+  en: { 
+    ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
+    btn:"View Order", title:"Your Order", clear:"Clear all", 
+    trans:"Show Waiter (ES)", confirm:"Clear everything?",
+    add: "Add", place: "Notes (e.g. no ice, well done...)",
+    all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan",
+    loading: "Translating note..."
+  },
+  de: { 
+    ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
+    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
+    trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
+    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)",
+    all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan",
+    loading: "Notiz wird übersetzt..."
+  },
+  fr: { 
+    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
+    btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", 
+    trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?",
+    add: "Ajouter", place: "Notes (ex. pas de glace...)",
+    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan",
+    loading: "Traduction de la note..."
+  },
+  it: { 
+    ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", 
+    btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", 
+    trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?",
+    add: "Aggiungi", place: "Note (es. senza ghiaccio...)",
+    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano",
+    loading: "Traduzione nota..."
+  }
+};
+
+/* --- ESTADO --- */
+let cart = {};
+let activeCategory = 'principales'; 
+let lang = 'es';
+let currentMenu = [];
+let userCategory = 'restaurante';
+
+/* --- INIT --- */
+function init() {
+  // Limpiar carrito si ha caducado (5 horas)
+  checkCartExpiration();
+
+  const params = new URLSearchParams(window.location.search);
+  lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
+  document.getElementById('langDisplay').innerText = lang.toUpperCase();
+  
+  const name = params.get('n') || "Restaurante";
+  userCategory = params.get('categoria') || 'restaurante';
+  document.getElementById('brandNameDisplay').innerText = name;
+  document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
+  
+  const root = document.documentElement.style;
+  if(params.get('btn')) root.setProperty('--brand-color', '#' + params.get('btn'));
+  else root.setProperty('--brand-color', '#68B553');
+
+  const urlTheme = params.get('theme');
+  if (urlTheme) { localStorage.setItem('theme', urlTheme); }
+  applyTheme();
+
+  const specificMenu = config.menus[userCategory] || config.menus['hamburgueseria'];
+  currentMenu = [...specificMenu, ...config.menus['comunes']];
+
+  loadCart();
+  translateUI();
+  updateFilterUI();
+  render();
+  updateFloat();
 }
 
-document.getElementById('generateBtn').onclick = () => {
-  const nameInput = document.getElementById('restaurantName').value.trim();
-  const typeInput = document.getElementById('restaurantType').value;
+/* --- RENDER --- */
+function render() {
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+  const allergyFilter = document.getElementById('allergyFilter').value;
+  
+  const t = uiDict[lang] || uiDict['es'];
+  const addBtnText = t.add || "Añadir";
 
-  if (!nameInput) return showToast('Introduce un nombre');
-  if (!typeInput) return showToast('Selecciona una opción');
+  const items = currentMenu.filter(item => {
+    if(item.cat !== activeCategory) return false;
+    if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
+    return true;
+  });
 
-  document.getElementById('generateBtn').textContent = 'Generando...';
+  if(items.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; opacity:0.7">No hay productos.</div>`;
+    return;
+  }
 
-  setTimeout(() => {
-    const url = `pruebita.html?n=${encodeURIComponent(nameInput)}&categoria=${typeInput}&btn=${selectedHex}&auth=true`;
-    window.location.href = url;
-  }, 600);
-};
+  items.forEach(p => {
+    const qty = cart[p.id] || 0;
+    const pName = p.name[lang] || p.name['es'];
+    const pDesc = p.desc[lang] || p.desc['es'];
+
+    let controlHTML = qty === 0 
+      ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
+      : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
+
+    container.innerHTML += `
+      <div class="dish-card">
+        <div class="dish-info">
+          <div class="dish-name">${pName}</div>
+          <div class="dish-desc">${pDesc}</div>
+          <div class="dish-price">${p.price.toFixed(2)}€</div>
+        </div>
+        <div class="action-area">${controlHTML}</div>
+      </div>
+    `;
+  });
+}
+
+function updateFilterUI() {
+  document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+  const map = { 'bebidas':'f-drk', 'entrantes':'f-ent', 'principales':'f-main', 'postres':'f-des' };
+  if(map[activeCategory]) document.getElementById(map[activeCategory]).classList.add('active');
+}
+
+function filter(cat) { activeCategory = cat; updateFilterUI(); render(); }
+
+/* --- CARRITO --- */
+function add(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
+function remove(id) { if(cart[id]) { cart[id]--; if(cart[id] <= 0) delete cart[id]; } saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
+
+function updateFloat() {
+  const count = Object.values(cart).reduce((a,b)=>a+b,0);
+  document.getElementById('countBadge').innerText = count;
+  const btn = document.getElementById('cart-float');
+  count > 0 ? btn.classList.add('visible') : btn.classList.remove('visible');
+}
+
+/* --- MODAL Y TRADUCCIÓN API --- */
+function renderList() {
+  const list = document.getElementById('orderList');
+  list.innerHTML = '';
+  
+  const isWaiter = document.body.classList.contains('waiter-active');
+  const displayLang = isWaiter ? 'es' : lang;
+
+  if(Object.keys(cart).length === 0) {
+    list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
+    closeSheet(); return;
+  }
+
+  const items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
+  
+  items.forEach(p => {
+    const qty = cart[p.id];
+    const pName = p.name[displayLang] || p.name['es'];
+    
+    if(isWaiter) {
+      list.innerHTML += `
+        <div class="order-item">
+          <div style="display:flex; align-items:center">
+             <span class="qty-display">x${qty}</span>
+             <span class="order-name">${pName}</span>
+          </div>
+        </div>`;
+    } else {
+      list.innerHTML += `
+        <div class="order-item">
+          <span class="order-name" style="flex:1">${pName}</span>
+          <div class="qty-selector" style="width:100px;">
+            <button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button>
+          </div>
+        </div>`;
+    }
+  });
+}
+
+function openSheet() { 
+  document.getElementById('overlay').classList.add('open'); 
+  const waiterBtn = document.getElementById('btnShowWaiter');
+  if (lang !== 'es') waiterBtn.style.display = 'flex';
+  else waiterBtn.style.display = 'none';
+  renderList();
+}
+
+function closeSheet() { 
+  exitWaiterMode();
+  document.getElementById('overlay').classList.remove('open'); 
+}
+
+async function enterWaiterMode() {
+  document.body.classList.add('waiter-active');
+  document.getElementById('orderSheet').classList.add('waiter-mode');
+  
+  document.getElementById('btnShowWaiter').style.display = 'none';
+  document.getElementById('notesArea').style.display = 'none';
+  document.getElementById('clearTxt').style.display = 'none';
+  document.getElementById('userCloseBtn').style.display = 'none'; 
+  
+  document.getElementById('closeWaiterBtn').style.display = 'flex'; 
+  
+  const notes = document.getElementById('notesField').value;
+  const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
+  const t = uiDict[lang] || uiDict['es']; // Texto traducido
+  
+  if (notes && notes.trim() !== "") {
+    waiterNotesDisplay.style.display = 'block';
+    // Muestra "Traduciendo..." en el idioma del cliente
+    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">${t.loading} ⏳</div>`;
+    
+    try {
+        // API MyMemory
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(notes)}&langpair=${lang}|es`);
+        const data = await res.json();
+        
+        let translatedText = notes;
+        if (data.responseData && data.responseData.translatedText) {
+            translatedText = data.responseData.translatedText;
+        }
+
+        // Muestra el resultado final (sin poner "(Traducido)")
+        waiterNotesDisplay.innerHTML = `
+          <div class="waiter-note-box">
+            <span class="waiter-note-label">📝 Nota del Cliente:</span>
+            "${translatedText}"
+            <div style="font-size:0.8rem; color:#888; margin-top:5px; font-style:italic">Original: "${notes}"</div>
+          </div>
+        `;
+    } catch (err) {
+        waiterNotesDisplay.innerHTML = `
+          <div class="waiter-note-box">
+            <span class="waiter-note-label">📝 Nota del Cliente:</span>
+            "${notes}"
+          </div>
+        `;
+    }
+  } else {
+    waiterNotesDisplay.style.display = 'none';
+  }
+  
+  renderList();
+}
+
+function exitWaiterMode() {
+  document.body.classList.remove('waiter-active');
+  document.getElementById('orderSheet').classList.remove('waiter-mode');
+  
+  document.getElementById('closeWaiterBtn').style.display = 'none';
+  document.getElementById('waiterNotesDisplay').style.display = 'none';
+  
+  document.getElementById('notesArea').style.display = 'block';
+  document.getElementById('clearTxt').style.display = 'block';
+  document.getElementById('userCloseBtn').style.display = 'block';
+  
+  if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';
+  
+  renderList();
+}
+
+function translateUI() {
+  const t = uiDict[lang] || uiDict['es'];
+  document.getElementById('f-ent').innerText = t.ent;
+  document.getElementById('f-main').innerText = t.main;
+  document.getElementById('f-des').innerText = t.des;
+  document.getElementById('f-drk').innerText = t.drk;
+  document.getElementById('btnText').innerText = t.btn;
+  document.getElementById('modalTitle').innerText = t.title;
+  document.getElementById('clearTxt').innerText = t.clear;
+  document.getElementById('notesField').placeholder = t.place;
+  document.getElementById('opt-all').innerText = t.all;
+  document.getElementById('opt-gf').innerText = t.gf;
+  document.getElementById('opt-lf').innerText = t.lf;
+  document.getElementById('opt-v').innerText = t.v;
+  
+  const waiterBtnSpan = document.querySelector('#btnShowWaiter span');
+  if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
+}
+
+/* --- UTILIDADES & PERSISTENCIA TEMPORAL --- */
+const CART_TTL = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
+
+function saveCart() { 
+  const data = {
+    cart: cart,
+    timestamp: Date.now()
+  };
+  localStorage.setItem('demo_cart', JSON.stringify(data)); 
+}
+
+function loadCart() { 
+  const s = localStorage.getItem('demo_cart'); 
+  if(s) {
+    const data = JSON.parse(s);
+    cart = data.cart || {};
+  }
+}
+
+function checkCartExpiration() {
+  const s = localStorage.getItem('demo_cart');
+  if(s) {
+    const data = JSON.parse(s);
+    const now = Date.now();
+    // Si ha pasado más de 5 horas desde la última modificación
+    if (now - data.timestamp > CART_TTL) {
+      localStorage.removeItem('demo_cart');
+      localStorage.removeItem('demo_notes'); // También borramos notas
+      cart = {};
+    }
+  }
+}
+
+function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
+
+function clearCart() { 
+  const t = uiDict[lang] || uiDict['es'];
+  if(confirm(t.confirm)) { 
+    cart={}; 
+    localStorage.removeItem('demo_cart'); // Borrado real
+    render(); updateFloat(); closeSheet(); 
+  } 
+}
+
+// TEMA
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme() {
+  let saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', saved);
+  themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
+}
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme();
+});
+
+init();
 </script>
-
 </body>
 </html>
