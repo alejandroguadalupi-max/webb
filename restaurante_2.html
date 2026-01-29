@@ -47,9 +47,10 @@
     overflow-x: hidden;
   }
 
+  /* --- CONTROLES SUPERIORES --- */
   .top-controls {
     position: absolute; top: 20px; right: 20px;
-    display: flex; align-items: center; gap: 12px; z-index: 10;
+    display: flex; align-items: center; gap: 12px; z-index: 20;
   }
 
   .lang-badge {
@@ -65,10 +66,14 @@
     cursor: pointer; transition: transform 0.2s; font-size: 1.2rem;
   }
 
+  /* --- CONTENEDOR PRINCIPAL --- */
   .review-container {
     width: 100%; min-height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    padding: 20px 25px; text-align: center;
+    padding: 20px 25px; 
+    /* CORRECCIÓN OVERLAP: Añadimos padding superior extra */
+    padding-top: 80px; 
+    text-align: center;
   }
   
   .content-wrapper {
@@ -95,16 +100,21 @@
   .divider::before { margin-right: 15px; }
   .divider::after { margin-left: 15px; }
 
+  /* --- BOTONES UNIFICADOS --- */
   .btn {
     display: block; width: 100%; text-decoration: none; padding: 18px 0; 
     border-radius: 16px; font-weight: 700; font-size: 1.05em; text-align: center;
     color: var(--btn-text); border: none; transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
     background-color: var(--primary-color);
+    font-family: 'Outfit', sans-serif; /* Asegura misma fuente en <button> y <a> */
+    
+    /* CORRECCIÓN DISEÑO: Sombra aplicada a ambos botones por igual */
+    box-shadow: 0 10px 20px -5px var(--primary-color);
   }
 
-  .btn-google { box-shadow: 0 10px 20px -5px var(--primary-color); }
   .btn:active { transform: scale(0.98); }
+  .btn:hover { opacity: 0.95; }
 
   .note { font-size: 0.85em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300;}
 
@@ -131,6 +141,7 @@
     background: var(--primary-color); color: white;
     width: 100%; padding: 15px; border-radius: 14px;
     font-weight: 700; border: none; cursor: pointer;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
   }
 </style>
 </head>
@@ -155,7 +166,9 @@
     <section class="option-box box-public">
       <h2 data-lang="publicTitle">⭐ Reseña pública</h2>
       <p data-lang="publicText">Tu opinión ayuda a otros clientes a encontrarnos.</p>
-      <button id="btnGoogle" class="btn btn-google" data-lang="publicBtn">Publicar en Google</button>
+      
+      <button id="btnGoogle" class="btn" data-lang="publicBtn">Publicar en Google</button>
+      
       <div class="note" data-lang="publicNote">Queda visible para todos.</div>
     </section>
 
@@ -164,7 +177,9 @@
     <section class="option-box box-private">
       <h2 data-lang="privateTitle">📝 Comentario privado</h2>
       <p data-lang="privateText">¿Algo no fue bien? Ayúdanos a mejorar hablándolo con nosotros.</p>
-      <a id="btnPrivate" class="btn btn-private" data-lang="privateBtn" href="#">Hablar con el equipo</a>
+      
+      <a id="btnPrivate" class="btn" data-lang="privateBtn" href="#">Hablar con el equipo</a>
+      
       <div class="note" data-lang="privateNote">Solo lo vemos nosotros.</div>
     </section>
 
@@ -195,8 +210,8 @@ const translations = {
   },
   it: { 
     publicTitle: "⭐ Recensione pubblica", publicText: "La tua opinione aiuta gli altri clienti a trovarci.", publicBtn: "Pubblica su Google", publicNote: "Visibile a tutti.", 
-    privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a mejorar.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi.",
-    modalTitle: "Demo Taply", modalText: "Questa è una demo di Taply. Il link diretto alla tua attività su Google sarà abilitato nella versione finale, una vez que ti unirai a noi e configurerai il tuo prodotto.", modalBtn: "Ho capito"
+    privateTitle: "📝 Feedback privato", privateText: "Qualcosa non è andato? Aiutaci a migliorare.", privateBtn: "Parla con il team", privateNote: "Visibile solo a noi.",
+    modalTitle: "Demo Taply", modalText: "Questa è una demo di Taply. Il link diretto alla tua attività su Google sarà abilitato nella versione finale, una volta che ti unirai a noi e configurerai il tuo prodotto.", modalBtn: "Ho capito"
   }
 };
 

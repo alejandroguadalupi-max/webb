@@ -179,6 +179,7 @@
     gap: 8px;
     background: rgba(0,0,0,0.03);
     border: 1px solid transparent;
+    text-decoration: none; /* Para que funcione como link si falla JS */
   }
 
   .kids-trigger:hover {
@@ -186,7 +187,7 @@
     transform: scale(1.05);
   }
 
-  /* Estado Activado (Agitar) */
+  /* Estado Activado (Agitar o Click) */
   .kids-trigger.active {
     background: var(--brand-color);
     color: #fff;
@@ -253,7 +254,7 @@
     </a>
   </div>
 
-  <div id="shakeTrigger" class="kids-trigger" onclick="enableShakeFeature()">
+  <div id="shakeTrigger" class="kids-trigger" onclick="handleKidsClick()">
     <span id="shakeIcon">🎮</span> 
     <span id="shakeText">Zona Kids: Toca para jugar</span>
   </div>
@@ -272,26 +273,43 @@
 <script>
   /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA EL MÓVIL!" },
-    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE PHONE!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Erfahrung teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "HANDY SCHÜTTELN!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Laisser un avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ !" },
-    it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI ORA!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA O TOCA!" },
+    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE OR TAP!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Erfahrung teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "SCHÜTTELN ODER TIPPEN!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Laisser un avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ OU TOUCHEZ !" },
+    it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI O TOCCA!" }
   };
 
-  /* --- 2. LOGICA NATIVA (SHAKE) --- */
+  /* --- 2. LOGICA ZONA KIDS (SHAKE + CLICK) --- */
   let lastX = null, lastY = null, lastZ = null;
   let lastTime = 0;
   let isListening = false;
 
+  function goToGames() {
+      window.location.href = `juegos.html${window.location.search}`;
+  }
+
+  function handleKidsClick() {
+      // Si ya estaba escuchando (boton activo), el click funciona como enlace directo
+      if (isListening) {
+          goToGames();
+      } else {
+          enableShakeFeature();
+      }
+  }
+
   function startNativeShakeListener() {
     if(isListening) return;
     
-    // VISUAL: ACTIVAR BOTÓN
+    // VISUAL: CAMBIO A MODO ACTIVO
     const btn = document.getElementById('shakeTrigger');
-    btn.classList.add('active'); // Clase CSS nueva para estado "pulsando"
+    btn.classList.add('active'); 
     
-    let lang = localStorage.getItem('userLang') || 'es';
+    // Actualizamos texto según idioma
+    let lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
+    // Fallback si el idioma no existe en dic
+    if (!translations[lang]) lang = 'es';
+
     const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
     
     document.getElementById('shakeText').innerText = readyText;
@@ -299,26 +317,28 @@
     
     isListening = true;
 
-    // SENSOR
-    window.addEventListener('devicemotion', (event) => {
-      const current = event.accelerationIncludingGravity;
-      if (!current) return;
+    // SENSOR DE MOVIMIENTO
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', (event) => {
+          const current = event.accelerationIncludingGravity;
+          if (!current) return;
 
-      const currentTime = new Date().getTime();
-      if ((currentTime - lastTime) > 100) {
-        const diffTime = currentTime - lastTime;
-        lastTime = currentTime;
+          const currentTime = new Date().getTime();
+          if ((currentTime - lastTime) > 100) {
+            const diffTime = currentTime - lastTime;
+            lastTime = currentTime;
 
-        if (lastX !== null) {
-          const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
-          if (speed > 800) { 
-             if(navigator.vibrate) navigator.vibrate(300);
-             window.location.href = `juegos.html${window.location.search}`;
+            if (lastX !== null) {
+              const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
+              if (speed > 800) { 
+                 if(navigator.vibrate) navigator.vibrate(300);
+                 goToGames(); // IR A JUEGOS AL AGITAR
+              }
+            }
+            lastX = current.x; lastY = current.y; lastZ = current.z;
           }
-        }
-        lastX = current.x; lastY = current.y; lastZ = current.z;
-      }
-    });
+        });
+    }
   }
 
   function enableShakeFeature() {
@@ -362,11 +382,9 @@
     // COLOR DINÁMICO
     const rootStyles = document.documentElement.style;
     if(params.get('btn')) {
-       // Color del configurador
        const customColor = '#' + params.get('btn');
        rootStyles.setProperty('--brand-color', customColor);
     } else {
-       // Color por defecto
        rootStyles.setProperty('--brand-color', style.bg);
     }
 
@@ -379,23 +397,44 @@
     document.body.style.opacity = "1";
   }
 
-  /* --- 4. SISTEMA UI --- */
+  /* --- 4. SISTEMA UI (IDIOMA AUTO) --- */
+  function detectAndSetLanguage() {
+      // 1. Mirar si ya eligió idioma antes
+      let lang = localStorage.getItem('userLang');
+      
+      // 2. Si no, detectar idioma del navegador
+      if (!lang) {
+          lang = navigator.language.slice(0, 2); // 'es', 'en', 'fr'...
+          // Si el idioma detectado no está en nuestro dic, usar 'es' por defecto
+          if (!translations[lang]) lang = 'es';
+          
+          // Guardarlo para la sesión
+          localStorage.setItem('userLang', lang);
+      }
+      
+      // 3. Aplicar al selector
+      const selector = document.getElementById("lang-select");
+      if(selector) selector.value = lang;
+
+      return lang;
+  }
+
   function syncLanguage() {
-    let lang = localStorage.getItem('userLang') || (navigator.language.slice(0,2)) || 'es';
-    if(!translations[lang]) lang = "es";
+    let lang = localStorage.getItem('userLang') || 'es';
+    
     document.querySelectorAll('[data-lang]').forEach(el => {
-      if (translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
+      if (translations[lang] && translations[lang][el.dataset.lang]) {
+          el.textContent = translations[lang][el.dataset.lang];
+      }
     });
     
-    // Actualizar texto shake
+    // Actualizar texto shake dinámicamente según estado
     const txtSpan = document.getElementById('shakeText');
     if(document.getElementById('shakeTrigger').classList.contains('active')) {
-       txtSpan.innerText = translations[lang].shake_ready;
+       txtSpan.innerText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
     } else {
-       txtSpan.innerText = translations[lang].shake_wait;
+       txtSpan.innerText = translations[lang] ? translations[lang].shake_wait : "Zona Kids";
     }
-
-    document.getElementById("lang-select").value = lang;
   }
 
   function syncTheme() {
@@ -417,6 +456,7 @@
   });
 
   window.addEventListener('pageshow', () => {
+    detectAndSetLanguage(); // AUTO DETECCIÓN AL CARGAR
     syncTheme();
     syncLanguage();
     applyDemoLogic();
