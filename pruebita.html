@@ -100,7 +100,7 @@
             transition: box-shadow 0.6s;
         }
 
-        /* PEGATINA EN LA MESA (PEQUEÑA) */
+        /* PEGATINA EN LA MESA */
         .design-sticker {
             position: absolute; bottom: 30px; right: 30px;
             width: 95px; height: 95px; transform: translateZ(2px);
@@ -112,24 +112,35 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 8px; box-sizing: border-box;
         }
+        
+        /* Texto dentro de la pegatina pequeña */
         .sticker-name-mini {
-            font-family: 'Playfair Display', serif; font-size: 8px;
-            color: var(--sticker-brown); margin-bottom: 2px; text-transform: uppercase;
-            font-weight: 700; text-align: center;
+            font-family: 'Outfit', sans-serif; 
+            font-size: 8px; /* Tamaño ajustado */
+            line-height: 1.4;
+            color: var(--sticker-brown); 
+            text-transform: uppercase;
+            font-weight: 800; 
+            text-align: center;
+            letter-spacing: 0.5px;
         }
 
         /* --- UI INFERIOR --- */
         .persistent-ui {
-            position: absolute; bottom: 70px; width: 90%; max-width: 400px;
+            position: absolute; bottom: 60px; width: 100%;
             display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 500;
+            padding: 0 20px; box-sizing: border-box;
         }
+        
         .btn-primary {
-            background: var(--brand-color); color: white; width: 100%; padding: 18px;
+            background: var(--brand-color); color: white; width: 100%; 
+            max-width: 280px; 
+            padding: 16px;
             border-radius: 100px; text-decoration: none; font-weight: 800;
             text-transform: uppercase; text-align: center; font-size: 0.9em;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.3s;
         }
-        .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
 
         .disclaimer {
             color: #888; font-size: 9px; font-weight: 600;
@@ -153,10 +164,10 @@
 
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- OVERLAY CON FOTO PERSONALIZADA --- */
+        /* --- OVERLAY --- */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); z-index: 1000; display: none;
+            background: rgba(0,0,0,0.95); z-index: 1000; display: none;
             flex-direction: column; align-items: center; justify-content: center;
             backdrop-filter: blur(10px);
         }
@@ -177,7 +188,6 @@
 
         .sticker-text-overlay {
             position: absolute;
-            /* AQUÍ ESTÁ EL AJUSTE: top: 10% */
             top: 10%; 
             left: 50%;
             transform: translateX(-50%);
@@ -190,6 +200,18 @@
             text-shadow: 0 1px 2px rgba(255,255,255,0.8); 
             pointer-events: none;
         }
+
+        /* Botón Escanear en Overlay */
+        .btn-scan-overlay {
+            margin-top: 30px;
+            background: white; color: black;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 800; border: none; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            transition: transform 0.2s;
+        }
+        .btn-scan-overlay:active { transform: scale(0.95); }
 
     </style>
 </head>
@@ -215,7 +237,12 @@
             <img src="img/diseño.png" alt="Diseño Mesa" class="sticker-img">
             <div class="sticker-text-overlay dynamic-name">Restaurante</div>
         </div>
-        <div style="color:white; margin-top:30px; font-size:12px; opacity:0.6; cursor:pointer; font-weight:800; letter-spacing:1px;" onclick="closeLogo()">CERRAR VISTA</div>
+        
+        <button class="btn-scan-overlay" onclick="scanQR()">
+            📷 Escanear QR
+        </button>
+
+        <div style="color:white; margin-top:20px; font-size:12px; opacity:0.6; cursor:pointer; font-weight:800; letter-spacing:1px;" onclick="closeLogo()">CERRAR VISTA</div>
     </div>
 
     <div class="restaurant-scene" id="scene">
@@ -226,9 +253,7 @@
             <div class="table-top">
                 <div class="design-sticker">
                     <div class="sticker-base">
-                        <div class="dynamic-name sticker-name-mini">Restaurante</div>
-                        <img style="width: 35px; opacity: 0.9;" src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=TaplyDemo" alt="QR">
-                        <div style="font-size: 4px; font-weight: 900; color: var(--sticker-brown); margin-top: 2px;">NFC CONTACTLESS</div>
+                        <div class="sticker-name-mini">TOCA PARA VER<br>EJEMPLO DISEÑO</div>
                     </div>
                 </div>
             </div>
@@ -241,6 +266,7 @@
         const colorHex = params.get('btn') || "2E7D32";
         const nextUrl = `principal.html${window.location.search}`;
 
+        // Asignar nombres
         document.querySelectorAll('.dynamic-name').forEach(el => el.textContent = restName);
         document.documentElement.style.setProperty('--brand-color', '#' + colorHex);
         document.getElementById('direct-link').href = nextUrl;
@@ -260,6 +286,15 @@
             document.getElementById('main-ui').style.visibility = 'visible';
             const scale = window.innerWidth < 600 ? 0.55 : 1;
             document.getElementById('scene').style.transform = `scale(${scale}) rotateX(60deg) rotateZ(-20deg) translateY(60px)`;
+        }
+
+        // Acción de Escanear (Redirige a principal.html)
+        function scanQR() {
+            const btn = document.querySelector('.btn-scan-overlay');
+            btn.innerHTML = "⏳ Escaneando...";
+            setTimeout(() => {
+                window.location.href = nextUrl;
+            }, 800);
         }
     </script>
 </body>
