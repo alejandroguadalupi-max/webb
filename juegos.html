@@ -35,15 +35,19 @@
       transition: background 0.4s ease; overflow-x: hidden;
     }
 
-    /* --- HEADER --- */
+    /* --- HEADER LIMPIO (SIN LÍNEA) --- */
     header {
       width: 100%; padding: 15px 20px;
-      background: var(--bg-card); border-bottom: 2px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
+      background: var(--bg-body); 
+      /* La línea border-bottom ha sido eliminada aquí */
+      display: flex; justify-content: flex-end; /* Alineado todo a la derecha */
+      align-items: center;
       position: sticky; top: 0; z-index: 100;
     }
-    .header-left { font-weight: 700; font-size: 1.1rem; color: var(--brand-color); text-transform: uppercase; letter-spacing: 1px; }
+    
+    /* Controles a la derecha */
     .header-right { display: flex; align-items: center; gap: 12px; }
+    
     .lang-tag { font-weight: 700; font-size: 0.8rem; color: var(--text-sec); border: 2px solid var(--border); padding: 4px 8px; border-radius: 8px; text-transform: uppercase; }
     .theme-toggle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg-body); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
 
@@ -61,13 +65,13 @@
     }
     .game-card:active { transform: scale(0.95); }
     .game-icon { font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1)); }
-    .game-title { font-weight: 700; font-size: 1rem; }
+    .game-title { font-weight: 700; font-size: 1rem; text-align: center;}
 
     /* --- CONTENEDORES --- */
     .game-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 450px; padding: 15px; flex: 1; margin: 0 auto; justify-content: center;}
     .game-wrapper.active { display: flex; animation: slideUp 0.4s ease-out; }
 
-    /* === MEMORY (DISEÑO LIMPIO) === */
+    /* === MEMORY === */
     .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 320px; margin: 0 auto; }
     .mem-card { aspect-ratio: 1; perspective: 1000px; cursor: pointer; height: 85px; }
     .mem-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
@@ -106,7 +110,6 @@
 <body>
 
   <header>
-    <div class="header-left">ZONA KIDS 🎨</div>
     <div class="header-right">
         <div class="lang-tag" id="langDisplay">ES</div>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
@@ -131,7 +134,7 @@
           <div class="game-icon">🦖</div>
           <div class="game-title" data-t="g4">Dino Run</div>
         </div>
-        <button class="btn btn-action" style="grid-column: span 2; margin-top: 15px;" onclick="history.back()">SALIR DE JUEGOS</button>
+        <button class="btn btn-action" style="grid-column: span 2; margin-top: 15px;" onclick="history.back()" data-t="exit_hub">SALIR DE JUEGOS</button>
     </div>
   </div>
 
@@ -139,45 +142,45 @@
       <div class="modal-content">
           <h2 id="modalMsg">¡FIN!</h2>
           <p id="modalScore"></p>
-          <button class="btn btn-action" id="btnRetry">REINTENTAR 🔄</button>
-          <button class="btn btn-outline" onclick="exitToHub()">MENÚ 🏠</button>
+          <button class="btn btn-action" id="btnRetry" data-t="retry">REINTENTAR 🔄</button>
+          <button class="btn btn-outline" onclick="exitToHub()" data-t="menu_btn">MENÚ 🏠</button>
       </div>
   </div>
 
   <div class="game-wrapper" id="game-dino">
-    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:10px; font-weight:800;"><span>Score: <span id="dScore">0</span></span></div>
+    <div style="width:100%; display:flex; justify-content:space-between; margin-bottom:10px; font-weight:800;"><span><span data-t="score">Score</span>: <span id="dScore">0</span></span></div>
     <canvas id="dinoCanvas"></canvas>
-    <button class="btn btn-action" style="margin-top:20px; height:80px;" onmousedown="dJump()" ontouchstart="dJump()">¡SALTAR! 👆</button>
-    <button class="btn btn-outline" onclick="exitToHub()">VOLVER</button>
+    <button class="btn btn-action" style="margin-top:20px; height:80px;" onmousedown="dJump()" ontouchstart="dJump()" data-t="jump_btn">¡SALTAR! 👆</button>
+    <button class="btn btn-outline" onclick="exitToHub()" data-t="back">VOLVER</button>
   </div>
 
   <div class="game-wrapper" id="game-mole">
     <div id="mole-intro" class="game-intro">
         <div class="game-icon">👨‍🍳</div>
-        <h2>Caza al Chef</h2>
-        <p>¡No dejes que se escape!</p>
-        <button class="btn btn-action" onclick="startMoleGame()">EMPEZAR</button>
-        <button class="btn btn-outline" onclick="exitToHub()">VOLVER</button>
+        <h2 data-t="mole_title">Caza al Chef</h2>
+        <p data-t="mole_desc">¡No dejes que se escape!</p>
+        <button class="btn btn-action" onclick="startMoleGame()" data-t="start">EMPEZAR</button>
+        <button class="btn btn-outline" onclick="exitToHub()" data-t="back">VOLVER</button>
     </div>
     <div id="mole-active" style="display:none; width:100%;">
-        <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; text-align:center;">Caza: <span id="mScore">0</span></div>
+        <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; text-align:center;"><span data-t="mole_catch">Caza</span>: <span id="mScore">0</span></div>
         <div class="mole-grid" id="mGrid"></div>
     </div>
   </div>
 
   <div class="game-wrapper" id="game-memory">
     <div class="memory-grid" id="memBoard"></div>
-    <button class="btn btn-outline" style="margin-top:30px" onclick="exitToHub()">VOLVER</button>
+    <button class="btn btn-outline" style="margin-top:30px" onclick="exitToHub()" data-t="back">VOLVER</button>
   </div>
 
   <div class="game-wrapper" id="game-impostor">
       <div id="imp-setup" style="width:100%;">
           <div class="setup-box">
               <input type="text" id="pName" placeholder="Nombre..." style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); margin-bottom:15px; font-family:'Fredoka';">
-              <button class="btn btn-action" onclick="addP()">Añadir +</button>
+              <button class="btn btn-action" onclick="addP()" data-t="add_btn">Añadir +</button>
               <div id="pList" style="margin:20px 0;"></div>
-              <button class="btn btn-action" id="startImpBtn" disabled onclick="startImp()" style="background:#22c55e">EMPEZAR</button>
-              <button class="btn btn-outline" onclick="exitToHub()">VOLVER</button>
+              <button class="btn btn-action" id="startImpBtn" disabled onclick="startImp()" style="background:#22c55e" data-t="start">EMPEZAR</button>
+              <button class="btn btn-outline" onclick="exitToHub()" data-t="back">VOLVER</button>
           </div>
       </div>
       <div id="imp-play" style="display:none; text-align:center; width:100%;">
@@ -188,6 +191,95 @@
   </div>
 
   <script>
+    /* 1. DICCIONARIO DE IDIOMAS */
+    const dict = {
+        es: { 
+            exit_hub: "SALIR DE JUEGOS",
+            g1:"Parejas", g2:"Caza Chef", g3:"Impostor", g4:"Dino Run", 
+            retry:"REINTENTAR 🔄", menu_btn: "MENÚ 🏠", back: "VOLVER", start: "EMPEZAR",
+            score: "Puntos", jump_btn: "¡SALTAR! 👆", boom: "¡BOOM!",
+            mole_title: "Caza al Chef", mole_desc: "¡No dejes que se escape!", mole_catch: "Caza", mole_msg_lost: "¡SE ESCAPÓ!",
+            win: "¡GENIO!",
+            add_btn: "Añadir +", name_ph: "Nombre...", 
+            imp_view: "VER PALABRA", imp_ready: "LISTO (OCULTAR)", imp_word: "PALABRA: ", imp_secret: "IMPOSTOR 😈", 
+            imp_play_title: "¡A JUGAR!", imp_starts: "EMPIEZA: ", imp_desc: "Debatid quién es el impostor y pulsad el botón cuando estéis listos.", imp_reveal: "REVELAR IMPOSTOR",
+            imp_words: ["Pizza", "Sushi", "Taco", "Hamburguesa", "Pasta", "Helado", "Sopa"]
+        },
+        en: { 
+            exit_hub: "EXIT GAMES",
+            g1:"Memory", g2:"Chef Hunt", g3:"Imposter", g4:"Dino Run", 
+            retry:"RETRY 🔄", menu_btn: "MENU 🏠", back: "BACK", start: "START",
+            score: "Score", jump_btn: "JUMP! 👆", boom: "BOOM!",
+            mole_title: "Catch the Chef", mole_desc: "Don't let him escape!", mole_catch: "Caught", mole_msg_lost: "HE ESCAPED!",
+            win: "GENIUS!",
+            add_btn: "Add +", name_ph: "Name...", 
+            imp_view: "VIEW WORD", imp_ready: "READY (HIDE)", imp_word: "WORD: ", imp_secret: "IMPOSTER 😈", 
+            imp_play_title: "LET'S PLAY!", imp_starts: "STARTS: ", imp_desc: "Discuss who is the imposter and press the button when ready.", imp_reveal: "REVEAL IMPOSTER",
+            imp_words: ["Pizza", "Sushi", "Taco", "Burger", "Pasta", "Ice Cream", "Soup"]
+        },
+        de: { 
+            exit_hub: "SPIELE VERLASSEN",
+            g1:"Paare", g2:"Chef Jagd", g3:"Hochstapler", g4:"Dino Run", 
+            retry:"NEU STARTEN 🔄", menu_btn: "MENÜ 🏠", back: "ZURÜCK", start: "STARTEN",
+            score: "Punkte", jump_btn: "SPRINGEN! 👆", boom: "BUMM!",
+            mole_title: "Fang den Chef", mole_desc: "Lass ihn nicht entkommen!", mole_catch: "Gefangen", mole_msg_lost: "ENTKOMMEN!",
+            win: "GENIE!",
+            add_btn: "Hinzufügen +", name_ph: "Name...", 
+            imp_view: "WORT ANSEHEN", imp_ready: "BEREIT (VERSTECKEN)", imp_word: "WORT: ", imp_secret: "HOCHSTAPLER 😈", 
+            imp_play_title: "LOS GEHT'S!", imp_starts: "BEGINNT: ", imp_desc: "Diskutiert, wer der Hochstapler ist, und drückt den Knopf.", imp_reveal: "ENTHÜLLEN",
+            imp_words: ["Pizza", "Sushi", "Taco", "Burger", "Pasta", "Eis", "Suppe"]
+        },
+        fr: { 
+            exit_hub: "QUITTER",
+            g1:"Mémoire", g2:"Chasse Chef", g3:"Imposteur", g4:"Dino Run", 
+            retry:"RÉESSAYER 🔄", menu_btn: "MENU 🏠", back: "RETOUR", start: "COMMENCER",
+            score: "Score", jump_btn: "SAUTER ! 👆", boom: "BOUM !",
+            mole_title: "Chasse au Chef", mole_desc: "Ne le laissez pas s'échapper !", mole_catch: "Attrapé", mole_msg_lost: "IL S'EST ÉCHAPPÉ !",
+            win: "GÉNIE !",
+            add_btn: "Ajouter +", name_ph: "Nom...", 
+            imp_view: "VOIR LE MOT", imp_ready: "PRÊT (CACHER)", imp_word: "MOT : ", imp_secret: "IMPOSTEUR 😈", 
+            imp_play_title: "JOUONS !", imp_starts: "COMMENCE : ", imp_desc: "Discutez qui est l'imposteur et appuyez sur le bouton.", imp_reveal: "RÉVÉLER",
+            imp_words: ["Pizza", "Sushi", "Tacos", "Burger", "Pâtes", "Glace", "Soupe"]
+        },
+        it: { 
+            exit_hub: "ESCI",
+            g1:"Memoria", g2:"Caccia allo Chef", g3:"Impostore", g4:"Dino Run", 
+            retry:"RIPROVA 🔄", menu_btn: "MENU 🏠", back: "INDIETRO", start: "INIZIA",
+            score: "Punti", jump_btn: "SALTA! 👆", boom: "BOOM!",
+            mole_title: "Caccia allo Chef", mole_desc: "Non farlo scappare!", mole_catch: "Preso", mole_msg_lost: "SCAPPATO!",
+            win: "GENIO!",
+            add_btn: "Aggiungi +", name_ph: "Nome...", 
+            imp_view: "VEDI PAROLA", imp_ready: "PRONTO (NASCONDI)", imp_word: "PAROLA: ", imp_secret: "IMPOSTORE 😈", 
+            imp_play_title: "GIOCHIAMO!", imp_starts: "INIZIA: ", imp_desc: "Discutete chi è l'impostore e premete il pulsante.", imp_reveal: "RIVELA",
+            imp_words: ["Pizza", "Sushi", "Taco", "Hamburger", "Pasta", "Gelato", "Zuppa"]
+        }
+    };
+
+    /* 2. INICIALIZACIÓN Y DETECCIÓN AUTOMÁTICA DE IDIOMA */
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // 1. Intentar obtener idioma de localStorage (si vino de principal.html)
+    // 2. Si no, intentar obtener idioma del navegador
+    // 3. Si no existe en el diccionario, usar 'es' por defecto
+    let detectedLang = localStorage.getItem('userLang') || navigator.language.slice(0,2);
+    if (!dict[detectedLang]) detectedLang = 'es';
+    
+    const t = dict[detectedLang]; // Objeto de traducción actual
+    
+    const color = urlParams.get('btn') ? '#' + urlParams.get('btn') : '#FF8C00';
+    document.documentElement.style.setProperty('--brand-color', color);
+    document.getElementById('langDisplay').innerText = detectedLang.toUpperCase();
+
+    // Aplicar traducciones estáticas al cargar
+    function applyTranslations() {
+        document.querySelectorAll('[data-t]').forEach(el => {
+            if (t[el.dataset.t]) el.innerText = t[el.dataset.t];
+        });
+        document.getElementById('pName').placeholder = t.name_ph;
+        document.getElementById('impBtn').innerText = t.imp_view;
+    }
+    applyTranslations();
+
     /* LÓGICA DE TEMA (MODO CLARO / OSCURO) */
     function applySavedTheme() {
         const savedTheme = localStorage.getItem('theme') || 'light';
@@ -203,18 +295,6 @@
         localStorage.setItem('theme', next);
         document.getElementById('themeBtn').innerText = next === 'dark' ? '🌙' : '☀️';
     }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const lang = urlParams.get('lang') || 'es';
-    const color = urlParams.get('btn') ? '#' + urlParams.get('btn') : '#FF8C00';
-    document.documentElement.style.setProperty('--brand-color', color);
-    document.getElementById('langDisplay').innerText = lang;
-
-    const dict = {
-        es: { g1:"Parejas", g2:"Caza Chef", g3:"Impostor", g4:"Dino Run", retry:"REINTENTAR", view:"VER PALABRA", secret:"IMPOSTOR 😈", start:"EMPIEZA: ", reveal:"REVELAR IMPOSTOR", lost:"¡SE ESCAPÓ!", win:"¡GENIO!" },
-        en: { g1:"Memory", g2:"Catch Chef", g3:"Impostor", g4:"Dino Run", retry:"RETRY", view:"VIEW WORD", secret:"IMPOSTER 😈", start:"STARTS: ", reveal:"REVEAL IMPOSTER", lost:"HE ESCAPED!", win:"GENIUS!" }
-    };
-    const t = dict[lang] || dict.es;
 
     function openGame(id) {
         stopAllGames();
@@ -237,7 +317,7 @@
         if(typeof mTimer !== 'undefined') clearTimeout(mTimer);
     }
 
-    /* PAREJAS (MEMORY) - REDUCIDO A 12 CARTAS */
+    /* PAREJAS (MEMORY) */
     function init_memory() {
         const icons = ['🍕','🍔','🍟','🍦','🍩','🍎']; 
         const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
@@ -257,7 +337,7 @@
         }
     }
 
-    /* CAZA CHEF (MOLE) CON INICIO */
+    /* CAZA CHEF (MOLE) */
     let mActive = false, mSpeed = 1200, mScore = 0, mTimer;
     function init_mole() {
         document.getElementById('mole-intro').style.display = 'block';
@@ -276,7 +356,7 @@
         const h = holes[Math.floor(Math.random()*9)];
         h.classList.add('up');
         mTimer = setTimeout(() => {
-            if(h.classList.contains('up') && mActive) { mActive = false; showGameOver(t.lost, mScore, 'mole'); }
+            if(h.classList.contains('up') && mActive) { mActive = false; showGameOver(t.mole_msg_lost, mScore, 'mole'); }
             else if(mActive) peepM();
         }, mSpeed);
     }
@@ -309,7 +389,7 @@
         dObs.forEach((o, i) => {
             o.x -= dSpeed; dCtx.font = "30px Arial"; dCtx.fillText(o.type, o.x, o.y+20);
             if(o.x < dDino.x + 25 && o.x + 20 > dDino.x && o.y < dDino.y + 35 && o.y + 25 > dDino.y) {
-                dActive = false; showGameOver("¡BOOM!", dScore, 'dino');
+                dActive = false; showGameOver(t.boom, dScore, 'dino');
             }
             if(o.x < -40) { dObs.splice(i,1); dScore++; dSpeed += 0.1; }
         });
@@ -317,7 +397,7 @@
         dFrame++; requestAnimationFrame(dLoop);
     }
 
-    /* IMPOSTOR CON BOTÓN VOLVER Y REVELACIÓN */
+    /* IMPOSTOR */
     let players = [], impIdx, revIdx, sWord;
     function addP() {
         const n = document.getElementById('pName').value.trim();
@@ -327,7 +407,7 @@
     function renderP() { document.getElementById('pList').innerHTML = players.map(p => `<span class="player-tag">${p}</span>`).join(''); }
     function startImp() {
         impIdx = Math.floor(Math.random()*players.length); revIdx = 0;
-        sWord = ["Pizza", "Sushi", "Taco", "Hamburguesa", "Pasta", "Helado", "Sopa"][Math.floor(Math.random()*7)];
+        sWord = t.imp_words[Math.floor(Math.random()*t.imp_words.length)];
         document.getElementById('imp-setup').style.display = "none";
         document.getElementById('imp-play').style.display = "block";
         updateImpUI();
@@ -335,36 +415,40 @@
     function updateImpUI() {
         document.getElementById('impTurn').innerText = players[revIdx];
         document.getElementById('impSecret').style.display = "none";
-        document.getElementById('impBtn').innerText = t.view;
+        document.getElementById('impBtn').innerText = t.imp_view;
     }
     function handleImp() {
         const sec = document.getElementById('impSecret');
         if(sec.style.display === "none") {
-            sec.style.display = "block"; sec.innerText = revIdx === impIdx ? t.secret : "PALABRA: " + sWord;
-            document.getElementById('impBtn').innerText = "LISTO (OCULTAR)";
+            sec.style.display = "block"; sec.innerText = revIdx === impIdx ? t.imp_secret : t.imp_word + sWord;
+            document.getElementById('impBtn').innerText = t.imp_ready;
         } else {
             revIdx++;
             if(revIdx < players.length) updateImpUI();
             else {
                 const starter = players[Math.floor(Math.random()*players.length)];
                 document.getElementById('imp-play').innerHTML = `
-                    <h2 style="color:var(--brand-color)">¡A JUGAR!</h2>
-                    <p style="font-size:1.3rem">🔥 ${t.start} <b>${starter}</b></p>
-                    <p style="margin:20px 0; color:var(--text-sec)">Debatid quién es el impostor y pulsad el botón cuando estéis listos.</p>
-                    <button class="btn btn-action" onclick="revealImpostorFinal()">${t.reveal}</button>
-                    <button class="btn btn-outline" onclick="exitToHub()">VOLVER AL MENÚ</button>
+                    <h2 style="color:var(--brand-color)">${t.imp_play_title}</h2>
+                    <p style="font-size:1.3rem">🔥 ${t.imp_starts} <b>${starter}</b></p>
+                    <p style="margin:20px 0; color:var(--text-sec)">${t.imp_desc}</p>
+                    <button class="btn btn-action" onclick="revealImpostorFinal()">${t.imp_reveal}</button>
+                    <button class="btn btn-outline" onclick="exitToHub()">${t.menu_btn}</button>
                 `;
             }
         }
     }
     function revealImpostorFinal() {
-        showGameOver(t.reveal, players[impIdx], 'impostor');
+        showGameOver(t.imp_reveal, players[impIdx], 'impostor');
     }
 
     function showGameOver(m, s, id) {
         document.getElementById('modalEnd').style.display = 'flex';
         document.getElementById('modalMsg').innerText = m;
-        document.getElementById('modalScore').innerText = s !== "" ? (id === 'impostor' ? s : "Resultado: " + s) : "";
+        if (id === 'impostor') {
+             document.getElementById('modalScore').innerText = s; 
+        } else {
+             document.getElementById('modalScore').innerText = t.score + ": " + s;
+        }
         document.getElementById('btnRetry').onclick = () => openGame(id);
     }
   </script>
