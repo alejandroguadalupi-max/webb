@@ -203,10 +203,10 @@ textarea.notes:focus { border-color: var(--brand-color); }
 <div class="controls-container">
   <div class="allergy-wrapper">
     <select id="allergyFilter" class="allergy-select" onchange="render()">
-      <option value="">🌱 Filtrar Alergias / Dietas</option>
-      <option value="gf">🌾 Sin Gluten</option>
-      <option value="lf">🥛 Sin Lactosa</option>
-      <option value="v">🥦 Vegano</option>
+      <option value="" id="opt-all">🌱 Filtrar Alergias</option>
+      <option value="gf" id="opt-gf">🌾 Sin Gluten</option>
+      <option value="lf" id="opt-lf">🥛 Sin Lactosa</option>
+      <option value="v" id="opt-v">🥦 Vegano</option>
     </select>
   </div>
 
@@ -272,6 +272,45 @@ const config = {
   }
 };
 
+/* --- IDIOMAS --- */
+const uiDict = {
+  es: { 
+    ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
+    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
+    trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
+    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)",
+    all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
+  },
+  en: { 
+    ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
+    btn:"View Order", title:"Your Order", clear:"Clear all", 
+    trans:"Show Waiter (ES)", confirm:"Clear everything?",
+    add: "Add", place: "Notes (e.g. no ice, well done...)",
+    all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
+  },
+  de: { 
+    ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
+    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
+    trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
+    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)",
+    all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
+  },
+  fr: { 
+    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
+    btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", 
+    trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?",
+    add: "Ajouter", place: "Notes (ex. pas de glace...)",
+    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
+  },
+  it: { 
+    ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", 
+    btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", 
+    trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?",
+    add: "Aggiungi", place: "Note (es. senza ghiaccio...)",
+    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
+  }
+};
+
 /* --- ESTADO --- */
 let cart = {};
 let activeCategory = 'principales'; 
@@ -282,30 +321,22 @@ let userCategory = 'restaurante';
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
-  
-  // 1. Idioma
   lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
-  // 2. Info Restaurante
   const name = params.get('n') || "Restaurante";
   userCategory = params.get('categoria') || 'restaurante';
   document.getElementById('brandNameDisplay').innerText = name;
   document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
   
-  // 3. Color Dinámico
   const root = document.documentElement.style;
   if(params.get('btn')) root.setProperty('--brand-color', '#' + params.get('btn'));
   else root.setProperty('--brand-color', '#68B553');
 
-  // 4. Tema (Detectar parámetro URL)
   const urlTheme = params.get('theme');
-  if (urlTheme) {
-    localStorage.setItem('theme', urlTheme);
-  }
+  if (urlTheme) { localStorage.setItem('theme', urlTheme); }
   applyTheme();
 
-  // 5. Cargar Menú
   const specificMenu = config.menus[userCategory] || config.menus['hamburgueseria'];
   currentMenu = [...specificMenu, ...config.menus['comunes']];
 
@@ -322,7 +353,6 @@ function render() {
   container.innerHTML = '';
   const allergyFilter = document.getElementById('allergyFilter').value;
   
-  // Usar texto traducido del botón "Añadir"
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
 
@@ -339,10 +369,10 @@ function render() {
 
   items.forEach(p => {
     const qty = cart[p.id] || 0;
+    // Traducir nombre y descripción del plato
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
 
-    // Aquí usamos addBtnText dinámico
     let controlHTML = qty === 0 
       ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
       : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
@@ -379,7 +409,7 @@ function updateFloat() {
   count > 0 ? btn.classList.add('visible') : btn.classList.remove('visible');
 }
 
-/* --- MODAL Y MODO CAMARERO --- */
+/* --- MODAL Y TRADUCCIÓN API --- */
 function renderList() {
   const list = document.getElementById('orderList');
   list.innerHTML = '';
@@ -423,7 +453,6 @@ function openSheet() {
   const waiterBtn = document.getElementById('btnShowWaiter');
   if (lang !== 'es') waiterBtn.style.display = 'flex';
   else waiterBtn.style.display = 'none';
-  
   renderList();
 }
 
@@ -432,7 +461,7 @@ function closeSheet() {
   document.getElementById('overlay').classList.remove('open'); 
 }
 
-function enterWaiterMode() {
+async function enterWaiterMode() {
   document.body.classList.add('waiter-active');
   document.getElementById('orderSheet').classList.add('waiter-mode');
   
@@ -443,19 +472,41 @@ function enterWaiterMode() {
   
   document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
-  // TRADUCCIÓN SIMULADA DE NOTAS
+  // LOGICA DE TRADUCCIÓN REAL CON API
   const notes = document.getElementById('notesField').value;
   const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
   
   if (notes && notes.trim() !== "") {
     waiterNotesDisplay.style.display = 'block';
-    // Visualmente decimos que está traducido
-    waiterNotesDisplay.innerHTML = `
-      <div class="waiter-note-box">
-        <span class="waiter-note-label">📝 Nota del Cliente (Traducido al Español):</span>
-        "${notes}"
-      </div>
-    `;
+    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">Traduciendo nota... ⏳</div>`;
+    
+    try {
+        // Usamos API MyMemory (Gratuita, sin Key)
+        // Traduce del idioma actual (lang) al español (es)
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(notes)}&langpair=${lang}|es`);
+        const data = await res.json();
+        
+        let translatedText = notes; // Fallback
+        if (data.responseData && data.responseData.translatedText) {
+            translatedText = data.responseData.translatedText;
+        }
+
+        waiterNotesDisplay.innerHTML = `
+          <div class="waiter-note-box">
+            <span class="waiter-note-label">📝 Nota del Cliente (Traducido):</span>
+            "${translatedText}"
+            <div style="font-size:0.8rem; color:#888; margin-top:5px; font-style:italic">Original: "${notes}"</div>
+          </div>
+        `;
+    } catch (err) {
+        // Fallback si falla la API
+        waiterNotesDisplay.innerHTML = `
+          <div class="waiter-note-box">
+            <span class="waiter-note-label">📝 Nota del Cliente:</span>
+            "${notes}"
+          </div>
+        `;
+    }
   } else {
     waiterNotesDisplay.style.display = 'none';
   }
@@ -479,52 +530,28 @@ function exitWaiterMode() {
   renderList();
 }
 
-/* --- IDIOMAS --- */
-const uiDict = {
-  es: { 
-    ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
-    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
-    trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
-    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)"
-  },
-  en: { 
-    ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
-    btn:"View Order", title:"Your Order", clear:"Clear all", 
-    trans:"Show Waiter (ES)", confirm:"Clear everything?",
-    add: "Add", place: "Notes (e.g. no ice, well done...)"
-  },
-  de: { 
-    ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
-    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
-    trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
-    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)"
-  },
-  fr: { 
-    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
-    btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", 
-    trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?",
-    add: "Ajouter", place: "Notes (ex. pas de glace...)"
-  },
-  it: { 
-    ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", 
-    btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", 
-    trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?",
-    add: "Aggiungi", place: "Note (es. senza ghiaccio...)"
-  }
-};
-
 function translateUI() {
   const t = uiDict[lang] || uiDict['es'];
+  
+  // Categorías
   document.getElementById('f-ent').innerText = t.ent;
   document.getElementById('f-main').innerText = t.main;
   document.getElementById('f-des').innerText = t.des;
   document.getElementById('f-drk').innerText = t.drk;
+  
+  // Botones y Títulos
   document.getElementById('btnText').innerText = t.btn;
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
   
-  // Traducir Placeholder
+  // Placeholder de Notas
   document.getElementById('notesField').placeholder = t.place;
+  
+  // Opciones del Select de Alergias
+  document.getElementById('opt-all').innerText = t.all;
+  document.getElementById('opt-gf').innerText = t.gf;
+  document.getElementById('opt-lf').innerText = t.lf;
+  document.getElementById('opt-v').innerText = t.v;
   
   const waiterBtnSpan = document.querySelector('#btnShowWaiter span');
   if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
