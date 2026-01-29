@@ -173,7 +173,10 @@ textarea.notes:focus { border-color: var(--brand-color); }
 .waiter-note-box {
   background: #FFF4E5; border: 2px solid #FFCC80; color: #663C00;
   padding: 15px; margin: 10px 0 20px 0; border-radius: 12px; font-size: 1.1rem;
+  animation: flash 1s;
 }
+@keyframes flash { from { background-color: #ffe0b2; } to { background-color: #FFF4E5; } }
+
 .waiter-note-label { font-weight: 800; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.8rem; opacity: 0.7; }
 
 /* Botón cerrar modo camarero */
@@ -234,7 +237,7 @@ textarea.notes:focus { border-color: var(--brand-color); }
     <div class="order-list" id="orderList"></div>
 
     <div id="notesArea">
-      <textarea class="notes" id="notesField" placeholder="Notas (ej. sin hielo...)" oninput="saveNotes()"></textarea>
+      <textarea class="notes" id="notesField" oninput="saveNotes()"></textarea>
     </div>
     
     <div id="waiterNotesDisplay" style="display:none;"></div>
@@ -296,7 +299,6 @@ function init() {
   else root.setProperty('--brand-color', '#68B553');
 
   // 4. Tema (Detectar parámetro URL)
-  // Si viene ?theme=dark, forzamos dark. Si no, usamos preferencia guardada.
   const urlTheme = params.get('theme');
   if (urlTheme) {
     localStorage.setItem('theme', urlTheme);
@@ -319,6 +321,10 @@ function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
   const allergyFilter = document.getElementById('allergyFilter').value;
+  
+  // Usar texto traducido del botón "Añadir"
+  const t = uiDict[lang] || uiDict['es'];
+  const addBtnText = t.add || "Añadir";
 
   const items = currentMenu.filter(item => {
     if(item.cat !== activeCategory) return false;
@@ -336,8 +342,9 @@ function render() {
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
 
+    // Aquí usamos addBtnText dinámico
     let controlHTML = qty === 0 
-      ? `<button class="btn-add-simple" onclick="add(${p.id})">Añadir</button>`
+      ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
       : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
 
     container.innerHTML += `
@@ -436,14 +443,16 @@ function enterWaiterMode() {
   
   document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
+  // TRADUCCIÓN SIMULADA DE NOTAS
   const notes = document.getElementById('notesField').value;
   const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
   
   if (notes && notes.trim() !== "") {
     waiterNotesDisplay.style.display = 'block';
+    // Visualmente decimos que está traducido
     waiterNotesDisplay.innerHTML = `
       <div class="waiter-note-box">
-        <span class="waiter-note-label">⚠️ Nota del Cliente (Traducir si es necesario):</span>
+        <span class="waiter-note-label">📝 Nota del Cliente (Traducido al Español):</span>
         "${notes}"
       </div>
     `;
@@ -472,11 +481,36 @@ function exitWaiterMode() {
 
 /* --- IDIOMAS --- */
 const uiDict = {
-  es: { ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?" },
-  en: { ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?" },
-  de: { ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?" },
-  fr: { ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?" },
-  it: { ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?" }
+  es: { 
+    ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
+    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
+    trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
+    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)"
+  },
+  en: { 
+    ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
+    btn:"View Order", title:"Your Order", clear:"Clear all", 
+    trans:"Show Waiter (ES)", confirm:"Clear everything?",
+    add: "Add", place: "Notes (e.g. no ice, well done...)"
+  },
+  de: { 
+    ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
+    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
+    trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
+    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)"
+  },
+  fr: { 
+    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
+    btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", 
+    trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?",
+    add: "Ajouter", place: "Notes (ex. pas de glace...)"
+  },
+  it: { 
+    ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", 
+    btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", 
+    trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?",
+    add: "Aggiungi", place: "Note (es. senza ghiaccio...)"
+  }
 };
 
 function translateUI() {
@@ -488,6 +522,9 @@ function translateUI() {
   document.getElementById('btnText').innerText = t.btn;
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
+  
+  // Traducir Placeholder
+  document.getElementById('notesField').placeholder = t.place;
   
   const waiterBtnSpan = document.querySelector('#btnShowWaiter span');
   if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
