@@ -46,19 +46,18 @@ body {
     background: var(--bg-body);
     color: var(--text-main);
     
-    /* CAMBIO CLAVE: Usar dvh (Dynamic Viewport Height) para evitar el salto de la barra de navegación */
-    min-height: 100vh; /* Fallback */
+    min-height: 100vh;
     min-height: 100dvh; 
     
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* CAMBIO: Usamos flex-start en lugar de center para controlar mejor el flujo vertical */
+    justify-content: flex-start; 
     
     -webkit-font-smoothing: antialiased;
     transition: background 0.3s ease, color 0.3s ease;
     
-    /* CAMBIO: Padding responsivo que respeta el 'Notch' del iPhone y da aire abajo */
     padding: 20px;
     padding-top: max(20px, env(safe-area-inset-top)); 
     padding-bottom: max(20px, env(safe-area-inset-bottom));
@@ -67,11 +66,17 @@ body {
 }
 
 .top-controls {
-    position: absolute; 
-    /* CAMBIO: Posición adaptada al Notch */
-    top: max(20px, env(safe-area-inset-top)); 
-    right: max(20px, env(safe-area-inset-right));
-    display: flex; align-items: center; gap: 12px; z-index: 10;
+    /* CAMBIO IMPORTANTE: Eliminamos position absolute. 
+       Ahora ocupa espacio real arriba, empujando todo el contenido hacia abajo. */
+    position: relative; 
+    width: 100%;
+    max-width: 420px; /* Alineado con el ancho de la tarjeta */
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end; /* Alineado a la derecha */
+    gap: 12px; 
+    z-index: 10;
+    margin-bottom: 10px; /* Espacio extra entre controles y tarjeta */
 }
 
 .lang-badge {
@@ -98,17 +103,25 @@ body {
     text-align: center;
     box-shadow: var(--shadow-card);
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    /* Eliminamos margin-top fijo para que el centrado flex funcione mejor */
     position: relative;
     z-index: 5;
+    
+    /* CAMBIO CLAVE: Centrado automático vertical.
+       Esto centra la tarjeta en el espacio SOBRANTE (debajo de los controles),
+       lo que visualmente la deja más abajo y equilibrada. */
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
-/* MEDIA QUERY: Si la pantalla es muy bajita (o teclado abierto), dejar de centrar verticalmente para poder hacer scroll */
+/* MEDIA QUERY: Para pantallas pequeñas, mantenemos un margen mínimo arriba */
 @media (max-height: 700px) {
     body {
-        justify-content: flex-start;
-        padding-top: max(80px, calc(env(safe-area-inset-top) + 60px)); /* Espacio para que no choque con los botones de arriba */
-        overflow-y: auto;
+        /* Permitir scroll si no cabe */
+        overflow-y: auto; 
+    }
+    .share-card {
+        margin-top: 10px; /* Margen fijo si la pantalla es muy pequeña */
+        margin-bottom: 20px;
     }
 }
 
@@ -117,10 +130,9 @@ p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-h
 
 .photo-area {
     width: 100%; 
-    /* Mantenemos el aspecto pero limitamos la altura máxima para pantallas pequeñas */
     aspect-ratio: 1/1; 
-    max-height: 35vh; /* CAMBIO: Altura relativa a la pantalla */
-    min-height: 200px; /* Mínimo de seguridad */
+    max-height: 35vh; 
+    min-height: 200px; 
     
     border-radius: 20px; 
     border: 2px dashed var(--border); 
