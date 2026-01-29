@@ -75,7 +75,9 @@
     align-items: center;
     padding: 20px 25px; 
     
-    /* AJUSTE SAFARI: Un poco de margen negativo superior para compensar visualmente */
+    /* AJUSTE SAFARI + BAJAR DISEÑO: Más padding superior */
+    padding-top: 100px; 
+    
     margin-top: -20px; 
     text-align: center;
   }
@@ -87,7 +89,7 @@
 
   .option-box {
     width: 100%; background: var(--bg-card); border: 1px solid var(--border); 
-    border-radius: 24px; padding: 25px 20px; /* Padding un poco más compacto */
+    border-radius: 24px; padding: 25px 20px; 
     box-shadow: var(--shadow-card); 
     transition: transform 0.3s ease; position: relative; overflow: hidden;
   }
@@ -98,7 +100,9 @@
   .option-box p { font-size: 0.9em; color: var(--text-sec); margin: 0 0 18px 0; line-height: 1.4; }
 
   .divider {
-    display: flex; align-items: center; width: 100%; margin: 20px 0; 
+    display: flex; align-items: center; width: 100%; 
+    /* SEPARACIÓN AUMENTADA: De 20px a 35px */
+    margin: 35px 0; 
     color: var(--text-sec); font-weight: 600; font-size: 0.8em; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;
   }
   .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
