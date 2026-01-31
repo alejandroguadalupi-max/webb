@@ -397,7 +397,8 @@
     document.body.style.opacity = "1";
   }
 
-  /* --- 4. SISTEMA UI (IDIOMA AUTO) --- */
+  /* --- 4. SISTEMA UI (IDIOMA AUTO + TEMA FIXED) --- */
+  
   function detectAndSetLanguage() {
       // 1. Mirar si ya eligió idioma antes
       let lang = localStorage.getItem('userLang');
@@ -437,8 +438,17 @@
     }
   }
 
+  // --- MODIFICADO: Modo claro por defecto ---
   function syncTheme() {
-    let theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    // 1. Intentamos obtener la preferencia guardada por el usuario
+    let theme = localStorage.getItem('theme');
+    
+    // 2. Si NO existe preferencia guardada, forzamos 'light' (ignorando sistema)
+    if (!theme) {
+        theme = 'light';
+    }
+
+    // 3. Aplicamos el tema (recuperado o 'light' por defecto)
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
   }
@@ -446,6 +456,7 @@
   document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
+    // Aquí SÍ guardamos la preferencia explícita del usuario
     localStorage.setItem('theme', newTheme);
     syncTheme();
   });
@@ -456,8 +467,8 @@
   });
 
   window.addEventListener('pageshow', () => {
-    detectAndSetLanguage(); // AUTO DETECCIÓN AL CARGAR
-    syncTheme();
+    detectAndSetLanguage(); // AUTO DETECCIÓN DE IDIOMA
+    syncTheme();            // TEMA (Claro por defecto)
     syncLanguage();
     applyDemoLogic();
   });
