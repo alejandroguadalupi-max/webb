@@ -1,10 +1,463 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Mi web</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>El Buen Bocado</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+  :root {
+    /* --- COLORES PERSONALIZADOS EL BUEN BOCADO --- */
+    --brand-color: #a0715e; /* Marrón Terracota (Marco del QR) */
+    
+    --bg-body: #fffbf2;     /* Crema suave (Fondo de la pegatina) */
+    --card-bg: #ffffff;
+    --text-main: #3e2b26;   /* Marrón Café Oscuro (Texto del logo) */
+    --text-sec: #8d6e63;    /* Marrón secundario suave */
+    --btn-bg-light: #ffffff;
+    
+    --shadow-soft: 0 10px 40px -10px rgba(62, 43, 38, 0.1);
+    --shadow-hover: 0 20px 40px -10px rgba(62, 43, 38, 0.15);
+  }
+
+  [data-theme="dark"] {
+    --bg-body: #1e1b1a;     /* Versión oscura del marrón */
+    --card-bg: #2d2420;
+    --text-main: #f3e5dc;
+    --text-sec: #d7ccc8;
+    --btn-bg-light: #3e2b26;
+    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.4);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg-body);
+    color: var(--text-main);
+    transition: background 0.4s ease;
+    opacity: 0; 
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* --- CONTENEDOR PRINCIPAL TIPO APP --- */
+  .app-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  /* --- HEADER & LOGO --- */
+  .header-section {
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .logo-icon {
+    font-size: 4em;
+    margin-bottom: 5px;
+    display: inline-block;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+  }
+
+  .brand-name {
+    font-size: 2.2em;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+    color: var(--text-main); /* Usamos el color oscuro del logo */
+    text-transform: capitalize;
+    letter-spacing: -1px;
+  }
+
+  .welcome-text {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--text-sec);
+    margin-top: 10px;
+  }
+
+  /* --- BOTONES DEL MENÚ --- */
+  .menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 1.05em;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Efecto Hover Premium */
+  .menu-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--brand-color);
+  }
+
+  /* Pequeña barra de color a la izquierda */
+  .menu-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: var(--brand-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-btn:hover::before { opacity: 1; }
+
+  /* Icono flecha */
+  .menu-btn::after {
+    content: '→';
+    font-weight: 300;
+    opacity: 0.5;
+    transition: transform 0.3s;
+  }
+  .menu-btn:hover::after {
+    transform: translateX(5px);
+    opacity: 1;
+    color: var(--brand-color);
+  }
+
+  /* Botón Principal (Destacado) */
+  .menu-btn.primary {
+    background: var(--brand-color);
+    color: #fff;
+    box-shadow: 0 15px 30px -10px rgba(160, 113, 94, 0.5); /* Sombra color terracota */
+  }
+  .menu-btn.primary:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: transparent;
+  }
+  .menu-btn.primary::before { display: none; }
+  .menu-btn.primary::after { color: #fff; opacity: 0.8; }
+
+
+  /* --- ZONA KIDS --- */
+  .kids-trigger {
+    margin-top: 40px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.03);
+    border: 1px solid transparent;
+    text-decoration: none; 
+  }
+
+  .kids-trigger:hover {
+    background: rgba(0,0,0,0.06);
+    transform: scale(1.05);
+  }
+
+  /* Estado Activado (Agitar o Click) */
+  .kids-trigger.active {
+    background: var(--brand-color);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.1em;
+    padding: 15px 40px;
+    box-shadow: 0 10px 25px -5px var(--brand-color);
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse { 
+    0% { transform: scale(1); } 
+    50% { transform: scale(1.05); } 
+    100% { transform: scale(1); } 
+  }
+
+  /* --- UTILIDADES --- */
+  .theme-btn { 
+    position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; 
+    border-radius: 50%; border: none; cursor: pointer; 
+    background: var(--card-bg); color: var(--text-main); 
+    box-shadow: var(--shadow-soft); font-size: 1.2em; 
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+  }
+  .theme-btn:active { transform: scale(0.9); }
+
+  .lang-container {
+    margin-top: 30px;
+    opacity: 0.7;
+  }
+  .lang-container select {
+    padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text-sec);
+    background: transparent; color: var(--text-main); font-size: 0.8em;
+    cursor: pointer;
+  }
+
+  /* Animaciones Entrada */
+  @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  </style>
 </head>
 <body>
-    <h1>Hola</h1>
+
+<main class="app-container">
+  <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema">☀️</button>
+  
+  <div class="header-section">
+    <div id="logoIcon" class="logo-icon">🍽️</div> 
+    <h1 id="brandNameDisplay" class="brand-name">El Buen Bocado</h1>
+    <p class="welcome-text" data-lang="welcome">¡Bienvenid@!</p>
+  </div>
+
+  <div class="menu-grid">
+    <a id="menuLink" class="menu-btn primary" href="#">
+      <span data-lang="view_menu">Ver la Carta</span>
+    </a>
+    <a id="reviewLink" class="menu-btn" href="#">
+      <span data-lang="leave_review">Dejar Reseña</span>
+    </a>
+    <a id="shareLink" class="menu-btn" href="#">
+      <span data-lang="share_with_friends">Compartir</span>
+    </a>
+  </div>
+
+  <div id="shakeTrigger" class="kids-trigger" onclick="handleKidsClick()">
+    <span id="shakeIcon">🎮</span> 
+    <span id="shakeText">Zona Kids: Toca para jugar</span>
+  </div>
+
+  <div class="lang-container">
+    <select id="lang-select">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+    </select>
+  </div>
+</main>
+
+<script>
+  /* --- 1. DICCIONARIO --- */
+  const translations = {
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA O TOCA!" },
+    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE OR TAP!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Erfahrung teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "SCHÜTTELN ODER TIPPEN!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Laisser un avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ OU TOUCHEZ !" },
+    it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI O TOCCA!" }
+  };
+
+  /* --- 2. LOGICA ZONA KIDS (SHAKE + CLICK) --- */
+  let lastX = null, lastY = null, lastZ = null;
+  let lastTime = 0;
+  let isListening = false;
+
+  function goToGames() {
+      // Ajuste para desarrollo local: Si no hay params, va limpio
+      const search = window.location.search ? window.location.search : '';
+      window.location.href = `juegos.html${search}`;
+  }
+
+  function handleKidsClick() {
+      if (isListening) {
+          goToGames();
+      } else {
+          enableShakeFeature();
+      }
+  }
+
+  function startNativeShakeListener() {
+    if(isListening) return;
+    
+    const btn = document.getElementById('shakeTrigger');
+    btn.classList.add('active'); 
+    
+    let lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
+    if (!translations[lang]) lang = 'es';
+
+    const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
+    
+    document.getElementById('shakeText').innerText = readyText;
+    document.getElementById('shakeIcon').innerText = "📳";
+    
+    isListening = true;
+
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', (event) => {
+          const current = event.accelerationIncludingGravity;
+          if (!current) return;
+
+          const currentTime = new Date().getTime();
+          if ((currentTime - lastTime) > 100) {
+            const diffTime = currentTime - lastTime;
+            lastTime = currentTime;
+
+            if (lastX !== null) {
+              const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
+              if (speed > 800) { 
+                 if(navigator.vibrate) navigator.vibrate(300);
+                 goToGames(); 
+              }
+            }
+            lastX = current.x; lastY = current.y; lastZ = current.z;
+          }
+        });
+    }
+  }
+
+  function enableShakeFeature() {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') startNativeShakeListener();
+        })
+        .catch(console.error);
+    } else {
+      startNativeShakeListener();
+    }
+  }
+
+  /* --- 3. CONFIGURACIÓN (COLORES Y DATOS) --- */
+  
+  // He actualizado la configuración por defecto para que coincida con "El Buen Bocado"
+  // Color bg: Terracota suave (#a0715e)
+  const designSystem = {
+    'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
+    'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
+    'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
+    'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
+    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' },
+    'default':        { bg: '#a0715e', text: '#fff', icon: '🍽️' } 
+  };
+
+  const params = new URLSearchParams(window.location.search);
+
+  function applyDemoLogic() {
+    // NOTA: He comentado la validación de 'auth' para que funcione sin URL especial
+    // if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
+
+    // Textos: Si no hay parámetro 'n', usa "El Buen Bocado"
+    const name = params.get('n') || "El Buen Bocado";
+    document.title = name;
+    document.getElementById('brandNameDisplay').textContent = name;
+    
+    // Icono y Color
+    const category = params.get('categoria'); 
+    const style = designSystem[category] || designSystem['default'];
+    document.getElementById('logoIcon').textContent = style.icon;
+
+    const rootStyles = document.documentElement.style;
+    
+    // Si la URL define color, úsalo, si no, usa el color terracota por defecto del CSS/System
+    if(params.get('btn')) {
+       const customColor = '#' + params.get('btn');
+       rootStyles.setProperty('--brand-color', customColor);
+    } else if (category) {
+       // Solo sobrescribimos si hay una categoría explícita, si no dejamos el CSS base
+       rootStyles.setProperty('--brand-color', style.bg);
+    }
+
+    // Enlaces
+    const currentParams = window.location.search; 
+    document.getElementById('menuLink').href = `carta.html${currentParams}`;
+    document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
+    document.getElementById('shareLink').href = `compartir_2.html${currentParams}`;
+
+    document.body.style.opacity = "1";
+  }
+
+  /* --- 4. SISTEMA UI (IDIOMA AUTO + TEMA FIXED) --- */
+  
+  function detectAndSetLanguage() {
+      let lang = localStorage.getItem('userLang');
+      if (!lang) {
+          lang = navigator.language.slice(0, 2); 
+          if (!translations[lang]) lang = 'es';
+          localStorage.setItem('userLang', lang);
+      }
+      const selector = document.getElementById("lang-select");
+      if(selector) selector.value = lang;
+      return lang;
+  }
+
+  function syncLanguage() {
+    let lang = localStorage.getItem('userLang') || 'es';
+    
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      if (translations[lang] && translations[lang][el.dataset.lang]) {
+          el.textContent = translations[lang][el.dataset.lang];
+      }
+    });
+    
+    const txtSpan = document.getElementById('shakeText');
+    if(document.getElementById('shakeTrigger').classList.contains('active')) {
+       txtSpan.innerText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
+    } else {
+       txtSpan.innerText = translations[lang] ? translations[lang].shake_wait : "Zona Kids";
+    }
+  }
+
+  function syncTheme() {
+    let theme = localStorage.getItem('theme');
+    if (!theme) {
+        theme = 'light';
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
+  }
+
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', newTheme);
+    syncTheme();
+  });
+
+  document.getElementById('lang-select').addEventListener('change', (e) => {
+    localStorage.setItem('userLang', e.target.value);
+    syncLanguage();
+  });
+
+  window.addEventListener('pageshow', () => {
+    detectAndSetLanguage(); 
+    syncTheme();            
+    syncLanguage();
+    applyDemoLogic();
+  });
+</script>
 </body>
 </html>

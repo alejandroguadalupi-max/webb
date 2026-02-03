@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
-<title>Carta Digital</title>
+<title>Taply Menu</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
 
 <style>
 :root {
-  --brand-color: #68B553; 
+  --brand-color: #FF4757; /* Se sobrescribe por JS si viene en URL */
   --bg-body: #f8fafc;
   --bg-card: #ffffff;
   --text-main: #1e293b;
@@ -52,6 +52,12 @@ body {
 .brand-category { font-size: 0.8rem; color: var(--text-sec); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
 .header-right { display: flex; align-items: center; gap: 10px; }
+
+.lang-badge {
+    font-weight: 700; border: 2px solid var(--text-main); padding: 5px 8px; 
+    border-radius: 8px; font-size: 0.8rem; cursor: default; letter-spacing: 1px; opacity: 0.8;
+}
+
 .theme-btn { 
   background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
   color: var(--text-main); display: flex; align-items: center; justify-content: center;
@@ -143,6 +149,7 @@ body {
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .order-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-body); border-radius: 12px; }
 .order-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
+.order-cat-header { font-size: 0.8rem; font-weight: 800; color: var(--text-sec); margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
 textarea.notes {
   width: 100%; padding: 15px; border-radius: 12px; background: var(--bg-body); border: 2px solid var(--border);
@@ -152,38 +159,49 @@ textarea.notes:focus { border-color: var(--brand-color); }
 
 .btn-action-wrapper { display: flex; flex-direction: column; gap: 10px; }
 .btn-waiter {
-  width: 100%; padding: 16px; border-radius: 14px; 
-  background: #111827; color: white; border: none; font-weight: 700; font-size: 1.1rem; cursor: pointer; 
+  width: 100%; padding: 18px; border-radius: 16px; 
+  background: #000; color: white; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; 
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transform-origin: center; animation: pulse 2s infinite;
 }
+@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
+
 .clear-btn { background: transparent; border: none; color: var(--text-sec); text-decoration: underline; cursor: pointer; align-self: center; font-size: 0.9rem; margin-top: 5px;}
 
-/* --- MODO CAMARERO (ZOOM) --- */
+/* --- MODO CAMARERO (PANTALLA COMPLETA) --- */
 .sheet.waiter-mode { 
-  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 80px; 
+  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 60px; 
+  background: #fff; color: #000;
 }
+/* Forzar tema claro en modo camarero para máximo contraste */
 .sheet.waiter-mode .order-item { 
-  padding: 25px 10px; background: transparent; border-bottom: 2px solid var(--border); border-radius: 0; 
+  padding: 25px 5px; background: transparent; border-bottom: 2px solid #eee; border-radius: 0; 
 }
-.sheet.waiter-mode .order-name { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
-.sheet.waiter-mode .qty-display { font-size: 2rem; font-weight: 900; color: var(--brand-color); margin-right: 20px; }
+.sheet.waiter-mode .order-name { 
+  font-size: 1.8rem; font-weight: 800; line-height: 1.1; color: #000;
+}
+.sheet.waiter-mode .qty-display { 
+  font-size: 2.2rem; font-weight: 900; color: var(--brand-color); margin-right: 25px; 
+}
 
-/* Notas en modo camarero */
+/* Notas traducidas en modo camarero */
 .waiter-note-box {
-  background: #FFF4E5; border: 2px solid #FFCC80; color: #663C00;
-  padding: 15px; margin: 10px 0 20px 0; border-radius: 12px; font-size: 1.1rem;
-  animation: flash 1s;
+  background: #FFF8E1; border: 3px solid #FFD54F; color: #000;
+  padding: 20px; margin: 20px 0; border-radius: 16px; font-size: 1.4rem;
+  line-height: 1.4; font-weight: 500;
 }
-@keyframes flash { from { background-color: #ffe0b2; } to { background-color: #FFF4E5; } }
 
-.waiter-note-label { font-weight: 800; display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.8rem; opacity: 0.7; }
+.waiter-note-label { 
+  font-weight: 900; display: block; margin-bottom: 8px; 
+  text-transform: uppercase; font-size: 0.9rem; color: #FFA000; letter-spacing: 1px;
+}
 
-/* Botón cerrar modo camarero */
+/* Botón cerrar modo camarero (Grande y flotante) */
 #closeWaiterBtn {
-  position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; background: #000; color: #fff;
-  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; z-index: 3001;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3); border: none;
+  position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: #FF4757; color: #fff;
+  border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; z-index: 3001;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3); border: none; font-weight: bold;
 }
 </style>
 </head>
@@ -253,26 +271,23 @@ textarea.notes:focus { border-color: var(--brand-color); }
 </div>
 
 <script>
-/* --- CONFIGURACIÓN --- */
+/* --- CONFIGURACIÓN DE DATOS --- */
 const config = {
   menus: {
     'pizzeria': [
-       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone"}, desc: {es:"Queso fundido", en:"Melted cheese"} },
-       { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella", en:"Tomato, mozzarella"} },
-       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara", en:"Carbonara"}, desc: {es:"Auténtica", en:"Authentic"} }
-    ],
-    'hamburgueseria': [
-       { id: 201, cat: 'entrantes', tags: ['v'], price: 8.50, name: {es:"Nachos", en:"Nachos"}, desc: {es:"Guacamole", en:"Guacamole"} },
-       { id: 204, cat: 'principales', tags: [], price: 12.50, name: {es:"Burger Clásica", en:"Classic Burger"}, desc: {es:"Cheddar, bacon", en:"Cheddar, bacon"} }
+       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone", de:"Gebackener Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato", de:"Geschmolzener Käse mit Tomate"} },
+       { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita", de:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil", de:"Tomate, Mozzarella, Basilikum"} },
+       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara Original", en:"Authentic Carbonara", de:"Carbonara Original"}, desc: {es:"Huevo, guanciale, pecorino", en:"Egg, guanciale, pecorino", de:"Ei, Guanciale, Pecorino"} },
+       { id: 199, cat: 'postres', tags: ['v'], price: 5.50, name: {es:"Tiramisú", en:"Tiramisu", de:"Tiramisu"}, desc: {es:"Casero", en:"Homemade", de:"Hausgemacht"} }
     ],
     'comunes': [
-       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke"}, desc: {es:"33cl", en:"33cl"} },
-       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water"}, desc: {es:"50cl", en:"50cl"} }
+       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke", de:"Cola"}, desc: {es:"33cl", en:"33cl", de:"33cl"} },
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua", en:"Water", de:"Wasser"}, desc: {es:"50cl", en:"50cl", de:"50cl"} }
     ]
   }
 };
 
-/* --- IDIOMAS --- */
+/* --- TRADUCCIONES UI --- */
 const uiDict = {
   es: { 
     ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
@@ -294,20 +309,6 @@ const uiDict = {
     trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
     add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)",
     all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
-  },
-  fr: { 
-    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
-    btn:"Voir Commande", title:"Votre Commande", clear:"Effacer", 
-    trans:"Montrer au serveur (ES)", confirm:"Tout effacer ?",
-    add: "Ajouter", place: "Notes (ex. pas de glace...)",
-    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
-  },
-  it: { 
-    ent:"Antipasti", main:"Piatti", des:"Dolci", drk:"Bevande", 
-    btn:"Vedi Ordine", title:"Il tuo Ordine", clear:"Cancellare", 
-    trans:"Mostra al cameriere (ES)", confirm:"Cancellare tutto?",
-    add: "Aggiungi", place: "Note (es. senza ghiaccio...)",
-    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
   }
 };
 
@@ -316,38 +317,47 @@ let cart = {};
 let activeCategory = 'principales'; 
 let lang = 'es';
 let currentMenu = [];
-let userCategory = 'restaurante';
+let userCategory = 'pizzeria';
 
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
-  lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
+  
+  // 1. GESTIÓN DEL IDIOMA (Solo por URL o Navegador, sin cambio manual)
+  // Intenta coger ?lang=xx, si no, busca localStorage, si no, idioma del navegador
+  const urlLang = params.get('lang');
+  const browserLang = navigator.language.slice(0,2);
+  lang = urlLang || localStorage.getItem('userLang') || (['es','en','de'].includes(browserLang) ? browserLang : 'es');
+  
+  // Guardamos para persistencia simple pero no permitimos cambio en UI
+  localStorage.setItem('userLang', lang); 
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
+  // 2. GESTIÓN DE COLORES (Si viene de página principal)
+  const colorParam = params.get('color');
+  if(colorParam) {
+    document.documentElement.style.setProperty('--brand-color', '#' + colorParam.replace('#',''));
+  }
+
+  // 3. Configuración del nombre
   const name = params.get('n') || "Restaurante";
-  userCategory = params.get('categoria') || 'restaurante';
   document.getElementById('brandNameDisplay').innerText = name;
-  document.getElementById('catDisplay').innerText = userCategory.toUpperCase();
   
-  const root = document.documentElement.style;
-  if(params.get('btn')) root.setProperty('--brand-color', '#' + params.get('btn'));
-  else root.setProperty('--brand-color', '#68B553');
-
-  const urlTheme = params.get('theme');
-  if (urlTheme) { localStorage.setItem('theme', urlTheme); }
-  applyTheme();
-
-  const specificMenu = config.menus[userCategory] || config.menus['hamburgueseria'];
+  // Definir menú
+  const specificMenu = config.menus[userCategory] || config.menus['pizzeria'];
   currentMenu = [...specificMenu, ...config.menus['comunes']];
 
   loadCart();
   translateUI();
+  // Forzar categoría inicial a bebidas si se prefiere, o principales
+  activeCategory = 'principales';
   updateFilterUI();
   render();
   updateFloat();
+  applyTheme();
 }
 
-/* --- RENDER --- */
+/* --- RENDERIZADO DEL MENU --- */
 function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
@@ -356,20 +366,18 @@ function render() {
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
 
+  // Filtramos los items
   const items = currentMenu.filter(item => {
     if(item.cat !== activeCategory) return false;
     if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
     return true;
   });
 
-  if(items.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; opacity:0.7">No hay productos.</div>`;
-    return;
-  }
-
   items.forEach(p => {
     const qty = cart[p.id] || 0;
-    // Traducir nombre y descripción del plato
+    
+    // TRADUCCIÓN DE NOMBRES E INGREDIENTES
+    // Usa el idioma actual, si no existe, usa 'es' por defecto
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
 
@@ -390,17 +398,33 @@ function render() {
   });
 }
 
+function filter(cat) {
+  activeCategory = cat;
+  updateFilterUI();
+  render();
+}
+
 function updateFilterUI() {
   document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
   const map = { 'bebidas':'f-drk', 'entrantes':'f-ent', 'principales':'f-main', 'postres':'f-des' };
   if(map[activeCategory]) document.getElementById(map[activeCategory]).classList.add('active');
 }
 
-function filter(cat) { activeCategory = cat; updateFilterUI(); render(); }
+/* --- FUNCIONES DEL CARRITO --- */
+function add(id) { 
+  cart[id] = (cart[id] || 0) + 1; 
+  saveCart(); render(); updateFloat(); 
+  if(document.querySelector('.overlay.open')) renderList(); 
+}
 
-/* --- CARRITO --- */
-function add(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
-function remove(id) { if(cart[id]) { cart[id]--; if(cart[id] <= 0) delete cart[id]; } saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
+function remove(id) { 
+  if(cart[id]) { 
+    cart[id]--; 
+    if(cart[id] <= 0) delete cart[id]; 
+  } 
+  saveCart(); render(); updateFloat(); 
+  if(document.querySelector('.overlay.open')) renderList(); 
+}
 
 function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
@@ -409,7 +433,21 @@ function updateFloat() {
   count > 0 ? btn.classList.add('visible') : btn.classList.remove('visible');
 }
 
-/* --- MODAL Y TRADUCCIÓN API --- */
+function openSheet() { 
+  document.getElementById('overlay').classList.add('open'); 
+  const waiterBtn = document.getElementById('btnShowWaiter');
+  // Mostrar botón camarero solo si no es español
+  if (lang !== 'es') waiterBtn.style.display = 'flex';
+  else waiterBtn.style.display = 'none';
+  renderList();
+}
+
+function closeSheet() { 
+  exitWaiterMode();
+  document.getElementById('overlay').classList.remove('open'); 
+}
+
+// LOGICA DE ORDENAMIENTO DE PLATOS EN EL RESUMEN
 function renderList() {
   const list = document.getElementById('orderList');
   list.innerHTML = '';
@@ -419,24 +457,34 @@ function renderList() {
 
   if(Object.keys(cart).length === 0) {
     list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
-    closeSheet(); return;
+    if(!isWaiter) setTimeout(closeSheet, 1000); 
+    return;
   }
 
-  const items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
+  // 1. Obtener objetos completos del menú
+  let items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
   
+  // 2. ORDENAR: Bebidas -> Entrantes -> Principales -> Postres
+  const sortOrder = { 'bebidas': 1, 'entrantes': 2, 'principales': 3, 'postres': 4 };
+  items.sort((a, b) => {
+     return (sortOrder[a.cat] || 99) - (sortOrder[b.cat] || 99);
+  });
+
   items.forEach(p => {
     const qty = cart[p.id];
-    const pName = p.name[displayLang] || p.name['es'];
+    const pName = p.name[displayLang] || p.name['es']; // Traduce o fallback
     
     if(isWaiter) {
+      // MODO CAMARERO
       list.innerHTML += `
         <div class="order-item">
-          <div style="display:flex; align-items:center">
-             <span class="qty-display">x${qty}</span>
+          <div style="display:flex; align-items:flex-start">
+             <span class="qty-display">${qty}x</span>
              <span class="order-name">${pName}</span>
           </div>
         </div>`;
     } else {
+      // MODO CLIENTE (Normal)
       list.innerHTML += `
         <div class="order-item">
           <span class="order-name" style="flex:1">${pName}</span>
@@ -448,19 +496,7 @@ function renderList() {
   });
 }
 
-function openSheet() { 
-  document.getElementById('overlay').classList.add('open'); 
-  const waiterBtn = document.getElementById('btnShowWaiter');
-  if (lang !== 'es') waiterBtn.style.display = 'flex';
-  else waiterBtn.style.display = 'none';
-  renderList();
-}
-
-function closeSheet() { 
-  exitWaiterMode();
-  document.getElementById('overlay').classList.remove('open'); 
-}
-
+/* --- MODO CAMARERO (Traducción y Full Screen) --- */
 async function enterWaiterMode() {
   document.body.classList.add('waiter-active');
   document.getElementById('orderSheet').classList.add('waiter-mode');
@@ -469,49 +505,37 @@ async function enterWaiterMode() {
   document.getElementById('notesArea').style.display = 'none';
   document.getElementById('clearTxt').style.display = 'none';
   document.getElementById('userCloseBtn').style.display = 'none'; 
-  
+  document.getElementById('modalTitle').style.display = 'none';
   document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
-  // LOGICA DE TRADUCCIÓN REAL CON API
   const notes = document.getElementById('notesField').value;
   const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
   
   if (notes && notes.trim() !== "") {
     waiterNotesDisplay.style.display = 'block';
-    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">Traduciendo nota... ⏳</div>`;
+    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">Traducido comentario... ⏳</div>`;
     
     try {
-        // Usamos API MyMemory (Gratuita, sin Key)
-        // Traduce del idioma actual (lang) al español (es)
         const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(notes)}&langpair=${lang}|es`);
         const data = await res.json();
-        
-        let translatedText = notes; // Fallback
+        let translatedText = notes;
         if (data.responseData && data.responseData.translatedText) {
             translatedText = data.responseData.translatedText;
         }
-
         waiterNotesDisplay.innerHTML = `
           <div class="waiter-note-box">
-            <span class="waiter-note-label">📝 Nota del Cliente (Traducido):</span>
+            <span class="waiter-note-label">📝 NOTA DEL CLIENTE:</span>
             "${translatedText}"
-            <div style="font-size:0.8rem; color:#888; margin-top:5px; font-style:italic">Original: "${notes}"</div>
           </div>
         `;
     } catch (err) {
-        // Fallback si falla la API
-        waiterNotesDisplay.innerHTML = `
-          <div class="waiter-note-box">
-            <span class="waiter-note-label">📝 Nota del Cliente:</span>
-            "${notes}"
-          </div>
-        `;
+        waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">"${notes}"</div>`;
     }
   } else {
     waiterNotesDisplay.style.display = 'none';
   }
   
-  renderList();
+  renderList(); // Re-renderiza la lista en español y ordenada
 }
 
 function exitWaiterMode() {
@@ -524,55 +548,42 @@ function exitWaiterMode() {
   document.getElementById('notesArea').style.display = 'block';
   document.getElementById('clearTxt').style.display = 'block';
   document.getElementById('userCloseBtn').style.display = 'block';
+  document.getElementById('modalTitle').style.display = 'block';
   
   if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';
   
   renderList();
 }
 
+/* --- UTILIDADES --- */
+function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
+function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
+function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
+function clearCart() { cart={}; saveCart(); render(); updateFloat(); closeSheet(); }
+
 function translateUI() {
   const t = uiDict[lang] || uiDict['es'];
-  
-  // Categorías
   document.getElementById('f-ent').innerText = t.ent;
   document.getElementById('f-main').innerText = t.main;
   document.getElementById('f-des').innerText = t.des;
   document.getElementById('f-drk').innerText = t.drk;
-  
-  // Botones y Títulos
   document.getElementById('btnText').innerText = t.btn;
   document.getElementById('modalTitle').innerText = t.title;
   document.getElementById('clearTxt').innerText = t.clear;
-  
-  // Placeholder de Notas
   document.getElementById('notesField').placeholder = t.place;
-  
-  // Opciones del Select de Alergias
   document.getElementById('opt-all').innerText = t.all;
   document.getElementById('opt-gf').innerText = t.gf;
   document.getElementById('opt-lf').innerText = t.lf;
   document.getElementById('opt-v').innerText = t.v;
   
-  const waiterBtnSpan = document.querySelector('#btnShowWaiter span');
-  if(waiterBtnSpan) waiterBtnSpan.innerText = "🗣️ " + t.trans;
-}
-
-/* --- UTILIDADES --- */
-function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
-function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
-function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
-
-function clearCart() { 
-  const t = uiDict[lang] || uiDict['es'];
-  if(confirm(t.confirm)) { 
-    cart={}; saveCart(); render(); updateFloat(); closeSheet(); 
-  } 
+  const waiterSpan = document.getElementById('btnWaiterText');
+  if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
 }
 
 // TEMA
 const themeBtn = document.getElementById('themeBtn');
 function applyTheme() {
-  let saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  let saved = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
   themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
 }
