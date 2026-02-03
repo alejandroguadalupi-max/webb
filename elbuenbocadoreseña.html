@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#a0715e" />
+<title>Dejar Reseña - El Buen Bocado</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* --- COLORES EL BUEN BOCADO --- */
+    --brand-color: #a0715e; /* Terracota */
+    
+    --bg-body: #fffbf2;     /* Crema suave */
+    --bg-card: #ffffff;
+    --text-main: #3e2b26;   /* Café oscuro */
+    --text-sec: #8d6e63;    /* Marrón suave */
+    --border: #e6ddd0;      /* Borde sutil beige */
+    
+    --shadow-card: 0 15px 35px -5px rgba(62, 43, 38, 0.08);
+    --btn-text: #ffffff;
+  }
+
+  [data-theme="dark"] {
+    --bg-body: #1e1b1a;
+    --bg-card: #2d2420;
+    --text-main: #f3e5dc;
+    --text-sec: #d7ccc8;
+    --border: #3e2b26;
+    --shadow-card: 0 10px 25px -5px rgba(0,0,0,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  html, body {
+    margin: 0; height: 100%; width: 100%;
+    background-color: var(--bg-body); color: var(--text-main);
+    font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow: hidden; 
+  }
+
+  /* --- CONTROLES SUPERIORES --- */
+  .top-controls {
+    position: absolute; top: 20px; right: 20px;
+    display: flex; align-items: center; gap: 12px; z-index: 20;
+  }
+
+  .lang-badge {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text-sec); padding: 5px 10px; border-radius: 50px;
+  }
+
+  .theme-btn {
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text-main); width: 36px; height: 36px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.2s; font-size: 1.2rem;
+  }
+  .theme-btn:active { transform: scale(0.9); }
+
+  /* --- CONTENEDOR PRINCIPAL --- */
+  .review-container {
+    width: 100%; 
+    height: 100dvh; 
+    display: flex; flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    padding: 20px 25px; 
+    text-align: center;
+  }
+  
+  .content-wrapper {
+    width: 100%; max-width: 420px; 
+    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Sin el header, centramos el contenido un poco mejor visualmente */
+    display: flex; flex-direction: column; gap: 0;
+  }
+
+  /* --- TARJETAS DE OPCIÓN --- */
+  .option-box {
+    width: 100%; background: var(--bg-card); border: 1px solid var(--border); 
+    border-radius: 24px; padding: 30px 25px; 
+    box-shadow: var(--shadow-card); 
+    transition: transform 0.3s ease; position: relative; overflow: hidden;
+  }
+  
+  /* Línea superior de color */
+  .option-box::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; background: var(--brand-color); }
+
+  .option-box h2 { font-size: 1.4em; font-weight: 700; margin: 8px 0 6px 0; color: var(--text-main); }
+  .option-box p { font-size: 1rem; color: var(--text-sec); margin: 0 0 25px 0; line-height: 1.5; }
+
+  .divider {
+    display: flex; align-items: center; width: 100%; 
+    margin: 25px 0; 
+    color: var(--text-sec); font-weight: 600; font-size: 0.8em; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .divider::before { margin-right: 15px; }
+  .divider::after { margin-left: 15px; }
+
+  /* --- BOTONES --- */
+  .btn {
+    display: block; width: 100%; text-decoration: none; padding: 18px 0; 
+    border-radius: 16px; font-weight: 700; font-size: 1.05em; text-align: center;
+    color: var(--btn-text); border: none; transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    background-color: var(--brand-color);
+    font-family: 'Outfit', sans-serif; 
+    box-shadow: 0 10px 20px -5px rgba(160, 113, 94, 0.4);
+  }
+
+  .btn:active { transform: scale(0.98); }
+  .btn:hover { opacity: 0.95; transform: translateY(-2px); }
+
+  .btn.btn-outline {
+    background: transparent; 
+    border: 2px solid var(--brand-color);
+    color: var(--brand-color);
+    box-shadow: none;
+  }
+  .btn.btn-outline:hover {
+     background: rgba(160, 113, 94, 0.05);
+  }
+
+  .note { font-size: 0.8em; color: var(--text-sec); margin-top: 15px; opacity: 0.7; font-weight: 400;}
+
+  /* --- MODAL --- */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(62, 43, 38, 0.6); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; padding: 20px;
+  }
+
+  .modal-card {
+    background: var(--bg-card); border-radius: 28px;
+    padding: 30px 20px; width: 100%; max-width: 340px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    text-align: center; border: 1px solid var(--border);
+    animation: fadeInUp 0.3s ease;
+  }
+
+  .modal-card h3 { margin: 0 0 12px; font-size: 1.3em; color: var(--brand-color); font-weight: 800; }
+  .modal-card p { font-size: 1rem; line-height: 1.5; color: var(--text-main); margin-bottom: 25px; }
+  
+  .btn-modal-close {
+    background: var(--brand-color); color: white;
+    width: 100%; padding: 15px; border-radius: 14px;
+    font-weight: 700; border: none; cursor: pointer;
+    font-size: 1em;
+    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1);
+  }
+</style>
+</head>
+<body>
+
+<div class="top-controls">
+  <div class="lang-badge" id="langDisplay">ES</div>
+  <button class="theme-btn" id="themeBtn">☀️</button>
+</div>
+
+<div id="demoModal" class="modal-overlay">
+  <div class="modal-card">
+    <h3 data-lang="modalTitle">Enlace a Google</h3>
+    <p data-lang="modalText">En la versión final, este botón abrirá directamente la ficha de <strong>El Buen Bocado</strong> en Google Maps.</p>
+    <button class="btn-modal-close" onclick="closeModal()" data-lang="modalBtn">Entendido</button>
+  </div>
+</div>
+
+<main class="review-container">
+  <div class="content-wrapper">
+    
+    <section class="option-box box-public">
+      <h2 data-lang="publicTitle">Reseña en Google</h2>
+      <p data-lang="publicText">Comparte tu experiencia públicamente para ayudar a otros clientes a encontrarnos.</p>
+      
+      <button id="btnGoogle" class="btn" data-lang="publicBtn">Publicar en Google Maps</button>
+      
+      <div class="note" data-lang="publicNote">Tu opinión será pública.</div>
+    </section>
+
+    <div class="divider">o</div>
+    
+    <section class="option-box box-private">
+      <h2 data-lang="privateTitle">Contactar al Equipo</h2>
+      <p data-lang="privateText">¿Quieres comentarnos algo en privado? Escríbenos directamente para sugerencias o quejas.</p>
+      
+      <a id="btnPrivate" class="btn btn-outline" data-lang="privateBtn" href="elbuenbocadofeedback.html">Mensaje Directo</a>
+      
+      <div class="note" data-lang="privateNote">Mensaje interno solo para gerencia.</div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+/* TEXTOS ACTUALIZADOS:
+   Se han neutralizado para evitar el "Review Gating".
+   En lugar de preguntar "Me gustó" vs "No me gustó", se ofrece
+   la elección del canal: "Público" vs "Privado".
+*/
+const translations = {
+  es: { 
+    publicTitle: "Reseña en Google", 
+    publicText: "Comparte tu experiencia públicamente para ayudar a otros clientes a encontrarnos.", 
+    publicBtn: "Ir a Google Maps", 
+    publicNote: "Visible para todos.", 
+    
+    privateTitle: "Contactar al Equipo", 
+    privateText: "Envíanos tus sugerencias, felicitaciones o quejas directamente a la gerencia.", 
+    privateBtn: "Mensaje Privado", 
+    privateNote: "Comunicación interna.",
+    
+    modalTitle: "Enlace a Google", 
+    modalText: "En la versión final, este botón abrirá directamente la ficha de El Buen Bocado en Google Maps.", 
+    modalBtn: "Entendido"
+  },
+  en: { 
+    publicTitle: "Review on Google", 
+    publicText: "Share your experience publicly to help other customers find us.", 
+    publicBtn: "Go to Google Maps", 
+    publicNote: "Visible to everyone.", 
+    
+    privateTitle: "Contact the Team", 
+    privateText: "Send your suggestions or feedback directly to management privately.", 
+    privateBtn: "Private Message", 
+    privateNote: "Internal communication only.",
+    
+    modalTitle: "Google Link", 
+    modalText: "In the final version, this button opens the Google Maps listing directly.", 
+    modalBtn: "Got it"
+  },
+  de: { 
+    publicTitle: "Bewertung auf Google", 
+    publicText: "Teilen Sie Ihre Erfahrung öffentlich, um anderen Kunden zu helfen.", 
+    publicBtn: "Zu Google Maps", 
+    publicNote: "Für alle sichtbar.", 
+    
+    privateTitle: "Team kontaktieren", 
+    privateText: "Senden Sie Vorschläge oder Feedback direkt und privat an die Geschäftsleitung.", 
+    privateBtn: "Private Nachricht", 
+    privateNote: "Nur interne Kommunikation.",
+    
+    modalTitle: "Google Link", 
+    modalText: "Hier öffnet sich in der finalen Version direkt Google Maps.", 
+    modalBtn: "Verstanden"
+  },
+  fr: { 
+    publicTitle: "Avis sur Google", 
+    publicText: "Partagez votre expérience publiquement pour aider les autres clients.", 
+    publicBtn: "Aller sur Google Maps", 
+    publicNote: "Visible par tous.", 
+    
+    privateTitle: "Contacter l'équipe", 
+    privateText: "Envoyez vos suggestions ou remarques directement à la direction en privé.", 
+    privateBtn: "Message Privé", 
+    privateNote: "Communication interne.",
+    
+    modalTitle: "Lien Google", 
+    modalText: "Ici s'ouvrira la fiche Google Maps dans la version finale.", 
+    modalBtn: "Compris"
+  },
+  it: { 
+    publicTitle: "Recensione su Google", 
+    publicText: "Condividi la tua esperienza pubblicamente per aiutare gli altri clienti.", 
+    publicBtn: "Vai su Google Maps", 
+    publicNote: "Visibile a tutti.", 
+    
+    privateTitle: "Contatta il Team", 
+    privateText: "Invia suggerimenti o feedback direttamente alla direzione in privato.", 
+    privateBtn: "Messaggio Privato", 
+    privateNote: "Comunicazione interna.",
+    
+    modalTitle: "Link Google", 
+    modalText: "Qui si aprirà la scheda Google Maps nella versione finale.", 
+    modalBtn: "Capito"
+  }
+};
+
+function init() {
+  detectAndSetLanguage();
+  applyTheme();
+
+  document.getElementById("btnGoogle").onclick = () => {
+    document.getElementById("demoModal").style.display = "flex";
+  };
+}
+
+function closeModal() {
+  document.getElementById("demoModal").style.display = "none";
+}
+
+function detectAndSetLanguage() {
+  let lang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
+  if (!translations[lang]) lang = 'es';
+  
+  document.getElementById('langDisplay').textContent = lang.toUpperCase();
+  document.querySelectorAll("[data-lang]").forEach(el => {
+    if (translations[lang][el.dataset.lang]) el.textContent = translations[lang][el.dataset.lang];
+  });
+}
+
+function applyTheme() {
+  let savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeBtn').innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
+}
+
+document.getElementById('themeBtn').onclick = () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', next);
+  applyTheme();
+};
+
+window.onload = init;
+</script>
+</body>
+</html>

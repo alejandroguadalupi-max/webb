@@ -11,25 +11,23 @@
 
   <style>
   :root {
-    /* --- COLORES PERSONALIZADOS EL BUEN BOCADO --- */
-    --brand-color: #a0715e; /* Marrón Terracota (Marco del QR) */
-    
-    --bg-body: #fffbf2;     /* Crema suave (Fondo de la pegatina) */
-    --card-bg: #ffffff;
-    --text-main: #3e2b26;   /* Marrón Café Oscuro (Texto del logo) */
-    --text-sec: #8d6e63;    /* Marrón secundario suave */
-    --btn-bg-light: #ffffff;
+    /* --- COLORES DEFINITIVOS EL BUEN BOCADO --- */
+    --brand-color: #a0715e; /* Terracota */
+    --bg-body: #fffbf2;     /* Crema suave */
+    --card-bg: #ffffff;     /* Blanco */
+    --text-main: #3e2b26;   /* Café oscuro */
+    --text-sec: #8d6e63;    /* Marrón suave */
     
     --shadow-soft: 0 10px 40px -10px rgba(62, 43, 38, 0.1);
     --shadow-hover: 0 20px 40px -10px rgba(62, 43, 38, 0.15);
   }
 
+  /* Modo Oscuro (Opcional, pero mantenido por si el usuario lo activa) */
   [data-theme="dark"] {
-    --bg-body: #1e1b1a;     /* Versión oscura del marrón */
+    --bg-body: #1e1b1a;     
     --card-bg: #2d2420;
     --text-main: #f3e5dc;
     --text-sec: #d7ccc8;
-    --btn-bg-light: #3e2b26;
     --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.4);
   }
 
@@ -39,7 +37,6 @@
     background: var(--bg-body);
     color: var(--text-main);
     transition: background 0.4s ease;
-    opacity: 0; 
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -48,7 +45,6 @@
     overflow-x: hidden;
   }
 
-  /* --- CONTENEDOR PRINCIPAL TIPO APP --- */
   .app-container {
     width: 100%;
     max-width: 420px;
@@ -60,7 +56,7 @@
     position: relative;
   }
 
-  /* --- HEADER & LOGO --- */
+  /* --- HEADER --- */
   .header-section {
     text-align: center;
     margin-bottom: 40px;
@@ -80,7 +76,7 @@
     font-weight: 800;
     margin: 0;
     line-height: 1.1;
-    color: var(--text-main); /* Usamos el color oscuro del logo */
+    color: var(--text-main);
     text-transform: capitalize;
     letter-spacing: -1px;
   }
@@ -92,7 +88,7 @@
     margin-top: 10px;
   }
 
-  /* --- BOTONES DEL MENÚ --- */
+  /* --- MENÚ --- */
   .menu-grid {
     display: flex;
     flex-direction: column;
@@ -119,14 +115,12 @@
     overflow: hidden;
   }
 
-  /* Efecto Hover Premium */
   .menu-btn:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
     border-color: var(--brand-color);
   }
 
-  /* Pequeña barra de color a la izquierda */
   .menu-btn::before {
     content: '';
     position: absolute;
@@ -138,7 +132,6 @@
   }
   .menu-btn:hover::before { opacity: 1; }
 
-  /* Icono flecha */
   .menu-btn::after {
     content: '→';
     font-weight: 300;
@@ -151,11 +144,11 @@
     color: var(--brand-color);
   }
 
-  /* Botón Principal (Destacado) */
+  /* Botón Principal */
   .menu-btn.primary {
     background: var(--brand-color);
     color: #fff;
-    box-shadow: 0 15px 30px -10px rgba(160, 113, 94, 0.5); /* Sombra color terracota */
+    box-shadow: 0 15px 30px -10px rgba(160, 113, 94, 0.5); 
   }
   .menu-btn.primary:hover {
     transform: translateY(-4px) scale(1.02);
@@ -188,7 +181,6 @@
     transform: scale(1.05);
   }
 
-  /* Estado Activado (Agitar o Click) */
   .kids-trigger.active {
     background: var(--brand-color);
     color: #fff;
@@ -226,7 +218,6 @@
     cursor: pointer;
   }
 
-  /* Animaciones Entrada */
   @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -238,19 +229,19 @@
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema">☀️</button>
   
   <div class="header-section">
-    <div id="logoIcon" class="logo-icon">🍽️</div> 
-    <h1 id="brandNameDisplay" class="brand-name">El Buen Bocado</h1>
+    <div class="logo-icon">🍽️</div> 
+    <h1 class="brand-name">El Buen Bocado</h1>
     <p class="welcome-text" data-lang="welcome">¡Bienvenid@!</p>
   </div>
 
   <div class="menu-grid">
-    <a id="menuLink" class="menu-btn primary" href="#">
+    <a href="elbuenbocadocarta.html" class="menu-btn primary">
       <span data-lang="view_menu">Ver la Carta</span>
     </a>
-    <a id="reviewLink" class="menu-btn" href="#">
+    <a href="elbuenbocadoreseña.html" class="menu-btn">
       <span data-lang="leave_review">Dejar Reseña</span>
     </a>
-    <a id="shareLink" class="menu-btn" href="#">
+    <a href="elbuenbocadocompartir.html" class="menu-btn">
       <span data-lang="share_with_friends">Compartir</span>
     </a>
   </div>
@@ -281,15 +272,14 @@
     it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI O TOCCA!" }
   };
 
-  /* --- 2. LOGICA ZONA KIDS (SHAKE + CLICK) --- */
+  /* --- 2. LÓGICA ZONA KIDS (Redirige a elbuenbocadojuegos.html) --- */
   let lastX = null, lastY = null, lastZ = null;
   let lastTime = 0;
   let isListening = false;
 
   function goToGames() {
-      // Ajuste para desarrollo local: Si no hay params, va limpio
-      const search = window.location.search ? window.location.search : '';
-      window.location.href = `juegos.html${search}`;
+      // Redirección fija
+      window.location.href = "elbuenbocadojuegos.html";
   }
 
   function handleKidsClick() {
@@ -306,9 +296,7 @@
     const btn = document.getElementById('shakeTrigger');
     btn.classList.add('active'); 
     
-    let lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
-    if (!translations[lang]) lang = 'es';
-
+    let lang = document.getElementById('lang-select').value;
     const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
     
     document.getElementById('shakeText').innerText = readyText;
@@ -320,12 +308,10 @@
         window.addEventListener('devicemotion', (event) => {
           const current = event.accelerationIncludingGravity;
           if (!current) return;
-
           const currentTime = new Date().getTime();
           if ((currentTime - lastTime) > 100) {
             const diffTime = currentTime - lastTime;
             lastTime = currentTime;
-
             if (lastX !== null) {
               const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
               if (speed > 800) { 
@@ -341,81 +327,30 @@
 
   function enableShakeFeature() {
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-      DeviceMotionEvent.requestPermission()
-        .then(response => {
+      DeviceMotionEvent.requestPermission().then(response => {
           if (response === 'granted') startNativeShakeListener();
-        })
-        .catch(console.error);
+        }).catch(console.error);
     } else {
       startNativeShakeListener();
     }
   }
 
-  /* --- 3. CONFIGURACIÓN (COLORES Y DATOS) --- */
-  
-  // He actualizado la configuración por defecto para que coincida con "El Buen Bocado"
-  // Color bg: Terracota suave (#a0715e)
-  const designSystem = {
-    'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
-    'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
-    'asiatico':       { bg: '#E91E63', text: '#fff', icon: '🍜' },
-    'cafe':           { bg: '#8D6E63', text: '#fff', icon: '☕' },
-    'restaurante':    { bg: '#2E7D32', text: '#fff', icon: '🍽️' },
-    'default':        { bg: '#a0715e', text: '#fff', icon: '🍽️' } 
-  };
-
-  const params = new URLSearchParams(window.location.search);
-
-  function applyDemoLogic() {
-    // NOTA: He comentado la validación de 'auth' para que funcione sin URL especial
-    // if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
-
-    // Textos: Si no hay parámetro 'n', usa "El Buen Bocado"
-    const name = params.get('n') || "El Buen Bocado";
-    document.title = name;
-    document.getElementById('brandNameDisplay').textContent = name;
-    
-    // Icono y Color
-    const category = params.get('categoria'); 
-    const style = designSystem[category] || designSystem['default'];
-    document.getElementById('logoIcon').textContent = style.icon;
-
-    const rootStyles = document.documentElement.style;
-    
-    // Si la URL define color, úsalo, si no, usa el color terracota por defecto del CSS/System
-    if(params.get('btn')) {
-       const customColor = '#' + params.get('btn');
-       rootStyles.setProperty('--brand-color', customColor);
-    } else if (category) {
-       // Solo sobrescribimos si hay una categoría explícita, si no dejamos el CSS base
-       rootStyles.setProperty('--brand-color', style.bg);
-    }
-
-    // Enlaces
-    const currentParams = window.location.search; 
-    document.getElementById('menuLink').href = `carta.html${currentParams}`;
-    document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
-    document.getElementById('shareLink').href = `compartir_2.html${currentParams}`;
-
-    document.body.style.opacity = "1";
-  }
-
-  /* --- 4. SISTEMA UI (IDIOMA AUTO + TEMA FIXED) --- */
+  /* --- 3. SISTEMA UI (IDIOMA + TEMA) --- */
   
   function detectAndSetLanguage() {
       let lang = localStorage.getItem('userLang');
       if (!lang) {
           lang = navigator.language.slice(0, 2); 
           if (!translations[lang]) lang = 'es';
-          localStorage.setItem('userLang', lang);
       }
+      localStorage.setItem('userLang', lang);
       const selector = document.getElementById("lang-select");
       if(selector) selector.value = lang;
       return lang;
   }
 
   function syncLanguage() {
-    let lang = localStorage.getItem('userLang') || 'es';
+    let lang = document.getElementById("lang-select").value;
     
     document.querySelectorAll('[data-lang]').forEach(el => {
       if (translations[lang] && translations[lang][el.dataset.lang]) {
@@ -432,10 +367,7 @@
   }
 
   function syncTheme() {
-    let theme = localStorage.getItem('theme');
-    if (!theme) {
-        theme = 'light';
-    }
+    let theme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
   }
@@ -456,7 +388,6 @@
     detectAndSetLanguage(); 
     syncTheme();            
     syncLanguage();
-    applyDemoLogic();
   });
 </script>
 </body>
