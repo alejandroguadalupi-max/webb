@@ -42,28 +42,34 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+html { height: 100%; }
+
 body {
     margin: 0;
     font-family: 'Outfit', sans-serif; 
     background: var(--bg-body);
     color: var(--text-main);
     
+    /* SOLUCIÓN AL CORTE: Altura dinámica y ancho completo */
+    width: 100%;
     min-height: 100vh;
     min-height: 100dvh; 
     
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; 
+    justify-content: center; /* Centrado vertical por defecto */
     
     -webkit-font-smoothing: antialiased;
     transition: background 0.3s ease, color 0.3s ease;
     
-    padding: 20px;
-    padding-top: max(20px, env(safe-area-inset-top)); 
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
+    /* Áreas seguras del móvil */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    
+    overflow-x: hidden;
 }
 
 .top-controls {
@@ -75,7 +81,8 @@ body {
     justify-content: flex-end; 
     gap: 12px; 
     z-index: 10;
-    margin-bottom: 10px; 
+    margin-top: 20px;     /* Espacio arriba */
+    padding: 0 20px;      /* Margen lateral interno */
 }
 
 .lang-badge {
@@ -97,21 +104,30 @@ body {
     border-radius: 24px; 
     padding: 30px 25px; 
     border: 1px solid var(--border);
-    width: 100%; 
+    width: 100%;
     max-width: 420px;
+    
+    /* Ajuste de márgenes para que la tarjeta no toque los bordes */
+    margin-left: 20px;
+    margin-right: 20px;
+    
     text-align: center;
     box-shadow: var(--shadow-card);
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
     z-index: 5;
+    
+    /* TRUCO FLEX: margin auto arriba y abajo centra la tarjeta,
+       pero si la pantalla es pequeña, permite scroll sin cortar */
     margin-top: auto;
     margin-bottom: auto;
 }
 
-/* Pantallas pequeñas: margen fijo */
-@media (max-height: 700px) {
-    body { overflow-y: auto; }
-    .share-card { margin-top: 10px; margin-bottom: 20px; }
+/* Espaciado extra abajo para evitar cortes en móviles */
+.spacer-bottom {
+    height: 40px;
+    width: 100%;
+    flex-shrink: 0;
 }
 
 h2 { margin: 0 0 8px; font-size: 1.5em; font-weight: 800; color: var(--text-main); }
@@ -221,6 +237,8 @@ p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-h
     <p class="note" id="note">Si no eliges foto, crearemos una tarjeta digital.</p>
 </div>
 
+<div class="spacer-bottom"></div>
+
 <script>
 /* --- 1. CONFIGURACIÓN --- */
 const COPY = {
@@ -317,7 +335,6 @@ async function addWatermarkToImage(file){
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
             
-            // Marca de agua
             const fontSize = Math.max(40, canvas.width * 0.06);
             ctx.font = `bold ${fontSize}px Arial`;
             ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
@@ -339,7 +356,6 @@ async function shareExperience(){
     try{
         let fileToShare = selectedFile;
         
-        // Si no hay foto, generamos una
         if(!fileToShare) {
             fileToShare = await generateDefaultCard();
         } else if(document.getElementById('chkWatermark').checked){
@@ -349,7 +365,6 @@ async function shareExperience(){
         if(navigator.canShare && navigator.canShare({files:[fileToShare]})){
             await navigator.share({ files:[fileToShare] });
         } else {
-            // Descarga fallback
             const url = URL.createObjectURL(fileToShare);
             const a = document.createElement('a');
             a.href = url; a.download = "ElBuenBocado_Momento.jpg";
