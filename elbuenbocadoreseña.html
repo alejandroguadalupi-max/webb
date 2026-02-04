@@ -51,7 +51,6 @@
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
     
-    /* CONFIGURACIÓN FLEX PARA CENTRADO Y EVITAR CHOQUES */
     width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
@@ -59,32 +58,30 @@
     display: flex; 
     flex-direction: column; 
     align-items: center;
-    justify-content: center; /* Centrado vertical */
+    /* Bajamos manualmente el contenido con padding-top para evitar cortes en Google/Safari */
+    justify-content: flex-start; 
     
     overflow-x: hidden; 
     
-    /* Padding seguro */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: max(40px, env(safe-area-inset-top)); 
+    padding-bottom: max(30px, env(safe-area-inset-bottom));
     padding-left: 20px;
     padding-right: 20px;
   }
 
-  /* --- CONTROLES SUPERIORES (CORREGIDO) --- */
+  /* --- CONTROLES SUPERIORES --- */
   .top-controls {
-    /* CAMBIO: position relative para que ocupe espacio y no flote encima */
     position: relative; 
     width: 100%;
-    max-width: 360px; /* Alineado con el ancho de las tarjetas */
+    max-width: 360px; 
     
     display: flex; 
     align-items: center; 
-    justify-content: flex-end; /* A la derecha */
+    justify-content: flex-end; 
     gap: 12px; 
     z-index: 20;
     
-    margin-bottom: 20px; /* Espacio antes del contenido */
-    margin-top: 20px;    /* Espacio extra arriba si hace falta */
+    margin-bottom: 20px; 
   }
 
   .lang-badge {
@@ -104,19 +101,17 @@
   /* --- CONTENEDOR PRINCIPAL --- */
   .review-container {
     width: 100%; 
-    /* CAMBIO: Eliminada altura fija para evitar problemas de scroll/solapamiento */
     display: flex; 
     flex-direction: column; 
     align-items: center;
     
-    /* Centrado automático en el espacio restante */
+    /* Centrado flexible en el espacio disponible */
     margin-top: auto;
     margin-bottom: auto;
   }
   
   .content-wrapper {
     width: 100%; 
-    /* CAMBIO: Ancho reducido a 360px para que sea más fino */
     max-width: 360px; 
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     display: flex; flex-direction: column; gap: 0;
@@ -125,12 +120,14 @@
   /* --- TARJETAS DE OPCIÓN --- */
   .option-box {
     width: 100%; background: var(--bg-card); border: 1px solid var(--border); 
-    border-radius: 24px; padding: 25px 20px; 
+    border-radius: 24px; padding: 30px 25px; 
     box-shadow: var(--shadow-card); 
     transition: transform 0.3s ease; position: relative; overflow: hidden;
+    
+    /* CORRECCIÓN: CENTRADO DE TEXTO HORIZONTAL */
+    text-align: center;
   }
   
-  /* Línea superior de color */
   .option-box::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; background: var(--brand-color); }
 
   .option-box h2 { font-size: 1.3em; font-weight: 700; margin: 8px 0 6px 0; color: var(--text-main); }
