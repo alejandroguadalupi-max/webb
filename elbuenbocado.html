@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#a0715e">
   <title>El Buen Bocado</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +23,7 @@
     --shadow-hover: 0 20px 40px -10px rgba(62, 43, 38, 0.15);
   }
 
-  /* Modo Oscuro (Opcional, pero mantenido por si el usuario lo activa) */
+  /* Modo Oscuro (Opcional) */
   [data-theme="dark"] {
     --bg-body: #1e1b1a;     
     --card-bg: #2d2420;
@@ -31,18 +32,36 @@
     --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.4);
   }
 
+  html {
+    height: 100%;
+  }
+
   body {
     margin: 0;
+    padding: 0;
     font-family: 'Outfit', sans-serif;
     background: var(--bg-body);
     color: var(--text-main);
     transition: background 0.4s ease;
-    min-height: 100vh;
+    
+    /* SOLUCIÓN AL CORTE EN GOOGLE/SAFARI: */
+    width: 100%;
+    min-height: 100vh;      /* Fallback para navegadores viejos */
+    min-height: 100dvh;     /* Altura dinámica real (clave para móviles) */
+    
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Centra verticalmente */
+    
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    
+    /* Respetar áreas seguras del iPhone (Notch/Barra inferior) */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
   .app-container {
@@ -53,19 +72,23 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     position: relative;
+    /* Asegura que si la pantalla es muy pequeña, haya espacio abajo */
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-bottom: 40px; /* Espacio extra de seguridad abajo */
   }
 
   /* --- HEADER --- */
   .header-section {
     text-align: center;
-    margin-bottom: 40px;
-    margin-top: 40px;
+    margin-bottom: 30px; /* Reducido ligeramente para pantallas pequeñas */
     animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .logo-icon {
-    font-size: 4em;
+    font-size: 3.8em;
     margin-bottom: 5px;
     display: inline-block;
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
@@ -85,14 +108,14 @@
     font-size: 1.1em;
     font-weight: 500;
     color: var(--text-sec);
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   /* --- MENÚ --- */
   .menu-grid {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
     width: 100%;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
@@ -101,7 +124,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 25px;
+    padding: 18px 25px; /* Ajustado para mejor tacto */
     background: var(--card-bg);
     border-radius: 20px;
     text-decoration: none;
@@ -110,13 +133,19 @@
     font-size: 1.05em;
     box-shadow: var(--shadow-soft);
     border: 1px solid transparent;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease; /* Más rápido se siente más nativo */
     position: relative;
     overflow: hidden;
+    /* Evita el parpadeo azul al tocar en Android */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .menu-btn:active {
+    transform: scale(0.98);
   }
 
   .menu-btn:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-hover);
     border-color: var(--brand-color);
   }
@@ -151,7 +180,7 @@
     box-shadow: 0 15px 30px -10px rgba(160, 113, 94, 0.5); 
   }
   .menu-btn.primary:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-2px) scale(1.01);
     border-color: transparent;
   }
   .menu-btn.primary::before { display: none; }
@@ -160,7 +189,7 @@
 
   /* --- ZONA KIDS --- */
   .kids-trigger {
-    margin-top: 40px;
+    margin-top: 35px;
     padding: 12px 30px;
     border-radius: 50px;
     font-size: 0.9em;
@@ -173,12 +202,13 @@
     gap: 8px;
     background: rgba(0,0,0,0.03);
     border: 1px solid transparent;
-    text-decoration: none; 
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .kids-trigger:hover {
-    background: rgba(0,0,0,0.06);
-    transform: scale(1.05);
+  .kids-trigger:active {
+     background: rgba(0,0,0,0.06);
+     transform: scale(0.95);
   }
 
   .kids-trigger.active {
@@ -199,23 +229,26 @@
 
   /* --- UTILIDADES --- */
   .theme-btn { 
-    position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; 
+    position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; 
     border-radius: 50%; border: none; cursor: pointer; 
     background: var(--card-bg); color: var(--text-main); 
-    box-shadow: var(--shadow-soft); font-size: 1.2em; 
+    box-shadow: var(--shadow-soft); font-size: 1.1em; 
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.2s;
+    z-index: 10;
   }
   .theme-btn:active { transform: scale(0.9); }
 
   .lang-container {
-    margin-top: 30px;
+    margin-top: 25px;
     opacity: 0.7;
+    margin-bottom: 10px; /* Espacio final */
   }
   .lang-container select {
     padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text-sec);
     background: transparent; color: var(--text-main); font-size: 0.8em;
     cursor: pointer;
+    outline: none;
   }
 
   @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -272,13 +305,12 @@
     it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI O TOCCA!" }
   };
 
-  /* --- 2. LÓGICA ZONA KIDS (Redirige a elbuenbocadojuegos.html) --- */
+  /* --- 2. LÓGICA ZONA KIDS (Redirección directa) --- */
   let lastX = null, lastY = null, lastZ = null;
   let lastTime = 0;
   let isListening = false;
 
   function goToGames() {
-      // Redirección fija
       window.location.href = "elbuenbocadojuegos.html";
   }
 
@@ -335,8 +367,7 @@
     }
   }
 
-  /* --- 3. SISTEMA UI (IDIOMA + TEMA) --- */
-  
+  /* --- 3. SISTEMA UI --- */
   function detectAndSetLanguage() {
       let lang = localStorage.getItem('userLang');
       if (!lang) {
