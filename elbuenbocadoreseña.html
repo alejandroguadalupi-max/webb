@@ -41,18 +41,50 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  html, body {
-    margin: 0; height: 100%; width: 100%;
-    background-color: var(--bg-body); color: var(--text-main);
-    font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased;
+  html { height: 100%; }
+
+  body {
+    margin: 0;
+    font-family: 'Outfit', sans-serif; 
+    background-color: var(--bg-body); 
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow: hidden; 
+    
+    /* CONFIGURACIÓN FLEX PARA CENTRADO Y EVITAR CHOQUES */
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center; /* Centrado vertical */
+    
+    overflow-x: hidden; 
+    
+    /* Padding seguro */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  /* --- CONTROLES SUPERIORES --- */
+  /* --- CONTROLES SUPERIORES (CORREGIDO) --- */
   .top-controls {
-    position: absolute; top: 20px; right: 20px;
-    display: flex; align-items: center; gap: 12px; z-index: 20;
+    /* CAMBIO: position relative para que ocupe espacio y no flote encima */
+    position: relative; 
+    width: 100%;
+    max-width: 360px; /* Alineado con el ancho de las tarjetas */
+    
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end; /* A la derecha */
+    gap: 12px; 
+    z-index: 20;
+    
+    margin-bottom: 20px; /* Espacio antes del contenido */
+    margin-top: 20px;    /* Espacio extra arriba si hace falta */
   }
 
   .lang-badge {
@@ -72,25 +104,28 @@
   /* --- CONTENEDOR PRINCIPAL --- */
   .review-container {
     width: 100%; 
-    height: 100dvh; 
-    display: flex; flex-direction: column; 
-    justify-content: center; 
+    /* CAMBIO: Eliminada altura fija para evitar problemas de scroll/solapamiento */
+    display: flex; 
+    flex-direction: column; 
     align-items: center;
-    padding: 20px 25px; 
-    text-align: center;
+    
+    /* Centrado automático en el espacio restante */
+    margin-top: auto;
+    margin-bottom: auto;
   }
   
   .content-wrapper {
-    width: 100%; max-width: 420px; 
+    width: 100%; 
+    /* CAMBIO: Ancho reducido a 360px para que sea más fino */
+    max-width: 360px; 
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    /* Sin el header, centramos el contenido un poco mejor visualmente */
     display: flex; flex-direction: column; gap: 0;
   }
 
   /* --- TARJETAS DE OPCIÓN --- */
   .option-box {
     width: 100%; background: var(--bg-card); border: 1px solid var(--border); 
-    border-radius: 24px; padding: 30px 25px; 
+    border-radius: 24px; padding: 25px 20px; 
     box-shadow: var(--shadow-card); 
     transition: transform 0.3s ease; position: relative; overflow: hidden;
   }
@@ -98,12 +133,12 @@
   /* Línea superior de color */
   .option-box::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; background: var(--brand-color); }
 
-  .option-box h2 { font-size: 1.4em; font-weight: 700; margin: 8px 0 6px 0; color: var(--text-main); }
-  .option-box p { font-size: 1rem; color: var(--text-sec); margin: 0 0 25px 0; line-height: 1.5; }
+  .option-box h2 { font-size: 1.3em; font-weight: 700; margin: 8px 0 6px 0; color: var(--text-main); }
+  .option-box p { font-size: 0.95rem; color: var(--text-sec); margin: 0 0 20px 0; line-height: 1.4; }
 
   .divider {
     display: flex; align-items: center; width: 100%; 
-    margin: 25px 0; 
+    margin: 20px 0; 
     color: var(--text-sec); font-weight: 600; font-size: 0.8em; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;
   }
   .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -112,7 +147,7 @@
 
   /* --- BOTONES --- */
   .btn {
-    display: block; width: 100%; text-decoration: none; padding: 18px 0; 
+    display: block; width: 100%; text-decoration: none; padding: 16px 0; 
     border-radius: 16px; font-weight: 700; font-size: 1.05em; text-align: center;
     color: var(--btn-text); border: none; transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
@@ -205,12 +240,9 @@
   </div>
 </main>
 
+<div style="height: 30px; width: 100%;"></div>
+
 <script>
-/* TEXTOS ACTUALIZADOS:
-   Se han neutralizado para evitar el "Review Gating".
-   En lugar de preguntar "Me gustó" vs "No me gustó", se ofrece
-   la elección del canal: "Público" vs "Privado".
-*/
 const translations = {
   es: { 
     publicTitle: "Reseña en Google", 
