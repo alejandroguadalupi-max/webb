@@ -50,7 +50,6 @@ body {
     background: var(--bg-body);
     color: var(--text-main);
     
-    /* SOLUCIÓN AL CORTE: Altura dinámica y ancho completo */
     width: 100%;
     min-height: 100vh;
     min-height: 100dvh; 
@@ -58,16 +57,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centrado vertical por defecto */
+    justify-content: flex-start; 
     
     -webkit-font-smoothing: antialiased;
     transition: background 0.3s ease, color 0.3s ease;
     
-    /* Áreas seguras del móvil */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+    padding-top: max(60px, env(safe-area-inset-top)); 
+    padding-bottom: max(30px, env(safe-area-inset-bottom));
+    padding-left: 20px;
+    padding-right: 20px;
     
     overflow-x: hidden;
 }
@@ -75,14 +73,15 @@ body {
 .top-controls {
     position: relative; 
     width: 100%;
-    max-width: 420px; 
+    /* CAMBIO: Ancho máximo reducido para coincidir con la tarjeta */
+    max-width: 360px; 
     display: flex; 
     align-items: center; 
     justify-content: flex-end; 
     gap: 12px; 
     z-index: 10;
-    margin-top: 20px;     /* Espacio arriba */
-    padding: 0 20px;      /* Margen lateral interno */
+    margin-bottom: 20px; 
+    padding: 0; /* Quitamos padding extra aquí para alinear exacto */
 }
 
 .lang-badge {
@@ -102,14 +101,12 @@ body {
 .share-card {
     background: var(--bg-card);
     border-radius: 24px; 
-    padding: 30px 25px; 
+    padding: 25px 20px; /* Padding interno un poco más ajustado */
     border: 1px solid var(--border);
-    width: 100%;
-    max-width: 420px;
     
-    /* Ajuste de márgenes para que la tarjeta no toque los bordes */
-    margin-left: 20px;
-    margin-right: 20px;
+    width: 100%;
+    /* CAMBIO: Ancho máximo reducido de 420px a 360px */
+    max-width: 360px;
     
     text-align: center;
     box-shadow: var(--shadow-card);
@@ -117,34 +114,26 @@ body {
     position: relative;
     z-index: 5;
     
-    /* TRUCO FLEX: margin auto arriba y abajo centra la tarjeta,
-       pero si la pantalla es pequeña, permite scroll sin cortar */
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 5vh; 
+    margin-bottom: 40px;
 }
 
-/* Espaciado extra abajo para evitar cortes en móviles */
-.spacer-bottom {
-    height: 40px;
-    width: 100%;
-    flex-shrink: 0;
-}
-
-h2 { margin: 0 0 8px; font-size: 1.5em; font-weight: 800; color: var(--text-main); }
-p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-height: 1.5; font-weight: 400; }
+h2 { margin: 0 0 8px; font-size: 1.4em; font-weight: 800; color: var(--text-main); }
+p.subtitle { margin: 0 0 20px; font-size: 0.9em; color: var(--text-sec); line-height: 1.4; font-weight: 400; }
 
 .photo-area {
     width: 100%; 
     aspect-ratio: 1/1; 
     max-height: 35vh; 
-    min-height: 200px; 
+    /* Ajuste de altura mínima para que no quede gigante en móviles */
+    min-height: 180px; 
     
     border-radius: 20px; 
     border: 2px dashed var(--border); 
     background: var(--bg-photo); 
     overflow: hidden; 
     display: flex; align-items: center; justify-content: center;
-    margin-bottom: 25px; position: relative; 
+    margin-bottom: 20px; position: relative; 
     transition: all 0.3s ease;
 }
 
@@ -153,23 +142,23 @@ p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-h
 
 #btnRemovePhoto {
     position: absolute; top: 12px; right: 12px;
-    width: 36px; height: 36px; border: none; border-radius: 50%;
-    background: rgba(160, 113, 94, 0.8); color: white; font-size: 1.2em;
+    width: 32px; height: 32px; border: none; border-radius: 50%;
+    background: rgba(160, 113, 94, 0.8); color: white; font-size: 1.1em;
     cursor: pointer; z-index: 5; display: none; backdrop-filter: blur(4px);
     align-items: center; justify-content: center;
 }
 
 .placeholder-content {
-    display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%;
+    display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;
 }
 
 .placeholder-btn {
     display: flex; align-items: center; justify-content: center; gap: 10px;
-    width: 85%; padding: 14px 0;
+    width: 85%; padding: 12px 0;
     border: 2px solid var(--border);
     border-radius: 14px;
     background: var(--bg-card);
-    font-weight: 600; font-size: 1em;
+    font-weight: 600; font-size: 0.95em;
     cursor: pointer; transition: all 0.2s ease;
     color: var(--text-main);
     box-shadow: var(--shadow-soft);
@@ -179,8 +168,8 @@ p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-h
 .placeholder-btn:hover { border-color: var(--brand-color); color: var(--brand-color); }
 
 .btn-primary {
-    width: 100%; padding: 18px 0; border: none; border-radius: 16px; 
-    font-weight: 800; font-size: 1.1em; 
+    width: 100%; padding: 16px 0; border: none; border-radius: 16px; 
+    font-weight: 800; font-size: 1.05em; 
     background: var(--brand-color); color: #fff;
     cursor: pointer; transition: all 0.2s ease;
     box-shadow: 0 10px 20px -5px rgba(160, 113, 94, 0.4);
@@ -188,15 +177,15 @@ p.subtitle { margin: 0 0 25px; font-size: 0.95em; color: var(--text-sec); line-h
 .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
 
 .watermark-toggle {
-    margin: 0 0 25px; display: flex; align-items: center; justify-content: center;
-    gap: 10px; font-size: 0.9em; color: var(--text-sec); cursor: pointer; font-weight: 500;
+    margin: 0 0 20px; display: flex; align-items: center; justify-content: center;
+    gap: 10px; font-size: 0.85em; color: var(--text-sec); cursor: pointer; font-weight: 500;
 }
 .watermark-toggle input { 
     accent-color: var(--brand-color); 
     width: 18px; height: 18px; cursor: pointer;
 }
 
-.note { font-size: 0.85em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300; }
+.note { font-size: 0.8em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300; }
 </style>
 </head>
 <body>
