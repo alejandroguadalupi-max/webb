@@ -1,393 +1,421 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-<meta name="theme-color" content="#a0715e" id="metaThemeColor" />
-<title data-lang="title">Compartir - El Buen Bocado</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#a0715e">
+  <title>El Buen Bocado</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
 
-<style>
-:root {
-    /* --- COLORES EL BUEN BOCADO --- */
-    --brand-color: #a0715e; 
-    --bg-body: #fffbf2;
-    --bg-card: #ffffff;
-    --bg-photo: #fdf8f5;
-    --text-main: #3e2b26;
-    --text-sec: #8d6e63;
-    --border: #e6ddd0;
+  <style>
+  :root {
+    /* --- COLORES DEFINITIVOS EL BUEN BOCADO --- */
+    --brand-color: #a0715e; /* Terracota */
+    --bg-body: #fffbf2;     /* Crema suave */
+    --card-bg: #ffffff;     /* Blanco */
+    --text-main: #3e2b26;   /* Café oscuro */
+    --text-sec: #8d6e63;    /* Marrón suave */
     
-    --shadow-card: 0 15px 35px -5px rgba(62, 43, 38, 0.08);
-    --shadow-soft: 0 4px 12px rgba(62, 43, 38, 0.05);
-}
+    --shadow-soft: 0 10px 40px -10px rgba(62, 43, 38, 0.1);
+    --shadow-hover: 0 20px 40px -10px rgba(62, 43, 38, 0.15);
+  }
 
-[data-theme="dark"] {
-    --bg-body: #1e1b1a;
-    --bg-card: #2d2420;
-    --bg-photo: #1e1b1a;
+  [data-theme="dark"] {
+    --bg-body: #1e1b1a;     
+    --card-bg: #2d2420;
     --text-main: #f3e5dc;
     --text-sec: #d7ccc8;
-    --border: #3e2b26;
-    --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.4);
-}
+    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.4);
+  }
 
-*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html {
+    height: 100%;
+  }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-html { height: 100%; }
-
-body {
+  body {
     margin: 0;
-    font-family: 'Outfit', sans-serif; 
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
     background: var(--bg-body);
     color: var(--text-main);
+    transition: background 0.4s ease;
     
     width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh; 
+    min-height: 100vh;      
+    min-height: 100dvh;     
     
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; 
+    /* CORRECCIÓN: Volvemos a centrarlo verticalmente */
+    justify-content: center; 
     
     -webkit-font-smoothing: antialiased;
-    transition: background 0.3s ease, color 0.3s ease;
-    
-    padding-top: max(60px, env(safe-area-inset-top)); 
-    padding-bottom: max(30px, env(safe-area-inset-bottom));
-    padding-left: 20px;
-    padding-right: 20px;
-    
     overflow-x: hidden;
-}
-
-.top-controls {
-    position: relative; 
-    width: 100%;
-    /* CAMBIO: Ancho máximo reducido para coincidir con la tarjeta */
-    max-width: 360px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: flex-end; 
-    gap: 12px; 
-    z-index: 10;
-    margin-bottom: 20px; 
-    padding: 0; /* Quitamos padding extra aquí para alinear exacto */
-}
-
-.lang-badge {
-    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-    background: var(--bg-card); border: 1px solid var(--border);
-    color: var(--text-sec); padding: 5px 10px; border-radius: 50px;
-}
-
-.theme-btn { 
-    background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
-    color: var(--text-main); display: flex; align-items: center; justify-content: center;
-    width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
-    transition: transform 0.2s;
-}
-.theme-btn:active { transform: scale(0.9); }
-
-.share-card {
-    background: var(--bg-card);
-    border-radius: 24px; 
-    padding: 25px 20px; /* Padding interno un poco más ajustado */
-    border: 1px solid var(--border);
     
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .app-container {
     width: 100%;
-    /* CAMBIO: Ancho máximo reducido de 420px a 360px */
-    max-width: 360px;
-    
-    text-align: center;
-    box-shadow: var(--shadow-card);
-    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    max-width: 420px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
-    z-index: 5;
     
-    margin-top: 5vh; 
-    margin-bottom: 40px;
-}
+    /* CORRECCIÓN: Eliminamos el margen superior excesivo */
+    margin-top: 0; 
+    padding-bottom: 20px;
+  }
 
-h2 { margin: 0 0 8px; font-size: 1.4em; font-weight: 800; color: var(--text-main); }
-p.subtitle { margin: 0 0 20px; font-size: 0.9em; color: var(--text-sec); line-height: 1.4; font-weight: 400; }
+  /* --- HEADER --- */
+  .header-section {
+    text-align: center;
+    margin-bottom: 30px; 
+    animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
 
-.photo-area {
-    width: 100%; 
-    aspect-ratio: 1/1; 
-    max-height: 35vh; 
-    /* Ajuste de altura mínima para que no quede gigante en móviles */
-    min-height: 180px; 
-    
-    border-radius: 20px; 
-    border: 2px dashed var(--border); 
-    background: var(--bg-photo); 
-    overflow: hidden; 
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 20px; position: relative; 
-    transition: all 0.3s ease;
-}
+  .logo-icon {
+    font-size: 3.8em;
+    margin-bottom: 5px;
+    display: inline-block;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+  }
 
-.photo-preview-container { width: 100%; height: 100%; display: none; background: #000; }
-.photo-preview { width: 100%; height: 100%; object-fit: contain; }
-
-#btnRemovePhoto {
-    position: absolute; top: 12px; right: 12px;
-    width: 32px; height: 32px; border: none; border-radius: 50%;
-    background: rgba(160, 113, 94, 0.8); color: white; font-size: 1.1em;
-    cursor: pointer; z-index: 5; display: none; backdrop-filter: blur(4px);
-    align-items: center; justify-content: center;
-}
-
-.placeholder-content {
-    display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;
-}
-
-.placeholder-btn {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    width: 85%; padding: 12px 0;
-    border: 2px solid var(--border);
-    border-radius: 14px;
-    background: var(--bg-card);
-    font-weight: 600; font-size: 0.95em;
-    cursor: pointer; transition: all 0.2s ease;
+  .brand-name {
+    font-size: 2.2em;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
     color: var(--text-main);
+    text-transform: capitalize;
+    letter-spacing: -1px;
+  }
+
+  .welcome-text {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--text-sec);
+    margin-top: 8px;
+  }
+
+  /* --- MENÚ --- */
+  .menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 25px; 
+    background: var(--card-bg);
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 1.05em;
     box-shadow: var(--shadow-soft);
-}
-.placeholder-btn:active { transform: scale(0.98); }
-.placeholder-btn span:first-child { font-size: 1.2em; }
-.placeholder-btn:hover { border-color: var(--brand-color); color: var(--brand-color); }
+    border: 1px solid transparent;
+    transition: all 0.2s ease; 
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-.btn-primary {
-    width: 100%; padding: 16px 0; border: none; border-radius: 16px; 
-    font-weight: 800; font-size: 1.05em; 
-    background: var(--brand-color); color: #fff;
-    cursor: pointer; transition: all 0.2s ease;
-    box-shadow: 0 10px 20px -5px rgba(160, 113, 94, 0.4);
-}
-.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+  .menu-btn:active {
+    transform: scale(0.98);
+  }
 
-.watermark-toggle {
-    margin: 0 0 20px; display: flex; align-items: center; justify-content: center;
-    gap: 10px; font-size: 0.85em; color: var(--text-sec); cursor: pointer; font-weight: 500;
-}
-.watermark-toggle input { 
-    accent-color: var(--brand-color); 
-    width: 18px; height: 18px; cursor: pointer;
-}
+  .menu-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--brand-color);
+  }
 
-.note { font-size: 0.8em; color: var(--text-sec); margin-top: 15px; opacity: 0.8; font-weight: 300; }
-</style>
+  .menu-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: var(--brand-color);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-btn:hover::before { opacity: 1; }
+
+  .menu-btn::after {
+    content: '→';
+    font-weight: 300;
+    opacity: 0.5;
+    transition: transform 0.3s;
+  }
+  .menu-btn:hover::after {
+    transform: translateX(5px);
+    opacity: 1;
+    color: var(--brand-color);
+  }
+
+  /* Botón Principal */
+  .menu-btn.primary {
+    background: var(--brand-color);
+    color: #fff;
+    box-shadow: 0 15px 30px -10px rgba(160, 113, 94, 0.5); 
+  }
+  .menu-btn.primary:hover {
+    transform: translateY(-2px) scale(1.01);
+    border-color: transparent;
+  }
+  .menu-btn.primary::before { display: none; }
+  .menu-btn.primary::after { color: #fff; opacity: 0.8; }
+
+
+  /* --- ZONA KIDS --- */
+  .kids-trigger {
+    margin-top: 35px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.03);
+    border: 1px solid transparent;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .kids-trigger:active {
+     background: rgba(0,0,0,0.06);
+     transform: scale(0.95);
+  }
+
+  .kids-trigger.active {
+    background: var(--brand-color);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.1em;
+    padding: 15px 40px;
+    box-shadow: 0 10px 25px -5px var(--brand-color);
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse { 
+    0% { transform: scale(1); } 
+    50% { transform: scale(1.05); } 
+    100% { transform: scale(1); } 
+  }
+
+  /* --- UTILIDADES --- */
+  .theme-btn { 
+    position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; 
+    border-radius: 50%; border: none; cursor: pointer; 
+    background: var(--card-bg); color: var(--text-main); 
+    box-shadow: var(--shadow-soft); font-size: 1.1em; 
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+    z-index: 10;
+  }
+  .theme-btn:active { transform: scale(0.9); }
+
+  .lang-container {
+    margin-top: 25px;
+    opacity: 0.7;
+    margin-bottom: 10px; 
+  }
+  .lang-container select {
+    padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text-sec);
+    background: transparent; color: var(--text-main); font-size: 0.8em;
+    cursor: pointer;
+    outline: none;
+  }
+
+  @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  </style>
 </head>
 <body>
 
-<div class="top-controls">
-    <div class="lang-badge" id="langDisplay">ES</div>
-    <button class="theme-btn" id="themeBtn">☀️</button>
-</div>
+<main class="app-container">
+  <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema">☀️</button>
+  
+  <div class="header-section">
+    <div class="logo-icon">🍽️</div> 
+    <h1 class="brand-name">El Buen Bocado</h1>
+    <p class="welcome-text" data-lang="welcome">¡Bienvenid@!</p>
+  </div>
 
-<div class="share-card">
-    <h2 id="shareTitle">📸 Comparte tu momento</h2>
-    <p id="shareSub" class="subtitle">Sube una foto y compártela con tus amigos.</p>
+  <div class="menu-grid">
+    <a href="elbuenbocadocarta.html" class="menu-btn primary">
+      <span data-lang="view_menu">Ver la Carta</span>
+    </a>
+    <a href="elbuenbocadoreseña.html" class="menu-btn">
+      <span data-lang="leave_review">Dejar Reseña</span>
+    </a>
+    <a href="elbuenbocadocompartir.html" class="menu-btn">
+      <span data-lang="share_with_friends">Compartir</span>
+    </a>
+  </div>
 
-    <div class="photo-area" id="photoArea">
-        <div class="photo-preview-container" id="photoPreviewContainer">
-            <img id="photoPreview" class="photo-preview" alt="Vista previa">
-        </div>
-        <button id="btnRemovePhoto">✕</button>
-        <div class="placeholder-content" id="placeholderContent">
-            <div class="placeholder-btn" id="btnCamera">
-                <span>📷</span> <span data-lang="takePhoto">Cámara</span>
-            </div>
-            <div class="placeholder-btn" id="btnGallery">
-                <span>🖼️</span> <span data-lang="choosePhoto">Galería</span>
-            </div>
-        </div>
-    </div>
+  <div id="shakeTrigger" class="kids-trigger" onclick="handleKidsClick()">
+    <span id="shakeIcon">🎮</span> 
+    <span id="shakeText">Zona Kids: Toca para jugar</span>
+  </div>
 
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
-    <input type="file" id="galleryInput" accept="image/*" style="display:none;">
-
-    <label class="watermark-toggle">
-        <input type="checkbox" id="chkWatermark" checked>
-        <span id="watermarkLabel">Incluir nombre</span>
-    </label>
-
-    <button id="btnShare" class="btn-primary">Compartir Ahora</button>
-    <p class="note" id="note">Si no eliges foto, crearemos una tarjeta digital.</p>
-</div>
-
-<div class="spacer-bottom"></div>
+  <div class="lang-container">
+    <select id="lang-select">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+    </select>
+  </div>
+</main>
 
 <script>
-/* --- 1. CONFIGURACIÓN --- */
-const COPY = {
-    es: { title: "Compartir", shareTitle: "📸 Comparte tu momento", shareSub: "Sube una foto y compártela con tus amigos.", note: "Si no eliges foto, crearemos una tarjeta digital.", shareBtn: "Compartir Ahora", takePhoto: "Usar Cámara", choosePhoto: "Abrir Galería", watermark: "Incluir nombre", processing: "Procesando..." },
-    en: { title: "Share", shareTitle: "📸 Share your moment", shareSub: "Upload a photo and share it with your friends.", note: "If you don't choose a photo, we'll create a digital card.", shareBtn: "Share Now", takePhoto: "Use Camera", choosePhoto: "Open Gallery", watermark: "Include name", processing: "Processing..." },
-    de: { title: "Teilen", shareTitle: "📸 Teile deinen Moment", shareSub: "Foto hochladen und mit Freunden teilen.", note: "Ohne Foto wird eine digitale Karte erstellt.", shareBtn: "Jetzt Teilen", takePhoto: "Kamera", choosePhoto: "Galerie", watermark: "Name einfügen", processing: "Wird verarbeitet..." },
-    fr: { title: "Partager", shareTitle: "📸 Partagez votre moment", shareSub: "Téléchargez une photo et partagez-la.", note: "Sans photo, une carte numérique sera créée.", shareBtn: "Partager Maintenant", takePhoto: "Caméra", choosePhoto: "Galerie", watermark: "Inclure le nom", processing: "Traitement..." },
-    it: { title: "Condividi", shareTitle: "📸 Il tuo momento", shareSub: "Carica una foto e condividila con i tuoi amici.", note: "Senza foto verrà creata una card digitale.", shareBtn: "Condividi Ora", takePhoto: "Fotocamera", choosePhoto: "Galleria", watermark: "Includi nome", processing: "Elaborazione..." }
-};
+  /* --- 1. DICCIONARIO --- */
+  const translations = {
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA O TOCA!" },
+    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE OR TAP!" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Erfahrung teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "SCHÜTTELN ODER TIPPEN!" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Laisser un avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ OU TOUCHEZ !" },
+    it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI O TOCCA!" }
+  };
 
-let selectedFile = null;
-let currentRestaurantName = "El Buen Bocado"; 
-let currentLang = 'es';
+  /* --- 2. LÓGICA ZONA KIDS (Redirección directa) --- */
+  let lastX = null, lastY = null, lastZ = null;
+  let lastTime = 0;
+  let isListening = false;
 
-function init() {
-    detectLanguage();
-    applyTheme();
-}
+  function goToGames() {
+      window.location.href = "elbuenbocadojuegos.html";
+  }
 
-function detectLanguage() {
-    currentLang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
-    if (!COPY[currentLang]) currentLang = 'es';
+  function handleKidsClick() {
+      if (isListening) {
+          goToGames();
+      } else {
+          enableShakeFeature();
+      }
+  }
+
+  function startNativeShakeListener() {
+    if(isListening) return;
     
-    document.getElementById('langDisplay').textContent = currentLang.toUpperCase();
+    const btn = document.getElementById('shakeTrigger');
+    btn.classList.add('active'); 
     
-    const c = COPY[currentLang];
-    document.querySelector('[data-lang="title"]').textContent = c.title;
-    document.getElementById('shareTitle').textContent = c.shareTitle;
-    document.getElementById('shareSub').textContent = c.shareSub;
-    document.getElementById('btnShare').textContent = c.shareBtn;
-    document.getElementById('note').textContent = c.note;
-    document.getElementById('watermarkLabel').textContent = c.watermark;
-    document.querySelectorAll('[data-lang="takePhoto"]').forEach(el => el.textContent = c.takePhoto);
-    document.querySelectorAll('[data-lang="choosePhoto"]').forEach(el => el.textContent = c.choosePhoto);
-}
-
-function handleFileInput(input){
-    const f=input.files?.[0];
-    if(!f) return;
-    selectedFile=f;
-    document.getElementById('photoPreview').src=URL.createObjectURL(f);
-    document.getElementById('placeholderContent').style.display = 'none';
-    document.getElementById('photoPreviewContainer').style.display = 'block';
-    document.getElementById('btnRemovePhoto').style.display = 'flex';
-    document.getElementById('photoArea').style.borderColor = 'var(--brand-color)'; 
-    document.getElementById('photoArea').style.borderStyle = 'solid';
-}
-
-function removePhoto() {
-    selectedFile = null;
-    document.getElementById('photoPreview').src = ''; 
-    document.getElementById('cameraInput').value = null; 
-    document.getElementById('galleryInput').value = null;
-    document.getElementById('placeholderContent').style.display = 'flex';
-    document.getElementById('photoPreviewContainer').style.display = 'none';
-    document.getElementById('btnRemovePhoto').style.display = 'none';
-    document.getElementById('photoArea').style.borderColor = 'var(--border)'; 
-    document.getElementById('photoArea').style.borderStyle = 'dashed';
-}
-
-// Genera una imagen simple con el nombre si no hay foto
-async function generateDefaultCard() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1080;
-    canvas.height = 1080;
-    const ctx = canvas.getContext('2d');
-
-    // Fondo Terracota
-    ctx.fillStyle = "#a0715e";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Texto Central
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 80px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("El Buen Bocado", canvas.width / 2, canvas.height / 2);
+    let lang = document.getElementById('lang-select').value;
+    const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
     
-    // Subtexto
-    ctx.font = "normal 40px Arial";
-    ctx.fillText("¡Qué aproveche!", canvas.width / 2, (canvas.height / 2) + 80);
-
-    return new Promise(resolve => canvas.toBlob(b => resolve(new File([b],"tarjeta.jpg",{type:"image/jpeg"})),"image/jpeg",0.9));
-}
-
-async function addWatermarkToImage(file){
-    return new Promise((resolve, reject)=>{
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            
-            const fontSize = Math.max(40, canvas.width * 0.06);
-            ctx.font = `bold ${fontSize}px Arial`;
-            ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-            ctx.textAlign = "right";
-            ctx.shadowColor="rgba(0,0,0,0.7)"; ctx.shadowBlur=6;
-            ctx.fillText(currentRestaurantName, canvas.width - 30, canvas.height - 30);
-            
-            canvas.toBlob(b => resolve(new File([b],"share.jpg",{type:"image/jpeg"})),"image/jpeg",0.9);
-        };
-        img.onerror = reject;
-    });
-}
-
-async function shareExperience(){
-    const btn = document.getElementById('btnShare');
-    const originalText = btn.textContent;
-    btn.textContent = COPY[currentLang].processing;
+    document.getElementById('shakeText').innerText = readyText;
+    document.getElementById('shakeIcon').innerText = "📳";
     
-    try{
-        let fileToShare = selectedFile;
-        
-        if(!fileToShare) {
-            fileToShare = await generateDefaultCard();
-        } else if(document.getElementById('chkWatermark').checked){
-            fileToShare = await addWatermarkToImage(selectedFile);
-        }
+    isListening = true;
 
-        if(navigator.canShare && navigator.canShare({files:[fileToShare]})){
-            await navigator.share({ files:[fileToShare] });
-        } else {
-            const url = URL.createObjectURL(fileToShare);
-            const a = document.createElement('a');
-            a.href = url; a.download = "ElBuenBocado_Momento.jpg";
-            a.click();
-        }
-    } catch(err){ 
-        if (err.name !== 'AbortError') console.error(err);
-    } finally {
-        btn.textContent = originalText;
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', (event) => {
+          const current = event.accelerationIncludingGravity;
+          if (!current) return;
+          const currentTime = new Date().getTime();
+          if ((currentTime - lastTime) > 100) {
+            const diffTime = currentTime - lastTime;
+            lastTime = currentTime;
+            if (lastX !== null) {
+              const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
+              if (speed > 800) { 
+                 if(navigator.vibrate) navigator.vibrate(300);
+                 goToGames(); 
+              }
+            }
+            lastX = current.x; lastY = current.y; lastZ = current.z;
+          }
+        });
     }
-}
+  }
 
-const themeBtn = document.getElementById('themeBtn');
-function applyTheme() {
-    let saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', saved);
-    themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
-}
+  function enableShakeFeature() {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(response => {
+          if (response === 'granted') startNativeShakeListener();
+        }).catch(console.error);
+    } else {
+      startNativeShakeListener();
+    }
+  }
 
-themeBtn.addEventListener('click', () => {
-    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', next);
-    applyTheme();
-});
+  /* --- 3. SISTEMA UI --- */
+  function detectAndSetLanguage() {
+      let lang = localStorage.getItem('userLang');
+      if (!lang) {
+          lang = navigator.language.slice(0, 2); 
+          if (!translations[lang]) lang = 'es';
+      }
+      localStorage.setItem('userLang', lang);
+      const selector = document.getElementById("lang-select");
+      if(selector) selector.value = lang;
+      return lang;
+  }
 
-document.getElementById('btnCamera').onclick = () => document.getElementById('cameraInput').click();
-document.getElementById('btnGallery').onclick = () => document.getElementById('galleryInput').click();
-document.getElementById('btnRemovePhoto').onclick = removePhoto;
-document.getElementById('btnShare').onclick = shareExperience;
+  function syncLanguage() {
+    let lang = document.getElementById("lang-select").value;
+    
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      if (translations[lang] && translations[lang][el.dataset.lang]) {
+          el.textContent = translations[lang][el.dataset.lang];
+      }
+    });
+    
+    const txtSpan = document.getElementById('shakeText');
+    if(document.getElementById('shakeTrigger').classList.contains('active')) {
+       txtSpan.innerText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
+    } else {
+       txtSpan.innerText = translations[lang] ? translations[lang].shake_wait : "Zona Kids";
+    }
+  }
 
-document.getElementById('cameraInput').onchange = (e) => handleFileInput(e.target);
-document.getElementById('galleryInput').onchange = (e) => handleFileInput(e.target);
+  function syncTheme() {
+    let theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
+  }
 
-window.addEventListener("pageshow", init);
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', newTheme);
+    syncTheme();
+  });
+
+  document.getElementById('lang-select').addEventListener('change', (e) => {
+    localStorage.setItem('userLang', e.target.value);
+    syncLanguage();
+  });
+
+  window.addEventListener('pageshow', () => {
+    detectAndSetLanguage(); 
+    syncTheme();            
+    syncLanguage();
+  });
 </script>
 </body>
 </html>
