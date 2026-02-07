@@ -23,6 +23,7 @@
     --shadow-hover: 0 20px 40px -10px rgba(62, 43, 38, 0.15);
   }
 
+  /* MODO OSCURO */
   [data-theme="dark"] {
     --bg-body: #1e1b1a;     
     --card-bg: #2d2420;
@@ -45,12 +46,11 @@
     
     width: 100%;
     min-height: 100vh;      
-    min-height: 100dvh;    
+    min-height: 100dvh;     
     
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* CAMBIO: Usamos flex-start para empujar el contenido desde arriba manualmente */
     justify-content: flex-start; 
     
     -webkit-font-smoothing: antialiased;
@@ -72,7 +72,6 @@
     align-items: center;
     position: relative;
     
-    /* CAMBIO: Bajamos todo el bloque un 10% de la pantalla para que no quede muy arriba */
     margin-top: 10vh; 
     margin-bottom: 40px; 
   }
@@ -393,17 +392,30 @@
     }
   }
 
+  // --- LÓGICA DE TEMA (MODIFICADA PARA LEER URL) ---
   function syncTheme() {
-    let theme = localStorage.getItem('theme') || 'light';
+    // 1. Mirar si viene en la URL primero
+    const params = new URLSearchParams(window.location.search);
+    let theme = params.get('theme');
+
+    // 2. Si no viene en URL, miramos LocalStorage. Si no hay nada, default 'light'
+    if (!theme) {
+        theme = localStorage.getItem('theme') || 'light';
+    }
+
+    // 3. Aplicar y guardar
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('theme', theme);
   }
 
   document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    document.getElementById('themeBtn').innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
     localStorage.setItem('theme', newTheme);
-    syncTheme();
   });
 
   document.getElementById('lang-select').addEventListener('change', (e) => {
