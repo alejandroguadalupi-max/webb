@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
+<meta name="theme-color" content="#a0715e" id="metaThemeColor" />
+<title>Gracias - El Buen Bocado</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  /* COLORES */
+  --brand: #a0715e; 
+  --bg-body: #fffbf2;
+  --bg-card: #ffffff;
+  --text-main: #3e2b26;
+  --text-sec: #8d6e63;
+  --border: #e6ddd0;
+  --shadow-card: 0 15px 35px -5px rgba(62, 43, 38, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg-body: #1e1b1a;
+  --bg-card: #2d2420;
+  --text-main: #f3e5dc;
+  --text-sec: #d7ccc8;
+  --border: #3e2b26;
+  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body { height: 100%; width: 100%; margin: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif; 
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease;
+  padding: 20px;
+  min-height: 100dvh;
+}
+
+.top-controls {
+  position: absolute; top: 20px; right: 20px; z-index: 10;
+}
+
+.theme-btn { 
+  background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
+  color: var(--text-main); display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem;
+  transition: transform 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.theme-btn:active { transform: scale(0.9); }
+
+main {
+  width: 100%; max-width: 420px; text-align: center;
+  display: flex; flex-direction: column; gap: 20px; z-index: 2;
+  animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brand-title {
+  font-weight: 800; font-size: 2.2rem;
+  color: var(--brand); margin: 0;
+  letter-spacing: -1px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 24px; 
+  padding: 40px 30px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: ''; position: absolute; top:0; left:0; width: 100%; height: 6px; 
+  background: var(--brand);
+}
+
+.card h1 {
+  margin: 0 0 15px; font-size: 1.8rem; font-weight: 800; 
+  color: var(--text-main); line-height: 1.2;
+}
+
+.card p {
+  margin: 0; font-size: 1.1rem; line-height: 1.6; 
+  color: var(--text-sec); font-weight: 400;
+}
+
+/* Iconos Sociales */
+footer.social {
+  display: flex; justify-content: center; gap: 20px;
+  margin-top: 30px; margin-bottom: 20px;
+}
+
+footer.social a {
+  transition: transform 0.2s; display: block;
+}
+
+footer.social img {
+  width: 45px; height: 45px; border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: block;
+}
+
+footer.social a:hover { transform: scale(1.1); }
+
+.btn-back {
+  margin-top: 10px; background: transparent; border: none;
+  color: var(--text-sec); text-decoration: underline;
+  font-weight: 600; cursor: pointer; font-size: 1rem;
+  opacity: 0.8; transition: opacity 0.2s;
+}
+.btn-back:hover { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div class="top-controls">
+  <button class="theme-btn" id="themeBtn">☀️</button>
+</div>
+
+<main>
+  <h2 class="brand-title">El Buen Bocado</h2>
+
+  <section class="card">
+    <h1 id="txtHeading">Gracias por tu ayuda</h1>
+    <p id="txtDesc">Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.</p>
+  </section>
+
+  <button class="btn-back" id="txtBack" onclick="goHome()">Volver al inicio</button>
+</main>
+
+<footer class="social">
+  <a href="https://instagram.com/taply.es" target="_blank" rel="noopener">
+    <img src="img/ig.jpg" alt="IG">
+  </a>
+  <a href="https://tiktok.com/@taply" target="_blank" rel="noopener">
+    <img src="img/tiktok.jpg" alt="TK">
+  </a>
+</footer>
+
+<script>
+  const COPY = {
+    es: { heading: "Gracias por tu ayuda", desc: "Tu opinión nos ayuda a mejorar y a ofrecerte un mejor servicio.", back: "Volver al inicio" },
+    en: { heading: "Thanks for your help", desc: "Your feedback helps us improve and offer you a better service.", back: "Back to home" },
+    de: { heading: "Danke für deine Hilfe", desc: "Dein Feedback hilft uns, uns zu verbessern.", back: "Zurück zum Start" },
+    fr: { heading: "Merci de votre aide", desc: "Vos commentaires nous aident à nous améliorer.", back: "Retour au début" },
+    it: { heading: "Grazie per il tuo aiuto", desc: "Il tuo feedback ci aiuta a migliorare.", back: "Torna alla home" }
+  };
+
+  function init() {
+    // 1. Idioma
+    let lang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
+    if (!COPY[lang]) lang = 'es';
+    
+    const dict = COPY[lang];
+    document.getElementById("txtHeading").textContent = dict.heading;
+    document.getElementById("txtDesc").textContent = dict.desc;
+    document.getElementById("txtBack").textContent = dict.back;
+
+    // 2. Tema
+    applyTheme();
+  }
+
+  // Lógica Tema
+  const themeBtn = document.getElementById('themeBtn');
+  
+  function applyTheme() {
+    let saved = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
+  }
+
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme();
+  });
+
+  function goHome() {
+      // Redirige al menú principal
+      window.location.href = "elbuenbocado.html";
+  }
+
+  init();
+</script>
+</body>
+</html>
