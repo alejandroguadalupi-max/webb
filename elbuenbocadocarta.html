@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#a0715e" />
+<meta name="theme-color" content="#a0715e" id="metaThemeColor" />
 <title>Carta - El Buen Bocado</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,10 +38,18 @@ html { touch-action: manipulation; }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+/* CORRECCIÓN FONDO SUPERIOR: Aplicamos color al HTML también */
+html {
+  background-color: var(--bg-body);
+  transition: background-color 0.3s ease;
+  height: 100%;
+}
+
 body {
   margin: 0; background: var(--bg-body); color: var(--text-main); 
   font-family: 'Outfit', sans-serif; transition: background 0.3s ease; 
   padding-bottom: 140px; -webkit-font-smoothing: antialiased;
+  min-height: 100%;
 }
 
 /* --- HEADER --- */
@@ -64,7 +72,7 @@ body {
 
 .brand-area { display: flex; align-items: center; }
 
-/* Título Carta */
+/* Título Carta (Sin flecha a la izquierda) */
 .brand-name { 
   font-size: 1.4rem; font-weight: 800; color: var(--text-main); 
   margin: 0; line-height: 1; text-transform: uppercase; letter-spacing: 1px; 
@@ -75,8 +83,8 @@ body {
 /* BADGE IDIOMA REDONDEADO */
 .lang-badge {
     font-weight: 700; border: 1px solid var(--text-sec); 
-    padding: 8px 12px; /* Más padding para hacerlo ovalado */
-    border-radius: 50px; /* Redondeado completo */
+    padding: 8px 12px; 
+    border-radius: 50px; 
     font-size: 0.75rem; cursor: default; letter-spacing: 1px; opacity: 0.8;
     color: var(--text-main);
 }
@@ -368,6 +376,12 @@ function init() {
   // TEMA
   let savedTheme = params.get('theme') || localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  // ACTUALIZACIÓN DE META COLOR SEGÚN TEMA
+  const metaTheme = document.getElementById('metaThemeColor');
+  if(savedTheme === 'dark') metaTheme.setAttribute('content', '#1e1b1a');
+  else metaTheme.setAttribute('content', '#a0715e');
+
   document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '🌙' : '☀️';
   
   // IDIOMA
@@ -610,6 +624,11 @@ themeBtn.addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', next);
   themeBtn.innerHTML = next === 'dark' ? '🌙' : '☀️';
   localStorage.setItem('theme', next);
+  
+  // Actualizar meta color para navegador
+  const metaTheme = document.getElementById('metaThemeColor');
+  if(next === 'dark') metaTheme.setAttribute('content', '#1e1b1a');
+  else metaTheme.setAttribute('content', '#a0715e');
 });
 
 init();
