@@ -34,7 +34,12 @@
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
-    html, body { height: 100%; }
+    /* CORRECCIÓN FONDO HTML */
+    html {
+        background-color: var(--bg-body);
+        transition: background-color 0.3s ease;
+        height: 100%;
+    }
 
     body {
       margin: 0; 
@@ -43,42 +48,54 @@
       color: var(--text-main);
       min-height: 100dvh;
       display: flex; flex-direction: column;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
       overflow-x: hidden;
-      padding: max(20px, env(safe-area-inset-top)) 20px 20px;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    /* --- CONTROLES SUPERIORES (Igual que Carta) --- */
+    /* --- CONTROLES SUPERIORES --- */
     .top-controls {
-      width: 100%; max-width: 500px; margin: 0 auto 20px;
-      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; 
+      padding: 15px 20px;
+      display: flex; 
+      justify-content: flex-end; /* Alineado a la derecha */
+      align-items: center; 
+      gap: 12px; 
+      position: sticky; top: 0; z-index: 100;
+      background-color: var(--bg-body);
+      transition: background-color 0.3s ease;
     }
 
-    .back-btn {
-      background: transparent; border: none; font-size: 1.5rem; color: var(--text-main);
-      cursor: pointer; padding: 0; line-height: 1; transition: transform 0.2s;
-    }
-    .back-btn:active { transform: scale(0.9); }
-
-    .header-right { display: flex; align-items: center; gap: 10px; }
-
+    /* Estilo Pastilla */
     .lang-badge {
-        font-weight: 700; border: 1px solid var(--text-sec); padding: 6px 10px; 
-        border-radius: 50px; font-size: 0.75rem; cursor: default; letter-spacing: 1px; opacity: 0.8;
-        color: var(--text-main);
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      background: var(--bg-card); 
+      border: 1px solid var(--border);
+      color: var(--text-sec); 
+      padding: 5px 10px; 
+      border-radius: 50px;
+      transition: all 0.3s ease;
     }
 
+    /* Estilo Botón Redondo */
     .theme-btn { 
-      background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
-      color: var(--text-main); display: flex; align-items: center; justify-content: center;
-      width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; transition: transform 0.2s;
+      background: var(--bg-card); 
+      border: 1px solid var(--border); 
+      cursor: pointer; padding: 0; 
+      color: var(--text-main); 
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; 
+      border-radius: 50%; 
+      font-size: 1.1rem;
+      transition: transform 0.2s, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
     .theme-btn:active { transform: scale(0.9); }
 
     /* --- HUB MENU --- */
     .hub-grid {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
-      width: 100%; max-width: 500px; margin: 0 auto;
+      width: 100%; max-width: 500px; padding: 20px; margin: 0 auto;
       animation: popIn 0.5s ease-out;
     }
     .game-card {
@@ -87,16 +104,15 @@
       align-items: center; cursor: pointer; 
       border: 1px solid var(--border);
       box-shadow: var(--shadow-soft); 
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s, background-color 0.3s ease, border-color 0.3s ease;
     }
     .game-card:active { transform: scale(0.96); }
     .game-icon { font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); }
     
-    /* Fuente Fredoka solo para títulos Kids */
     .game-title { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.1rem; text-align: center; color: var(--text-main); }
 
     /* --- CONTENEDORES DE JUEGO --- */
-    .game-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 450px; padding: 15px 0; flex: 1; margin: 0 auto; justify-content: center;}
+    .game-wrapper { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 450px; padding: 15px; flex: 1; margin: 0 auto; justify-content: center;}
     .game-wrapper.active { display: flex; animation: slideUp 0.4s ease-out; }
 
     /* === MEMORY === */
@@ -104,7 +120,7 @@
     .mem-card { aspect-ratio: 1; perspective: 1000px; cursor: pointer; height: 85px; }
     .mem-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
     .mem-card.flipped .mem-inner { transform: rotateY(180deg); }
-    .mem-face { position: absolute; width: 100%; height: 100%; border-radius: 15px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); background: var(--bg-card); transition: background 0.3s; }
+    .mem-face { position: absolute; width: 100%; height: 100%; border-radius: 15px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); background: var(--bg-card); transition: background-color 0.3s ease, border-color 0.3s ease;}
     .mem-front { background: var(--brand-color); color: white; font-size: 1.5rem; font-weight: 800; border: none; }
     .mem-back { transform: rotateY(180deg); font-size: 2.2rem; }
 
@@ -116,7 +132,7 @@
 
     /* BOTONES */
     .btn { padding: 16px 25px; border-radius: 16px; border: none; font-weight: 700; font-family: 'Outfit', sans-serif; cursor: pointer; font-size: 1rem; width: 100%; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .btn-action { background: var(--brand-color); color: #fff; box-shadow: 0 10px 20px -5px rgba(160, 113, 94, 0.4); }
+    .btn-action { background: var(--brand-color); color: #fff; box-shadow: 0 4px 15px -3px var(--brand-color); }
     .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text-sec); margin-top: 10px; }
     .btn:active { transform: scale(0.98); box-shadow: none; opacity: 0.9; }
 
@@ -129,7 +145,7 @@
     #dinoCanvas { background: #fff; border-radius: 20px; border: 2px solid var(--border); width: 100%; height: 180px; }
     .mole-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
     .hole { aspect-ratio: 1; background: var(--border); border-radius: 50%; position: relative; overflow: hidden; box-shadow: inset 0 10px 10px rgba(0,0,0,0.1); }
-    .mole { position: absolute; top: 100%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: top 0.1s; cursor: pointer; }
+    .mole { position: absolute; top: 100%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: top 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
     .hole.up .mole { top: 10%; }
 
     .player-tag { background: var(--brand-color); color: white; padding: 6px 14px; border-radius: 50px; margin: 4px; display: inline-block; font-weight: 600; font-size: 0.9rem; }
@@ -144,11 +160,8 @@
 <body>
 
   <div class="top-controls">
-      <button class="back-btn" onclick="history.back()">←</button>
-      <div class="header-right">
-        <div class="lang-badge" id="langDisplay">ES</div>
-        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
-      </div>
+      <div class="lang-badge" id="langDisplay">ES</div>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
   </div>
 
   <div id="hubMenu">
@@ -169,6 +182,7 @@
           <div class="game-icon">🦖</div>
           <div class="game-title" data-t="g4">Dino Run</div>
         </div>
+        <button class="btn btn-action" style="grid-column: span 2; margin-top: 15px;" onclick="history.back()" data-t="exit_hub">SALIR DE JUEGOS</button>
     </div>
   </div>
 
@@ -228,6 +242,7 @@
     /* 1. DICCIONARIO DE IDIOMAS */
     const dict = {
         es: { 
+            exit_hub: "SALIR DE JUEGOS",
             g1:"Parejas", g2:"Caza Chef", g3:"Impostor", g4:"Dino Run", 
             retry:"REINTENTAR 🔄", menu_btn: "MENÚ 🏠", back: "VOLVER", start: "EMPEZAR",
             score: "Puntos", jump_btn: "¡SALTAR! 👆", boom: "¡BOOM!",
@@ -239,6 +254,7 @@
             imp_words: ["Pizza", "Sushi", "Taco", "Hamburguesa", "Pasta", "Helado", "Sopa"]
         },
         en: { 
+            exit_hub: "EXIT GAMES",
             g1:"Memory", g2:"Chef Hunt", g3:"Imposter", g4:"Dino Run", 
             retry:"RETRY 🔄", menu_btn: "MENU 🏠", back: "BACK", start: "START",
             score: "Score", jump_btn: "JUMP! 👆", boom: "BOOM!",
@@ -250,6 +266,7 @@
             imp_words: ["Pizza", "Sushi", "Taco", "Burger", "Pasta", "Ice Cream", "Soup"]
         },
         de: { 
+            exit_hub: "SPIELE VERLASSEN",
             g1:"Paare", g2:"Chef Jagd", g3:"Hochstapler", g4:"Dino Run", 
             retry:"NEU STARTEN 🔄", menu_btn: "MENÜ 🏠", back: "ZURÜCK", start: "STARTEN",
             score: "Punkte", jump_btn: "SPRINGEN! 👆", boom: "BUMM!",
@@ -261,6 +278,7 @@
             imp_words: ["Pizza", "Sushi", "Taco", "Burger", "Pasta", "Eis", "Suppe"]
         },
         fr: { 
+            exit_hub: "QUITTER",
             g1:"Mémoire", g2:"Chasse Chef", g3:"Imposteur", g4:"Dino Run", 
             retry:"RÉESSAYER 🔄", menu_btn: "MENU 🏠", back: "RETOUR", start: "COMMENCER",
             score: "Score", jump_btn: "SAUTER ! 👆", boom: "BOUM !",
@@ -272,6 +290,7 @@
             imp_words: ["Pizza", "Sushi", "Tacos", "Burger", "Pâtes", "Glace", "Soupe"]
         },
         it: { 
+            exit_hub: "ESCI",
             g1:"Memoria", g2:"Caccia allo Chef", g3:"Impostore", g4:"Dino Run", 
             retry:"RIPROVA 🔄", menu_btn: "MENU 🏠", back: "INDIETRO", start: "INIZIA",
             score: "Punti", jump_btn: "SALTA! 👆", boom: "BOOM!",
@@ -284,16 +303,23 @@
         }
     };
 
-    /* 2. INICIALIZACIÓN */
+    /* 2. INICIALIZACIÓN Y DETECCIÓN AUTOMÁTICA DE IDIOMA */
     const urlParams = new URLSearchParams(window.location.search);
     
-    // 1. Idioma
+    // 1. Intentar obtener idioma de localStorage (si vino de principal.html)
+    // 2. Si no, intentar obtener idioma del navegador
+    // 3. Si no existe en el diccionario, usar 'es' por defecto
     let detectedLang = localStorage.getItem('userLang') || navigator.language.slice(0,2);
     if (!dict[detectedLang]) detectedLang = 'es';
-    const t = dict[detectedLang]; 
+    
+    const t = dict[detectedLang]; // Objeto de traducción actual
+    
+    // Si viene parámetro btn (color) se aplica, sino default terracota
+    const color = urlParams.get('btn') ? '#' + urlParams.get('btn') : '#a0715e';
+    document.documentElement.style.setProperty('--brand-color', color);
     document.getElementById('langDisplay').innerText = detectedLang.toUpperCase();
 
-    // 2. Aplicar traducciones
+    // Aplicar traducciones estáticas al cargar
     function applyTranslations() {
         document.querySelectorAll('[data-t]').forEach(el => {
             if (t[el.dataset.t]) el.innerText = t[el.dataset.t];
@@ -303,7 +329,7 @@
     }
     applyTranslations();
 
-    // 3. Tema
+    /* LÓGICA DE TEMA (MODO CLARO / OSCURO) */
     function applySavedTheme() {
         // Mirar URL primero, luego storage
         let savedTheme = urlParams.get('theme') || localStorage.getItem('theme') || 'light';
@@ -320,13 +346,13 @@
         document.getElementById('themeBtn').innerText = next === 'dark' ? '🌙' : '☀️';
     }
 
-    /* LOGICA JUEGOS */
     function openGame(id) {
         stopAllGames();
         document.getElementById('hubMenu').style.display = 'none';
         document.getElementById('modalEnd').style.display = 'none';
         document.querySelectorAll('.game-wrapper').forEach(w => w.classList.remove('active'));
         document.getElementById(`game-${id}`).classList.add('active');
+        
         if(id !== 'mole') window[`init_${id}`]();
     }
 
