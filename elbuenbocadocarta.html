@@ -46,7 +46,7 @@ body {
 
 /* --- HEADER --- */
 .header {
-  background: var(--bg-body); padding: 15px 20px; 
+  padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; z-index: 800; 
   /* Efecto Glass */
@@ -69,9 +69,11 @@ body {
 
 .header-right { display: flex; align-items: center; gap: 10px; }
 
+/* DISEÑO DEL BADGE DE IDIOMA CORREGIDO (REDONDO) */
 .lang-badge {
-    font-weight: 700; border: 2px solid var(--text-main); padding: 4px 8px; 
-    border-radius: 8px; font-size: 0.75rem; cursor: default; letter-spacing: 1px; opacity: 0.7;
+    font-weight: 700; border: 1px solid var(--text-sec); padding: 6px 10px; 
+    border-radius: 50px; font-size: 0.75rem; cursor: default; letter-spacing: 1px; opacity: 0.8;
+    color: var(--text-main);
 }
 
 .theme-btn { 
@@ -87,15 +89,16 @@ body {
   padding: 10px 0; border-bottom: 1px solid transparent; transition: border-color 0.3s;
 }
 .allergy-wrapper { padding: 0 20px 10px 20px; }
+
+/* SELECTOR DE ALERGIAS SIN FLECHA */
 .allergy-select {
   width: 100%; appearance: none; -webkit-appearance: none;
   background: var(--bg-card); border: 1px solid var(--border); 
   color: var(--text-main); font-size: 0.9rem; font-weight: 500;
   padding: 12px 16px; border-radius: 12px; cursor: pointer; outline: none;
   box-shadow: var(--shadow-card);
-  /* Flecha SVG inyectada */
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a0715e%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-  background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 10px auto;
+  text-align: center; /* Centrado */
+  background-image: none !important; /* Quitar flecha */
 }
 
 .filters-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
@@ -250,10 +253,10 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
   </div>
 
   <div class="filters-scroll">
-    <button class="filter-pill active" onclick="filter('principales')" id="f-main">Principales</button>
+    <button class="filter-pill active" onclick="filter('bebidas')" id="f-drk">Bebidas</button>
     <button class="filter-pill" onclick="filter('entrantes')" id="f-ent">Entrantes</button>
+    <button class="filter-pill" onclick="filter('principales')" id="f-main">Principales</button>
     <button class="filter-pill" onclick="filter('postres')" id="f-des">Postres</button>
-    <button class="filter-pill" onclick="filter('bebidas')" id="f-drk">Bebidas</button>
   </div>
 </div>
 
@@ -292,24 +295,28 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 </div>
 
 <script>
-/* --- CONFIGURACIÓN DE MENÚ (El Buen Bocado) --- */
+/* --- MENÚ TRADICIONAL REDUCIDO --- */
 const config = {
   menus: {
     'restaurante': [
-       { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone", de:"Gebackener Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato", de:"Geschmolzener Käse mit Tomate"} },
-       { id: 102, cat: 'entrantes', tags: [], price: 12.00, name: {es:"Carpaccio de Ternera", en:"Beef Carpaccio", de:"Rindercarpaccio"}, desc: {es:"Con rúcula y parmesano", en:"With arugula and parmesan", de:"Mit Rucola und Parmesan"} },
-       
-       { id: 104, cat: 'principales', tags: ['v'], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita", de:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil", de:"Tomate, Mozzarella, Basilikum"} },
-       { id: 105, cat: 'principales', tags: [], price: 13.50, name: {es:"Pizza Diavola", en:"Pizza Diavola", de:"Pizza Diavola"}, desc: {es:"Tomate, mozzarella, salami picante", en:"Tomato, mozzarella, spicy salami", de:"Tomate, Mozzarella, scharfe Salami"} },
-       { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara Original", en:"Authentic Carbonara", de:"Carbonara Original"}, desc: {es:"Huevo, guanciale, pecorino", en:"Egg, guanciale, pecorino", de:"Ei, Guanciale, Pecorino"} },
-       
-       { id: 199, cat: 'postres', tags: ['v'], price: 5.50, name: {es:"Tiramisú", en:"Tiramisu", de:"Tiramisu"}, desc: {es:"Casero", en:"Homemade", de:"Hausgemacht"} },
-       { id: 200, cat: 'postres', tags: ['v'], price: 4.50, name: {es:"Panna Cotta", en:"Panna Cotta", de:"Panna Cotta"}, desc: {es:"Frutos rojos", en:"Red berries", de:"Rote Früchte"} }
-    ],
-    'comunes': [
-       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola", en:"Coke", de:"Cola"}, desc: {es:"33cl", en:"33cl", de:"33cl"} },
-       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua Mineral", en:"Still Water", de:"Stilles Wasser"}, desc: {es:"50cl", en:"50cl", de:"50cl"} },
-       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 3.00, name: {es:"Cerveza", en:"Beer", de:"Bier"}, desc: {es:"Caña", en:"Draft", de:"Vom Fass"} }
+       /* BEBIDAS */
+       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.20, name: {es:"Refresco / Agua", en:"Soft Drink / Water", de:"Erfrischungsgetränk"}, desc: {es:"Coca-Cola, Fanta, Agua Mineral", en:"Coke, Fanta, Mineral Water", de:"Cola, Fanta, Mineralwasser"} },
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.80, name: {es:"Cerveza de Barril", en:"Draft Beer", de:"Fassbier"}, desc: {es:"Caña bien fría", en:"Cold draft beer", de:"Kaltes Bier"} },
+       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 3.50, name: {es:"Vino de la Casa", en:"House Wine", de:"Hauswein"}, desc: {es:"Copa (Rioja/Ribera)", en:"Glass (Red/White)", de:"Glas (Rot/Weiß)"} },
+
+       /* ENTRANTES */
+       { id: 101, cat: 'entrantes', tags: [], price: 14.50, name: {es:"Jamón Ibérico", en:"Iberian Ham", de:"Iberischer Schinken"}, desc: {es:"Cortado a cuchillo, con picos", en:"Hand-sliced, with breadsticks", de:"Handgeschnitten"} },
+       { id: 102, cat: 'entrantes', tags: [], price: 9.00, name: {es:"Croquetas Caseras", en:"Homemade Croquettes", de:"Hausgemachte Kroketten"}, desc: {es:"De jamón (6 uds)", en:"Ham croquettes (6 pcs)", de:"Schinkenkroketten (6 Stk)"} },
+       { id: 103, cat: 'entrantes', tags: ['v','gf'], price: 8.50, name: {es:"Ensalada de la Huerta", en:"Garden Salad", de:"Gartensalat"}, desc: {es:"Tomate, lechuga, cebolla y atún", en:"Tomato, lettuce, onion, tuna", de:"Tomate, Salat, Zwiebel, Thunfisch"} },
+
+       /* PRINCIPALES */
+       { id: 201, cat: 'principales', tags: ['gf'], price: 18.00, name: {es:"Entrecot de Ternera", en:"Beef Entrecote", de:"Rinderentrecôte"}, desc: {es:"A la parrilla con guarnición", en:"Grilled with garnish", de:"Gegrillt mit Beilage"} },
+       { id: 202, cat: 'principales', tags: [], price: 14.50, name: {es:"Bacalao a la Riojana", en:"Cod Rioja Style", de:"Kabeljau nach Rioja-Art"}, desc: {es:"Con salsa de tomate y pimientos", en:"With tomato and pepper sauce", de:"Mit Tomaten-Paprika-Soße"} },
+       { id: 203, cat: 'principales', tags: ['v'], price: 11.00, name: {es:"Huevos Rotos", en:"Broken Eggs", de:"Zerbrochene Eier"}, desc: {es:"Con patatas y jamón", en:"With potatoes and ham", de:"Mit Kartoffeln und Schinken"} },
+
+       /* POSTRES */
+       { id: 301, cat: 'postres', tags: [], price: 5.00, name: {es:"Tarta de Queso", en:"Cheesecake", de:"Käsekuchen"}, desc: {es:"Casera al horno", en:"Homemade baked", de:"Hausgemacht gebacken"} },
+       { id: 302, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Flan de Huevo", en:"Egg Flan", de:"Eierflan"}, desc: {es:"Receta de la abuela", en:"Grandma's recipe", de:"Omas Rezept"} }
     ]
   }
 };
@@ -344,7 +351,7 @@ const uiDict = {
 
 /* --- ESTADO --- */
 let cart = {};
-let activeCategory = 'principales'; 
+let activeCategory = 'bebidas'; // Inicia en bebidas como pidió
 let lang = 'es';
 let currentMenu = [];
 
@@ -352,12 +359,12 @@ let currentMenu = [];
 function init() {
   const params = new URLSearchParams(window.location.search);
   
-  // 1. TEMA: Detección inteligente (URL -> LocalStorage)
+  // TEMA
   let savedTheme = params.get('theme') || localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '🌙' : '☀️';
   
-  // 2. IDIOMA
+  // IDIOMA
   const urlLang = params.get('lang');
   const browserLang = navigator.language.slice(0,2);
   lang = urlLang || localStorage.getItem('userLang') || (['es','en','de'].includes(browserLang) ? browserLang : 'es');
@@ -365,14 +372,14 @@ function init() {
   try { localStorage.setItem('userLang', lang); } catch (e) {}
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
-  // 3. MENU
-  currentMenu = [...config.menus['restaurante'], ...config.menus['comunes']];
+  // MENU
+  currentMenu = config.menus['restaurante']; // Menú único
 
   loadCart();
   translateUI();
-  activeCategory = 'principales';
-  updateFilterUI();
-  render();
+  
+  // Iniciar en Bebidas
+  filter('bebidas'); 
   updateFloat();
 }
 
@@ -476,6 +483,7 @@ function renderList() {
 
   let items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
   
+  // Orden lógico en el resumen
   items.sort((a, b) => {
      const order = { 'bebidas': 1, 'entrantes': 2, 'principales': 3, 'postres': 4 };
      return (order[a.cat] || 99) - (order[b.cat] || 99);
