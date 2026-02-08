@@ -49,56 +49,61 @@ body {
   padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; z-index: 800; 
-  /* Efecto Glass */
-  background: rgba(255, 251, 242, 0.9);
+  /* Efecto Glass - MODO CLARO */
+  background: rgba(255, 251, 242, 0.95);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
-}
-[data-theme="dark"] .header { background: rgba(30, 27, 26, 0.9); }
-
-.brand-area { 
-  display: flex; align-items: center; gap: 15px;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.back-btn {
-  background: transparent; border: none; font-size: 1.5rem; color: var(--text-main);
-  cursor: pointer; padding: 0; line-height: 1;
+/* CORRECCIÓN FONDO HEADER MODO OSCURO */
+[data-theme="dark"] .header { 
+  background: rgba(30, 27, 26, 0.95); 
+  border-bottom: 1px solid #3e2b26;
 }
 
-.brand-name { font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.1; text-transform: uppercase; letter-spacing: 1px; }
+.brand-area { display: flex; align-items: center; }
+
+/* Título Carta */
+.brand-name { 
+  font-size: 1.4rem; font-weight: 800; color: var(--text-main); 
+  margin: 0; line-height: 1; text-transform: uppercase; letter-spacing: 1px; 
+}
 
 .header-right { display: flex; align-items: center; gap: 10px; }
 
-/* DISEÑO DEL BADGE DE IDIOMA CORREGIDO (REDONDO) */
+/* BADGE IDIOMA REDONDEADO */
 .lang-badge {
-    font-weight: 700; border: 1px solid var(--text-sec); padding: 6px 10px; 
-    border-radius: 50px; font-size: 0.75rem; cursor: default; letter-spacing: 1px; opacity: 0.8;
+    font-weight: 700; border: 1px solid var(--text-sec); 
+    padding: 8px 12px; /* Más padding para hacerlo ovalado */
+    border-radius: 50px; /* Redondeado completo */
+    font-size: 0.75rem; cursor: default; letter-spacing: 1px; opacity: 0.8;
     color: var(--text-main);
 }
 
 .theme-btn { 
   background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; padding: 0; 
   color: var(--text-main); display: flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; transition: transform 0.2s;
+  width: 38px; height: 38px; border-radius: 50%; font-size: 1.1rem; transition: transform 0.2s;
 }
 .theme-btn:active { transform: scale(0.9); }
 
 /* --- CONTROLES --- */
 .controls-container {
-  position: sticky; top: 67px; z-index: 790; background: var(--bg-body);
-  padding: 10px 0; border-bottom: 1px solid transparent; transition: border-color 0.3s;
+  position: sticky; top: 68px; z-index: 790; background: var(--bg-body);
+  padding: 10px 0; border-bottom: 1px solid transparent; transition: background 0.3s ease;
 }
 .allergy-wrapper { padding: 0 20px 10px 20px; }
 
-/* SELECTOR DE ALERGIAS SIN FLECHA */
+/* SELECTOR DE ALERGIAS LIMPIO */
 .allergy-select {
   width: 100%; appearance: none; -webkit-appearance: none;
   background: var(--bg-card); border: 1px solid var(--border); 
   color: var(--text-main); font-size: 0.9rem; font-weight: 500;
   padding: 12px 16px; border-radius: 12px; cursor: pointer; outline: none;
   box-shadow: var(--shadow-card);
-  text-align: center; /* Centrado */
-  background-image: none !important; /* Quitar flecha */
+  text-align: center; 
+  background-image: none !important;
 }
 
 .filters-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
@@ -198,7 +203,6 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
   height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 60px; 
   background: #fff; color: #000;
 }
-/* Forzar tema claro en modo camarero para máximo contraste */
 .sheet.waiter-mode .order-item { 
   padding: 25px 5px; background: transparent; border-bottom: 2px solid #eee; border-radius: 0; 
 }
@@ -221,7 +225,6 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
   text-transform: uppercase; font-size: 0.9rem; color: #FFA000; letter-spacing: 1px;
 }
 
-/* Botón cerrar modo camarero (Grande y flotante) */
 #closeWaiterBtn {
   position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: var(--brand-color); color: #fff;
   border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; z-index: 3001;
@@ -233,7 +236,6 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 
 <header class="header">
   <div class="brand-area">
-    <button class="back-btn" onclick="goBack()">←</button>
     <h1 class="brand-name" id="brandNameDisplay">CARTA</h1>
   </div>
   <div class="header-right">
@@ -295,28 +297,32 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 </div>
 
 <script>
-/* --- MENÚ TRADICIONAL REDUCIDO --- */
+/* --- MENÚ TRADICIONAL (Platos comunes y típicos) --- */
 const config = {
   menus: {
     'restaurante': [
        /* BEBIDAS */
-       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.20, name: {es:"Refresco / Agua", en:"Soft Drink / Water", de:"Erfrischungsgetränk"}, desc: {es:"Coca-Cola, Fanta, Agua Mineral", en:"Coke, Fanta, Mineral Water", de:"Cola, Fanta, Mineralwasser"} },
-       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.80, name: {es:"Cerveza de Barril", en:"Draft Beer", de:"Fassbier"}, desc: {es:"Caña bien fría", en:"Cold draft beer", de:"Kaltes Bier"} },
-       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 3.50, name: {es:"Vino de la Casa", en:"House Wine", de:"Hauswein"}, desc: {es:"Copa (Rioja/Ribera)", en:"Glass (Red/White)", de:"Glas (Rot/Weiß)"} },
+       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola / Refresco", en:"Coke / Soft Drink", de:"Cola / Erfrischungsgetränk"}, desc: {es:"33cl", en:"33cl", de:"33cl"} },
+       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua Mineral", en:"Mineral Water", de:"Mineralwasser"}, desc: {es:"Botella 50cl", en:"50cl Bottle", de:"50cl Flasche"} },
+       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 2.80, name: {es:"Caña de Cerveza", en:"Draft Beer", de:"Bier vom Fass"}, desc: {es:"Bien fría", en:"Cold draft beer", de:"Kaltes Bier"} },
+       { id: 904, cat: 'bebidas', tags: ['gf','v'], price: 3.50, name: {es:"Copa de Vino", en:"Glass of Wine", de:"Glas Wein"}, desc: {es:"Rioja o Ribera", en:"Red Wine", de:"Rotwein"} },
 
        /* ENTRANTES */
-       { id: 101, cat: 'entrantes', tags: [], price: 14.50, name: {es:"Jamón Ibérico", en:"Iberian Ham", de:"Iberischer Schinken"}, desc: {es:"Cortado a cuchillo, con picos", en:"Hand-sliced, with breadsticks", de:"Handgeschnitten"} },
-       { id: 102, cat: 'entrantes', tags: [], price: 9.00, name: {es:"Croquetas Caseras", en:"Homemade Croquettes", de:"Hausgemachte Kroketten"}, desc: {es:"De jamón (6 uds)", en:"Ham croquettes (6 pcs)", de:"Schinkenkroketten (6 Stk)"} },
-       { id: 103, cat: 'entrantes', tags: ['v','gf'], price: 8.50, name: {es:"Ensalada de la Huerta", en:"Garden Salad", de:"Gartensalat"}, desc: {es:"Tomate, lechuga, cebolla y atún", en:"Tomato, lettuce, onion, tuna", de:"Tomate, Salat, Zwiebel, Thunfisch"} },
+       { id: 101, cat: 'entrantes', tags: [], price: 10.50, name: {es:"Croquetas Caseras", en:"Homemade Croquettes", de:"Hausgemachte Kroketten"}, desc: {es:"De jamón ibérico (8 uds)", en:"Iberian Ham (8 pcs)", de:"Iberischer Schinken (8 Stk)"} },
+       { id: 102, cat: 'entrantes', tags: [], price: 16.00, name: {es:"Jamón Ibérico", en:"Iberian Ham", de:"Iberischer Schinken"}, desc: {es:"Ración completa con picos", en:"Full portion with breadsticks", de:"Ganze Portion"} },
+       { id: 103, cat: 'entrantes', tags: ['v','gf'], price: 8.50, name: {es:"Ensalada Mixta", en:"Mixed Salad", de:"Gemischter Salat"}, desc: {es:"Lechuga, tomate, cebolla, atún", en:"Lettuce, tomato, onion, tuna", de:"Salat, Tomate, Zwiebel, Thunfisch"} },
+       { id: 104, cat: 'entrantes', tags: ['v','gf'], price: 6.50, name: {es:"Patatas Bravas", en:"Patatas Bravas", de:"Patatas Bravas"}, desc: {es:"Salsa picante casera", en:"Spicy homemade sauce", de:"Scharfe hausgemachte Soße"} },
 
        /* PRINCIPALES */
-       { id: 201, cat: 'principales', tags: ['gf'], price: 18.00, name: {es:"Entrecot de Ternera", en:"Beef Entrecote", de:"Rinderentrecôte"}, desc: {es:"A la parrilla con guarnición", en:"Grilled with garnish", de:"Gegrillt mit Beilage"} },
-       { id: 202, cat: 'principales', tags: [], price: 14.50, name: {es:"Bacalao a la Riojana", en:"Cod Rioja Style", de:"Kabeljau nach Rioja-Art"}, desc: {es:"Con salsa de tomate y pimientos", en:"With tomato and pepper sauce", de:"Mit Tomaten-Paprika-Soße"} },
-       { id: 203, cat: 'principales', tags: ['v'], price: 11.00, name: {es:"Huevos Rotos", en:"Broken Eggs", de:"Zerbrochene Eier"}, desc: {es:"Con patatas y jamón", en:"With potatoes and ham", de:"Mit Kartoffeln und Schinken"} },
+       { id: 201, cat: 'principales', tags: ['gf'], price: 19.50, name: {es:"Solomillo de Ternera", en:"Beef Tenderloin", de:"Rinderfilet"}, desc: {es:"A la parrilla con patatas", en:"Grilled with potatoes", de:"Gegrillt mit Kartoffeln"} },
+       { id: 202, cat: 'principales', tags: ['gf'], price: 15.00, name: {es:"Merluza a la Romana", en:"Battered Hake", de:"Seehecht im Teigmantel"}, desc: {es:"Con ensalada", en:"With salad", de:"Mit Salat"} },
+       { id: 203, cat: 'principales', tags: [], price: 12.50, name: {es:"Hamburguesa Completa", en:"Full Burger", de:"Vollständiger Burger"}, desc: {es:"Ternera, queso, bacon, huevo", en:"Beef, cheese, bacon, egg", de:"Rindfleisch, Käse, Speck, Ei"} },
+       { id: 204, cat: 'principales', tags: [], price: 14.00, name: {es:"Carrillada en Salsa", en:"Braised Pork Cheeks", de:"Geschmorte Schweinebäckchen"}, desc: {es:"Muy tierna, con puré", en:"Very tender, with mash", de:"Sehr zart, mit Püree"} },
 
        /* POSTRES */
-       { id: 301, cat: 'postres', tags: [], price: 5.00, name: {es:"Tarta de Queso", en:"Cheesecake", de:"Käsekuchen"}, desc: {es:"Casera al horno", en:"Homemade baked", de:"Hausgemacht gebacken"} },
-       { id: 302, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Flan de Huevo", en:"Egg Flan", de:"Eierflan"}, desc: {es:"Receta de la abuela", en:"Grandma's recipe", de:"Omas Rezept"} }
+       { id: 301, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Arroz con Leche", en:"Rice Pudding", de:"Milchreis"}, desc: {es:"Casero con canela", en:"Homemade with cinnamon", de:"Hausgemacht mit Zimt"} },
+       { id: 302, cat: 'postres', tags: ['gf'], price: 4.00, name: {es:"Flan de Huevo", en:"Egg Flan", de:"Eierflan"}, desc: {es:"Receta de la abuela", en:"Grandma's recipe", de:"Omas Rezept"} },
+       { id: 303, cat: 'postres', tags: [], price: 5.50, name: {es:"Tarta de Queso", en:"Cheesecake", de:"Käsekuchen"}, desc: {es:"Al horno", en:"Baked", de:"Gebacken"} }
     ]
   }
 };
@@ -351,7 +357,7 @@ const uiDict = {
 
 /* --- ESTADO --- */
 let cart = {};
-let activeCategory = 'bebidas'; // Inicia en bebidas como pidió
+let activeCategory = 'bebidas'; // Empieza en Bebidas
 let lang = 'es';
 let currentMenu = [];
 
@@ -373,7 +379,7 @@ function init() {
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
   // MENU
-  currentMenu = config.menus['restaurante']; // Menú único
+  currentMenu = config.menus['restaurante'];
 
   loadCart();
   translateUI();
@@ -605,10 +611,6 @@ themeBtn.addEventListener('click', () => {
   themeBtn.innerHTML = next === 'dark' ? '🌙' : '☀️';
   localStorage.setItem('theme', next);
 });
-
-function goBack() {
-    window.location.href = "elbuenbocado.html";
-}
 
 init();
 </script>
