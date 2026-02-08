@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
-<title>Taply Menu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, viewport-fit=cover" />
+<title>Carta Digital</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
 
 <style>
 :root {
-  --brand-color: #FF4757; /* Se sobrescribe por JS si viene en URL */
+  --brand-color: #FF4757; /* Se sobrescribe por JS si viene ?btn=COLOR */
   --bg-body: #f8fafc;
   --bg-card: #ffffff;
   --text-main: #1e293b;
@@ -30,6 +30,9 @@
   --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.3);
 }
 
+/* EVITAR ZOOM EN DOBLE TOQUE */
+html { touch-action: manipulation; }
+
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
@@ -38,7 +41,7 @@ body {
   padding-bottom: 140px; -webkit-font-smoothing: antialiased;
 }
 
-/* --- HEADER --- */
+/* --- HEADER (MODIFICADO: ALINEACIÓN IZQUIERDA) --- */
 .header {
   background: rgba(255, 255, 255, 0.9); padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
@@ -47,10 +50,17 @@ body {
 }
 [data-theme="dark"] .header { background: rgba(30, 41, 59, 0.9); }
 
-.brand-area { display: flex; flex-direction: column; }
-.brand-name { font-size: 1.3rem; font-weight: 800; color: var(--brand-color); margin: 0; line-height: 1.1; text-transform: capitalize; }
-.brand-category { font-size: 0.8rem; color: var(--text-sec); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+.brand-area { 
+  display: flex; 
+  flex-direction: column; 
+  /* Eliminado center para que se quede a la izquierda */
+  align-items: flex-start; 
+}
 
+/* TÍTULO "CARTA" A LA IZQUIERDA */
+.brand-name { font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.1; text-transform: uppercase; letter-spacing: 2px; }
+
+/* DERECHA */
 .header-right { display: flex; align-items: center; gap: 10px; }
 
 .lang-badge {
@@ -209,8 +219,7 @@ textarea.notes:focus { border-color: var(--brand-color); }
 
 <header class="header">
   <div class="brand-area">
-    <h1 class="brand-name" id="brandNameDisplay">Restaurante</h1>
-    <span class="brand-category" id="catDisplay">Menu</span>
+    <h1 class="brand-name" id="brandNameDisplay">CARTA</h1>
   </div>
   <div class="header-right">
     <div class="lang-badge" id="langDisplay">ES</div>
@@ -274,7 +283,7 @@ textarea.notes:focus { border-color: var(--brand-color); }
 /* --- CONFIGURACIÓN DE DATOS --- */
 const config = {
   menus: {
-    'pizzeria': [
+    'restaurante': [
        { id: 101, cat: 'entrantes', tags: ['v'], price: 9.50, name: {es:"Provolone al Forno", en:"Baked Provolone", de:"Gebackener Provolone"}, desc: {es:"Queso fundido con tomate", en:"Melted cheese with tomato", de:"Geschmolzener Käse mit Tomate"} },
        { id: 104, cat: 'principales', tags: [], price: 11.00, name: {es:"Pizza Margarita", en:"Pizza Margherita", de:"Pizza Margherita"}, desc: {es:"Tomate, mozzarella, albahaca", en:"Tomato, mozzarella, basil", de:"Tomate, Mozzarella, Basilikum"} },
        { id: 107, cat: 'principales', tags: [], price: 12.50, name: {es:"Carbonara Original", en:"Authentic Carbonara", de:"Carbonara Original"}, desc: {es:"Huevo, guanciale, pecorino", en:"Egg, guanciale, pecorino", de:"Ei, Guanciale, Pecorino"} },
@@ -290,6 +299,7 @@ const config = {
 /* --- TRADUCCIONES UI --- */
 const uiDict = {
   es: { 
+    pageTitle: "CARTA",
     ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
     btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
     trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
@@ -297,6 +307,7 @@ const uiDict = {
     all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
   },
   en: { 
+    pageTitle: "MENU",
     ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
     btn:"View Order", title:"Your Order", clear:"Clear all", 
     trans:"Show Waiter (ES)", confirm:"Clear everything?",
@@ -304,6 +315,7 @@ const uiDict = {
     all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
   },
   de: { 
+    pageTitle: "SPEISEKARTE",
     ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
     btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
     trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
@@ -317,39 +329,36 @@ let cart = {};
 let activeCategory = 'principales'; 
 let lang = 'es';
 let currentMenu = [];
-let userCategory = 'pizzeria';
+let userCategory = 'restaurante';
 
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
   
-  // 1. GESTIÓN DEL IDIOMA (Solo por URL o Navegador, sin cambio manual)
-  // Intenta coger ?lang=xx, si no, busca localStorage, si no, idioma del navegador
+  // 1. GESTIÓN DEL IDIOMA
   const urlLang = params.get('lang');
   const browserLang = navigator.language.slice(0,2);
   lang = urlLang || localStorage.getItem('userLang') || (['es','en','de'].includes(browserLang) ? browserLang : 'es');
-  
-  // Guardamos para persistencia simple pero no permitimos cambio en UI
   localStorage.setItem('userLang', lang); 
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
-  // 2. GESTIÓN DE COLORES (Si viene de página principal)
-  const colorParam = params.get('color');
+  // 2. GESTIÓN DE COLORES (Ahora busca 'btn' en la URL)
+  const colorParam = params.get('btn') || params.get('color'); // Soporta 'btn' y fallback a 'color'
   if(colorParam) {
     document.documentElement.style.setProperty('--brand-color', '#' + colorParam.replace('#',''));
   }
-
-  // 3. Configuración del nombre
-  const name = params.get('n') || "Restaurante";
-  document.getElementById('brandNameDisplay').innerText = name;
   
+  // 3. CATEGORIA
+  userCategory = params.get('categoria') || 'restaurante';
+
   // Definir menú
-  const specificMenu = config.menus[userCategory] || config.menus['pizzeria'];
-  currentMenu = [...specificMenu, ...config.menus['comunes']];
+  const specificMenu = config.menus[userCategory] || config.menus['restaurante'];
+  // Si no encuentra la categoría específica, usa 'restaurante' para evitar errores
+  const menuToLoad = specificMenu ? specificMenu : config.menus['restaurante'];
+  currentMenu = [...menuToLoad, ...config.menus['comunes']];
 
   loadCart();
   translateUI();
-  // Forzar categoría inicial a bebidas si se prefiere, o principales
   activeCategory = 'principales';
   updateFilterUI();
   render();
@@ -366,7 +375,6 @@ function render() {
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
 
-  // Filtramos los items
   const items = currentMenu.filter(item => {
     if(item.cat !== activeCategory) return false;
     if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
@@ -376,8 +384,7 @@ function render() {
   items.forEach(p => {
     const qty = cart[p.id] || 0;
     
-    // TRADUCCIÓN DE NOMBRES E INGREDIENTES
-    // Usa el idioma actual, si no existe, usa 'es' por defecto
+    // TRADUCCIÓN COMPLETA (Nombre + Descripción/Ingredientes)
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
 
@@ -436,7 +443,6 @@ function updateFloat() {
 function openSheet() { 
   document.getElementById('overlay').classList.add('open'); 
   const waiterBtn = document.getElementById('btnShowWaiter');
-  // Mostrar botón camarero solo si no es español
   if (lang !== 'es') waiterBtn.style.display = 'flex';
   else waiterBtn.style.display = 'none';
   renderList();
@@ -447,7 +453,7 @@ function closeSheet() {
   document.getElementById('overlay').classList.remove('open'); 
 }
 
-// LOGICA DE ORDENAMIENTO DE PLATOS EN EL RESUMEN
+// LOGICA DE ORDENAMIENTO (Bebidas -> Entrantes -> Primeros -> Segundos -> Postres)
 function renderList() {
   const list = document.getElementById('orderList');
   list.innerHTML = '';
@@ -461,18 +467,25 @@ function renderList() {
     return;
   }
 
-  // 1. Obtener objetos completos del menú
   let items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
   
-  // 2. ORDENAR: Bebidas -> Entrantes -> Principales -> Postres
-  const sortOrder = { 'bebidas': 1, 'entrantes': 2, 'principales': 3, 'postres': 4 };
+  // ORDENAR
+  const sortOrder = { 
+    'bebidas': 1, 
+    'entrantes': 2, 
+    'primeros': 3, 
+    'segundos': 4, 
+    'principales': 4, // Tratado como principal/segundo
+    'postres': 5 
+  };
+  
   items.sort((a, b) => {
      return (sortOrder[a.cat] || 99) - (sortOrder[b.cat] || 99);
   });
 
   items.forEach(p => {
     const qty = cart[p.id];
-    const pName = p.name[displayLang] || p.name['es']; // Traduce o fallback
+    const pName = p.name[displayLang] || p.name['es']; 
     
     if(isWaiter) {
       // MODO CAMARERO
@@ -484,7 +497,7 @@ function renderList() {
           </div>
         </div>`;
     } else {
-      // MODO CLIENTE (Normal)
+      // MODO CLIENTE
       list.innerHTML += `
         <div class="order-item">
           <span class="order-name" style="flex:1">${pName}</span>
@@ -535,7 +548,7 @@ async function enterWaiterMode() {
     waiterNotesDisplay.style.display = 'none';
   }
   
-  renderList(); // Re-renderiza la lista en español y ordenada
+  renderList(); 
 }
 
 function exitWaiterMode() {
@@ -563,6 +576,8 @@ function clearCart() { cart={}; saveCart(); render(); updateFloat(); closeSheet(
 
 function translateUI() {
   const t = uiDict[lang] || uiDict['es'];
+  document.getElementById('brandNameDisplay').innerText = t.pageTitle; // Cabecera CARTA
+  
   document.getElementById('f-ent').innerText = t.ent;
   document.getElementById('f-main').innerText = t.main;
   document.getElementById('f-des').innerText = t.des;
@@ -580,7 +595,6 @@ function translateUI() {
   if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
 }
 
-// TEMA
 const themeBtn = document.getElementById('themeBtn');
 function applyTheme() {
   let saved = localStorage.getItem('theme') || 'light';
