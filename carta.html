@@ -53,7 +53,6 @@ body {
 .brand-area { 
   display: flex; 
   flex-direction: column; 
-  /* Eliminado center para que se quede a la izquierda */
   align-items: flex-start; 
 }
 
@@ -129,11 +128,16 @@ body {
 
 /* --- CESTA FLOTANTE --- */
 #cart-float {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px) scale(0.9);
+  position: fixed; 
+  /* SAFARI FIX: Usamos env() para respetar la barra inferior del iPhone */
+  bottom: calc(30px + env(safe-area-inset-bottom)); 
+  left: 50%; 
+  transform: translateX(-50%) translateY(200px) scale(0.9);
   background: var(--text-main); color: var(--bg-card); padding: 14px 24px; border-radius: 100px; 
   display: flex; align-items: center; gap: 12px; justify-content: center;
   box-shadow: var(--shadow-float); cursor: pointer; z-index: 1000; 
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; font-size: 1rem; width: max-content;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  font-weight: 600; font-size: 1rem; width: max-content;
 }
 #cart-float.visible { transform: translateX(-50%) translateY(0) scale(1); }
 .badge-count { background: var(--brand-color); color: #fff; padding: 3px 9px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; }
@@ -339,11 +343,18 @@ function init() {
   const urlLang = params.get('lang');
   const browserLang = navigator.language.slice(0,2);
   lang = urlLang || localStorage.getItem('userLang') || (['es','en','de'].includes(browserLang) ? browserLang : 'es');
-  localStorage.setItem('userLang', lang); 
+  
+  // Fix para que funcione en Navegación Privada de Safari
+  try {
+    localStorage.setItem('userLang', lang); 
+  } catch (e) {
+    console.log("Modo privado detectado, no se guarda idioma");
+  }
+
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
   
-  // 2. GESTIÓN DE COLORES (Ahora busca 'btn' en la URL)
-  const colorParam = params.get('btn') || params.get('color'); // Soporta 'btn' y fallback a 'color'
+  // 2. GESTIÓN DE COLORES (Busca 'btn' en la URL)
+  const colorParam = params.get('btn') || params.get('color'); 
   if(colorParam) {
     document.documentElement.style.setProperty('--brand-color', '#' + colorParam.replace('#',''));
   }
@@ -353,7 +364,6 @@ function init() {
 
   // Definir menú
   const specificMenu = config.menus[userCategory] || config.menus['restaurante'];
-  // Si no encuentra la categoría específica, usa 'restaurante' para evitar errores
   const menuToLoad = specificMenu ? specificMenu : config.menus['restaurante'];
   currentMenu = [...menuToLoad, ...config.menus['comunes']];
 
@@ -475,7 +485,7 @@ function renderList() {
     'entrantes': 2, 
     'primeros': 3, 
     'segundos': 4, 
-    'principales': 4, // Tratado como principal/segundo
+    'principales': 4, 
     'postres': 5 
   };
   
@@ -569,9 +579,19 @@ function exitWaiterMode() {
 }
 
 /* --- UTILIDADES --- */
-function saveCart() { localStorage.setItem('demo_cart', JSON.stringify(cart)); }
-function loadCart() { const s = localStorage.getItem('demo_cart'); if(s) cart = JSON.parse(s); }
-function saveNotes() { localStorage.setItem('demo_notes', document.getElementById('notesField').value); }
+/* TRY-CATCH para Safari Private Mode */
+function saveCart() { 
+  try { localStorage.setItem('demo_cart', JSON.stringify(cart)); } catch(e){} 
+}
+function loadCart() { 
+  try { 
+    const s = localStorage.getItem('demo_cart'); 
+    if(s) cart = JSON.parse(s); 
+  } catch(e) {} 
+}
+function saveNotes() { 
+  try { localStorage.setItem('demo_notes', document.getElementById('notesField').value); } catch(e){} 
+}
 function clearCart() { cart={}; saveCart(); render(); updateFloat(); closeSheet(); }
 
 function translateUI() {
@@ -597,14 +617,15 @@ function translateUI() {
 
 const themeBtn = document.getElementById('themeBtn');
 function applyTheme() {
-  let saved = localStorage.getItem('theme') || 'light';
+  let saved = 'light';
+  try { saved = localStorage.getItem('theme') || 'light'; } catch(e){}
   document.documentElement.setAttribute('data-theme', saved);
   themeBtn.innerHTML = saved === 'dark' ? '🌙' : '☀️';
 }
 themeBtn.addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', next);
+  try { localStorage.setItem('theme', next); } catch(e){}
   applyTheme();
 });
 
