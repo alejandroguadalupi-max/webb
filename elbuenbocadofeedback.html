@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
-<meta name="theme-color" content="#a0715e" id="metaThemeColor" />
+<meta name="theme-color" content="#a0715e" />
 <title>Feedback - El Buen Bocado</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,31 +36,38 @@
 
   *, *::before, *::after { box-sizing: border-box; }
 
-  html, body { height: 100%; }
+  html { height: 100%; }
 
   body {
     margin: 0; font-family: 'Outfit', sans-serif;
     background: var(--bg-body); color: var(--text-main);
+    
     display: flex; flex-direction: column;
     align-items: center; 
-    /* Centrado vertical y horizontal seguro */
     justify-content: flex-start; 
+    
     min-height: 100vh;
     min-height: 100dvh;
-    padding: max(20px, env(safe-area-inset-top)) 20px 40px;
+    
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(30px, env(safe-area-inset-bottom));
+    padding-left: 20px;
+    padding-right: 20px;
+    
     transition: background 0.3s, color 0.3s;
   }
 
   /* --- CONTROLES SUPERIORES --- */
   .top-controls {
-    width: 100%; max-width: 400px;
+    width: 100%; max-width: 360px;
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 20px;
+    margin-top: 10px;
   }
 
   .back-btn {
-    background: transparent; border: none; font-size: 1.8rem;
-    cursor: pointer; color: var(--text-main); padding: 0 10px 0 0;
+    background: transparent; border: none; font-size: 1.5rem;
+    cursor: pointer; color: var(--text-main); padding: 5px;
     transition: transform 0.2s;
     line-height: 1;
     display: flex; align-items: center;
@@ -69,7 +76,7 @@
 
   .theme-btn {
     background: var(--bg-card); border: 1px solid var(--border);
-    color: var(--text-main); width: 40px; height: 40px;
+    color: var(--text-main); width: 36px; height: 36px;
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: transform 0.2s; font-size: 1.2rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -79,12 +86,12 @@
   /* --- TARJETA DEL FORMULARIO --- */
   .form-card {
     background: var(--bg-card); 
-    width: 100%; max-width: 400px;
-    border-radius: 24px; padding: 35px 28px;
+    width: 100%; max-width: 360px;
+    border-radius: 24px; padding: 30px 25px;
     box-shadow: var(--shadow-card); border: 1px solid var(--border);
     text-align: center;
     animation: fadeInUp 0.5s ease-out;
-    /* Ajuste para centrar visualmente si hay espacio */
+    
     margin-top: auto; margin-bottom: auto;
   }
 
@@ -93,8 +100,8 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  h1 { margin: 0 0 10px; font-size: 1.8em; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
-  p.subtitle { margin: 0 0 30px; font-size: 1em; color: var(--text-sec); line-height: 1.5; font-weight: 400; }
+  h1 { margin: 0 0 10px; font-size: 1.6em; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+  p.subtitle { margin: 0 0 30px; font-size: 0.95em; color: var(--text-sec); line-height: 1.5; font-weight: 400; }
 
   /* --- ESTRELLAS --- */
   .star-container {
@@ -103,7 +110,7 @@
   }
   
   .star {
-    font-size: 2.8em; cursor: pointer; color: var(--border);
+    font-size: 2.5em; cursor: pointer; color: var(--border);
     transition: transform 0.2s, color 0.2s;
     line-height: 1;
     user-select: none;
@@ -122,14 +129,14 @@
     font-family: inherit; font-size: 1em; color: var(--text-main);
     resize: none; outline: none; height: 120px;
     transition: border-color 0.3s, background 0.3s;
-    appearance: none; /* Quita estilos por defecto del navegador */
+    appearance: none;
   }
   
   textarea:focus { border-color: var(--brand-color); background: var(--bg-card); }
 
   /* --- BOTÓN --- */
   button[type="submit"] {
-    width: 100%; padding: 18px; border-radius: 16px; border: none;
+    width: 100%; padding: 16px; border-radius: 16px; border: none;
     font-size: 1.1em; font-weight: 700; color: white;
     background: var(--brand-color); cursor: pointer;
     box-shadow: 0 10px 25px -5px rgba(160, 113, 94, 0.4);
@@ -151,7 +158,7 @@
 </div>
 
 <form class="form-card" id="feedbackForm">
-  <h1 id="brandName">Tu Opinión</h1>
+  <h1 id="pageTitle">Tu Opinión</h1>
   <p class="subtitle" id="txtSubtitle">Ayúdanos a mejorar contándonos tu experiencia de hoy.</p>
 
   <div class="input-group" style="text-align:center">
@@ -174,11 +181,15 @@
   <button type="submit" id="submitBtn">Enviar Comentario</button>
 </form>
 
+<div style="height: 30px; width: 100%;"></div>
+
 <script>
+// URL del script de Google Apps Script (Mantenemos la que pasaste o una demo)
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo4q3MIwWjXgE88lIl5_E8UdsrxNmwGvjQATsZ9rLXoha2EixB5BdozivNJ24W_NYH/exec"; 
 
 const translations = {
   es: {
+    title: "Tu Opinión",
     subtitle: "Ayúdanos a mejorar contándonos tu experiencia de hoy.",
     lblRating: "¿Cómo fue tu experiencia general? *",
     lblComment: "¿Qué podemos mejorar? *",
@@ -189,6 +200,7 @@ const translations = {
     alertComment: "Por favor, escribe un comentario.",
   },
   en: {
+    title: "Your Opinion",
     subtitle: "Help us improve by sharing your experience today.",
     lblRating: "How was your overall experience? *",
     lblComment: "What can we improve? *",
@@ -199,6 +211,7 @@ const translations = {
     alertComment: "Please write a comment.",
   },
   de: {
+    title: "Ihre Meinung",
     subtitle: "Helfen Sie uns, besser zu werden.",
     lblRating: "Wie war Ihre Erfahrung? *",
     lblComment: "Was können wir verbessern? *",
@@ -209,6 +222,7 @@ const translations = {
     alertComment: "Bitte schreiben Sie einen Kommentar.",
   },
   fr: {
+    title: "Votre Avis",
     subtitle: "Aidez-nous à nous améliorer.",
     lblRating: "Comment s'est passée votre expérience ? *",
     lblComment: "Que pouvons-nous améliorer ? *",
@@ -219,6 +233,7 @@ const translations = {
     alertComment: "Veuillez écrire un commentaire.",
   },
   it: {
+    title: "La Tua Opinione",
     subtitle: "Aiutaci a migliorare la tua esperienza.",
     lblRating: "Com'è stata la tua esperienza? *",
     lblComment: "Cosa possiamo migliorare? *",
@@ -233,12 +248,12 @@ const translations = {
 let currentLang = 'es';
 
 function init() {
-  // TEMA
+  // 1. TEMA
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '🌙' : '☀️';
 
-  // IDIOMA
+  // 2. IDIOMA
   currentLang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
   if (!translations[currentLang]) currentLang = 'es';
   translateUI();
@@ -246,6 +261,7 @@ function init() {
 
 function translateUI() {
   const t = translations[currentLang];
+  document.getElementById('pageTitle').innerText = t.title; // TÍTULO TRADUCIDO
   document.getElementById('txtSubtitle').innerText = t.subtitle;
   document.getElementById('lblRating').innerText = t.lblRating;
   document.getElementById('lblComment').innerText = t.lblComment;
@@ -292,6 +308,7 @@ form.addEventListener('submit', (e) => {
   data.append('comentario', comment);
   data.append('origen', 'El Buen Bocado'); 
 
+  // Enviar a Google Sheets (modo no-cors para evitar bloqueo, no recibimos respuesta JSON pero se envía)
   fetch(SCRIPT_URL, { 
     method: 'POST', 
     body: data, 
@@ -299,6 +316,7 @@ form.addEventListener('submit', (e) => {
     keepalive: true 
   }).catch(err => console.log("Envío lanzado"));
 
+  // Redirigir a agradecimiento tras 1s
   setTimeout(() => {
     window.location.href = "elbuenbocadoagradecimiento.html";
   }, 1000);
