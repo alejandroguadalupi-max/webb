@@ -108,7 +108,7 @@
     margin-top: 8px;
   }
 
-  /* --- MENÚ PRINCIPAL (El Triángulo de Poder) --- */
+  /* --- MENÚ PRINCIPAL --- */
   .menu-grid {
     display: flex;
     flex-direction: column;
@@ -208,7 +208,7 @@
 
   /* --- FOOTER REDES SOCIALES --- */
   .social-footer {
-    margin-top: auto; /* Empuja el footer hacia abajo del todo */
+    margin-top: auto;
     padding-top: 40px;
     text-align: center;
     animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -233,19 +233,28 @@
     justify-content: center;
     width: 45px;
     height: 45px;
-    border-radius: 50%;
+    border-radius: 50%; /* Hace que el contenedor sea un círculo perfecto */
     background: var(--card-bg);
-    color: var(--text-main);
     text-decoration: none;
-    font-size: 1.4em;
     box-shadow: var(--shadow-soft);
     transition: all 0.2s ease;
+    overflow: hidden; /* Evita que las esquinas de la imagen cuadrada sobresalgan */
+  }
+
+  .social-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen llene el círculo sin aplastarse */
+    transition: transform 0.3s ease;
   }
 
   .social-icon:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
-    color: var(--brand-color);
+  }
+  
+  .social-icon:hover img {
+    transform: scale(1.1); /* Pequeño zoom al pasar el ratón */
   }
 
   @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -286,14 +295,17 @@
   <div class="social-footer">
     <p data-lang="follow_us">Síguenos en redes</p>
     <div class="social-icons">
-      <a href="#" target="_blank" class="social-icon" aria-label="Instagram">📸</a>
-      <a href="#" target="_blank" class="social-icon" aria-label="TikTok">🎵</a>
+      <a href="#" target="_blank" class="social-icon" aria-label="Instagram">
+        <img src="img/ig.jpg" alt="Instagram">
+      </a>
+      <a href="#" target="_blank" class="social-icon" aria-label="TikTok">
+        <img src="img/tiktok.jpg" alt="TikTok">
+      </a>
     </div>
   </div>
 </main>
 
 <script>
-  // --- 1. DICCIONARIO LIMPIO Y DIRECTO ---
   const translations = {
     es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Valorar Experiencia", follow_us:"Síguenos en redes" },
     en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Rate Experience", follow_us:"Follow us" },
@@ -302,7 +314,6 @@
     it: { welcome:"Benvenuto!", view_menu:"Vedi Menu", leave_review:"Valuta l'esperienza", follow_us:"Seguici" }
   };
 
-  /* --- 2. SISTEMA UI Y TRADUCCIONES --- */
   function detectAndSetLanguage() {
       let lang = localStorage.getItem('userLang');
       if (!lang) {
@@ -325,7 +336,6 @@
     });
   }
 
-  /* --- 3. LÓGICA DE TEMA (MODO OSCURO/CLARO) --- */
   function syncTheme() {
     const params = new URLSearchParams(window.location.search);
     let theme = params.get('theme');
