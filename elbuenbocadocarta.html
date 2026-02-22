@@ -304,78 +304,41 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-/* --- MENÚ TRADICIONAL CON TRADUCCIONES COMPLETAS (IT/FR AÑADIDO) --- */
-const config = {
-  menus: {
-    'restaurante': [
-       /* BEBIDAS */
-       { id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, name: {es:"Coca-Cola / Refresco", en:"Coke / Soft Drink", de:"Cola / Erfrischungsgetränk", fr:"Coca / Boisson gazeuse", it:"Coca-Cola / Bibita"}, desc: {es:"33cl", en:"33cl", de:"33cl", fr:"33cl", it:"33cl"} },
-       { id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, name: {es:"Agua Mineral", en:"Mineral Water", de:"Mineralwasser", fr:"Eau minérale", it:"Acqua minerale"}, desc: {es:"Botella 50cl", en:"50cl Bottle", de:"50cl Flasche", fr:"Bouteille 50cl", it:"Bottiglia 50cl"} },
-       { id: 903, cat: 'bebidas', tags: ['gf','v'], price: 2.80, name: {es:"Caña de Cerveza", en:"Draft Beer", de:"Bier vom Fass", fr:"Bière pression", it:"Birra alla spina"}, desc: {es:"Bien fría", en:"Cold draft beer", de:"Kaltes Bier", fr:"Bien fraîche", it:"Ben fredda"} },
-       { id: 904, cat: 'bebidas', tags: ['gf','v'], price: 3.50, name: {es:"Copa de Vino", en:"Glass of Wine", de:"Glas Wein", fr:"Verre de vin", it:"Calice di vino"}, desc: {es:"Rioja o Ribera", en:"Red Wine", de:"Rotwein", fr:"Vin rouge", it:"Vino rosso"} },
-
-       /* ENTRANTES */
-       { id: 101, cat: 'entrantes', tags: [], price: 10.50, name: {es:"Croquetas Caseras", en:"Homemade Croquettes", de:"Hausgemachte Kroketten", fr:"Croquettes maison", it:"Crocchette fatte in casa"}, desc: {es:"De jamón ibérico (8 uds)", en:"Iberian Ham (8 pcs)", de:"Iberischer Schinken (8 Stk)", fr:"Jambon ibérique (8 pcs)", it:"Prosciutto iberico (8 pz)"} },
-       { id: 102, cat: 'entrantes', tags: [], price: 16.00, name: {es:"Jamón Ibérico", en:"Iberian Ham", de:"Iberischer Schinken", fr:"Jambon Ibérique", it:"Prosciutto Iberico"}, desc: {es:"Ración completa con picos", en:"Full portion with breadsticks", de:"Ganze Portion", fr:"Portion complète", it:"Porzione completa"} },
-       { id: 103, cat: 'entrantes', tags: ['v','gf'], price: 8.50, name: {es:"Ensalada Mixta", en:"Mixed Salad", de:"Gemischter Salat", fr:"Salade mixte", it:"Insalata mista"}, desc: {es:"Lechuga, tomate, cebolla, atún", en:"Lettuce, tomato, onion, tuna", de:"Salat, Tomate, Zwiebel, Thunfisch", fr:"Laitue, tomate, oignon, thon", it:"Lattuga, pomodoro, cipolla, tonno"} },
-       { id: 104, cat: 'entrantes', tags: ['v','gf'], price: 6.50, name: {es:"Patatas Bravas", en:"Patatas Bravas", de:"Patatas Bravas", fr:"Patatas Bravas", it:"Patatas Bravas"}, desc: {es:"Salsa picante casera", en:"Spicy homemade sauce", de:"Scharfe hausgemachte Soße", fr:"Sauce piquante maison", it:"Salsa piccante fatta in casa"} },
-
-       /* PRINCIPALES */
-       { id: 201, cat: 'principales', tags: ['gf'], price: 19.50, name: {es:"Solomillo de Ternera", en:"Beef Tenderloin", de:"Rinderfilet", fr:"Filet de boeuf", it:"Filetto di manzo"}, desc: {es:"A la parrilla con patatas", en:"Grilled with potatoes", de:"Gegrillt mit Kartoffeln", fr:"Grillé avec pommes de terre", it:"Alla griglia con patate"} },
-       { id: 202, cat: 'principales', tags: ['gf'], price: 15.00, name: {es:"Merluza a la Romana", en:"Battered Hake", de:"Seehecht im Teigmantel", fr:"Merlu à la romaine", it:"Nasello alla romana"}, desc: {es:"Con ensalada", en:"With salad", de:"Mit Salat", fr:"Avec salade", it:"Con insalata"} },
-       { id: 203, cat: 'principales', tags: [], price: 12.50, name: {es:"Hamburguesa Completa", en:"Full Burger", de:"Vollständiger Burger", fr:"Burger complet", it:"Hamburger completo"}, desc: {es:"Ternera, queso, bacon, huevo", en:"Beef, cheese, bacon, egg", de:"Rindfleisch, Käse, Speck, Ei", fr:"Boeuf, fromage, bacon, oeuf", it:"Manzo, formaggio, bacon, uovo"} },
-       { id: 204, cat: 'principales', tags: [], price: 14.00, name: {es:"Carrillada en Salsa", en:"Braised Pork Cheeks", de:"Geschmorte Schweinebäckchen", fr:"Joues de porc en sauce", it:"Guance di maiale brasate"}, desc: {es:"Muy tierna, con puré", en:"Very tender, with mash", de:"Sehr zart, mit Püree", fr:"Très tendre, avec purée", it:"Molto tenero, con purè"} },
-
-       /* POSTRES */
-       { id: 301, cat: 'postres', tags: ['gf'], price: 4.50, name: {es:"Arroz con Leche", en:"Rice Pudding", de:"Milchreis", fr:"Riz au lait", it:"Riso al latte"}, desc: {es:"Casero con canela", en:"Homemade with cinnamon", de:"Hausgemacht mit Zimt", fr:"Fait maison à la cannelle", it:"Fatto in casa con cannella"} },
-       { id: 302, cat: 'postres', tags: ['gf'], price: 4.00, name: {es:"Flan de Huevo", en:"Egg Flan", de:"Eierflan", fr:"Flan aux oeufs", it:"Creme Caramel"}, desc: {es:"Receta de la abuela", en:"Grandma's recipe", de:"Omas Rezept", fr:"Recette de grand-mère", it:"Ricetta della nonna"} },
-       { id: 303, cat: 'postres', tags: [], price: 5.50, name: {es:"Tarta de Queso", en:"Cheesecake", de:"Käsekuchen", fr:"Gâteau au fromage", it:"Cheesecake"}, desc: {es:"Al horno", en:"Baked", de:"Gebacken", fr:"Au four", it:"Al forno"} }
-    ]
-  }
-};
+/* --- CONFIGURACIÓN DE SUPABASE --- */
+const SUPABASE_URL = "https://xfylujdfpmajnbmuiebv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmeWx1amRmcG1ham5ibXVpZWJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTczMTEsImV4cCI6MjA4NzM3MzMxMX0.S6NLD1pyObNpg_sRD60Od8q7MmNWMMLnwq8YLVEhtew"; 
+// EL ARREGLO ESTRELLA: "miSupabase"
+const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* --- TRADUCCIONES UI COMPLETAS --- */
 const uiDict = {
   es: { 
-    pageTitle: "CARTA",
-    ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
-    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
-    trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
-    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)",
-    all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
+    pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
+    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
+    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
   },
   en: { 
-    pageTitle: "MENU",
-    ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
-    btn:"View Order", title:"Your Order", clear:"Clear all", 
-    trans:"Show Waiter (ES)", confirm:"Clear everything?",
-    add: "Add", place: "Notes (e.g. no ice, well done...)",
-    all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
+    pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
+    btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?",
+    add: "Add", place: "Notes (e.g. no ice, well done...)", all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
   },
   de: { 
-    pageTitle: "SPEISEKARTE",
-    ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
-    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
-    trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
-    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)",
-    all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
+    pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
+    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
+    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
   },
   fr: { 
-    pageTitle: "CARTE",
-    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
-    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", 
-    trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
-    add: "Ajouter", place: "Notes (ex. sans glace...)",
-    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
+    pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
+    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
+    add: "Ajouter", place: "Notes (ex. sans glace...)", all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
   },
   it: { 
-    pageTitle: "MENU",
-    ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
-    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", 
-    trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
-    add: "Aggiungi", place: "Note (es. senza ghiaccio...)",
-    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
+    pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
+    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
+    add: "Aggiungi", place: "Note (es. senza ghiaccio...)", all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
   }
 };
 
@@ -410,15 +373,45 @@ function init() {
   
   try { localStorage.setItem('userLang', lang); } catch (e) {}
   document.getElementById('langDisplay').innerText = lang.toUpperCase();
-  
-  // MENU
-  currentMenu = config.menus['restaurante'];
 
   loadCart();
   translateUI();
   
   filter('bebidas'); 
   updateFloat();
+
+  // Llamar a Supabase
+  loadMenuFromDB();
+}
+
+/* --- SUPABASE --- */
+async function loadMenuFromDB() {
+  // Usamos miSupabase aquí
+  const { data, error } = await miSupabase
+    .from('platos')
+    .select('*')
+    .eq('disponible', true)
+    .order('id');
+
+  if (error) {
+    console.error("SUPABASE ERROR:", error.message);
+    return;
+  }
+
+  // Mapeamos los datos exactamente como vienen en tu base de datos
+  currentMenu = data.map(p => {
+    return {
+      id: p.id,
+      cat: p.categoria || 'bebidas',
+      tags: p.tags || [],
+      price: Number(p.precio) || 0,
+      name: p.nombre || { es: "Plato" },
+      desc: p.descripcion || { es: "" }
+    };
+  });
+
+  // Renderizamos la web con los platos
+  render();
 }
 
 /* --- RENDERIZADO DEL MENU --- */
@@ -432,15 +425,20 @@ function render() {
 
   const items = currentMenu.filter(item => {
     if(item.cat !== activeCategory) return false;
-    if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
+    if(allergyFilter && (!item.tags || !item.tags.includes(allergyFilter))) return false;
     return true;
   });
 
+  if (items.length === 0) {
+     container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec); opacity:0.7">No hay platos en esta categoría</div>`;
+  }
+
   items.forEach(p => {
     const qty = cart[p.id] || 0;
-    // Fallback seguro: si no hay traducción, usa español
-    const pName = p.name[lang] || p.name['es'];
-    const pDesc = p.desc[lang] || p.desc['es'];
+    
+    // Extraemos el texto en el idioma actual, o en español como fallback
+    const pName = (p.name && p.name[lang]) ? p.name[lang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
+    const pDesc = (p.desc && p.desc[lang]) ? p.desc[lang] : (p.desc && p.desc['es'] ? p.desc['es'] : "");
 
     let controlHTML = qty === 0 
       ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
@@ -529,7 +527,7 @@ function renderList() {
 
   items.forEach(p => {
     const qty = cart[p.id];
-    const pName = p.name[displayLang] || p.name['es']; 
+    const pName = (p.name && p.name[displayLang]) ? p.name[displayLang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
     
     if(isWaiter) {
       list.innerHTML += `
@@ -559,7 +557,10 @@ async function enterWaiterMode() {
   document.getElementById('btnShowWaiter').style.display = 'none';
   document.getElementById('notesArea').style.display = 'none';
   document.getElementById('clearTxt').style.display = 'none';
-  document.getElementById('userCloseBtn').style.display = 'none'; 
+  
+  const userCloseBtn = document.getElementById('userCloseBtn');
+  if(userCloseBtn) userCloseBtn.style.display = 'none'; 
+  
   document.getElementById('modalTitle').style.display = 'none';
   document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
@@ -602,7 +603,10 @@ function exitWaiterMode() {
   
   document.getElementById('notesArea').style.display = 'block';
   document.getElementById('clearTxt').style.display = 'block';
-  document.getElementById('userCloseBtn').style.display = 'block';
+  
+  const userCloseBtn = document.getElementById('userCloseBtn');
+  if(userCloseBtn) userCloseBtn.style.display = 'block';
+  
   document.getElementById('modalTitle').style.display = 'block';
   
   if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';

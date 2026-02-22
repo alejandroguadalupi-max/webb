@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba Básica Supabase</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h1>Conexión a Supabase</h1>
+  <div id="resultado">Cargando datos... ⏳</div>
+
+  <script>
+    const SUPABASE_URL = "https://xfylujdfpmajnbmuiebv.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmeWx1amRmcG1ham5ibXVpZWJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTczMTEsImV4cCI6MjA4NzM3MzMxMX0.S6NLD1pyObNpg_sRD60Od8q7MmNWMMLnwq8YLVEhtew"; 
+    
+    // 👇 EL ARREGLO ESTÁ AQUÍ: Le cambiamos el nombre a "miSupabase"
+    const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function cargarPlatos() {
+      const cajaResultado = document.getElementById('resultado');
+
+      try {
+        // 👇 Usamos "miSupabase" aquí también
+        const { data, error } = await miSupabase.from('platos').select('*');
+
+        if (error) {
+          console.error("Error devuelto por Supabase:", error);
+          cajaResultado.innerHTML = `
+            <h3 style="color: red;">❌ Error de Supabase:</h3>
+            <p><strong>Mensaje:</strong> ${error.message}</p>
+            <p><strong>Detalles:</strong> ${error.details || 'Revisa si tienes activado el RLS y no tienes políticas creadas.'}</p>
+          `;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          cajaResultado.innerHTML = `
+            <h3 style="color: orange;">⚠️ Conexión exitosa, pero no hay datos</h3>
+            <p>O la tabla está vacía, o las políticas RLS no te dejan ver las filas.</p>
+          `;
+          return;
+        }
+
+        cajaResultado.innerHTML = `
+          <h3 style="color: green;">✅ ¡ÉXITO! Datos recibidos:</h3>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+
+      } catch (err) {
+        cajaResultado.innerHTML = `<h3 style="color: red;">Error en JavaScript:</h3><p>${err.message}</p>`;
+      }
+    }
+
+    cargarPlatos();
+  </script>
+
+</body>
+</html>
