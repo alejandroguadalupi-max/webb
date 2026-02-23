@@ -386,28 +386,25 @@ function init() {
 
 /* --- SUPABASE --- */
 async function loadMenuFromDB() {
-  // 1. Definimos el slug válido para esta página
   const slugValido = "el-buen-bocado"; 
 
-  // 2. Comprobación y carga: Solo traemos platos de este restaurante
   const { data, error } = await miSupabase
     .from('platos')
     .select('*')
-    .eq('slug', slugValido) // <--- COMPROBACIÓN DE SLUG
-    .eq('disponible', true) 
-    .order('id');
+    .eq('slug', slugValido)
+    .eq('disponible', true)
+    // EL TRUCO ESTÁ AQUÍ 👇
+    .order('orden', { ascending: true }); 
 
   if (error) {
     console.error("Error en Supabase:", error.message);
     return;
   }
 
-  // 3. Si no hay platos con ese slug, la lista quedará vacía automáticamente
+  // ... (el resto del código sigue igual) ...
   if (!data || data.length === 0) {
-    console.warn("No se encontraron platos para el restaurante:", slugValido);
     currentMenu = [];
   } else {
-    // 4. Mapeamos los datos asegurando el formato multiidioma
     currentMenu = data.map(p => ({
       id: p.id,
       cat: p.categoria || 'bebidas',
@@ -418,7 +415,6 @@ async function loadMenuFromDB() {
     }));
   }
 
-  // 5. Dibujamos los platos en la pantalla
   render();
 }
 

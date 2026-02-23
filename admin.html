@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Panel de Control</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --brand: #a0715e; --bg: #fffbf2; --text: #3e2b26; --white: #ffffff; }
         body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; padding-bottom: 50px; }
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         
-        /* NAV */
         .admin-nav { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .logo { font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* CARDS */
         .card { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(62, 43, 38, 0.05); margin-bottom: 30px; border: 1px solid rgba(160, 113, 94, 0.1); }
         h2, h4 { margin-top: 0; color: var(--brand); }
 
-        /* FORM */
         .grid-form { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; }
         input, select, textarea { padding: 14px; border-radius: 12px; border: 1px solid #e6ddd0; background: #fafafa; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; }
         input:focus, textarea:focus { border-color: var(--brand); background: white; }
@@ -28,24 +26,31 @@
         button { padding: 15px; background: var(--brand); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.3s; }
         button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(160, 113, 94, 0.3); }
         button:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-cancel { background: #888; display: none; }
 
-        /* DISH LIST */
-        .dish-item { background: white; padding: 15px 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border: 1px solid #eee; transition: 0.3s; }
-        .dish-item:hover { border-color: var(--brand); }
-        .dish-info { display: flex; flex-direction: column; }
-        .dish-name { font-weight: 600; font-size: 1.1rem; }
-        .dish-meta { font-size: 0.85rem; color: #8d6e63; text-transform: uppercase; }
-        .btn-delete { background: #fee2e2; color: #ef4444; padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; border:none; cursor:pointer; }
-        .btn-delete:hover { background: #ef4444; color: white; }
-
-        /* LOADING INDICATOR */
-        .loader { display: none; color: var(--brand); font-weight: 600; margin-top: 10px; font-size: 0.9rem; }
+        /* LISTAS ARRASTRABLES */
+        .categoria-titulo { margin-top: 30px; border-bottom: 2px solid var(--brand); padding-bottom: 5px; color: var(--brand); text-transform: uppercase; font-size: 1.2rem;}
+        .lista-platos { min-height: 50px; background: rgba(0,0,0,0.02); border-radius: 15px; padding: 10px; margin-top: 10px; }
         
-        /* RESTAURANT INFO */
+        .dish-item { background: white; padding: 15px 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid #ddd; cursor: grab; transition: box-shadow 0.2s;}
+        .dish-item:active { cursor: grabbing; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .dish-info { display: flex; align-items: center; gap: 15px; }
+        .drag-handle { color: #ccc; font-size: 1.5rem; cursor: grab; }
+        
+        .acciones { display: flex; gap: 10px; }
+        .btn-edit { background: #e0f2fe; color: #0284c7; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border:none; cursor:pointer; font-weight: bold;}
+        .btn-delete { background: #fee2e2; color: #ef4444; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border:none; cursor:pointer; font-weight: bold;}
+
+        .loader { display: none; color: var(--brand); font-weight: 600; margin-top: 10px; font-size: 0.9rem; }
         #restaurant-info { margin-bottom: 20px; font-weight: 600; color: #888; }
+        
+        /* Notificación de guardado rápido */
+        #toast { position: fixed; bottom: 20px; right: 20px; background: #4caf50; color: white; padding: 10px 20px; border-radius: 8px; display: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000;}
     </style>
 </head>
 <body>
+
+<div id="toast">✅ Orden actualizado</div>
 
 <div id="login-section" style="max-width: 350px; margin: 100px auto;" class="card">
     <h2 style="text-align:center" class="logo">Acceso Dueños</h2>
@@ -66,37 +71,37 @@
         <div id="restaurant-info">Cargando restaurante...</div>
 
         <div class="card" id="form-container" style="display:none;">
-            <h4>✨ Añadir Nuevo Plato</h4>
-            <p style="font-size: 0.85rem; color: #888; margin-bottom: 20px;">Solo necesitas escribir en español. El sistema traducirá automáticamente a Inglés, Francés, Alemán e Italiano.</p>
+            <h4 id="form-title">✨ Añadir Nuevo Plato</h4>
             
             <div class="grid-form">
                 <input type="text" id="nombre_es" class="full" placeholder="Nombre del plato (ej: Croquetas Caseras)">
                 <textarea id="desc_es" class="full" placeholder="Descripción de los ingredientes..."></textarea>
                 <input type="number" id="precio" placeholder="Precio (€)" step="0.01">
                 <select id="categoria">
-                    <option value="bebidas">Bebidas</option>
                     <option value="entrantes">Entrantes</option>
                     <option value="principales">Principales</option>
                     <option value="postres">Postres</option>
+                    <option value="bebidas">Bebidas</option>
                 </select>
                 <button id="btnGuardar" onclick="saveDishWithAutoTranslate()">Guardar y Traducir</button>
+                <button id="btnCancelar" class="btn-cancel" onclick="cancelEdit()">Cancelar</button>
             </div>
-            <div id="loadingMsg" class="loader">⏳ Traduciendo a 4 idiomas y guardando en la nube...</div>
+            <div id="loadingMsg" class="loader">⏳ Procesando...</div>
         </div>
 
-        <div id="dishes-list">
+        <div id="dishes-container">
             </div>
     </div>
 </div>
 
 <script>
-    // CONFIGURACIÓN SUPABASE
     const SUPABASE_URL = "https://xfylujdfpmajnbmuiebv.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmeWx1amRmcG1ham5ibXVpZWJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTczMTEsImV4cCI6MjA4NzM3MzMxMX0.S6NLD1pyObNpg_sRD60Od8q7MmNWMMLnwq8YLVEhtew";
     const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Variable global para guardar los datos del restaurante actual
     let currentRestaurant = null;
+    let platosActuales = [];
+    let platoEditandoId = null;
 
     window.onload = async () => {
         const { data: { session } } = await miSupabase.auth.getSession();
@@ -114,152 +119,229 @@
     async function showDashboard() {
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('admin-dashboard').style.display = 'block';
-        
-        // 1. Al cargar el panel, primero buscamos el restaurante del usuario
         await loadRestaurantData();
-        // 2. Luego cargamos sus platos
-        if (currentRestaurant) {
-            loadMyDishes();
-        }
+        if (currentRestaurant) loadMyDishes();
     }
 
-    // NUEVA FUNCIÓN: Busca el restaurante del usuario
     async function loadRestaurantData() {
         const { data: { user } } = await miSupabase.auth.getUser();
-        
-        // Buscamos en la tabla restaurantes
-        const { data, error } = await miSupabase
-            .from('restaurantes')
-            .select('id, nombre, slug')
-            .eq('owner_id', user.id)
-            .single();
-
+        const { data, error } = await miSupabase.from('restaurantes').select('id, nombre, slug').eq('owner_id', user.id).single();
         const infoDiv = document.getElementById('restaurant-info');
-        const formDiv = document.getElementById('form-container');
-
         if (error || !data) {
-            infoDiv.innerHTML = "⚠️ No tienes un restaurante asignado en el sistema. Contacta con el administrador.";
+            infoDiv.innerHTML = "⚠️ No tienes un restaurante asignado.";
             infoDiv.style.color = "red";
             return;
         }
-
-        // Guardamos los datos para usarlos al guardar platos
         currentRestaurant = data;
-        infoDiv.innerHTML = `Gestionando: <span style="color:var(--brand)">${data.nombre}</span> (ID: ${data.id})`;
-        formDiv.style.display = "block"; // Mostramos el formulario solo si tiene restaurante
+        infoDiv.innerHTML = `Gestionando: <span style="color:var(--brand)">${data.nombre}</span>`;
+        document.getElementById('form-container').style.display = "block";
     }
 
+    // CARGA Y RENDERIZADO POR CATEGORÍAS
     async function loadMyDishes() {
         const { data: { user } } = await miSupabase.auth.getUser();
-        // Filtramos para ver solo los que nos pertenecen
-        const { data, error } = await miSupabase.from('platos').select('*').eq('owner_id', user.id).order('id');
         
-        const list = document.getElementById('dishes-list');
-        list.innerHTML = '<h4>Tus Platos Publicados</h4>';
+        // Obtenemos los platos ordenados por su columna oculta "orden"
+        const { data, error } = await miSupabase
+            .from('platos')
+            .select('*')
+            .eq('owner_id', user.id)
+            .order('orden', { ascending: true });
         
         if (error) return console.error(error);
-        if (data.length === 0) list.innerHTML += '<p style="color:#888">Aún no has añadido platos.</p>';
+        platosActuales = data;
+        
+        renderLists();
+    }
 
-        data.forEach(p => {
-            // Manejamos posibles errores si el JSON está malformado
-            const nombrePlato = p.nombre && p.nombre.es ? p.nombre.es : 'Sin nombre';
-            const precioPlato = p.precio ? parseFloat(p.precio).toFixed(2) : '0.00';
+    function renderLists() {
+        const container = document.getElementById('dishes-container');
+        container.innerHTML = ''; // Limpiamos
 
-            list.innerHTML += `
-                <div class="dish-item">
-                    <div class="dish-info">
-                        <span class="dish-name">${nombrePlato}</span>
-                        <span class="dish-meta">${p.categoria} • ${precioPlato}€</span>
-                    </div>
-                    <button class="btn-delete" onclick="deleteDish(${p.id})">Eliminar</button>
+        // Definimos las categorías que queremos mostrar
+        const categorias = ['entrantes', 'principales', 'postres', 'bebidas'];
+
+        categorias.forEach(cat => {
+            // Filtramos los platos de esta categoría
+            const platosCategoria = platosActuales.filter(p => p.categoria === cat);
+            
+            // Creamos el bloque HTML para la categoría
+            const block = document.createElement('div');
+            block.innerHTML = `
+                <h3 class="categoria-titulo">${cat}</h3>
+                <div class="lista-platos" id="lista-${cat}" data-categoria="${cat}">
+                    ${platosCategoria.length === 0 ? '<p style="color:#aaa; text-align:center; margin:0;">Arrastra platos aquí o añade nuevos.</p>' : ''}
                 </div>
             `;
+            container.appendChild(block);
+
+            // Añadimos los platos a su lista correspondiente
+            const listaElement = document.getElementById(`lista-${cat}`);
+            platosCategoria.forEach(p => {
+                const nombrePlato = p.nombre?.es || 'Sin nombre';
+                const div = document.createElement('div');
+                div.className = 'dish-item';
+                div.dataset.id = p.id; // ¡IMPORTANTE PARA SABER QUIÉN ES QUIÉN!
+                div.innerHTML = `
+                    <div class="dish-info">
+                        <span class="drag-handle">☰</span>
+                        <strong>${nombrePlato}</strong> - ${p.precio}€
+                    </div>
+                    <div class="acciones">
+                        <button class="btn-edit" onclick="iniciarEdicion(${p.id})">Editar</button>
+                        <button class="btn-delete" onclick="deleteDish(${p.id})">Eliminar</button>
+                    </div>
+                `;
+                listaElement.appendChild(div);
+            });
+
+            // ACTIVAMOS SORTABLEJS (DRAG & DROP) PARA ESTA LISTA
+            new Sortable(listaElement, {
+                animation: 150,
+                handle: '.dish-item', // Se puede arrastrar agarrando de cualquier parte del plato
+                onEnd: function (evt) {
+                    // Cuando el usuario suelta el plato, ejecutamos la actualización
+                    actualizarOrdenEnBaseDeDatos(cat);
+                }
+            });
         });
     }
 
-    // FUNCIÓN DE TRADUCCIÓN Y GUARDADO ACTUALIZADA
-    async function saveDishWithAutoTranslate() {
-        if (!currentRestaurant) return alert("Error: No se encontró tu restaurante.");
+    // EL MOTOR DE ACTUALIZACIÓN DE ORDEN
+    async function actualizarOrdenEnBaseDeDatos(categoria) {
+        const listaHTML = document.getElementById(`lista-${categoria}`);
+        const items = listaHTML.querySelectorAll('.dish-item');
+        
+        // Creamos un array con las actualizaciones que hay que mandar a Supabase
+        const actualizaciones = [];
+        
+        items.forEach((item, index) => {
+            const platoId = item.dataset.id;
+            // El index es su nueva posición visual (0, 1, 2, 3...)
+            actualizaciones.push({ id: parseInt(platoId), orden: index });
+        });
 
+        // Enviamos las actualizaciones a Supabase una por una (rápido en background)
+        // Enviamos las actualizaciones a Supabase una por una
+        for (let actualizacion of actualizaciones) {
+            const { error } = await miSupabase
+                .from('platos')
+                .update({ orden: actualizacion.orden })
+                .eq('id', actualizacion.id);
+            
+            if (error) {
+                console.error("Error al guardar el nuevo orden:", error.message);
+                alert("Hubo un problema al guardar el orden. Revisa la consola.");
+                return; // Detenemos el proceso si hay error
+            }
+        }
+
+        // Mostramos un mensajito verde de éxito
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2000);
+        
+        // Recargamos los datos en memoria en silencio
+        const { data: { user } } = await miSupabase.auth.getUser();
+        const { data } = await miSupabase.from('platos').select('*').eq('owner_id', user.id).order('orden', { ascending: true });
+        platosActuales = data;
+    }
+
+    // GUARDAR O ACTUALIZAR UN PLATO
+    async function saveDishWithAutoTranslate() {
         const nombre_es = document.getElementById('nombre_es').value;
         const desc_es = document.getElementById('desc_es').value;
         const precio = document.getElementById('precio').value;
+        const categoriaSeleccionada = document.getElementById('categoria').value;
         
         if(!nombre_es || !precio) return alert("El nombre y el precio son obligatorios.");
 
-        const btn = document.getElementById('btnGuardar');
-        const loader = document.getElementById('loadingMsg');
-        btn.disabled = true;
-        loader.style.display = 'block';
+        document.getElementById('btnGuardar').disabled = true;
+        document.getElementById('loadingMsg').style.display = 'block';
 
         try {
             const { data: { user } } = await miSupabase.auth.getUser();
             
-            // Idiomas a los que vamos a traducir automáticamente
             const targetLangs = ['en', 'de', 'fr', 'it'];
             const nombreObj = { es: nombre_es };
             const descObj = { es: desc_es };
 
-            // Ejecutamos las traducciones
             for (let lang of targetLangs) {
                 nombreObj[lang] = await translateAPI(nombre_es, lang);
                 descObj[lang] = await translateAPI(desc_es, lang);
             }
 
-            // NUEVO: Añadimos restaurant_id y slug
-            const nuevoPlato = {
+            // Calculamos el nuevo orden (al final de su categoría)
+            const platosMismaCat = platosActuales.filter(p => p.categoria === categoriaSeleccionada);
+            const nuevoOrdenAutomatico = platosMismaCat.length; // Si hay 3, este será el índice 3 (cuarta posición)
+
+            const platoData = {
                 nombre: nombreObj,
                 descripcion: descObj,
                 precio: parseFloat(precio),
-                categoria: document.getElementById('categoria').value,
+                categoria: categoriaSeleccionada,
                 disponible: true,
                 owner_id: user.id,
-                restaurant_id: currentRestaurant.id, // Se vincula al local automáticamente
-                slug: currentRestaurant.slug         // Se etiqueta para la URL pública
+                restaurant_id: currentRestaurant.id,
+                slug: currentRestaurant.slug
             };
 
-            const { error } = await miSupabase.from('platos').insert([nuevoPlato]);
-            if (error) throw error;
+            if (platoEditandoId) {
+                await miSupabase.from('platos').update(platoData).eq('id', platoEditandoId);
+            } else {
+                // Solo asignamos el orden automático si es un plato nuevo
+                platoData.orden = nuevoOrdenAutomatico; 
+                await miSupabase.from('platos').insert([platoData]);
+            }
 
-            alert("Plato guardado y traducido correctamente.");
-            limpiarFormulario();
-            loadMyDishes();
+            cancelEdit();
+            loadMyDishes(); // Refresca toda la vista
 
         } catch (err) {
             alert("Error al guardar: " + err.message);
         } finally {
-            btn.disabled = false;
-            loader.style.display = 'none';
+            document.getElementById('btnGuardar').disabled = false;
+            document.getElementById('loadingMsg').style.display = 'none';
         }
     }
 
-    // Servicio de traducción gratuito (MyMemory)
+    function iniciarEdicion(id) {
+        const plato = platosActuales.find(p => p.id === id);
+        platoEditandoId = id;
+        document.getElementById('nombre_es').value = plato.nombre?.es || "";
+        document.getElementById('desc_es').value = plato.descripcion?.es || "";
+        document.getElementById('precio').value = plato.precio;
+        document.getElementById('categoria').value = plato.categoria;
+        
+        document.getElementById('form-title').innerText = "✏️ Editando Plato";
+        document.getElementById('btnGuardar').innerText = "Actualizar Plato";
+        document.getElementById('btnCancelar').style.display = "inline-block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+        platoEditandoId = null;
+        document.getElementById('nombre_es').value = "";
+        document.getElementById('desc_es').value = "";
+        document.getElementById('precio').value = "";
+        document.getElementById('form-title').innerText = "✨ Añadir Nuevo Plato";
+        document.getElementById('btnGuardar').innerText = "Guardar y Traducir";
+        document.getElementById('btnCancelar').style.display = "none";
+    }
+
+    async function deleteDish(id) {
+        if(!confirm("¿Estás seguro?")) return;
+        await miSupabase.from('platos').delete().eq('id', id);
+        loadMyDishes();
+    }
+
     async function translateAPI(text, target) {
         if(!text) return "";
         try {
             const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|${target}`);
             const data = await res.json();
             return data.responseData.translatedText || text;
-        } catch (e) {
-            return text;
-        }
-    }
-
-    async function deleteDish(id) {
-        if(!confirm("¿Estás seguro de eliminar este plato?")) return;
-        const { error } = await miSupabase.from('platos').delete().eq('id', id);
-        
-        if(error) {
-            alert("Error al eliminar. Revisa que tengas permisos.");
-        } else {
-            loadMyDishes();
-        }
-    }
-
-    function limpiarFormulario() {
-        document.getElementById('nombre_es').value = "";
-        document.getElementById('desc_es').value = "";
-        document.getElementById('precio').value = "";
+        } catch (e) { return text; }
     }
 
     async function handleLogout() {
