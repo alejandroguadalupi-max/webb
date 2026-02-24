@@ -45,17 +45,18 @@
     transition: background 0.4s ease;
     
     width: 100%;
+    /* El 100dvh es vital para evitar que la barra de Chrome lo corte */
     min-height: 100vh;      
-    min-height: 100dvh; /* Altura dinámica perfecta para móviles */
+    min-height: 100dvh; 
     
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center; /* RESTAURADO: Centrado vertical perfecto */
     
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     
-    /* Soporte para el notch de los móviles */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
@@ -71,28 +72,24 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    
-    /* CAMBIO CLAVE: Toma todo el alto disponible sin desbordar */
-    flex: 1; 
   }
 
   /* --- HEADER --- */
   .header-section {
     text-align: center;
-    margin-top: 5vh; /* Separación superior flexible */
-    margin-bottom: 30px; 
+    margin-bottom: 25px; /* Reducido ligeramente para ahorrar hueco */
     animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .logo-icon {
-    font-size: 3.5em; /* Ligeramente más pequeño para asegurar que cabe en pantallas bajitas */
+    font-size: 3.5em; /* Un pelín más pequeño */
     margin-bottom: 5px;
     display: inline-block;
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
   }
 
   .brand-name {
-    font-size: 2em;
+    font-size: 2em; /* Ajustado para mantener proporción */
     font-weight: 800;
     margin: 0;
     line-height: 1.1;
@@ -105,14 +102,14 @@
     font-size: 1.1em;
     font-weight: 500;
     color: var(--text-sec);
-    margin-top: 8px;
+    margin-top: 5px;
   }
 
   /* --- MENÚ PRINCIPAL --- */
   .menu-grid {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px; /* Hueco reducido */
     width: 100%;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
@@ -121,7 +118,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 25px; /* Ligeramente reducido para no saturar la pantalla */
+    padding: 16px 25px; /* Altura de botón reducida sutilmente */
     background: var(--card-bg);
     border-radius: 20px;
     text-decoration: none;
@@ -183,7 +180,8 @@
 
   /* --- BOTÓN TEMA --- */
   .theme-btn { 
-    position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; 
+    position: fixed; /* Fijo para que no altere el centrado del bloque central */
+    top: 20px; right: 20px; width: 40px; height: 40px; 
     border-radius: 50%; border: none; cursor: pointer; 
     background: var(--card-bg); color: var(--text-main); 
     box-shadow: var(--shadow-soft); font-size: 1.1em; 
@@ -195,11 +193,11 @@
 
   /* --- IDIOMAS --- */
   .lang-container {
-    margin-top: 25px;
+    margin-top: 20px; /* Reducido */
     opacity: 0.8;
   }
   .lang-container select {
-    padding: 10px 20px; border-radius: 20px; border: 1px solid var(--text-sec);
+    padding: 8px 16px; border-radius: 20px; border: 1px solid var(--text-sec);
     background: transparent; color: var(--text-main); font-size: 0.9em;
     cursor: pointer;
     outline: none;
@@ -208,12 +206,8 @@
 
   /* --- FOOTER REDES SOCIALES --- */
   .social-footer {
-    /* CAMBIO CLAVE: margin-top: auto empuja el footer hasta el borde inferior siempre */
-    margin-top: auto;
-    padding-top: 20px;
-    padding-bottom: 10px;
+    margin-top: 25px; /* Separación ajustada, sin usar 'auto' para no romper el centrado */
     text-align: center;
-    width: 100%;
     animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
@@ -221,7 +215,7 @@
     font-size: 0.9em;
     font-weight: 600;
     color: var(--text-sec);
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
 
   .social-icons {
@@ -234,8 +228,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 45px;
-    height: 45px;
+    width: 40px; /* Iconos un poco más recogidos */
+    height: 40px;
     border-radius: 50%; 
     background: var(--card-bg);
     text-decoration: none;
@@ -267,8 +261,9 @@
 </head>
 <body>
 
-<main class="app-container">
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema">☀️</button>
+
+<main class="app-container">
   
   <div class="header-section">
     <div class="logo-icon">🍽️</div> 

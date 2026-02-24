@@ -2,69 +2,106 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin - Panel de Control</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --brand: #a0715e; --bg: #fffbf2; --text: #3e2b26; --white: #ffffff; }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; padding-bottom: 50px; }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; padding-bottom: 80px; }
         
+        .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+        
+        /* HEADER NAV */
         .admin-nav { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo { font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: 1px; }
+        .logo { font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; }
+        .btn-logout { padding: 8px 15px; background: #666; color: white; border: none; border-radius: 8px; font-size: 0.85rem; cursor: pointer; font-weight: bold; }
 
-        .card { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(62, 43, 38, 0.05); margin-bottom: 30px; border: 1px solid rgba(160, 113, 94, 0.1); }
+        /* CARDS */
+        .card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(62, 43, 38, 0.05); margin-bottom: 25px; border: 1px solid rgba(160, 113, 94, 0.1); width: 100%; }
         h2, h4 { margin-top: 0; color: var(--brand); }
 
-        .grid-form { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; }
-        input, select, textarea { padding: 14px; border-radius: 12px; border: 1px solid #e6ddd0; background: #fafafa; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; }
-        input:focus, textarea:focus { border-color: var(--brand); background: white; }
-        .full { grid-column: span 3; }
+        /* FORMULARIO RESPONSIVO (Móvil por defecto) */
+        .grid-form { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        /* La clase full abarca todas las columnas sin importar cuántas haya */
+        .full { grid-column: 1 / -1; }
         
-        button { padding: 15px; background: var(--brand); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.3s; }
+        input, select, textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e6ddd0; background: #fafafa; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: var(--brand); background: white; }
+        textarea { min-height: 100px; resize: vertical; }
+        
+        /* BOTONES PRINCIPALES */
+        button { padding: 16px; background: var(--brand); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.3s; display: flex; justify-content: center; align-items: center; width: 100%; }
         button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(160, 113, 94, 0.3); }
-        button:disabled { background: #ccc; cursor: not-allowed; }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-cancel { background: #888; display: none; }
+        .btn-cancel:hover { background: #666; }
 
-        /* LISTAS ARRASTRABLES */
+        /* DISEÑO DE PLATOS ARRASTRABLES */
         .categoria-titulo { margin-top: 30px; border-bottom: 2px solid var(--brand); padding-bottom: 5px; color: var(--brand); text-transform: uppercase; font-size: 1.2rem;}
         .lista-platos { min-height: 50px; background: rgba(0,0,0,0.02); border-radius: 15px; padding: 10px; margin-top: 10px; }
         
-        .dish-item { background: white; padding: 15px 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid #ddd; cursor: grab; transition: box-shadow 0.2s;}
+        /* Plato en versión móvil */
+        .dish-item { background: white; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 12px; border: 1px solid #ddd; cursor: grab; transition: box-shadow 0.2s;}
         .dish-item:active { cursor: grabbing; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .dish-info { display: flex; align-items: center; gap: 15px; }
-        .drag-handle { color: #ccc; font-size: 1.5rem; cursor: grab; }
         
-        .acciones { display: flex; gap: 10px; }
-        .btn-edit { background: #e0f2fe; color: #0284c7; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border:none; cursor:pointer; font-weight: bold;}
-        .btn-delete { background: #fee2e2; color: #ef4444; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border:none; cursor:pointer; font-weight: bold;}
+        .dish-info { display: flex; align-items: center; gap: 12px; width: 100%; }
+        .drag-handle { color: #ccc; font-size: 1.5rem; cursor: grab; padding-right: 5px; }
+        .dish-text { display: flex; flex-direction: column; flex: 1; line-height: 1.3; }
+        .dish-text strong { font-size: 1.05rem; color: var(--text); }
+        .dish-text span { font-size: 0.9rem; color: var(--brand); font-weight: bold; margin-top: 2px;}
+        
+        .acciones { display: flex; gap: 10px; width: 100%; justify-content: flex-end; }
+        .btn-edit { background: #e0f2fe; color: #0284c7; padding: 10px 15px; border-radius: 8px; font-size: 0.9rem; border:none; cursor:pointer; font-weight: bold; width: auto; flex: 1; text-align: center; }
+        .btn-delete { background: #fee2e2; color: #ef4444; padding: 10px 15px; border-radius: 8px; font-size: 0.9rem; border:none; cursor:pointer; font-weight: bold; width: auto; flex: 1; text-align: center; }
 
-        .loader { display: none; color: var(--brand); font-weight: 600; margin-top: 10px; font-size: 0.9rem; }
-        #restaurant-info { margin-bottom: 20px; font-weight: 600; color: #888; }
+        .loader { display: none; color: var(--brand); font-weight: 600; margin-top: 10px; font-size: 0.9rem; text-align: center; }
+        #restaurant-info { margin-bottom: 20px; font-weight: 600; color: #888; text-align: center;}
         
-        /* Notificación de guardado rápido */
-        #toast { position: fixed; bottom: 20px; right: 20px; background: #4caf50; color: white; padding: 10px 20px; border-radius: 8px; display: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000;}
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #4caf50; color: white; padding: 12px 24px; border-radius: 50px; display: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000; text-align: center; width: max-content; }
+
+        /* =========================================
+           ADAPTACIÓN PARA TABLET Y ORDENADOR
+           ========================================= */
+        @media (min-width: 768px) {
+            .container { padding: 30px; }
+            .card { padding: 30px; }
+            
+            /* El formulario pasa a 3 columnas */
+            .grid-form { grid-template-columns: 2fr 1fr 1fr; gap: 20px; }
+            
+            /* Los platos pasan a 1 sola fila horizontal */
+            .dish-item { flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px; gap: 20px;}
+            .dish-info { width: auto; flex: 1; }
+            .dish-text { flex-direction: row; align-items: center; gap: 10px; }
+            .dish-text span { margin-top: 0; border-left: 2px solid #eee; padding-left: 10px; }
+            
+            /* Los botones de acción no ocupan todo el ancho */
+            .acciones { width: auto; justify-content: flex-end; }
+            .btn-edit, .btn-delete { flex: none; padding: 8px 16px; }
+            button { width: auto; padding: 14px 24px; }
+        }
     </style>
 </head>
 <body>
 
 <div id="toast">✅ Orden actualizado</div>
 
-<div id="login-section" style="max-width: 350px; margin: 100px auto;" class="card">
+<div id="login-section" style="max-width: 350px; margin: 10vh auto; padding: 30px 20px;" class="card">
     <h2 style="text-align:center" class="logo">Acceso Dueños</h2>
-    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">
         <input type="email" id="email" placeholder="Email corporativo">
         <input type="password" id="password" placeholder="Contraseña">
-        <button onclick="handleLogin()">Iniciar Sesión</button>
+        <button onclick="handleLogin()" style="width: 100%;">Iniciar Sesión</button>
     </div>
 </div>
 
 <div id="admin-dashboard" style="display: none;">
     <nav class="admin-nav">
-        <div class="logo">Panel Administrativo</div>
-        <button onclick="handleLogout()" style="padding: 8px 15px; background: #666; font-size: 0.8rem;">Cerrar Sesión</button>
+        <div class="logo">Panel Admin</div>
+        <button onclick="handleLogout()" class="btn-logout">Cerrar Sesión</button>
     </nav>
 
     <div class="container">
@@ -74,7 +111,7 @@
             <h4 id="form-title">✨ Añadir Nuevo Plato</h4>
             
             <div class="grid-form">
-                <input type="text" id="nombre_es" class="full" placeholder="Nombre del plato (ej: Croquetas Caseras)">
+                <input type="text" id="nombre_es" class="full" placeholder="Nombre del plato (ej: Croquetas)">
                 <textarea id="desc_es" class="full" placeholder="Descripción de los ingredientes..."></textarea>
                 <input type="number" id="precio" placeholder="Precio (€)" step="0.01">
                 <select id="categoria">
@@ -83,10 +120,12 @@
                     <option value="postres">Postres</option>
                     <option value="bebidas">Bebidas</option>
                 </select>
-                <button id="btnGuardar" onclick="saveDishWithAutoTranslate()">Guardar y Traducir</button>
-                <button id="btnCancelar" class="btn-cancel" onclick="cancelEdit()">Cancelar</button>
+                <div style="display: flex; gap: 10px; width: 100%;">
+                    <button id="btnGuardar" onclick="saveDishWithAutoTranslate()" style="flex: 2;">Guardar Plato</button>
+                    <button id="btnCancelar" class="btn-cancel" onclick="cancelEdit()" style="flex: 1;">Cancelar</button>
+                </div>
             </div>
-            <div id="loadingMsg" class="loader">⏳ Procesando...</div>
+            <div id="loadingMsg" class="loader">⏳ Guardando y traduciendo...</div>
         </div>
 
         <div id="dishes-container">
@@ -133,20 +172,19 @@
             return;
         }
         currentRestaurant = data;
-        infoDiv.innerHTML = `Gestionando: <span style="color:var(--brand)">${data.nombre}</span>`;
+        infoDiv.innerHTML = `Gestionando local: <span style="color:var(--brand)">${data.nombre}</span>`;
         document.getElementById('form-container').style.display = "block";
     }
 
-    // CARGA Y RENDERIZADO POR CATEGORÍAS
     async function loadMyDishes() {
         const { data: { user } } = await miSupabase.auth.getUser();
         
-        // Obtenemos los platos ordenados por su columna oculta "orden"
         const { data, error } = await miSupabase
             .from('platos')
             .select('*')
             .eq('owner_id', user.id)
-            .order('orden', { ascending: true });
+            .order('orden', { ascending: true })
+            .order('id', { ascending: true }); // Seguro anti-fantasmas
         
         if (error) return console.error(error);
         platosActuales = data;
@@ -156,73 +194,68 @@
 
     function renderLists() {
         const container = document.getElementById('dishes-container');
-        container.innerHTML = ''; // Limpiamos
+        container.innerHTML = ''; 
 
-        // Definimos las categorías que queremos mostrar
         const categorias = ['entrantes', 'principales', 'postres', 'bebidas'];
 
         categorias.forEach(cat => {
-            // Filtramos los platos de esta categoría
             const platosCategoria = platosActuales.filter(p => p.categoria === cat);
             
-            // Creamos el bloque HTML para la categoría
             const block = document.createElement('div');
             block.innerHTML = `
                 <h3 class="categoria-titulo">${cat}</h3>
                 <div class="lista-platos" id="lista-${cat}" data-categoria="${cat}">
-                    ${platosCategoria.length === 0 ? '<p style="color:#aaa; text-align:center; margin:0;">Arrastra platos aquí o añade nuevos.</p>' : ''}
+                    ${platosCategoria.length === 0 ? '<p style="color:#aaa; text-align:center; margin:0; padding: 10px;">Vacío. Añade platos aquí.</p>' : ''}
                 </div>
             `;
             container.appendChild(block);
 
-            // Añadimos los platos a su lista correspondiente
             const listaElement = document.getElementById(`lista-${cat}`);
             platosCategoria.forEach(p => {
                 const nombrePlato = p.nombre?.es || 'Sin nombre';
                 const div = document.createElement('div');
                 div.className = 'dish-item';
-                div.dataset.id = p.id; // ¡IMPORTANTE PARA SABER QUIÉN ES QUIÉN!
+                div.dataset.id = p.id; 
+                
+                // Estructura HTML optimizada para flexbox responsivo
                 div.innerHTML = `
                     <div class="dish-info">
                         <span class="drag-handle">☰</span>
-                        <strong>${nombrePlato}</strong> - ${p.precio}€
+                        <div class="dish-text">
+                            <strong>${nombrePlato}</strong>
+                            <span>${p.precio}€</span>
+                        </div>
                     </div>
                     <div class="acciones">
                         <button class="btn-edit" onclick="iniciarEdicion(${p.id})">Editar</button>
-                        <button class="btn-delete" onclick="deleteDish(${p.id})">Eliminar</button>
+                        <button class="btn-delete" onclick="deleteDish(${p.id})">Borrar</button>
                     </div>
                 `;
                 listaElement.appendChild(div);
             });
 
-            // ACTIVAMOS SORTABLEJS (DRAG & DROP) PARA ESTA LISTA
             new Sortable(listaElement, {
                 animation: 150,
-                handle: '.dish-item', // Se puede arrastrar agarrando de cualquier parte del plato
+                handle: '.drag-handle', // Ahora se agarra específicamente del icono, mejora en táctil
+                delay: 100, // Pequeño delay en móvil para evitar arrastres accidentales al hacer scroll
+                delayOnTouchOnly: true,
                 onEnd: function (evt) {
-                    // Cuando el usuario suelta el plato, ejecutamos la actualización
                     actualizarOrdenEnBaseDeDatos(cat);
                 }
             });
         });
     }
 
-    // EL MOTOR DE ACTUALIZACIÓN DE ORDEN
     async function actualizarOrdenEnBaseDeDatos(categoria) {
         const listaHTML = document.getElementById(`lista-${categoria}`);
         const items = listaHTML.querySelectorAll('.dish-item');
-        
-        // Creamos un array con las actualizaciones que hay que mandar a Supabase
         const actualizaciones = [];
         
         items.forEach((item, index) => {
             const platoId = item.dataset.id;
-            // El index es su nueva posición visual (0, 1, 2, 3...)
             actualizaciones.push({ id: parseInt(platoId), orden: index });
         });
 
-        // Enviamos las actualizaciones a Supabase una por una (rápido en background)
-        // Enviamos las actualizaciones a Supabase una por una
         for (let actualizacion of actualizaciones) {
             const { error } = await miSupabase
                 .from('platos')
@@ -231,23 +264,20 @@
             
             if (error) {
                 console.error("Error al guardar el nuevo orden:", error.message);
-                alert("Hubo un problema al guardar el orden. Revisa la consola.");
-                return; // Detenemos el proceso si hay error
+                alert("Hubo un problema al guardar el orden. Recarga la página.");
+                return;
             }
         }
 
-        // Mostramos un mensajito verde de éxito
         const toast = document.getElementById('toast');
         toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 2000);
+        setTimeout(() => toast.style.display = 'none', 2500);
         
-        // Recargamos los datos en memoria en silencio
         const { data: { user } } = await miSupabase.auth.getUser();
         const { data } = await miSupabase.from('platos').select('*').eq('owner_id', user.id).order('orden', { ascending: true });
         platosActuales = data;
     }
 
-    // GUARDAR O ACTUALIZAR UN PLATO
     async function saveDishWithAutoTranslate() {
         const nombre_es = document.getElementById('nombre_es').value;
         const desc_es = document.getElementById('desc_es').value;
@@ -271,9 +301,8 @@
                 descObj[lang] = await translateAPI(desc_es, lang);
             }
 
-            // Calculamos el nuevo orden (al final de su categoría)
             const platosMismaCat = platosActuales.filter(p => p.categoria === categoriaSeleccionada);
-            const nuevoOrdenAutomatico = platosMismaCat.length; // Si hay 3, este será el índice 3 (cuarta posición)
+            const nuevoOrdenAutomatico = platosMismaCat.length;
 
             const platoData = {
                 nombre: nombreObj,
@@ -289,13 +318,12 @@
             if (platoEditandoId) {
                 await miSupabase.from('platos').update(platoData).eq('id', platoEditandoId);
             } else {
-                // Solo asignamos el orden automático si es un plato nuevo
                 platoData.orden = nuevoOrdenAutomatico; 
                 await miSupabase.from('platos').insert([platoData]);
             }
 
             cancelEdit();
-            loadMyDishes(); // Refresca toda la vista
+            loadMyDishes();
 
         } catch (err) {
             alert("Error al guardar: " + err.message);
@@ -314,8 +342,8 @@
         document.getElementById('categoria').value = plato.categoria;
         
         document.getElementById('form-title').innerText = "✏️ Editando Plato";
-        document.getElementById('btnGuardar').innerText = "Actualizar Plato";
-        document.getElementById('btnCancelar').style.display = "inline-block";
+        document.getElementById('btnGuardar').innerText = "Actualizar";
+        document.getElementById('btnCancelar').style.display = "block";
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -325,12 +353,12 @@
         document.getElementById('desc_es').value = "";
         document.getElementById('precio').value = "";
         document.getElementById('form-title').innerText = "✨ Añadir Nuevo Plato";
-        document.getElementById('btnGuardar').innerText = "Guardar y Traducir";
+        document.getElementById('btnGuardar').innerText = "Guardar Plato";
         document.getElementById('btnCancelar').style.display = "none";
     }
 
     async function deleteDish(id) {
-        if(!confirm("¿Estás seguro?")) return;
+        if(!confirm("¿Estás seguro de que quieres borrar este plato?")) return;
         await miSupabase.from('platos').delete().eq('id', id);
         loadMyDishes();
     }
