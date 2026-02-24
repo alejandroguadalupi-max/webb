@@ -46,16 +46,16 @@
     
     width: 100%;
     min-height: 100vh;      
-    min-height: 100dvh;     
+    min-height: 100dvh; /* Altura dinámica perfecta para móviles */
     
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; 
     
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     
+    /* Soporte para el notch de los móviles */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
@@ -72,27 +72,27 @@
     align-items: center;
     position: relative;
     
-    margin-top: 10vh; 
-    margin-bottom: 40px; 
-    min-height: 80vh; /* Para empujar el footer hacia abajo */
+    /* CAMBIO CLAVE: Toma todo el alto disponible sin desbordar */
+    flex: 1; 
   }
 
   /* --- HEADER --- */
   .header-section {
     text-align: center;
-    margin-bottom: 40px; 
+    margin-top: 5vh; /* Separación superior flexible */
+    margin-bottom: 30px; 
     animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .logo-icon {
-    font-size: 4em;
+    font-size: 3.5em; /* Ligeramente más pequeño para asegurar que cabe en pantallas bajitas */
     margin-bottom: 5px;
     display: inline-block;
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
   }
 
   .brand-name {
-    font-size: 2.2em;
+    font-size: 2em;
     font-weight: 800;
     margin: 0;
     line-height: 1.1;
@@ -121,7 +121,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 25px; 
+    padding: 18px 25px; /* Ligeramente reducido para no saturar la pantalla */
     background: var(--card-bg);
     border-radius: 20px;
     text-decoration: none;
@@ -195,7 +195,7 @@
 
   /* --- IDIOMAS --- */
   .lang-container {
-    margin-top: 30px;
+    margin-top: 25px;
     opacity: 0.8;
   }
   .lang-container select {
@@ -208,9 +208,12 @@
 
   /* --- FOOTER REDES SOCIALES --- */
   .social-footer {
+    /* CAMBIO CLAVE: margin-top: auto empuja el footer hasta el borde inferior siempre */
     margin-top: auto;
-    padding-top: 40px;
+    padding-top: 20px;
+    padding-bottom: 10px;
     text-align: center;
+    width: 100%;
     animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
@@ -233,18 +236,18 @@
     justify-content: center;
     width: 45px;
     height: 45px;
-    border-radius: 50%; /* Hace que el contenedor sea un círculo perfecto */
+    border-radius: 50%; 
     background: var(--card-bg);
     text-decoration: none;
     box-shadow: var(--shadow-soft);
     transition: all 0.2s ease;
-    overflow: hidden; /* Evita que las esquinas de la imagen cuadrada sobresalgan */
+    overflow: hidden; 
   }
 
   .social-icon img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Asegura que la imagen llene el círculo sin aplastarse */
+    object-fit: cover; 
     transition: transform 0.3s ease;
   }
 
@@ -254,7 +257,7 @@
   }
   
   .social-icon:hover img {
-    transform: scale(1.1); /* Pequeño zoom al pasar el ratón */
+    transform: scale(1.1); 
   }
 
   @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
