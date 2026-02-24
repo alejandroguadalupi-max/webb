@@ -22,16 +22,18 @@
         
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         
-        /* HEADER NAV (Minimalista) */
-        .admin-nav { background: var(--bg-card); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
-        .logo { font-weight: 600; color: var(--text-dark); font-size: 1.1rem; display: flex; align-items: center; gap: 15px; letter-spacing: 0.5px;}
+        /* HEADER NAV */
+        .admin-nav { background: var(--bg-card); padding: 0 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); height: 60px; }
+        .nav-left { flex: 1; display: flex; align-items: center; justify-content: flex-start; }
+        .nav-center { flex: 1; text-align: center; font-weight: 600; font-size: 1.1rem; letter-spacing: 0.5px; white-space: nowrap;}
+        .nav-right { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 20px; }
         
-        /* BOTONES NAV */
-        .nav-actions { display: flex; gap: 15px; align-items: center;}
-        .btn-volver { background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; font-weight: 500; cursor: pointer; display: none; transition: 0.2s;}
-        .btn-volver:hover { color: var(--text-dark); border-color: var(--text-muted); }
-        .btn-logout { background: transparent; color: var(--text-muted); border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; text-decoration: underline; }
-        .btn-logout:hover { color: var(--text-dark); }
+        .btn-volver { background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; font-weight: 500; cursor: pointer; display: none; transition: 0.2s; }
+        .btn-volver:hover { color: var(--text-dark); border-color: var(--text-muted); background: var(--bg-light); }
+        
+        .btn-nav-text { background: transparent; color: var(--text-muted); border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; padding: 0; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .btn-nav-text:hover { color: var(--text-dark); }
+        .btn-logout { text-decoration: underline; }
 
         /* CARDS */
         .card { background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 30px; width: 100%; }
@@ -71,16 +73,18 @@
         .categoria-titulo { margin-top: 40px; margin-bottom: 15px; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;}
         .lista-platos { min-height: 20px; }
         
-        .dish-item { background: var(--bg-card); padding: 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 10px; border: 1px solid var(--border); cursor: grab; transition: border-color 0.2s;}
+        /* Hacemos que todo el item tenga el cursor de agarrar */
+        .dish-item { background: var(--bg-card); padding: 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 10px; border: 1px solid var(--border); transition: border-color 0.2s; cursor: grab;}
         .dish-item:active { cursor: grabbing; border-color: var(--text-muted); }
         
-        .dish-info { display: flex; align-items: flex-start; gap: 12px; width: 100%; }
-        .drag-handle { color: #d1d5db; font-size: 1.2rem; cursor: grab; padding-top: 2px; }
+        .dish-info { display: flex; align-items: flex-start; gap: 12px; width: 100%; pointer-events: none; /* Para que los clicks fluyan a la tarjeta */}
+        .drag-handle { color: #d1d5db; font-size: 1.2rem; padding-top: 2px; } 
         .dish-text { display: flex; flex-direction: column; flex: 1; line-height: 1.4; }
         .dish-text strong { font-size: 1rem; font-weight: 500; color: var(--text-dark); }
         .dish-text span { font-size: 0.9rem; color: var(--text-muted); }
         
-        .acciones { display: flex; gap: 8px; width: 100%; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 5px;}
+        /* Área de botones bloqueada para arrastre */
+        .acciones { display: flex; gap: 8px; width: 100%; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 5px; cursor: default; }
         .btn-edit, .btn-delete { background: transparent; border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; padding: 6px; flex: 1; text-align: center; border-radius: 6px; transition: 0.2s;}
         .btn-edit { color: var(--text-dark); }
         .btn-edit:hover { background: #f3f4f6; }
@@ -94,7 +98,7 @@
         .tab-btn:hover { border-color: var(--text-muted); color: var(--text-dark); }
         .tab-btn.active { background: var(--text-dark); color: white; border-color: var(--text-dark); }
 
-        /* AGRUPACIÓN POR FECHAS (NUEVO) */
+        /* AGRUPACIÓN POR FECHAS */
         .date-separator { margin: 30px 0 15px 0; display: flex; align-items: center; text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         .date-separator::before, .date-separator::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
         .date-separator:not(:empty)::before { margin-right: 15px; }
@@ -105,7 +109,7 @@
         .review-card { background: var(--bg-card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); height: 100%; display: flex; flex-direction: column;}
         .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .review-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
-        .review-time { font-size: 0.75rem; color: #a1a1aa; } /* Solo muestra la hora dentro de la tarjeta */
+        .review-time { font-size: 0.75rem; color: #a1a1aa; } 
         .review-text { color: var(--text-dark); line-height: 1.6; font-size: 0.95rem; margin: 0; font-weight: 300; flex: 1;}
         .review-empty { text-align: center; color: var(--text-muted); padding: 40px 20px; font-weight: 300; grid-column: 1 / -1;}
 
@@ -131,7 +135,6 @@
             .btn-edit:hover { border-color: var(--border); }
             .btn-delete:hover { border-color: #fca5a5; }
 
-            /* Grid 2 columnas para reseñas en PC */
             .reviews-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
@@ -153,12 +156,13 @@
 
 <div id="admin-dashboard" style="display: none;">
     <nav class="admin-nav">
-        <div class="logo">
-            <button id="btnVolver" class="btn-volver" onclick="volverAlHub()">← Menú Principal</button>
-            <span id="nav-title">Panel de Control</span>
+        <div class="nav-left">
+            <button id="btnVolver" class="btn-volver" onclick="volverAlHub()">← Volver</button>
         </div>
-        <div class="nav-actions">
-            <button onclick="handleLogout()" class="btn-logout">Cerrar Sesión</button>
+        <div class="nav-center" id="nav-title">Panel de Control</div>
+        <div class="nav-right">
+            <button onclick="abrirSeccionAjustes()" id="btnAjustesTop" class="btn-nav-text">🔐 Cambiar contraseña</button>
+            <button onclick="handleLogout()" class="btn-nav-text btn-logout">Cerrar Sesión</button>
         </div>
     </nav>
 
@@ -200,10 +204,10 @@
                     <textarea id="desc_es" class="full" placeholder="Descripción detallada de ingredientes..."></textarea>
                     <input type="number" id="precio" placeholder="Precio (€)" step="0.01">
                     <select id="categoria">
+                        <option value="bebidas">Bebidas</option>
                         <option value="entrantes">Entrantes</option>
                         <option value="principales">Principales</option>
                         <option value="postres">Postres</option>
-                        <option value="bebidas">Bebidas</option>
                     </select>
                     <div style="display: flex; gap: 10px; width: 100%; margin-top: 5px;">
                         <button id="btnGuardar" onclick="saveDishWithAutoTranslate()" class="primary-btn" style="flex: 2;">Guardar Plato</button>
@@ -216,18 +220,24 @@
         </div>
 
         <div id="resenas-section" style="display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-                <h4 style="color: var(--text-dark); margin: 0; font-size: 1.2rem;">Opiniones de Clientes</h4>
-            </div>
-
             <div class="tabs-container">
                 <button class="tab-btn active" data-filter="todas" onclick="cambiarPestana('todas')">Todas</button>
                 <button class="tab-btn" data-filter="google" onclick="cambiarPestana('google')">⭐ Google Maps</button>
                 <button class="tab-btn" data-filter="privadas" onclick="cambiarPestana('privadas')">🔒 Privadas (Web)</button>
             </div>
-
             <div id="reviews-container">
                 <div class="loader" style="display:block;">Cargando opiniones...</div>
+            </div>
+        </div>
+
+        <div id="ajustes-section" style="display:none;">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h4 style="margin-bottom: 25px;">Cambiar mi contraseña</h4>
+                <div class="grid-form">
+                    <input type="password" id="old_password" class="full" placeholder="Contraseña actual" autocomplete="new-password">
+                    <input type="password" id="new_password" class="full" placeholder="Nueva contraseña (mínimo 6 caracteres)">
+                    <button onclick="cambiarContrasena()" class="primary-btn full">Actualizar Contraseña</button>
+                </div>
             </div>
         </div>
 
@@ -284,29 +294,80 @@
         document.getElementById('hub-section').style.display = 'block';
         document.getElementById('carta-section').style.display = 'none';
         document.getElementById('resenas-section').style.display = 'none';
+        document.getElementById('ajustes-section').style.display = 'none';
+        
+        // Configuración de la barra superior
         document.getElementById('btnVolver').style.display = 'none';
+        document.getElementById('btnAjustesTop').style.display = 'flex';
         document.getElementById('nav-title').innerText = "Panel de Control";
     }
 
     function abrirSeccionCarta() {
         if(!currentRestaurant) return alert("Sin restaurante asignado.");
-        document.getElementById('hub-section').style.display = 'none';
+        ocultarTodo();
         document.getElementById('carta-section').style.display = 'block';
-        document.getElementById('btnVolver').style.display = 'inline-block';
         document.getElementById('nav-title').innerText = "Editor de Carta";
-        loadMyDishes();
     }
 
     function abrirSeccionResenas() {
         if(!currentRestaurant) return alert("Sin restaurante asignado.");
-        document.getElementById('hub-section').style.display = 'none';
+        ocultarTodo();
         document.getElementById('resenas-section').style.display = 'block';
-        document.getElementById('btnVolver').style.display = 'inline-block';
         document.getElementById('nav-title').innerText = "Buzón de Opiniones";
         loadMyReviews();
     }
 
-    // --- LÓGICA DE RESEÑAS AGRUPADAS POR FECHA ---
+    function abrirSeccionAjustes() {
+        ocultarTodo();
+        document.getElementById('ajustes-section').style.display = 'block';
+        document.getElementById('btnAjustesTop').style.display = 'none'; // Ocultar el engranaje cuando ya estás dentro
+        document.getElementById('nav-title').innerText = "Ajustes de Cuenta";
+    }
+
+    function ocultarTodo() {
+        document.getElementById('hub-section').style.display = 'none';
+        document.getElementById('btnVolver').style.display = 'inline-block';
+        document.getElementById('carta-section').style.display = 'none';
+        document.getElementById('resenas-section').style.display = 'none';
+        document.getElementById('ajustes-section').style.display = 'none';
+    }
+
+    // --- FUNCIÓN CAMBIO DE CONTRASEÑA ULTRA-SEGURA ---
+    async function cambiarContrasena() {
+        const oldPassword = document.getElementById('old_password').value;
+        const newPassword = document.getElementById('new_password').value;
+        
+        if(!oldPassword) return alert("Debes introducir tu contraseña actual para verificar tu identidad.");
+        if(newPassword.length < 6) return alert("La nueva contraseña debe tener al menos 6 caracteres.");
+
+        showToast("Verificando...");
+
+        // 1. Obtenemos el usuario actual
+        const { data: { user } } = await miSupabase.auth.getUser();
+        
+        // 2. Intentamos iniciar sesión con la vieja para verificar
+        const { error: signInError } = await miSupabase.auth.signInWithPassword({
+            email: user.email,
+            password: oldPassword
+        });
+
+        if (signInError) {
+            return alert("❌ La contraseña actual que has introducido es incorrecta.");
+        }
+
+        // 3. Si la vieja es correcta, cambiamos a la nueva
+        const { error: updateError } = await miSupabase.auth.updateUser({ password: newPassword });
+
+        if (updateError) {
+            alert("Error al actualizar la contraseña: " + updateError.message);
+        } else {
+            showToast("✅ Contraseña actualizada con éxito");
+            document.getElementById('old_password').value = ""; 
+            document.getElementById('new_password').value = ""; 
+            setTimeout(() => volverAlHub(), 1500); 
+        }
+    }
+
     async function loadMyReviews() {
         const container = document.getElementById('reviews-container');
         container.innerHTML = '<div class="loader" style="display:block;">Cargando...</div>';
@@ -342,12 +403,10 @@
             return;
         }
 
-        // Agrupación de reseñas por fecha
         const reviewsPorFecha = {};
         
         filtradas.forEach(r => {
             const fechaObj = new Date(r.created_at);
-            // Creamos un string con la fecha "limpia" (ej: "25/10/2023") para usarlo como nombre de grupo
             const fechaCorta = fechaObj.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
             if (!reviewsPorFecha[fechaCorta]) {
@@ -356,24 +415,17 @@
             reviewsPorFecha[fechaCorta].push(r);
         });
 
-        // Helper para nombres de fecha bonitos (Hoy, Ayer...)
         const hoy = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const ayer = new Date(Date.now() - 86400000).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
         let html = '';
 
-        // Recorremos los grupos de fechas (como ya vienen ordenados de Supabase, el primer grupo es el más reciente)
         for (const [fecha, arrayResenas] of Object.entries(reviewsPorFecha)) {
-            
-            // Calculamos el nombre del separador
             let nombreSeparador = fecha;
             if (fecha === hoy) nombreSeparador = "Hoy";
             else if (fecha === ayer) nombreSeparador = "Ayer";
             
-            // Dibujamos el separador
             html += `<div class="date-separator">${nombreSeparador}</div>`;
-            
-            // Dibujamos el grid para ese día en concreto
             html += '<div class="reviews-grid">';
             
             arrayResenas.forEach(r => {
@@ -407,12 +459,11 @@
                     </div>
                 `;
             });
-            html += '</div>'; // Cerramos el grid de ese día
+            html += '</div>';
         }
         
         container.innerHTML = html;
     }
-    // --- FIN DE LÓGICA ---
 
     async function loadMyDishes() {
         const { data: { user } } = await miSupabase.auth.getUser();
@@ -426,7 +477,8 @@
     function renderLists() {
         const container = document.getElementById('dishes-container');
         container.innerHTML = ''; 
-        const categorias = ['entrantes', 'principales', 'postres', 'bebidas'];
+        
+        const categorias = ['bebidas', 'entrantes', 'principales', 'postres'];
 
         categorias.forEach(cat => {
             const platosCategoria = platosActuales.filter(p => p.categoria === cat);
@@ -460,7 +512,16 @@
                 listaElement.appendChild(div);
             });
 
-            new Sortable(listaElement, { animation: 150, handle: '.drag-handle', delay: 100, delayOnTouchOnly: true, onEnd: () => actualizarOrdenEnBaseDeDatos(cat) });
+            // MAGIA DE ARRASTRE: Ahora se arrastra la tarjeta entera (sin handle explícito) 
+            // pero le decimos (filter) que no permita arrastrar si se hace clic en ".acciones"
+            new Sortable(listaElement, { 
+                animation: 150, 
+                filter: '.acciones', // Evita que se arrastre si se hace clic en Editar/Eliminar
+                preventOnFilter: false, // Permite que el clic siga funcionando para Editar/Eliminar
+                delay: 50, // Pequeño retraso para distinguir entre tap y arrastre en móviles
+                delayOnTouchOnly: true, 
+                onEnd: () => actualizarOrdenEnBaseDeDatos(cat) 
+            });
         });
     }
 
