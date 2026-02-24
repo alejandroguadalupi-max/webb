@@ -80,7 +80,6 @@
         .dish-text strong { font-size: 1rem; font-weight: 500; color: var(--text-dark); }
         .dish-text span { font-size: 0.9rem; color: var(--text-muted); }
         
-        /* Botones de acción sobrios */
         .acciones { display: flex; gap: 8px; width: 100%; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 5px;}
         .btn-edit, .btn-delete { background: transparent; border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; padding: 6px; flex: 1; text-align: center; border-radius: 6px; transition: 0.2s;}
         .btn-edit { color: var(--text-dark); }
@@ -88,13 +87,27 @@
         .btn-delete { color: #dc2626; }
         .btn-delete:hover { background: #fef2f2; }
 
-        /* RESEÑAS */
-        .review-card { background: var(--bg-card); padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); }
+        /* SISTEMA DE PESTAÑAS (TABS) PARA RESEÑAS */
+        .tabs-container { display: flex; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none;}
+        .tabs-container::-webkit-scrollbar { display: none; }
+        .tab-btn { background: transparent; border: 1px solid var(--border); padding: 8px 16px; border-radius: 50px; font-family: inherit; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; font-weight: 500; transition: 0.2s;}
+        .tab-btn:hover { border-color: var(--text-muted); color: var(--text-dark); }
+        .tab-btn.active { background: var(--text-dark); color: white; border-color: var(--text-dark); }
+
+        /* AGRUPACIÓN POR FECHAS (NUEVO) */
+        .date-separator { margin: 30px 0 15px 0; display: flex; align-items: center; text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .date-separator::before, .date-separator::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
+        .date-separator:not(:empty)::before { margin-right: 15px; }
+        .date-separator:not(:empty)::after { margin-left: 15px; }
+
+        /* CUADRÍCULA DE RESEÑAS */
+        .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .review-card { background: var(--bg-card); padding: 20px; border-radius: 8px; border: 1px solid var(--border); height: 100%; display: flex; flex-direction: column;}
         .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .review-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
-        .review-date { font-size: 0.8rem; color: var(--text-muted); }
-        .review-text { color: var(--text-dark); line-height: 1.6; font-size: 0.95rem; margin: 0; font-weight: 300;}
-        .review-empty { text-align: center; color: var(--text-muted); padding: 40px 20px; font-weight: 300;}
+        .review-time { font-size: 0.75rem; color: #a1a1aa; } /* Solo muestra la hora dentro de la tarjeta */
+        .review-text { color: var(--text-dark); line-height: 1.6; font-size: 0.95rem; margin: 0; font-weight: 300; flex: 1;}
+        .review-empty { text-align: center; color: var(--text-muted); padding: 40px 20px; font-weight: 300; grid-column: 1 / -1;}
 
         .loader { display: none; color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 20px; }
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text-dark); color: white; padding: 10px 20px; border-radius: 6px; display: none; font-size: 0.9rem; font-weight: 400; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -117,6 +130,9 @@
             .btn-edit, .btn-delete { flex: none; padding: 8px 16px; border: 1px solid transparent; }
             .btn-edit:hover { border-color: var(--border); }
             .btn-delete:hover { border-color: #fca5a5; }
+
+            /* Grid 2 columnas para reseñas en PC */
+            .reviews-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -170,7 +186,7 @@
                     </div>
                     <div class="hub-text">
                         <span class="hub-title">Buzón de Opiniones</span>
-                        <span class="hub-desc">Lee el feedback privado de tus clientes.</span>
+                        <span class="hub-desc">Lee el feedback de tus clientes.</span>
                     </div>
                 </div>
             </div>
@@ -200,7 +216,16 @@
         </div>
 
         <div id="resenas-section" style="display:none;">
-            <h4 style="color: var(--text-dark); margin-bottom: 20px; font-size: 1.2rem;">Opiniones Recientes</h4>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                <h4 style="color: var(--text-dark); margin: 0; font-size: 1.2rem;">Opiniones de Clientes</h4>
+            </div>
+
+            <div class="tabs-container">
+                <button class="tab-btn active" data-filter="todas" onclick="cambiarPestana('todas')">Todas</button>
+                <button class="tab-btn" data-filter="google" onclick="cambiarPestana('google')">⭐ Google Maps</button>
+                <button class="tab-btn" data-filter="privadas" onclick="cambiarPestana('privadas')">🔒 Privadas (Web)</button>
+            </div>
+
             <div id="reviews-container">
                 <div class="loader" style="display:block;">Cargando opiniones...</div>
             </div>
@@ -217,6 +242,7 @@
     let currentRestaurant = null;
     let platosActuales = [];
     let platoEditandoId = null;
+    let reseñasActuales = []; 
 
     window.onload = async () => {
         const { data: { session } } = await miSupabase.auth.getSession();
@@ -280,34 +306,113 @@
         loadMyReviews();
     }
 
+    // --- LÓGICA DE RESEÑAS AGRUPADAS POR FECHA ---
     async function loadMyReviews() {
         const container = document.getElementById('reviews-container');
         container.innerHTML = '<div class="loader" style="display:block;">Cargando...</div>';
 
         const { data, error } = await miSupabase.from('resenas').select('*').order('created_at', { ascending: false });
 
-        if (error) { container.innerHTML = `<p style="color:red; font-size:0.9rem;">Error: ${error.message}</p>`; return; }
+        if (error) { 
+            container.innerHTML = `<p style="color:red; font-size:0.9rem;">Error: ${error.message}</p>`; 
+            return; 
+        }
 
-        if (!data || data.length === 0) {
-            container.innerHTML = `<div class="review-empty">Aún no hay opiniones registradas.</div>`;
+        reseñasActuales = data || [];
+        cambiarPestana('todas'); 
+    }
+
+    function cambiarPestana(filtro) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            if(btn.dataset.filter === filtro) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        let filtradas = reseñasActuales;
+        if (filtro === 'google') filtradas = reseñasActuales.filter(r => r.origen === 'Google');
+        if (filtro === 'privadas') filtradas = reseñasActuales.filter(r => r.origen !== 'Google');
+
+        const container = document.getElementById('reviews-container');
+        
+        if (filtradas.length === 0) {
+            container.innerHTML = `<div class="review-empty">No hay opiniones en esta categoría.</div>`;
             return;
         }
 
-        container.innerHTML = '';
-        data.forEach(r => {
-            const fecha = new Date(r.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-            const estrellas = '★'.repeat(r.valoracion) + '☆'.repeat(5 - r.valoracion);
-            container.innerHTML += `
-                <div class="review-card">
-                    <div class="review-header">
-                        <div class="review-stars">${estrellas}</div>
-                        <div class="review-date">${fecha}</div>
-                    </div>
-                    <p class="review-text">"${r.comentario}"</p>
-                </div>
-            `;
+        // Agrupación de reseñas por fecha
+        const reviewsPorFecha = {};
+        
+        filtradas.forEach(r => {
+            const fechaObj = new Date(r.created_at);
+            // Creamos un string con la fecha "limpia" (ej: "25/10/2023") para usarlo como nombre de grupo
+            const fechaCorta = fechaObj.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            
+            if (!reviewsPorFecha[fechaCorta]) {
+                reviewsPorFecha[fechaCorta] = [];
+            }
+            reviewsPorFecha[fechaCorta].push(r);
         });
+
+        // Helper para nombres de fecha bonitos (Hoy, Ayer...)
+        const hoy = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const ayer = new Date(Date.now() - 86400000).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+        let html = '';
+
+        // Recorremos los grupos de fechas (como ya vienen ordenados de Supabase, el primer grupo es el más reciente)
+        for (const [fecha, arrayResenas] of Object.entries(reviewsPorFecha)) {
+            
+            // Calculamos el nombre del separador
+            let nombreSeparador = fecha;
+            if (fecha === hoy) nombreSeparador = "Hoy";
+            else if (fecha === ayer) nombreSeparador = "Ayer";
+            
+            // Dibujamos el separador
+            html += `<div class="date-separator">${nombreSeparador}</div>`;
+            
+            // Dibujamos el grid para ese día en concreto
+            html += '<div class="reviews-grid">';
+            
+            arrayResenas.forEach(r => {
+                const fechaObj = new Date(r.created_at);
+                const hora = fechaObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                const estrellas = '★'.repeat(r.valoracion) + '☆'.repeat(5 - r.valoracion);
+                
+                let origenHTML = '';
+                if (r.origen === 'Google') {
+                    origenHTML = `<span style="background:#e8f0fe; color:#1a73e8; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold; display:inline-flex; align-items:center; gap:5px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" style="stroke:none;"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                                    Google
+                                  </span>`;
+                } else {
+                    origenHTML = `<span style="background:#f3f4f6; color:#6b7280; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold; display:inline-flex; align-items:center; gap:5px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" style="stroke:currentColor; fill:none;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    Privada
+                                  </span>`;
+                }
+
+                html += `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div class="review-stars">${estrellas}</div>
+                                ${origenHTML}
+                            </div>
+                            <div class="review-time">${hora}</div>
+                        </div>
+                        <p class="review-text">"${r.comentario}"</p>
+                    </div>
+                `;
+            });
+            html += '</div>'; // Cerramos el grid de ese día
+        }
+        
+        container.innerHTML = html;
     }
+    // --- FIN DE LÓGICA ---
 
     async function loadMyDishes() {
         const { data: { user } } = await miSupabase.auth.getUser();
