@@ -6,130 +6,206 @@
     <title>Admin - Panel de Control</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --brand: #a0715e; --bg: #fffbf2; --text: #3e2b26; --white: #ffffff; }
+        :root { 
+            --brand: #a0715e; 
+            --bg-light: #f8f9fa; 
+            --bg-card: #ffffff;
+            --text-dark: #1f2937; 
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --border-focus: #d1d5db;
+        }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; padding-bottom: 80px; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-light); color: var(--text-dark); margin: 0; padding: 0; padding-bottom: 80px; letter-spacing: 0.2px; }
         
-        .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         
-        /* HEADER NAV */
-        .admin-nav { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo { font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; }
-        .btn-logout { padding: 8px 15px; background: #666; color: white; border: none; border-radius: 8px; font-size: 0.85rem; cursor: pointer; font-weight: bold; }
+        /* HEADER NAV (Minimalista) */
+        .admin-nav { background: var(--bg-card); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+        .logo { font-weight: 600; color: var(--text-dark); font-size: 1.1rem; display: flex; align-items: center; gap: 15px; letter-spacing: 0.5px;}
+        
+        /* BOTONES NAV */
+        .nav-actions { display: flex; gap: 15px; align-items: center;}
+        .btn-volver { background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; font-weight: 500; cursor: pointer; display: none; transition: 0.2s;}
+        .btn-volver:hover { color: var(--text-dark); border-color: var(--text-muted); }
+        .btn-logout { background: transparent; color: var(--text-muted); border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; text-decoration: underline; }
+        .btn-logout:hover { color: var(--text-dark); }
 
         /* CARDS */
-        .card { background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(62, 43, 38, 0.05); margin-bottom: 25px; border: 1px solid rgba(160, 113, 94, 0.1); width: 100%; }
-        h2, h4 { margin-top: 0; color: var(--brand); }
+        .card { background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 30px; width: 100%; }
+        h2, h4 { margin-top: 0; font-weight: 600; }
+        h4 { color: var(--text-dark); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;}
 
-        /* FORMULARIO RESPONSIVO (Móvil por defecto) */
-        .grid-form { display: grid; grid-template-columns: 1fr; gap: 12px; }
-        /* La clase full abarca todas las columnas sin importar cuántas haya */
+        /* --- MENÚ HUB --- */
+        .hub-header { text-align: left; margin-bottom: 30px; margin-top: 10px; }
+        .hub-header h2 { font-size: 1.8rem; margin-bottom: 5px; color: var(--text-dark); font-weight: 400;}
+        .hub-header h2 strong { font-weight: 600; color: var(--brand); }
+        .hub-header p { color: var(--text-muted); margin: 0; font-weight: 300;}
+        
+        .hub-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .hub-btn { background: var(--bg-card); border: 1px solid var(--border); padding: 25px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 20px; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .hub-btn:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .hub-icon { font-size: 1.5rem; color: var(--brand); background: rgba(160, 113, 94, 0.1); padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: center;}
+        .hub-text { display: flex; flex-direction: column; }
+        .hub-title { font-size: 1.1rem; font-weight: 500; color: var(--text-dark); }
+        .hub-desc { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* FORMULARIO */
+        .grid-form { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .full { grid-column: 1 / -1; }
+        input, select, textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.2s; color: var(--text-dark); }
+        input:focus, textarea:focus { border-color: var(--text-muted); box-shadow: 0 0 0 3px rgba(0,0,0,0.03); }
+        input::placeholder, textarea::placeholder { color: #a1a1aa; }
+        textarea { min-height: 80px; resize: vertical; }
         
-        input, select, textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e6ddd0; background: #fafafa; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; }
-        input:focus, textarea:focus { border-color: var(--brand); background: white; }
-        textarea { min-height: 100px; resize: vertical; }
+        button.primary-btn { padding: 14px; background: var(--text-dark); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.95rem; transition: 0.2s; width: 100%; letter-spacing: 0.5px;}
+        button.primary-btn:hover { background: #000; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        /* BOTONES PRINCIPALES */
-        button { padding: 16px; background: var(--brand); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.3s; display: flex; justify-content: center; align-items: center; width: 100%; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(160, 113, 94, 0.3); }
-        button:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
-        .btn-cancel { background: #888; display: none; }
-        .btn-cancel:hover { background: #666; }
+        .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 8px; display: none; padding: 14px; cursor: pointer; font-weight: 500;}
+        .btn-cancel:hover { background: #f3f4f6; color: var(--text-dark); }
 
-        /* DISEÑO DE PLATOS ARRASTRABLES */
-        .categoria-titulo { margin-top: 30px; border-bottom: 2px solid var(--brand); padding-bottom: 5px; color: var(--brand); text-transform: uppercase; font-size: 1.2rem;}
-        .lista-platos { min-height: 50px; background: rgba(0,0,0,0.02); border-radius: 15px; padding: 10px; margin-top: 10px; }
+        /* PLATOS */
+        .categoria-titulo { margin-top: 40px; margin-bottom: 15px; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;}
+        .lista-platos { min-height: 20px; }
         
-        /* Plato en versión móvil */
-        .dish-item { background: white; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 12px; border: 1px solid #ddd; cursor: grab; transition: box-shadow 0.2s;}
-        .dish-item:active { cursor: grabbing; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .dish-item { background: var(--bg-card); padding: 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 10px; border: 1px solid var(--border); cursor: grab; transition: border-color 0.2s;}
+        .dish-item:active { cursor: grabbing; border-color: var(--text-muted); }
         
-        .dish-info { display: flex; align-items: center; gap: 12px; width: 100%; }
-        .drag-handle { color: #ccc; font-size: 1.5rem; cursor: grab; padding-right: 5px; }
-        .dish-text { display: flex; flex-direction: column; flex: 1; line-height: 1.3; }
-        .dish-text strong { font-size: 1.05rem; color: var(--text); }
-        .dish-text span { font-size: 0.9rem; color: var(--brand); font-weight: bold; margin-top: 2px;}
+        .dish-info { display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+        .drag-handle { color: #d1d5db; font-size: 1.2rem; cursor: grab; padding-top: 2px; }
+        .dish-text { display: flex; flex-direction: column; flex: 1; line-height: 1.4; }
+        .dish-text strong { font-size: 1rem; font-weight: 500; color: var(--text-dark); }
+        .dish-text span { font-size: 0.9rem; color: var(--text-muted); }
         
-        .acciones { display: flex; gap: 10px; width: 100%; justify-content: flex-end; }
-        .btn-edit { background: #e0f2fe; color: #0284c7; padding: 10px 15px; border-radius: 8px; font-size: 0.9rem; border:none; cursor:pointer; font-weight: bold; width: auto; flex: 1; text-align: center; }
-        .btn-delete { background: #fee2e2; color: #ef4444; padding: 10px 15px; border-radius: 8px; font-size: 0.9rem; border:none; cursor:pointer; font-weight: bold; width: auto; flex: 1; text-align: center; }
+        /* Botones de acción sobrios */
+        .acciones { display: flex; gap: 8px; width: 100%; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 5px;}
+        .btn-edit, .btn-delete { background: transparent; border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; padding: 6px; flex: 1; text-align: center; border-radius: 6px; transition: 0.2s;}
+        .btn-edit { color: var(--text-dark); }
+        .btn-edit:hover { background: #f3f4f6; }
+        .btn-delete { color: #dc2626; }
+        .btn-delete:hover { background: #fef2f2; }
 
-        .loader { display: none; color: var(--brand); font-weight: 600; margin-top: 10px; font-size: 0.9rem; text-align: center; }
-        #restaurant-info { margin-bottom: 20px; font-weight: 600; color: #888; text-align: center;}
-        
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #4caf50; color: white; padding: 12px 24px; border-radius: 50px; display: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000; text-align: center; width: max-content; }
+        /* RESEÑAS */
+        .review-card { background: var(--bg-card); padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .review-stars { color: #fbbf24; font-size: 1.1rem; letter-spacing: 2px; }
+        .review-date { font-size: 0.8rem; color: var(--text-muted); }
+        .review-text { color: var(--text-dark); line-height: 1.6; font-size: 0.95rem; margin: 0; font-weight: 300;}
+        .review-empty { text-align: center; color: var(--text-muted); padding: 40px 20px; font-weight: 300;}
 
-        /* =========================================
-           ADAPTACIÓN PARA TABLET Y ORDENADOR
-           ========================================= */
+        .loader { display: none; color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 20px; }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text-dark); color: white; padding: 10px 20px; border-radius: 6px; display: none; font-size: 0.9rem; font-weight: 400; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        /* SVG Icons */
+        svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
         @media (min-width: 768px) {
-            .container { padding: 30px; }
-            .card { padding: 30px; }
-            
-            /* El formulario pasa a 3 columnas */
+            .container { padding: 40px 20px; }
+            .hub-grid { grid-template-columns: 1fr 1fr; }
             .grid-form { grid-template-columns: 2fr 1fr 1fr; gap: 20px; }
             
-            /* Los platos pasan a 1 sola fila horizontal */
             .dish-item { flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px; gap: 20px;}
-            .dish-info { width: auto; flex: 1; }
-            .dish-text { flex-direction: row; align-items: center; gap: 10px; }
-            .dish-text span { margin-top: 0; border-left: 2px solid #eee; padding-left: 10px; }
+            .dish-info { width: auto; flex: 1; align-items: center;}
+            .drag-handle { padding-top: 0; }
+            .dish-text { flex-direction: row; align-items: center; gap: 15px; }
+            .dish-text span { border-left: 1px solid var(--border); padding-left: 15px; }
             
-            /* Los botones de acción no ocupan todo el ancho */
-            .acciones { width: auto; justify-content: flex-end; }
-            .btn-edit, .btn-delete { flex: none; padding: 8px 16px; }
-            button { width: auto; padding: 14px 24px; }
+            .acciones { width: auto; justify-content: flex-end; border-top: none; padding-top: 0; margin-top: 0;}
+            .btn-edit, .btn-delete { flex: none; padding: 8px 16px; border: 1px solid transparent; }
+            .btn-edit:hover { border-color: var(--border); }
+            .btn-delete:hover { border-color: #fca5a5; }
         }
     </style>
 </head>
 <body>
 
-<div id="toast">✅ Orden actualizado</div>
+<div id="toast">Operación exitosa</div>
 
-<div id="login-section" style="max-width: 350px; margin: 10vh auto; padding: 30px 20px;" class="card">
-    <h2 style="text-align:center" class="logo">Acceso Dueños</h2>
-    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">
-        <input type="email" id="email" placeholder="Email corporativo">
-        <input type="password" id="password" placeholder="Contraseña">
-        <button onclick="handleLogin()" style="width: 100%;">Iniciar Sesión</button>
+<div id="login-section" style="max-width: 380px; margin: 15vh auto; padding: 0 20px;">
+    <div class="card" style="padding: 35px 25px;">
+        <h2 style="text-align:center; color: var(--text-dark); margin-bottom: 25px; font-weight: 500;">Acceso Administrativo</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <input type="email" id="email" placeholder="Correo electrónico">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button onclick="handleLogin()" class="primary-btn" style="margin-top: 10px;">Iniciar Sesión</button>
+        </div>
     </div>
 </div>
 
 <div id="admin-dashboard" style="display: none;">
     <nav class="admin-nav">
-        <div class="logo">Panel Admin</div>
-        <button onclick="handleLogout()" class="btn-logout">Cerrar Sesión</button>
+        <div class="logo">
+            <button id="btnVolver" class="btn-volver" onclick="volverAlHub()">← Menú Principal</button>
+            <span id="nav-title">Panel de Control</span>
+        </div>
+        <div class="nav-actions">
+            <button onclick="handleLogout()" class="btn-logout">Cerrar Sesión</button>
+        </div>
     </nav>
 
     <div class="container">
-        <div id="restaurant-info">Cargando restaurante...</div>
-
-        <div class="card" id="form-container" style="display:none;">
-            <h4 id="form-title">✨ Añadir Nuevo Plato</h4>
+        <div id="hub-section">
+            <div class="hub-header">
+                <h2>Hola, <strong id="hub-nombre-local">Usuario</strong></h2>
+                <p>Selecciona una opción para administrar tu negocio.</p>
+            </div>
             
-            <div class="grid-form">
-                <input type="text" id="nombre_es" class="full" placeholder="Nombre del plato (ej: Croquetas)">
-                <textarea id="desc_es" class="full" placeholder="Descripción de los ingredientes..."></textarea>
-                <input type="number" id="precio" placeholder="Precio (€)" step="0.01">
-                <select id="categoria">
-                    <option value="entrantes">Entrantes</option>
-                    <option value="principales">Principales</option>
-                    <option value="postres">Postres</option>
-                    <option value="bebidas">Bebidas</option>
-                </select>
-                <div style="display: flex; gap: 10px; width: 100%;">
-                    <button id="btnGuardar" onclick="saveDishWithAutoTranslate()" style="flex: 2;">Guardar Plato</button>
-                    <button id="btnCancelar" class="btn-cancel" onclick="cancelEdit()" style="flex: 1;">Cancelar</button>
+            <div class="hub-grid">
+                <div class="hub-btn" onclick="abrirSeccionCarta()">
+                    <div class="hub-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4 19h16v-2H4v2zm16-4H4V5h16v10zM4 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4z"/></svg>
+                    </div>
+                    <div class="hub-text">
+                        <span class="hub-title">Gestionar Carta</span>
+                        <span class="hub-desc">Añade, edita o reorganiza tus platos.</span>
+                    </div>
+                </div>
+                
+                <div class="hub-btn" onclick="abrirSeccionResenas()">
+                    <div class="hub-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <div class="hub-text">
+                        <span class="hub-title">Buzón de Opiniones</span>
+                        <span class="hub-desc">Lee el feedback privado de tus clientes.</span>
+                    </div>
                 </div>
             </div>
-            <div id="loadingMsg" class="loader">⏳ Guardando y traduciendo...</div>
         </div>
 
-        <div id="dishes-container">
+        <div id="carta-section" style="display:none;">
+            <div class="card" id="form-container">
+                <h4 id="form-title">Añadir Nuevo Plato</h4>
+                <div class="grid-form">
+                    <input type="text" id="nombre_es" class="full" placeholder="Nombre del plato">
+                    <textarea id="desc_es" class="full" placeholder="Descripción detallada de ingredientes..."></textarea>
+                    <input type="number" id="precio" placeholder="Precio (€)" step="0.01">
+                    <select id="categoria">
+                        <option value="entrantes">Entrantes</option>
+                        <option value="principales">Principales</option>
+                        <option value="postres">Postres</option>
+                        <option value="bebidas">Bebidas</option>
+                    </select>
+                    <div style="display: flex; gap: 10px; width: 100%; margin-top: 5px;">
+                        <button id="btnGuardar" onclick="saveDishWithAutoTranslate()" class="primary-btn" style="flex: 2;">Guardar Plato</button>
+                        <button id="btnCancelar" class="btn-cancel" onclick="cancelEdit()" style="flex: 1;">Cancelar</button>
+                    </div>
+                </div>
+                <div id="loadingMsg" class="loader">Procesando y guardando...</div>
             </div>
+            <div id="dishes-container"></div>
+        </div>
+
+        <div id="resenas-section" style="display:none;">
+            <h4 style="color: var(--text-dark); margin-bottom: 20px; font-size: 1.2rem;">Opiniones Recientes</h4>
+            <div id="reviews-container">
+                <div class="loader" style="display:block;">Cargando opiniones...</div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -150,129 +226,152 @@
     async function handleLogin() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const btn = document.querySelector('#login-section button');
+        btn.innerText = "Iniciando...";
+        
         const { error } = await miSupabase.auth.signInWithPassword({ email, password });
-        if (error) alert("Error: " + error.message);
-        else showDashboard();
+        if (error) {
+            alert("Error: " + error.message);
+            btn.innerText = "Iniciar Sesión";
+        } else {
+            showDashboard();
+        }
     }
 
     async function showDashboard() {
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('admin-dashboard').style.display = 'block';
         await loadRestaurantData();
-        if (currentRestaurant) loadMyDishes();
+        volverAlHub();
     }
 
     async function loadRestaurantData() {
         const { data: { user } } = await miSupabase.auth.getUser();
         const { data, error } = await miSupabase.from('restaurantes').select('id, nombre, slug').eq('owner_id', user.id).single();
-        const infoDiv = document.getElementById('restaurant-info');
-        if (error || !data) {
-            infoDiv.innerHTML = "⚠️ No tienes un restaurante asignado.";
-            infoDiv.style.color = "red";
+        
+        if (error || !data) return;
+        currentRestaurant = data;
+        document.getElementById('hub-nombre-local').innerText = data.nombre;
+    }
+
+    function volverAlHub() {
+        document.getElementById('hub-section').style.display = 'block';
+        document.getElementById('carta-section').style.display = 'none';
+        document.getElementById('resenas-section').style.display = 'none';
+        document.getElementById('btnVolver').style.display = 'none';
+        document.getElementById('nav-title').innerText = "Panel de Control";
+    }
+
+    function abrirSeccionCarta() {
+        if(!currentRestaurant) return alert("Sin restaurante asignado.");
+        document.getElementById('hub-section').style.display = 'none';
+        document.getElementById('carta-section').style.display = 'block';
+        document.getElementById('btnVolver').style.display = 'inline-block';
+        document.getElementById('nav-title').innerText = "Editor de Carta";
+        loadMyDishes();
+    }
+
+    function abrirSeccionResenas() {
+        if(!currentRestaurant) return alert("Sin restaurante asignado.");
+        document.getElementById('hub-section').style.display = 'none';
+        document.getElementById('resenas-section').style.display = 'block';
+        document.getElementById('btnVolver').style.display = 'inline-block';
+        document.getElementById('nav-title').innerText = "Buzón de Opiniones";
+        loadMyReviews();
+    }
+
+    async function loadMyReviews() {
+        const container = document.getElementById('reviews-container');
+        container.innerHTML = '<div class="loader" style="display:block;">Cargando...</div>';
+
+        const { data, error } = await miSupabase.from('resenas').select('*').order('created_at', { ascending: false });
+
+        if (error) { container.innerHTML = `<p style="color:red; font-size:0.9rem;">Error: ${error.message}</p>`; return; }
+
+        if (!data || data.length === 0) {
+            container.innerHTML = `<div class="review-empty">Aún no hay opiniones registradas.</div>`;
             return;
         }
-        currentRestaurant = data;
-        infoDiv.innerHTML = `Gestionando local: <span style="color:var(--brand)">${data.nombre}</span>`;
-        document.getElementById('form-container').style.display = "block";
+
+        container.innerHTML = '';
+        data.forEach(r => {
+            const fecha = new Date(r.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+            const estrellas = '★'.repeat(r.valoracion) + '☆'.repeat(5 - r.valoracion);
+            container.innerHTML += `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-stars">${estrellas}</div>
+                        <div class="review-date">${fecha}</div>
+                    </div>
+                    <p class="review-text">"${r.comentario}"</p>
+                </div>
+            `;
+        });
     }
 
     async function loadMyDishes() {
         const { data: { user } } = await miSupabase.auth.getUser();
-        
-        const { data, error } = await miSupabase
-            .from('platos')
-            .select('*')
-            .eq('owner_id', user.id)
-            .order('orden', { ascending: true })
-            .order('id', { ascending: true }); // Seguro anti-fantasmas
+        const { data, error } = await miSupabase.from('platos').select('*').eq('owner_id', user.id).order('orden', { ascending: true }).order('id', { ascending: true });
         
         if (error) return console.error(error);
         platosActuales = data;
-        
         renderLists();
     }
 
     function renderLists() {
         const container = document.getElementById('dishes-container');
         container.innerHTML = ''; 
-
         const categorias = ['entrantes', 'principales', 'postres', 'bebidas'];
 
         categorias.forEach(cat => {
             const platosCategoria = platosActuales.filter(p => p.categoria === cat);
-            
             const block = document.createElement('div');
             block.innerHTML = `
-                <h3 class="categoria-titulo">${cat}</h3>
-                <div class="lista-platos" id="lista-${cat}" data-categoria="${cat}">
-                    ${platosCategoria.length === 0 ? '<p style="color:#aaa; text-align:center; margin:0; padding: 10px;">Vacío. Añade platos aquí.</p>' : ''}
+                <div class="categoria-titulo">${cat}</div>
+                <div class="lista-platos" id="lista-${cat}">
+                    ${platosCategoria.length === 0 ? '<p style="color:#a1a1aa; font-size:0.9rem; margin:0;">Sin elementos</p>' : ''}
                 </div>
             `;
             container.appendChild(block);
 
             const listaElement = document.getElementById(`lista-${cat}`);
             platosCategoria.forEach(p => {
-                const nombrePlato = p.nombre?.es || 'Sin nombre';
                 const div = document.createElement('div');
                 div.className = 'dish-item';
                 div.dataset.id = p.id; 
-                
-                // Estructura HTML optimizada para flexbox responsivo
                 div.innerHTML = `
                     <div class="dish-info">
-                        <span class="drag-handle">☰</span>
+                        <span class="drag-handle">⋮</span>
                         <div class="dish-text">
-                            <strong>${nombrePlato}</strong>
+                            <strong>${p.nombre?.es || 'Sin nombre'}</strong>
                             <span>${p.precio}€</span>
                         </div>
                     </div>
                     <div class="acciones">
                         <button class="btn-edit" onclick="iniciarEdicion(${p.id})">Editar</button>
-                        <button class="btn-delete" onclick="deleteDish(${p.id})">Borrar</button>
+                        <button class="btn-delete" onclick="deleteDish(${p.id})">Eliminar</button>
                     </div>
                 `;
                 listaElement.appendChild(div);
             });
 
-            new Sortable(listaElement, {
-                animation: 150,
-                handle: '.drag-handle', // Ahora se agarra específicamente del icono, mejora en táctil
-                delay: 100, // Pequeño delay en móvil para evitar arrastres accidentales al hacer scroll
-                delayOnTouchOnly: true,
-                onEnd: function (evt) {
-                    actualizarOrdenEnBaseDeDatos(cat);
-                }
-            });
+            new Sortable(listaElement, { animation: 150, handle: '.drag-handle', delay: 100, delayOnTouchOnly: true, onEnd: () => actualizarOrdenEnBaseDeDatos(cat) });
         });
     }
 
-    async function actualizarOrdenEnBaseDeDatos(categoria) {
-        const listaHTML = document.getElementById(`lista-${categoria}`);
-        const items = listaHTML.querySelectorAll('.dish-item');
-        const actualizaciones = [];
-        
-        items.forEach((item, index) => {
-            const platoId = item.dataset.id;
-            actualizaciones.push({ id: parseInt(platoId), orden: index });
-        });
-
-        for (let actualizacion of actualizaciones) {
-            const { error } = await miSupabase
-                .from('platos')
-                .update({ orden: actualizacion.orden })
-                .eq('id', actualizacion.id);
-            
-            if (error) {
-                console.error("Error al guardar el nuevo orden:", error.message);
-                alert("Hubo un problema al guardar el orden. Recarga la página.");
-                return;
-            }
-        }
-
+    function showToast(msg) {
         const toast = document.getElementById('toast');
+        toast.innerText = msg;
         toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 2500);
-        
+        setTimeout(() => toast.style.display = 'none', 2000);
+    }
+
+    async function actualizarOrdenEnBaseDeDatos(categoria) {
+        const items = document.getElementById(`lista-${categoria}`).querySelectorAll('.dish-item');
+        for (let i = 0; i < items.length; i++) {
+            await miSupabase.from('platos').update({ orden: i }).eq('id', items[i].dataset.id);
+        }
+        showToast("Orden guardado");
         const { data: { user } } = await miSupabase.auth.getUser();
         const { data } = await miSupabase.from('platos').select('*').eq('owner_id', user.id).order('orden', { ascending: true });
         platosActuales = data;
@@ -282,85 +381,66 @@
         const nombre_es = document.getElementById('nombre_es').value;
         const desc_es = document.getElementById('desc_es').value;
         const precio = document.getElementById('precio').value;
-        const categoriaSeleccionada = document.getElementById('categoria').value;
+        const categoria = document.getElementById('categoria').value;
         
-        if(!nombre_es || !precio) return alert("El nombre y el precio son obligatorios.");
+        if(!nombre_es || !precio) return alert("Nombre y precio requeridos.");
 
         document.getElementById('btnGuardar').disabled = true;
         document.getElementById('loadingMsg').style.display = 'block';
 
         try {
             const { data: { user } } = await miSupabase.auth.getUser();
-            
-            const targetLangs = ['en', 'de', 'fr', 'it'];
+            const langs = ['en', 'de', 'fr', 'it'];
             const nombreObj = { es: nombre_es };
             const descObj = { es: desc_es };
 
-            for (let lang of targetLangs) {
-                nombreObj[lang] = await translateAPI(nombre_es, lang);
-                descObj[lang] = await translateAPI(desc_es, lang);
+            for (let l of langs) {
+                nombreObj[l] = await translateAPI(nombre_es, l);
+                descObj[l] = await translateAPI(desc_es, l);
             }
 
-            const platosMismaCat = platosActuales.filter(p => p.categoria === categoriaSeleccionada);
-            const nuevoOrdenAutomatico = platosMismaCat.length;
-
-            const platoData = {
-                nombre: nombreObj,
-                descripcion: descObj,
-                precio: parseFloat(precio),
-                categoria: categoriaSeleccionada,
-                disponible: true,
-                owner_id: user.id,
-                restaurant_id: currentRestaurant.id,
-                slug: currentRestaurant.slug
-            };
+            const platoData = { nombre: nombreObj, descripcion: descObj, precio: parseFloat(precio), categoria: categoria, disponible: true, owner_id: user.id, restaurant_id: currentRestaurant.id, slug: currentRestaurant.slug };
 
             if (platoEditandoId) {
                 await miSupabase.from('platos').update(platoData).eq('id', platoEditandoId);
+                showToast("Plato actualizado");
             } else {
-                platoData.orden = nuevoOrdenAutomatico; 
+                platoData.orden = platosActuales.filter(p => p.categoria === categoria).length; 
                 await miSupabase.from('platos').insert([platoData]);
+                showToast("Plato creado");
             }
-
-            cancelEdit();
-            loadMyDishes();
-
-        } catch (err) {
-            alert("Error al guardar: " + err.message);
-        } finally {
-            document.getElementById('btnGuardar').disabled = false;
-            document.getElementById('loadingMsg').style.display = 'none';
-        }
+            cancelEdit(); loadMyDishes();
+        } catch (err) { alert("Error: " + err.message); } 
+        finally { document.getElementById('btnGuardar').disabled = false; document.getElementById('loadingMsg').style.display = 'none'; }
     }
 
     function iniciarEdicion(id) {
-        const plato = platosActuales.find(p => p.id === id);
+        const p = platosActuales.find(x => x.id === id);
         platoEditandoId = id;
-        document.getElementById('nombre_es').value = plato.nombre?.es || "";
-        document.getElementById('desc_es').value = plato.descripcion?.es || "";
-        document.getElementById('precio').value = plato.precio;
-        document.getElementById('categoria').value = plato.categoria;
-        
-        document.getElementById('form-title').innerText = "✏️ Editando Plato";
-        document.getElementById('btnGuardar').innerText = "Actualizar";
+        document.getElementById('nombre_es').value = p.nombre?.es || "";
+        document.getElementById('desc_es').value = p.descripcion?.es || "";
+        document.getElementById('precio').value = p.precio;
+        document.getElementById('categoria').value = p.categoria;
+        document.getElementById('form-title').innerText = "Editando plato";
+        document.getElementById('btnGuardar').innerText = "Guardar cambios";
         document.getElementById('btnCancelar').style.display = "block";
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function cancelEdit() {
         platoEditandoId = null;
-        document.getElementById('nombre_es').value = "";
-        document.getElementById('desc_es').value = "";
-        document.getElementById('precio').value = "";
-        document.getElementById('form-title').innerText = "✨ Añadir Nuevo Plato";
+        document.querySelectorAll('input, textarea').forEach(i => i.value = "");
+        document.getElementById('form-title').innerText = "Añadir Nuevo Plato";
         document.getElementById('btnGuardar').innerText = "Guardar Plato";
         document.getElementById('btnCancelar').style.display = "none";
     }
 
     async function deleteDish(id) {
-        if(!confirm("¿Estás seguro de que quieres borrar este plato?")) return;
-        await miSupabase.from('platos').delete().eq('id', id);
-        loadMyDishes();
+        if(confirm("¿Eliminar plato definitivamente?")) {
+            await miSupabase.from('platos').delete().eq('id', id);
+            loadMyDishes();
+            showToast("Plato eliminado");
+        }
     }
 
     async function translateAPI(text, target) {
@@ -372,10 +452,7 @@
         } catch (e) { return text; }
     }
 
-    async function handleLogout() {
-        await miSupabase.auth.signOut();
-        location.reload();
-    }
+    async function handleLogout() { await miSupabase.auth.signOut(); location.reload(); }
 </script>
 </body>
 </html>

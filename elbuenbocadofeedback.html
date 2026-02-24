@@ -187,77 +187,36 @@
 
 <div style="height: 30px; width: 100%;"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// URL del script de Google Apps Script (Mantenemos la que pasaste o una demo)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo4q3MIwWjXgE88lIl5_E8UdsrxNmwGvjQATsZ9rLXoha2EixB5BdozivNJ24W_NYH/exec"; 
+// --- CONFIGURACIÓN SUPABASE ---
+const SUPABASE_URL = "https://xfylujdfpmajnbmuiebv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmeWx1amRmcG1ham5ibXVpZWJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTczMTEsImV4cCI6MjA4NzM3MzMxMX0.S6NLD1pyObNpg_sRD60Od8q7MmNWMMLnwq8YLVEhtew"; 
+const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const translations = {
   es: {
-    title: "Tu Opinión",
-    subtitle: "Ayúdanos a mejorar contándonos tu experiencia de hoy.",
-    lblRating: "¿Cómo fue tu experiencia general? *",
-    lblComment: "¿Qué podemos mejorar? *",
-    placeholder: "La comida estaba...",
-    submit: "Enviar Comentario",
-    sending: "Enviando...",
-    alertStar: "Por favor, selecciona una puntuación de estrellas.",
-    alertComment: "Por favor, escribe un comentario.",
+    title: "Tu Opinión", subtitle: "Ayúdanos a mejorar contándonos tu experiencia de hoy.",
+    lblRating: "¿Cómo fue tu experiencia general? *", lblComment: "¿Qué podemos mejorar? *",
+    placeholder: "La comida estaba...", submit: "Enviar Comentario", sending: "Enviando...",
+    alertStar: "Por favor, selecciona una puntuación de estrellas.", alertComment: "Por favor, escribe un comentario."
   },
   en: {
-    title: "Your Opinion",
-    subtitle: "Help us improve by sharing your experience today.",
-    lblRating: "How was your overall experience? *",
-    lblComment: "What can we improve? *",
-    placeholder: "The food was...",
-    submit: "Send Feedback",
-    sending: "Sending...",
-    alertStar: "Please select a star rating.",
-    alertComment: "Please write a comment.",
+    title: "Your Opinion", subtitle: "Help us improve by sharing your experience today.",
+    lblRating: "How was your overall experience? *", lblComment: "What can we improve? *",
+    placeholder: "The food was...", submit: "Send Feedback", sending: "Sending...",
+    alertStar: "Please select a star rating.", alertComment: "Please write a comment."
   },
-  de: {
-    title: "Ihre Meinung",
-    subtitle: "Helfen Sie uns, besser zu werden.",
-    lblRating: "Wie war Ihre Erfahrung? *",
-    lblComment: "Was können wir verbessern? *",
-    placeholder: "Das Essen war...",
-    submit: "Feedback senden",
-    sending: "Senden...",
-    alertStar: "Bitte wählen Sie eine Sternebewertung.",
-    alertComment: "Bitte schreiben Sie einen Kommentar.",
-  },
-  fr: {
-    title: "Votre Avis",
-    subtitle: "Aidez-nous à nous améliorer.",
-    lblRating: "Comment s'est passée votre expérience ? *",
-    lblComment: "Que pouvons-nous améliorer ? *",
-    placeholder: "La nourriture était...",
-    submit: "Envoyer",
-    sending: "Envoi...",
-    alertStar: "Veuillez sélectionner une note.",
-    alertComment: "Veuillez écrire un commentaire.",
-  },
-  it: {
-    title: "La Tua Opinione",
-    subtitle: "Aiutaci a migliorare la tua esperienza.",
-    lblRating: "Com'è stata la tua esperienza? *",
-    lblComment: "Cosa possiamo migliorare? *",
-    placeholder: "Il cibo era...",
-    submit: "Invia Feedback",
-    sending: "Invio...",
-    alertStar: "Seleziona un punteggio.",
-    alertComment: "Scrivi un commento.",
-  }
+  // ... (puedes mantener el resto de tus idiomas aquí igual que los tenías)
 };
 
 let currentLang = 'es';
 
 function init() {
-  // 1. TEMA
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '🌙' : '☀️';
 
-  // 2. IDIOMA
   currentLang = localStorage.getItem('userLang') || navigator.language.slice(0, 2);
   if (!translations[currentLang]) currentLang = 'es';
   translateUI();
@@ -265,7 +224,7 @@ function init() {
 
 function translateUI() {
   const t = translations[currentLang];
-  document.getElementById('pageTitle').innerText = t.title; // TÍTULO TRADUCIDO
+  document.getElementById('pageTitle').innerText = t.title;
   document.getElementById('txtSubtitle').innerText = t.subtitle;
   document.getElementById('lblRating').innerText = t.lblRating;
   document.getElementById('lblComment').innerText = t.lblComment;
@@ -273,7 +232,6 @@ function translateUI() {
   document.getElementById('submitBtn').innerText = t.submit;
 }
 
-// Cambio de tema
 document.getElementById('themeBtn').onclick = () => {
   const current = document.documentElement.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
@@ -282,7 +240,7 @@ document.getElementById('themeBtn').onclick = () => {
   localStorage.setItem('theme', next);
 };
 
-// Estrellas
+// Lógica de estrellas
 const stars = document.querySelectorAll('.star');
 const ratingInput = document.getElementById('ratingInput');
 stars.forEach(star => {
@@ -293,9 +251,9 @@ stars.forEach(star => {
   });
 });
 
-// Envio
+// ENVÍO A SUPABASE
 const form = document.getElementById('feedbackForm');
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const t = translations[currentLang];
 
@@ -307,23 +265,26 @@ form.addEventListener('submit', (e) => {
   btn.disabled = true;
   btn.innerText = t.sending;
 
-  const data = new FormData();
-  data.append('valoracion', ratingInput.value);
-  data.append('comentario', comment);
-  data.append('origen', 'El Buen Bocado'); 
+  // Creamos el objeto con los datos para tu base de datos
+  const nuevaResena = {
+      valoracion: parseInt(ratingInput.value),
+      comentario: comment,
+      restaurant_slug: "el-buen-bocado" // <-- Etiqueta vital para saber a quién va
+  };
 
-  // Enviar a Google Sheets (modo no-cors para evitar bloqueo, no recibimos respuesta JSON pero se envía)
-  fetch(SCRIPT_URL, { 
-    method: 'POST', 
-    body: data, 
-    mode: 'no-cors',
-    keepalive: true 
-  }).catch(err => console.log("Envío lanzado"));
+  // Insertamos en Supabase
+  const { error } = await miSupabase.from('resenas').insert([nuevaResena]);
 
-  // Redirigir a agradecimiento tras 1s
-  setTimeout(() => {
-    window.location.href = "elbuenbocadoagradecimiento.html";
-  }, 1000);
+  if (error) {
+      console.error("Error al guardar:", error.message);
+      alert("Hubo un problema al enviar tu reseña. Inténtalo de nuevo.");
+      btn.disabled = false;
+      btn.innerText = t.submit;
+      return;
+  }
+
+  // Redirigir a agradecimiento si todo salió bien
+  window.location.href = "elbuenbocadoagradecimiento.html";
 });
 
 window.onload = init;
