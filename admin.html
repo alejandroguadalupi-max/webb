@@ -69,21 +69,30 @@
         .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 8px; display: none; padding: 14px; cursor: pointer; font-weight: 500;}
         .btn-cancel:hover { background: #f3f4f6; color: var(--text-dark); }
 
+        /* SWITCH DISPONIBILIDAD */
+        .toggle-wrapper { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 500; color: var(--text-dark);}
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1d5db; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--brand); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
         /* PLATOS */
         .categoria-titulo { margin-top: 40px; margin-bottom: 15px; color: var(--text-muted); text-transform: uppercase; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;}
         .lista-platos { min-height: 20px; }
         
-        /* Hacemos que todo el item tenga el cursor de agarrar */
         .dish-item { background: var(--bg-card); padding: 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 10px; border: 1px solid var(--border); transition: border-color 0.2s; cursor: grab;}
         .dish-item:active { cursor: grabbing; border-color: var(--text-muted); }
+        .dish-item.agotado { opacity: 0.6; }
         
-        .dish-info { display: flex; align-items: flex-start; gap: 12px; width: 100%; pointer-events: none; /* Para que los clicks fluyan a la tarjeta */}
+        .dish-info { display: flex; align-items: flex-start; gap: 12px; width: 100%; pointer-events: none;}
         .drag-handle { color: #d1d5db; font-size: 1.2rem; padding-top: 2px; } 
         .dish-text { display: flex; flex-direction: column; flex: 1; line-height: 1.4; }
         .dish-text strong { font-size: 1rem; font-weight: 500; color: var(--text-dark); }
         .dish-text span { font-size: 0.9rem; color: var(--text-muted); }
+        .badge-agotado { font-size: 0.7rem; background: #fee2e2; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 10px; text-transform: uppercase;}
         
-        /* Área de botones bloqueada para arrastre */
         .acciones { display: flex; gap: 8px; width: 100%; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 5px; cursor: default; }
         .btn-edit, .btn-delete { background: transparent; border: none; font-size: 0.85rem; cursor: pointer; font-weight: 500; padding: 6px; flex: 1; text-align: center; border-radius: 6px; transition: 0.2s;}
         .btn-edit { color: var(--text-dark); }
@@ -125,6 +134,7 @@
             .grid-form { grid-template-columns: 2fr 1fr 1fr; gap: 20px; }
             
             .dish-item { flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px; gap: 20px;}
+            .drag-area { flex-direction: row; align-items: center; width: auto; flex: 1;}
             .dish-info { width: auto; flex: 1; align-items: center;}
             .drag-handle { padding-top: 0; }
             .dish-text { flex-direction: row; align-items: center; gap: 15px; }
@@ -161,7 +171,6 @@
         </div>
         <div class="nav-center" id="nav-title">Panel de Control</div>
         <div class="nav-right">
-            <button onclick="abrirSeccionAjustes()" id="btnAjustesTop" class="btn-nav-text">🔐 Cambiar contraseña</button>
             <button onclick="handleLogout()" class="btn-nav-text btn-logout">Cerrar Sesión</button>
         </div>
     </nav>
@@ -173,7 +182,7 @@
                 <p>Selecciona una opción para administrar tu negocio.</p>
             </div>
             
-            <div class="hub-grid">
+            <div class="hub-grid" style="margin-bottom: 30px;">
                 <div class="hub-btn" onclick="abrirSeccionCarta()">
                     <div class="hub-icon">
                         <svg viewBox="0 0 24 24"><path d="M4 19h16v-2H4v2zm16-4H4V5h16v10zM4 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4z"/></svg>
@@ -194,6 +203,17 @@
                     </div>
                 </div>
             </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <div class="card" style="max-width: 350px; margin: 0; padding: 20px;">
+                    <h4 style="font-size: 1rem; margin-bottom: 15px; padding-bottom: 5px;">Seguridad</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <input type="password" id="old_password" placeholder="Contraseña actual" style="padding: 8px 12px; font-size: 0.85rem;">
+                        <input type="password" id="new_password" placeholder="Nueva contraseña" style="padding: 8px 12px; font-size: 0.85rem;">
+                        <button onclick="cambiarContrasena()" class="primary-btn" style="padding: 8px; font-size: 0.85rem;">Actualizar</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="carta-section" style="display:none;">
@@ -202,14 +222,26 @@
                 <div class="grid-form">
                     <input type="text" id="nombre_es" class="full" placeholder="Nombre del plato">
                     <textarea id="desc_es" class="full" placeholder="Descripción detallada de ingredientes..."></textarea>
-                    <input type="number" id="precio" placeholder="Precio (€)" step="0.01">
-                    <select id="categoria">
-                        <option value="bebidas">Bebidas</option>
-                        <option value="entrantes">Entrantes</option>
-                        <option value="principales">Principales</option>
-                        <option value="postres">Postres</option>
-                    </select>
-                    <div style="display: flex; gap: 10px; width: 100%; margin-top: 5px;">
+                    
+                    <div style="display: flex; gap: 15px; align-items: center; grid-column: 1 / -1;">
+                        <input type="number" id="precio" placeholder="Precio (€)" step="0.01" style="flex: 1;">
+                        <select id="categoria" style="flex: 1;">
+                            <option value="bebidas">Bebidas</option>
+                            <option value="entrantes">Entrantes</option>
+                            <option value="principales">Principales</option>
+                            <option value="postres">Postres</option>
+                        </select>
+                    </div>
+
+                    <div class="toggle-wrapper full">
+                        <span>Disponible en carta:</span>
+                        <label class="switch">
+                            <input type="checkbox" id="disponible" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; width: 100%; margin-top: 5px;" class="full">
                         <button id="btnGuardar" onclick="saveDishWithAutoTranslate()" class="primary-btn" style="flex: 2;">Guardar Plato</button>
                         <button id="btnCancelar" class="btn-cancel" onclick="cancelEdit()" style="flex: 1;">Cancelar</button>
                     </div>
@@ -229,18 +261,6 @@
                 <div class="loader" style="display:block;">Cargando opiniones...</div>
             </div>
         </div>
-
-        <div id="ajustes-section" style="display:none;">
-            <div class="card" style="max-width: 500px; margin: 0 auto;">
-                <h4 style="margin-bottom: 25px;">Cambiar mi contraseña</h4>
-                <div class="grid-form">
-                    <input type="password" id="old_password" class="full" placeholder="Contraseña actual" autocomplete="new-password">
-                    <input type="password" id="new_password" class="full" placeholder="Nueva contraseña (mínimo 6 caracteres)">
-                    <button onclick="cambiarContrasena()" class="primary-btn full">Actualizar Contraseña</button>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
@@ -294,77 +314,60 @@
         document.getElementById('hub-section').style.display = 'block';
         document.getElementById('carta-section').style.display = 'none';
         document.getElementById('resenas-section').style.display = 'none';
-        document.getElementById('ajustes-section').style.display = 'none';
         
-        // Configuración de la barra superior
         document.getElementById('btnVolver').style.display = 'none';
-        document.getElementById('btnAjustesTop').style.display = 'flex';
         document.getElementById('nav-title').innerText = "Panel de Control";
     }
 
     function abrirSeccionCarta() {
         if(!currentRestaurant) return alert("Sin restaurante asignado.");
-        ocultarTodo();
+        document.getElementById('hub-section').style.display = 'none';
         document.getElementById('carta-section').style.display = 'block';
+        document.getElementById('btnVolver').style.display = 'inline-block';
         document.getElementById('nav-title').innerText = "Editor de Carta";
+        loadMyDishes();
     }
 
     function abrirSeccionResenas() {
         if(!currentRestaurant) return alert("Sin restaurante asignado.");
-        ocultarTodo();
+        document.getElementById('hub-section').style.display = 'none';
         document.getElementById('resenas-section').style.display = 'block';
+        document.getElementById('btnVolver').style.display = 'inline-block';
         document.getElementById('nav-title').innerText = "Buzón de Opiniones";
         loadMyReviews();
     }
 
-    function abrirSeccionAjustes() {
-        ocultarTodo();
-        document.getElementById('ajustes-section').style.display = 'block';
-        document.getElementById('btnAjustesTop').style.display = 'none'; // Ocultar el engranaje cuando ya estás dentro
-        document.getElementById('nav-title').innerText = "Ajustes de Cuenta";
-    }
-
-    function ocultarTodo() {
-        document.getElementById('hub-section').style.display = 'none';
-        document.getElementById('btnVolver').style.display = 'inline-block';
-        document.getElementById('carta-section').style.display = 'none';
-        document.getElementById('resenas-section').style.display = 'none';
-        document.getElementById('ajustes-section').style.display = 'none';
-    }
-
-    // --- FUNCIÓN CAMBIO DE CONTRASEÑA ULTRA-SEGURA ---
+    // --- FUNCIÓN CAMBIO DE CONTRASEÑA ---
     async function cambiarContrasena() {
         const oldPassword = document.getElementById('old_password').value;
         const newPassword = document.getElementById('new_password').value;
         
-        if(!oldPassword) return alert("Debes introducir tu contraseña actual para verificar tu identidad.");
+        if(!oldPassword) return alert("Debes introducir tu contraseña actual.");
         if(newPassword.length < 6) return alert("La nueva contraseña debe tener al menos 6 caracteres.");
 
         showToast("Verificando...");
 
-        // 1. Obtenemos el usuario actual
         const { data: { user } } = await miSupabase.auth.getUser();
         
-        // 2. Intentamos iniciar sesión con la vieja para verificar
+        // Verificamos la contraseña vieja
         const { error: signInError } = await miSupabase.auth.signInWithPassword({
             email: user.email,
             password: oldPassword
         });
 
         if (signInError) {
-            return alert("❌ La contraseña actual que has introducido es incorrecta.");
+            return alert("❌ La contraseña actual es incorrecta.");
         }
 
-        // 3. Si la vieja es correcta, cambiamos a la nueva
+        // Cambiamos a la nueva
         const { error: updateError } = await miSupabase.auth.updateUser({ password: newPassword });
 
         if (updateError) {
-            alert("Error al actualizar la contraseña: " + updateError.message);
+            alert("Error al actualizar: " + updateError.message);
         } else {
             showToast("✅ Contraseña actualizada con éxito");
             document.getElementById('old_password').value = ""; 
             document.getElementById('new_password').value = ""; 
-            setTimeout(() => volverAlHub(), 1500); 
         }
     }
 
@@ -492,16 +495,23 @@
             container.appendChild(block);
 
             const listaElement = document.getElementById(`lista-${cat}`);
+            
             platosCategoria.forEach(p => {
                 const div = document.createElement('div');
-                div.className = 'dish-item';
+                // Añadimos la clase 'agotado' si el plato no está disponible
+                div.className = p.disponible !== false ? 'dish-item' : 'dish-item agotado';
                 div.dataset.id = p.id; 
+                
+                const badgeAgotado = p.disponible !== false ? '' : '<span class="badge-agotado">Agotado</span>';
+
                 div.innerHTML = `
-                    <div class="dish-info">
-                        <span class="drag-handle">⋮</span>
-                        <div class="dish-text">
-                            <strong>${p.nombre?.es || 'Sin nombre'}</strong>
-                            <span>${p.precio}€</span>
+                    <div class="drag-area">
+                        <div class="dish-info">
+                            <span class="drag-handle">⋮</span>
+                            <div class="dish-text">
+                                <div><strong>${p.nombre?.es || 'Sin nombre'}</strong> ${badgeAgotado}</div>
+                                <span>${p.precio}€</span>
+                            </div>
                         </div>
                     </div>
                     <div class="acciones">
@@ -512,13 +522,11 @@
                 listaElement.appendChild(div);
             });
 
-            // MAGIA DE ARRASTRE: Ahora se arrastra la tarjeta entera (sin handle explícito) 
-            // pero le decimos (filter) que no permita arrastrar si se hace clic en ".acciones"
             new Sortable(listaElement, { 
                 animation: 150, 
-                filter: '.acciones', // Evita que se arrastre si se hace clic en Editar/Eliminar
-                preventOnFilter: false, // Permite que el clic siga funcionando para Editar/Eliminar
-                delay: 50, // Pequeño retraso para distinguir entre tap y arrastre en móviles
+                filter: '.acciones', 
+                preventOnFilter: false, 
+                delay: 50, 
                 delayOnTouchOnly: true, 
                 onEnd: () => actualizarOrdenEnBaseDeDatos(cat) 
             });
@@ -538,9 +546,7 @@
             await miSupabase.from('platos').update({ orden: i }).eq('id', items[i].dataset.id);
         }
         showToast("Orden guardado");
-        const { data: { user } } = await miSupabase.auth.getUser();
-        const { data } = await miSupabase.from('platos').select('*').eq('owner_id', user.id).order('orden', { ascending: true });
-        platosActuales = data;
+        loadMyDishes();
     }
 
     async function saveDishWithAutoTranslate() {
@@ -548,6 +554,7 @@
         const desc_es = document.getElementById('desc_es').value;
         const precio = document.getElementById('precio').value;
         const categoria = document.getElementById('categoria').value;
+        const disponible = document.getElementById('disponible').checked; // Capturamos el switch
         
         if(!nombre_es || !precio) return alert("Nombre y precio requeridos.");
 
@@ -565,7 +572,16 @@
                 descObj[l] = await translateAPI(desc_es, l);
             }
 
-            const platoData = { nombre: nombreObj, descripcion: descObj, precio: parseFloat(precio), categoria: categoria, disponible: true, owner_id: user.id, restaurant_id: currentRestaurant.id, slug: currentRestaurant.slug };
+            const platoData = { 
+                nombre: nombreObj, 
+                descripcion: descObj, 
+                precio: parseFloat(precio), 
+                categoria: categoria, 
+                disponible: disponible, // Guardamos el estado
+                owner_id: user.id, 
+                restaurant_id: currentRestaurant.id, 
+                slug: currentRestaurant.slug 
+            };
 
             if (platoEditandoId) {
                 await miSupabase.from('platos').update(platoData).eq('id', platoEditandoId);
@@ -575,7 +591,8 @@
                 await miSupabase.from('platos').insert([platoData]);
                 showToast("Plato creado");
             }
-            cancelEdit(); loadMyDishes();
+            cancelEdit(); 
+            loadMyDishes();
         } catch (err) { alert("Error: " + err.message); } 
         finally { document.getElementById('btnGuardar').disabled = false; document.getElementById('loadingMsg').style.display = 'none'; }
     }
@@ -587,6 +604,8 @@
         document.getElementById('desc_es').value = p.descripcion?.es || "";
         document.getElementById('precio').value = p.precio;
         document.getElementById('categoria').value = p.categoria;
+        document.getElementById('disponible').checked = p.disponible !== false; // Marcamos el switch
+        
         document.getElementById('form-title').innerText = "Editando plato";
         document.getElementById('btnGuardar').innerText = "Guardar cambios";
         document.getElementById('btnCancelar').style.display = "block";
@@ -595,7 +614,8 @@
 
     function cancelEdit() {
         platoEditandoId = null;
-        document.querySelectorAll('input, textarea').forEach(i => i.value = "");
+        document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(i => i.value = "");
+        document.getElementById('disponible').checked = true; // Por defecto siempre disponible al crear
         document.getElementById('form-title').innerText = "Añadir Nuevo Plato";
         document.getElementById('btnGuardar').innerText = "Guardar Plato";
         document.getElementById('btnCancelar').style.display = "none";
