@@ -38,7 +38,7 @@ html { touch-action: manipulation; }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-/* CORRECCIÓN FONDO SUPERIOR: Aplicamos color al HTML también */
+/* CORRECCIÓN FONDO SUPERIOR */
 html {
   background-color: var(--bg-body);
   transition: background-color 0.3s ease;
@@ -57,14 +57,12 @@ body {
   padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; z-index: 800; 
-  /* Efecto Glass - MODO CLARO */
   background: rgba(255, 251, 242, 0.95);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-/* CORRECCIÓN FONDO HEADER MODO OSCURO */
 [data-theme="dark"] .header { 
   background: rgba(30, 27, 26, 0.95); 
   border-bottom: 1px solid #3e2b26;
@@ -72,7 +70,6 @@ body {
 
 .brand-area { display: flex; align-items: center; }
 
-/* Título Carta (Sin flecha a la izquierda) */
 .brand-name { 
   font-size: 1.4rem; font-weight: 800; color: var(--text-main); 
   margin: 0; line-height: 1; text-transform: uppercase; letter-spacing: 1px; 
@@ -80,7 +77,6 @@ body {
 
 .header-right { display: flex; align-items: center; gap: 10px; }
 
-/* BADGE IDIOMA REDONDEADO */
 .lang-badge {
     font-weight: 700; border: 1px solid var(--text-sec); 
     padding: 8px 12px; 
@@ -103,7 +99,6 @@ body {
 }
 .allergy-wrapper { padding: 0 20px 10px 20px; }
 
-/* SELECTOR DE ALERGIAS LIMPIO */
 .allergy-select {
   width: 100%; appearance: none; -webkit-appearance: none;
   background: var(--bg-card); border: 1px solid var(--border); 
@@ -130,10 +125,21 @@ body {
   display: grid; grid-template-columns: 1fr auto; gap: 15px;
   box-shadow: var(--shadow-card); align-items: start; border: 1px solid var(--border);
 }
+
+/* ESTILO PLATO AGOTADO EN LA CARTA PÚBLICA */
+.dish-card.sold-out {
+  opacity: 0.6;
+  background: rgba(0,0,0,0.02);
+}
+
 .dish-info { display: flex; flex-direction: column; gap: 5px; }
-.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); }
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
 .dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
 .dish-price { font-weight: 700; font-size: 1rem; color: var(--brand-color); margin-top: 5px; }
+
+.badge-sold-out {
+  font-size: 0.65rem; background: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+}
 
 .action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
 .btn-add-simple {
@@ -221,7 +227,6 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
   font-size: 2.2rem; font-weight: 900; color: var(--brand-color); margin-right: 25px; 
 }
 
-/* Notas traducidas en modo camarero */
 .waiter-note-box {
   background: #FFF8E1; border: 3px solid #FFD54F; color: #000;
   padding: 20px; margin: 20px 0; border-radius: 16px; font-size: 1.4rem;
@@ -310,7 +315,6 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 /* --- CONFIGURACIÓN DE SUPABASE --- */
 const SUPABASE_URL = "https://xfylujdfpmajnbmuiebv.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmeWx1amRmcG1ham5ibXVpZWJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTczMTEsImV4cCI6MjA4NzM3MzMxMX0.S6NLD1pyObNpg_sRD60Od8q7MmNWMMLnwq8YLVEhtew"; 
-// EL ARREGLO ESTRELLA: "miSupabase"
 const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* --- TRADUCCIONES UI COMPLETAS --- */
@@ -318,27 +322,27 @@ const uiDict = {
   es: { 
     pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
     btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
-    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
+    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano", soldout: "Agotado"
   },
   en: { 
     pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
     btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?",
-    add: "Add", place: "Notes (e.g. no ice, well done...)", all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
+    add: "Add", place: "Notes (e.g. no ice, well done...)", all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan", soldout: "Sold out"
   },
   de: { 
     pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
     btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
-    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
+    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan", soldout: "Ausverkauft"
   },
   fr: { 
     pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
     btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
-    add: "Ajouter", place: "Notes (ex. sans glace...)", all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
+    add: "Ajouter", place: "Notes (ex. sans glace...)", all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan", soldout: "Épuisé"
   },
   it: { 
     pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
     btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
-    add: "Aggiungi", place: "Note (es. senza ghiaccio...)", all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
+    add: "Aggiungi", place: "Note (es. senza ghiaccio...)", all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano", soldout: "Esaurito"
   }
 };
 
@@ -352,7 +356,6 @@ let currentMenu = [];
 function init() {
   const params = new URLSearchParams(window.location.search);
   
-  // TEMA
   let savedTheme = params.get('theme') || localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   
@@ -362,12 +365,10 @@ function init() {
 
   document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '🌙' : '☀️';
   
-  // IDIOMA (Detectar y asegurar que existe en el diccionario, si no fallback a ES)
   const urlLang = params.get('lang');
   const browserLang = navigator.language.slice(0,2);
   let detectedLang = urlLang || localStorage.getItem('userLang') || browserLang;
   
-  // Lista de idiomas soportados
   const supportedLangs = ['es','en','de','fr','it'];
   lang = supportedLangs.includes(detectedLang) ? detectedLang : 'es';
   
@@ -380,7 +381,6 @@ function init() {
   filter('bebidas'); 
   updateFloat();
 
-  // Llamar a Supabase
   loadMenuFromDB();
 }
 
@@ -388,12 +388,11 @@ function init() {
 async function loadMenuFromDB() {
   const slugValido = "el-buen-bocado"; 
 
+  // ELIMINADO EL FILTRO DE DISPONIBLE PARA QUE DESCARGUE TODOS LOS PLATOS
   const { data, error } = await miSupabase
     .from('platos')
     .select('*')
     .eq('slug', slugValido)
-    .eq('disponible', true)
-    // EL TRUCO ESTÁ AQUÍ 👇
     .order('orden', { ascending: true }); 
 
   if (error) {
@@ -401,7 +400,6 @@ async function loadMenuFromDB() {
     return;
   }
 
-  // ... (el resto del código sigue igual) ...
   if (!data || data.length === 0) {
     currentMenu = [];
   } else {
@@ -411,7 +409,8 @@ async function loadMenuFromDB() {
       tags: p.tags || [],
       price: Number(p.precio) || 0,
       name: p.nombre || { es: "Sin nombre" },
-      desc: p.descripcion || { es: "" }
+      desc: p.descripcion || { es: "" },
+      disponible: p.disponible !== false // Extraemos si está disponible
     }));
   }
 
@@ -426,6 +425,7 @@ function render() {
   
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
+  const soldOutText = t.soldout || "Agotado";
 
   const items = currentMenu.filter(item => {
     if(item.cat !== activeCategory) return false;
@@ -440,18 +440,24 @@ function render() {
   items.forEach(p => {
     const qty = cart[p.id] || 0;
     
-    // Extraemos el texto en el idioma actual, o en español como fallback
     const pName = (p.name && p.name[lang]) ? p.name[lang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
     const pDesc = (p.desc && p.desc[lang]) ? p.desc[lang] : (p.desc && p.desc['es'] ? p.desc['es'] : "");
 
-    let controlHTML = qty === 0 
-      ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
-      : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
+    // Si está agotado, le ponemos la etiqueta y quitamos los botones. Si no, botones normales.
+    const badgeHTML = p.disponible ? '' : `<span class="badge-sold-out">${soldOutText}</span>`;
+    const cardClass = p.disponible ? 'dish-card' : 'dish-card sold-out';
+
+    let controlHTML = '';
+    if(p.disponible) {
+        controlHTML = qty === 0 
+          ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
+          : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
+    }
 
     container.innerHTML += `
-      <div class="dish-card">
+      <div class="${cardClass}">
         <div class="dish-info">
-          <div class="dish-name">${pName}</div>
+          <div class="dish-name">${pName} ${badgeHTML}</div>
           <div class="dish-desc">${pDesc}</div>
           <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
