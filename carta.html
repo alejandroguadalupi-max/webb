@@ -11,7 +11,7 @@
 
 <style>
 :root {
-  /* --- COLORES Y VARIABLES (Diseño Estilo 1) --- */
+  /* --- COLORES Y VARIABLES --- */
   --brand-color: #FF4757; 
   --bg-body: #f8fafc;
   --bg-card: #ffffff;
@@ -22,13 +22,14 @@
   --shadow-float: 0 15px 35px -5px rgba(0,0,0,0.15);
 }
 
+/* --- MODO OSCURO (NEGROS Y GRISES REALES) --- */
 [data-theme="dark"] {
-  --bg-body: #0f172a;
-  --bg-card: #1e293b;
-  --text-main: #f8fafc;
-  --text-sec: #94a3b8;
-  --border: #334155;
-  --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.3);
+  --bg-body: #121212;
+  --bg-card: #1e1e1e;
+  --text-main: #f5f5f5;
+  --text-sec: #aaaaaa;
+  --border: #333333;
+  --shadow-card: 0 4px 20px -5px rgba(0,0,0,0.5);
 }
 
 html { touch-action: manipulation; }
@@ -42,12 +43,13 @@ body {
 
 /*HEADER*/
 .header {
-  background: rgba(255, 255, 255, 0.9); padding: 15px 20px; 
+  background: rgba(255, 255, 255, 0.95); padding: 15px 20px; 
   display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; z-index: 800; border-bottom: 1px solid var(--border);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: background 0.3s ease;
 }
-[data-theme="dark"] .header { background: rgba(30, 41, 59, 0.9); }
+[data-theme="dark"] .header { background: rgba(18, 18, 18, 0.95); }
 
 .brand-area { display: flex; flex-direction: column; align-items: flex-start; }
 .brand-name { font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.1; text-transform: uppercase; letter-spacing: 2px; }
@@ -68,7 +70,7 @@ body {
 /* CONTROLES */
 .controls-container {
   position: sticky; top: 62px; z-index: 790; background: var(--bg-body);
-  padding: 10px 0; border-bottom: 1px solid transparent; transition: border-color 0.3s;
+  padding: 10px 0; border-bottom: 1px solid transparent; transition: background 0.3s ease, border-color 0.3s;
 }
 .allergy-wrapper { padding: 0 20px 10px 20px; }
 .allergy-select {
@@ -97,15 +99,23 @@ body {
   box-shadow: var(--shadow-card); align-items: start;
 }
 .dish-info { display: flex; flex-direction: column; gap: 5px; }
-.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); }
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
 .dish-price { font-weight: 700; font-size: 1rem; color: var(--text-main); margin-top: 5px; }
+
+.allergy-badge { 
+  font-size: 0.85rem; background: rgba(0,0,0,0.05); padding: 2px 6px; 
+  border-radius: 6px; display: inline-flex; align-items: center; gap: 3px; 
+}
+[data-theme="dark"] .allergy-badge { background: rgba(255,255,255,0.1); }
 
 .action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
 .btn-add-simple {
   background: rgba(0,0,0,0.03); color: var(--brand-color); font-weight: 700; font-size: 0.9rem;
   padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; width: 100%;
 }
+[data-theme="dark"] .btn-add-simple { background: rgba(255,255,255,0.05); }
+
 .qty-selector {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; padding: 3px; width: 100%;
@@ -163,7 +173,7 @@ textarea.notes:focus { border-color: var(--brand-color); }
 .btn-action-wrapper { display: flex; flex-direction: column; gap: 10px; }
 .btn-waiter {
   width: 100%; padding: 18px; border-radius: 16px; 
-  background: #000; color: white; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; 
+  background: var(--text-main); color: var(--bg-card); border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; 
   display: flex; align-items: center; justify-content: center; gap: 10px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   transform-origin: center; animation: pulse 2s infinite;
@@ -210,10 +220,10 @@ textarea.notes:focus { border-color: var(--brand-color); }
 <div class="controls-container">
   <div class="allergy-wrapper">
     <select id="allergyFilter" class="allergy-select" onchange="render()">
-      <option value="" id="opt-all">🌱 Filtrar Alergias</option>
-      <option value="gf" id="opt-gf">🌾 Sin Gluten</option>
-      <option value="lf" id="opt-lf">🥛 Sin Lactosa</option>
-      <option value="v" id="opt-v">🥦 Vegano</option>
+      <option value="" id="opt-all">🌱 Ver todo (Sin filtros)</option>
+      <option value="g" id="opt-gf">🌾 Ocultar platos con Gluten</option>
+      <option value="l" id="opt-lf">🥛 Ocultar platos con Lactosa</option>
+      <option value="n" id="opt-nuts">🥜 Ocultar platos con Frutos Secos</option>
     </select>
   </div>
 
@@ -260,90 +270,100 @@ textarea.notes:focus { border-color: var(--brand-color); }
 </div>
 
 <script>
-/* --- BASE DE DATOS COMPLETA EN 5 IDIOMAS --- */
+/* --- BASE DE DATOS COMPLETA --- 
+   Tags de Alérgenos (Lo que CONTIENE el plato):
+   'g' = Gluten (🍞)
+   'l' = Lactosa (🥛)
+   'n' = Frutos Secos (🥜)
+*/
 const config = {
   menus: {
     'restaurante': [
        /* ENTRANTES */
        { 
-         id: 101, cat: 'entrantes', tags: [], price: 10.50, 
+         id: 101, cat: 'entrantes', tags: ['g', 'l'], price: 10.50, emojis: "🍞 🥛", 
          name: {es:"Croquetas Caseras", en:"Homemade Croquettes", de:"Hausgemachte Kroketten", fr:"Croquettes Maison", it:"Crocchette Fatte in Casa"}, 
          desc: {es:"De jamón ibérico (8 uds)", en:"Iberian Ham (8 pcs)", de:"Iberischer Schinken (8 Stk)", fr:"Jambon Ibérique (8 pcs)", it:"Prosciutto Iberico (8 pz)"} 
        },
        { 
-         id: 102, cat: 'entrantes', tags: [], price: 16.00, 
+         id: 102, cat: 'entrantes', tags: ['g'], price: 16.00, emojis: "🍞",
          name: {es:"Jamón Ibérico", en:"Iberian Ham", de:"Iberischer Schinken", fr:"Jambon Ibérique", it:"Prosciutto Iberico"}, 
          desc: {es:"Ración completa con picos", en:"Full portion with breadsticks", de:"Ganze Portion", fr:"Portion complète", it:"Porzione completa"} 
        },
        { 
-         id: 103, cat: 'entrantes', tags: ['v','gf'], price: 8.50, 
+         id: 103, cat: 'entrantes', tags: [], price: 8.50, emojis: "",
          name: {es:"Ensalada Mixta", en:"Mixed Salad", de:"Gemischter Salat", fr:"Salade Mixte", it:"Insalata Mista"}, 
          desc: {es:"Lechuga, tomate, cebolla, atún", en:"Lettuce, tomato, onion, tuna", de:"Salat, Tomate, Zwiebel, Thunfisch", fr:"Laitue, tomate, oignon, thon", it:"Lattuga, pomodoro, cipolla, tonno"} 
        },
        { 
-         id: 104, cat: 'entrantes', tags: ['v','gf'], price: 6.50, 
+         id: 104, cat: 'entrantes', tags: [], price: 6.50, emojis: "",
          name: {es:"Patatas Bravas", en:"Patatas Bravas", de:"Patatas Bravas", fr:"Patatas Bravas", it:"Patatas Bravas"}, 
          desc: {es:"Salsa picante casera", en:"Spicy homemade sauce", de:"Scharfe hausgemachte Soße", fr:"Sauce piquante maison", it:"Salsa piccante fatta in casa"} 
        },
 
        /* PRINCIPALES */
        { 
-         id: 201, cat: 'principales', tags: ['gf'], price: 19.50, 
+         id: 201, cat: 'principales', tags: [], price: 19.50, emojis: "",
          name: {es:"Solomillo de Ternera", en:"Beef Tenderloin", de:"Rinderfilet", fr:"Filet de Bœuf", it:"Filetto di Manzo"}, 
          desc: {es:"A la parrilla con patatas", en:"Grilled with potatoes", de:"Gegrillt mit Kartoffeln", fr:"Grillé avec pommes de terre", it:"Alla griglia con patate"} 
        },
        { 
-         id: 202, cat: 'principales', tags: ['gf'], price: 15.00, 
+         id: 202, cat: 'principales', tags: ['g'], price: 15.00, emojis: "🍞",
          name: {es:"Merluza a la Romana", en:"Battered Hake", de:"Seehecht im Teigmantel", fr:"Merlu à la Romaine", it:"Nasello alla Romana"}, 
-         desc: {es:"Con ensalada", en:"With salad", de:"Mit Salat", fr:"Avec salade", it:"Con insalata"} 
+         desc: {es:"Rebozada, con ensalada", en:"Battered, with salad", de:"Paniert, mit Salat", fr:"Pannée, avec salade", it:"Impanato, con insalata"} 
        },
        { 
-         id: 203, cat: 'principales', tags: [], price: 12.50, 
+         id: 203, cat: 'principales', tags: ['g', 'l'], price: 12.50, emojis: "🍞 🥛",
          name: {es:"Hamburguesa Completa", en:"Full Burger", de:"Vollständiger Burger", fr:"Burger Complet", it:"Hamburger Completo"}, 
          desc: {es:"Ternera, queso, bacon, huevo", en:"Beef, cheese, bacon, egg", de:"Rindfleisch, Käse, Speck, Ei", fr:"Bœuf, fromage, bacon, œuf", it:"Manzo, formaggio, bacon, uovo"} 
        },
        { 
-         id: 204, cat: 'principales', tags: [], price: 14.00, 
+         id: 204, cat: 'principales', tags: ['g'], price: 14.00, emojis: "🍞",
          name: {es:"Carrillada en Salsa", en:"Braised Pork Cheeks", de:"Geschmorte Schweinebäckchen", fr:"Joues de Porc Braisées", it:"Guance di Maiale Brasate"}, 
-         desc: {es:"Muy tierna, con puré", en:"Very tender, with mash", de:"Sehr zart, mit Püree", fr:"Très tendre, avec purée", it:"Molto tenero, con purè"} 
+         desc: {es:"Salsa ligada con harina", en:"Sauce thickened with flour", de:"Soße mit Mehl gebunden", fr:"Sauce liée à la farine", it:"Salsa legata con farina"} 
        },
 
        /* POSTRES */
        { 
-         id: 301, cat: 'postres', tags: ['gf'], price: 4.50, 
+         id: 301, cat: 'postres', tags: ['l'], price: 4.50, emojis: "🥛",
          name: {es:"Arroz con Leche", en:"Rice Pudding", de:"Milchreis", fr:"Riz au Lait", it:"Riso al Latte"}, 
          desc: {es:"Casero con canela", en:"Homemade with cinnamon", de:"Hausgemacht mit Zimt", fr:"Fait maison à la cannelle", it:"Fatto in casa con cannella"} 
        },
        { 
-         id: 302, cat: 'postres', tags: ['gf'], price: 4.00, 
+         id: 302, cat: 'postres', tags: ['l'], price: 4.00, emojis: "🥛",
          name: {es:"Flan de Huevo", en:"Egg Flan", de:"Eierflan", fr:"Flan aux Œufs", it:"Creme Caramel"}, 
          desc: {es:"Receta de la abuela", en:"Grandma's recipe", de:"Omas Rezept", fr:"Recette de grand-mère", it:"Ricetta della nonna"} 
        },
        { 
-         id: 303, cat: 'postres', tags: [], price: 5.50, 
+         id: 303, cat: 'postres', tags: ['g', 'l'], price: 5.50, emojis: "🍞 🥛",
          name: {es:"Tarta de Queso", en:"Cheesecake", de:"Käsekuchen", fr:"Gâteau au Fromage", it:"Cheesecake"}, 
-         desc: {es:"Al horno", en:"Baked", de:"Gebacken", fr:"Au four", it:"Al forno"} 
+         desc: {es:"Base de galleta", en:"Biscuit base", de:"Keksboden", fr:"Base de biscuit", it:"Base di biscotto"} 
+       },
+       { 
+         id: 304, cat: 'postres', tags: ['g', 'l', 'n'], price: 6.00, emojis: "🍞 🥛 🥜",
+         name: {es:"Brownie con Nueces", en:"Walnut Brownie", de:"Brownie mit Walnüssen", fr:"Brownie aux Noix", it:"Brownie alle Noci"}, 
+         desc: {es:"Con nueces y helado", en:"With walnuts and ice cream", de:"Mit Walnüssen und Eis", fr:"Avec noix et glace", it:"Con noci e gelato"} 
        }
     ],
     'comunes': [
        /* BEBIDAS */
        { 
-         id: 901, cat: 'bebidas', tags: ['gf','v'], price: 2.50, 
+         id: 901, cat: 'bebidas', tags: [], price: 2.50, emojis: "",
          name: {es:"Coca-Cola / Refresco", en:"Coke / Soft Drink", de:"Cola / Erfrischungsgetränk", fr:"Coca / Boisson Gazeuse", it:"Coca-Cola / Bibita"}, 
          desc: {es:"33cl", en:"33cl", de:"33cl", fr:"33cl", it:"33cl"} 
        },
        { 
-         id: 902, cat: 'bebidas', tags: ['gf','v'], price: 2.00, 
+         id: 902, cat: 'bebidas', tags: [], price: 2.00, emojis: "",
          name: {es:"Agua Mineral", en:"Mineral Water", de:"Mineralwasser", fr:"Eau Minérale", it:"Acqua Minerale"}, 
          desc: {es:"Botella 50cl", en:"50cl Bottle", de:"50cl Flasche", fr:"Bouteille 50cl", it:"Bottiglia 50cl"} 
        },
        { 
-         id: 903, cat: 'bebidas', tags: ['gf','v'], price: 2.80, 
+         id: 903, cat: 'bebidas', tags: ['g'], price: 2.80, emojis: "🍞",
          name: {es:"Caña de Cerveza", en:"Draft Beer", de:"Bier vom Fass", fr:"Bière Pression", it:"Birra alla Spina"}, 
-         desc: {es:"Bien fría", en:"Cold draft beer", de:"Kaltes Bier", fr:"Bien fraîche", it:"Ben fredda"} 
+         desc: {es:"Contiene cebada", en:"Contains barley", de:"Enthält Gerste", fr:"Contient de l'orge", it:"Contiene orzo"} 
        },
        { 
-         id: 904, cat: 'bebidas', tags: ['gf','v'], price: 3.50, 
+         id: 904, cat: 'bebidas', tags: [], price: 3.50, emojis: "",
          name: {es:"Copa de Vino", en:"Glass of Wine", de:"Glas Wein", fr:"Verre de Vin", it:"Calice di Vino"}, 
          desc: {es:"Rioja o Ribera", en:"Red Wine", de:"Rotwein", fr:"Vin rouge", it:"Vino rosso"} 
        }
@@ -354,44 +374,34 @@ const config = {
 /* --- DICCIONARIO UI COMPLETO --- */
 const uiDict = {
   es: { 
-    pageTitle: "CARTA",
-    ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
-    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", 
-    trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
+    pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
+    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", 
     add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)",
-    all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano"
+    all: "🌱 Ver todo (Sin filtros)", gf: "🌾 Ocultar platos con Gluten", lf: "🥛 Ocultar platos con Lactosa", nuts: "🥜 Ocultar platos con Frutos Secos"
   },
   en: { 
-    pageTitle: "MENU",
-    ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
-    btn:"View Order", title:"Your Order", clear:"Clear all", 
-    trans:"Show Waiter (ES)", confirm:"Clear everything?",
+    pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
+    btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", 
     add: "Add", place: "Notes (e.g. no ice, well done...)",
-    all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan"
+    all: "🌱 View all", gf: "🌾 Hide dishes with Gluten", lf: "🥛 Hide dishes with Dairy", nuts: "🥜 Hide dishes with Nuts"
   },
   de: { 
-    pageTitle: "SPEISEKARTE",
-    ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
-    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", 
-    trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
+    pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
+    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", 
     add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)",
-    all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan"
+    all: "🌱 Alle anzeigen", gf: "🌾 Gerichte mit Gluten ausblenden", lf: "🥛 Gerichte mit Laktose ausblenden", nuts: "🥜 Gerichte mit Nüssen ausblenden"
   },
   fr: { 
-    pageTitle: "CARTE",
-    ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
-    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", 
-    trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
+    pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
+    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer au Serveur (ES)", 
     add: "Ajouter", place: "Notes (ex. sans glace...)",
-    all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan"
+    all: "🌱 Voir tout", gf: "🌾 Masquer plats avec Gluten", lf: "🥛 Masquer plats avec Lactose", nuts: "🥜 Masquer plats avec Fruits à Coque"
   },
   it: { 
-    pageTitle: "MENU",
-    ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
-    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", 
-    trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
+    pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
+    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra al Cameriere (ES)", 
     add: "Aggiungi", place: "Note (es. senza ghiaccio...)",
-    all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano"
+    all: "🌱 Vedi tutto", gf: "🌾 Nascondi piatti con Glutine", lf: "🥛 Nascondi piatti con Lattosio", nuts: "🥜 Nascondi piatti con Frutta a Guscio"
   }
 };
 
@@ -445,23 +455,35 @@ function init() {
 function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
-  const allergyFilter = document.getElementById('allergyFilter').value;
+  // allergyFilter ahora es el alérgeno que el usuario NO quiere ver
+  const allergyFilter = document.getElementById('allergyFilter').value; 
   
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
 
   const items = currentMenu.filter(item => {
     if(item.cat !== activeCategory) return false;
-    if(allergyFilter && !item.tags.includes(allergyFilter)) return false;
+    // Si el filtro de alergia está activo, y el plato CONTIENE ese alérgeno, lo OCULTAMOS
+    if(allergyFilter && item.tags && item.tags.includes(allergyFilter)) return false;
     return true;
   });
+
+  if (items.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec); opacity:0.7">No hay platos que cumplan tu selección.</div>`;
+  }
 
   items.forEach(p => {
     const qty = cart[p.id] || 0;
     
-    // TRADUCCIÓN: Si falta la clave en el idioma actual, usa 'es' como respaldo
+    // Traducción
     const pName = p.name[lang] || p.name['es'];
     const pDesc = p.desc[lang] || p.desc['es'];
+    
+    // Si tiene emojis hardcodeados (inventados para este ejemplo)
+    let emojisHTML = '';
+    if (p.emojis && p.emojis.trim() !== '') {
+        emojisHTML = `<span class="allergy-badge">${p.emojis}</span>`;
+    }
 
     let controlHTML = qty === 0 
       ? `<button class="btn-add-simple" onclick="add(${p.id})">${addBtnText}</button>`
@@ -470,7 +492,7 @@ function render() {
     container.innerHTML += `
       <div class="dish-card">
         <div class="dish-info">
-          <div class="dish-name">${pName}</div>
+          <div class="dish-name">${pName} ${emojisHTML}</div>
           <div class="dish-desc">${pDesc}</div>
           <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
@@ -512,7 +534,6 @@ function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
   document.getElementById('countBadge').innerText = count;
   
-  // Asegura que el texto del botón se actualice al idioma
   const t = uiDict[lang] || uiDict['es'];
   document.getElementById('btnText').innerText = t.btn;
 
@@ -538,7 +559,7 @@ function renderList() {
   list.innerHTML = '';
   
   const isWaiter = document.body.classList.contains('waiter-active');
-  const displayLang = isWaiter ? 'es' : lang; // Camarero ve Español
+  const displayLang = isWaiter ? 'es' : lang;
 
   if(Object.keys(cart).length === 0) {
     list.innerHTML = `<div style="text-align:center; padding:30px; opacity:0.6">Tu lista está vacía</div>`;
@@ -557,18 +578,23 @@ function renderList() {
     const qty = cart[p.id];
     const pName = p.name[displayLang] || p.name['es']; 
     
+    let emojisHTML = '';
+    if (p.emojis && p.emojis.trim() !== '') {
+        emojisHTML = `<span class="allergy-badge" style="font-size:0.75rem">${p.emojis}</span>`;
+    }
+    
     if(isWaiter) {
       list.innerHTML += `
         <div class="order-item">
           <div style="display:flex; align-items:flex-start">
              <span class="qty-display">${qty}x</span>
-             <span class="order-name">${pName}</span>
+             <span class="order-name">${pName} ${emojisHTML}</span>
           </div>
         </div>`;
     } else {
       list.innerHTML += `
         <div class="order-item">
-          <span class="order-name" style="flex:1">${pName}</span>
+          <span class="order-name" style="flex:1">${pName} ${emojisHTML}</span>
           <div class="qty-selector" style="width:100px;">
             <button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button>
           </div>
@@ -649,11 +675,10 @@ function translateUI() {
   document.getElementById('clearTxt').innerText = t.clear;
   document.getElementById('notesField').placeholder = t.place;
   
-  // IMPORTANTE: Traducir opciones del Select
   document.getElementById('opt-all').innerText = t.all;
   document.getElementById('opt-gf').innerText = t.gf;
   document.getElementById('opt-lf').innerText = t.lf;
-  document.getElementById('opt-v').innerText = t.v;
+  document.getElementById('opt-nuts').innerText = t.nuts;
   
   const waiterSpan = document.getElementById('btnWaiterText');
   if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;

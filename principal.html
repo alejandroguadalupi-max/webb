@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
   <title>Bienvenido</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,43 +12,58 @@
 
   <style>
   :root {
-    /* Color base (se sobrescribe por JS) */
-    --brand-color: #6366f1; 
+    /* Color base (se sobrescribe dinámicamente por JS) */
+    --brand-color: #a0715e; 
     
+    /* Modo Claro */
     --bg-body: #f8fafc;
     --card-bg: #ffffff;
     --text-main: #1e293b;
     --text-sec: #64748b;
-    --btn-bg-light: #ffffff;
     --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
     --shadow-hover: 0 20px 40px -10px rgba(0,0,0,0.12);
   }
 
+  /* --- MODO OSCURO NORMAL (Sin azules ni marrones) --- */
   [data-theme="dark"] {
-    --bg-body: #0f172a;
-    --card-bg: #1e293b;
-    --text-main: #f1f5f9;
-    --text-sec: #94a3b8;
-    --btn-bg-light: #334155;
-    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.3);
+    --bg-body: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #f5f5f5;
+    --text-sec: #aaaaaa;
+    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.5);
+  }
+
+  html {
+    height: 100%;
   }
 
   body {
     margin: 0;
+    padding: 0;
     font-family: 'Outfit', sans-serif;
     background: var(--bg-body);
     color: var(--text-main);
     transition: background 0.4s ease;
-    opacity: 0; 
-    min-height: 100vh;
+    opacity: 0; /* Para la transición de entrada del JS dinámico */
+    
+    width: 100%;
+    min-height: 100vh;      
+    min-height: 100dvh; 
+    
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
-  /* --- CONTENEDOR PRINCIPAL TIPO APP --- */
   .app-container {
     width: 100%;
     max-width: 420px;
@@ -59,27 +75,26 @@
     position: relative;
   }
 
-  /* --- HEADER & LOGO --- */
+  /* --- HEADER --- */
   .header-section {
     text-align: center;
-    margin-bottom: 40px;
-    margin-top: 40px;
+    margin-bottom: 25px;
     animation: slideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .logo-icon {
-    font-size: 4em;
+    font-size: 3.5em;
     margin-bottom: 5px;
     display: inline-block;
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
   }
 
   .brand-name {
-    font-size: 2.2em;
+    font-size: 2em;
     font-weight: 800;
     margin: 0;
     line-height: 1.1;
-    color: var(--brand-color); /* Color dinámico */
+    color: var(--text-main);
     text-transform: capitalize;
     letter-spacing: -1px;
   }
@@ -88,14 +103,14 @@
     font-size: 1.1em;
     font-weight: 500;
     color: var(--text-sec);
-    margin-top: 10px;
+    margin-top: 5px;
   }
 
-  /* --- BOTONES DEL MENÚ --- */
+  /* --- MENÚ PRINCIPAL --- */
   .menu-grid {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
     width: 100%;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
@@ -104,28 +119,31 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 25px;
+    padding: 16px 25px;
     background: var(--card-bg);
     border-radius: 20px;
     text-decoration: none;
     color: var(--text-main);
     font-weight: 700;
-    font-size: 1.05em;
+    font-size: 1.1em;
     box-shadow: var(--shadow-soft);
     border: 1px solid transparent;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease; 
     position: relative;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  /* Efecto Hover Premium */
+  .menu-btn:active {
+    transform: scale(0.98);
+  }
+
   .menu-btn:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-hover);
     border-color: var(--brand-color);
   }
 
-  /* Pequeña barra de color a la izquierda */
   .menu-btn::before {
     content: '';
     position: absolute;
@@ -137,7 +155,6 @@
   }
   .menu-btn:hover::before { opacity: 1; }
 
-  /* Icono flecha */
   .menu-btn::after {
     content: '→';
     font-weight: 300;
@@ -150,82 +167,94 @@
     color: var(--brand-color);
   }
 
-  /* Botón Principal (Destacado) */
   .menu-btn.primary {
     background: var(--brand-color);
     color: #fff;
-    box-shadow: 0 15px 30px -10px var(--brand-color); /* Sombra de color */
+    box-shadow: 0 15px 30px -10px var(--brand-color); 
   }
   .menu-btn.primary:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-2px) scale(1.01);
     border-color: transparent;
   }
   .menu-btn.primary::before { display: none; }
   .menu-btn.primary::after { color: #fff; opacity: 0.8; }
 
-
-  /* --- ZONA KIDS --- */
-  .kids-trigger {
-    margin-top: 40px;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-size: 0.9em;
-    font-weight: 600;
-    color: var(--text-sec);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,0,0,0.03);
-    border: 1px solid transparent;
-    text-decoration: none; /* Para que funcione como link si falla JS */
-  }
-
-  .kids-trigger:hover {
-    background: rgba(0,0,0,0.06);
-    transform: scale(1.05);
-  }
-
-  /* Estado Activado (Agitar o Click) */
-  .kids-trigger.active {
-    background: var(--brand-color);
-    color: #fff;
-    font-weight: 800;
-    font-size: 1.1em;
-    padding: 15px 40px;
-    box-shadow: 0 10px 25px -5px var(--brand-color);
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse { 
-    0% { transform: scale(1); } 
-    50% { transform: scale(1.05); } 
-    100% { transform: scale(1); } 
-  }
-
-  /* --- UTILIDADES --- */
+  /* --- BOTÓN TEMA --- */
   .theme-btn { 
-    position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; 
+    position: fixed;
+    top: 20px; right: 20px; width: 40px; height: 40px; 
     border-radius: 50%; border: none; cursor: pointer; 
     background: var(--card-bg); color: var(--text-main); 
-    box-shadow: var(--shadow-soft); font-size: 1.2em; 
+    box-shadow: var(--shadow-soft); font-size: 1.1em; 
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.2s;
+    z-index: 10;
   }
   .theme-btn:active { transform: scale(0.9); }
 
+  /* --- IDIOMAS --- */
   .lang-container {
-    margin-top: 30px;
-    opacity: 0.7;
+    margin-top: 20px;
+    opacity: 0.8;
   }
   .lang-container select {
-    padding: 8px 15px; border-radius: 20px; border: 1px solid var(--text-sec);
-    background: transparent; color: var(--text-main); font-size: 0.8em;
+    padding: 8px 16px; border-radius: 20px; border: 1px solid var(--text-sec);
+    background: transparent; color: var(--text-main); font-size: 0.9em;
     cursor: pointer;
+    outline: none;
+    font-weight: 500;
   }
 
-  /* Animaciones Entrada */
+  /* --- FOOTER REDES SOCIALES --- */
+  .social-footer {
+    margin-top: 25px;
+    text-align: center;
+    animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .social-footer p {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-sec);
+    margin-bottom: 12px;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; 
+    background: var(--card-bg);
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.2s ease;
+    overflow: hidden; 
+  }
+
+  .social-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    transition: transform 0.3s ease;
+  }
+
+  .social-icon:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+  
+  .social-icon:hover img {
+    transform: scale(1.1); 
+  }
+
   @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -233,8 +262,9 @@
 </head>
 <body>
 
-<main class="app-container">
   <button id="themeBtn" class="theme-btn" aria-label="Cambiar tema">☀️</button>
+
+<main class="app-container">
   
   <div class="header-section">
     <div id="logoIcon" class="logo-icon">🍽️</div> 
@@ -243,20 +273,12 @@
   </div>
 
   <div class="menu-grid">
-    <a id="menuLink" class="menu-btn primary" href="#">
+    <a id="menuLink" href="#" class="menu-btn primary">
       <span data-lang="view_menu">Ver la Carta</span>
     </a>
-    <a id="reviewLink" class="menu-btn" href="#">
-      <span data-lang="leave_review">Dejar Reseña</span>
+    <a id="reviewLink" href="#" class="menu-btn">
+      <span data-lang="leave_review">Valorar Experiencia</span>
     </a>
-    <a id="shareLink" class="menu-btn" href="#">
-      <span data-lang="share_with_friends">Compartir</span>
-    </a>
-  </div>
-
-  <div id="shakeTrigger" class="kids-trigger" onclick="handleKidsClick()">
-    <span id="shakeIcon">🎮</span> 
-    <span id="shakeText">Zona Kids: Toca para jugar</span>
   </div>
 
   <div class="lang-container">
@@ -268,93 +290,31 @@
       <option value="it">Italiano</option>
     </select>
   </div>
+  
+  <div class="social-footer">
+    <p data-lang="follow_us">Síguenos en redes</p>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/" target="_blank" class="social-icon" aria-label="Instagram">
+        <img src="img/instagram.png" alt="Instagram">
+      </a>
+      <a href="https://www.tiktok.com/" target="_blank" class="social-icon" aria-label="TikTok">
+        <img src="img/tiktok.png" alt="TikTok">
+      </a>
+    </div>
+  </div>
 </main>
 
 <script>
   /* --- 1. DICCIONARIO --- */
   const translations = {
-    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Dejar Reseña", share_with_friends:"Compartir Experiencia", shake_wait: "Zona Kids: Toca para jugar", shake_ready: "¡AGITA O TOCA!" },
-    en: { welcome:"Welcome!", view_menu:"View the Menu", leave_review:"Leave a Review", share_with_friends:"Share Experience", shake_wait: "Kids Zone: Tap to play", shake_ready: "SHAKE OR TAP!" },
-    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Bewerten", share_with_friends:"Erfahrung teilen", shake_wait: "Kids Zone: Tippen", shake_ready: "SCHÜTTELN ODER TIPPEN!" },
-    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Laisser un avis", share_with_friends:"Partager", shake_wait: "Zone Enfants : Touchez", shake_ready: "SECOUEZ OU TOUCHEZ !" },
-    it: { welcome:"Benvenuto!", view_menu:"Vedi il Menu", leave_review:"Lascia Recensione", share_with_friends:"Condividi", shake_wait: "Zona Bimbi: Tocca", shake_ready: "SCUOTI O TOCCA!" }
+    es: { welcome:"¡Bienvenid@!", view_menu:"Ver la Carta", leave_review:"Valorar Experiencia", follow_us:"Síguenos en redes" },
+    en: { welcome:"Welcome!", view_menu:"View Menu", leave_review:"Rate Experience", follow_us:"Follow us" },
+    de: { welcome:"Willkommen!", view_menu:"Speisekarte", leave_review:"Erfahrung bewerten", follow_us:"Folgen Sie uns" },
+    fr: { welcome:"Bienvenue !", view_menu:"Voir le Menu", leave_review:"Évaluer l'expérience", follow_us:"Suivez-nous" },
+    it: { welcome:"Benvenuto!", view_menu:"Vedi Menu", leave_review:"Valuta l'esperienza", follow_us:"Seguici" }
   };
 
-  /* --- 2. LOGICA ZONA KIDS (SHAKE + CLICK) --- */
-  let lastX = null, lastY = null, lastZ = null;
-  let lastTime = 0;
-  let isListening = false;
-
-  function goToGames() {
-      window.location.href = `juegos.html${window.location.search}`;
-  }
-
-  function handleKidsClick() {
-      // Si ya estaba escuchando (boton activo), el click funciona como enlace directo
-      if (isListening) {
-          goToGames();
-      } else {
-          enableShakeFeature();
-      }
-  }
-
-  function startNativeShakeListener() {
-    if(isListening) return;
-    
-    // VISUAL: CAMBIO A MODO ACTIVO
-    const btn = document.getElementById('shakeTrigger');
-    btn.classList.add('active'); 
-    
-    // Actualizamos texto según idioma
-    let lang = localStorage.getItem('userLang') || navigator.language.slice(0,2) || 'es';
-    // Fallback si el idioma no existe en dic
-    if (!translations[lang]) lang = 'es';
-
-    const readyText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
-    
-    document.getElementById('shakeText').innerText = readyText;
-    document.getElementById('shakeIcon').innerText = "📳";
-    
-    isListening = true;
-
-    // SENSOR DE MOVIMIENTO
-    if (window.DeviceMotionEvent) {
-        window.addEventListener('devicemotion', (event) => {
-          const current = event.accelerationIncludingGravity;
-          if (!current) return;
-
-          const currentTime = new Date().getTime();
-          if ((currentTime - lastTime) > 100) {
-            const diffTime = currentTime - lastTime;
-            lastTime = currentTime;
-
-            if (lastX !== null) {
-              const speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
-              if (speed > 800) { 
-                 if(navigator.vibrate) navigator.vibrate(300);
-                 goToGames(); // IR A JUEGOS AL AGITAR
-              }
-            }
-            lastX = current.x; lastY = current.y; lastZ = current.z;
-          }
-        });
-    }
-  }
-
-  function enableShakeFeature() {
-    // iOS 13+ Permisos
-    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-      DeviceMotionEvent.requestPermission()
-        .then(response => {
-          if (response === 'granted') startNativeShakeListener();
-        })
-        .catch(console.error);
-    } else {
-      startNativeShakeListener();
-    }
-  }
-
-  /* --- 3. CONFIGURACIÓN (COLORES Y DATOS) --- */
+  /* --- 2. CONFIGURACIÓN DINÁMICA (ADAPTACIÓN) --- */
   const designSystem = {
     'hamburgueseria': { bg: '#FF8C00', text: '#fff', icon: '🍔' }, 
     'pizzeria':       { bg: '#D32F2F', text: '#fff', icon: '🍕' },
@@ -367,19 +327,23 @@
   const params = new URLSearchParams(window.location.search);
 
   function applyDemoLogic() {
-    if (params.get('auth') !== 'true') { window.location.href = "https://taply.es"; return; }
+    // Mantener la seguridad por URL de tu código original
+    if (params.get('auth') !== 'true' && window.location.hostname !== "localhost" && window.location.protocol !== "file:") { 
+      // Puedes descomentar esta línea si quieres forzar la redirección en producción
+      // window.location.href = "https://taply.es"; return; 
+    }
 
-    // Textos
+    // Textos adaptables
     const name = params.get('n') || "Tu Restaurante";
     document.title = name;
     document.getElementById('brandNameDisplay').textContent = name;
     
-    // Icono
+    // Icono adaptable
     const category = params.get('categoria'); 
     const style = designSystem[category] || designSystem['default'];
     document.getElementById('logoIcon').textContent = style.icon;
 
-    // COLOR DINÁMICO
+    // Color Dinámico
     const rootStyles = document.documentElement.style;
     if(params.get('btn')) {
        const customColor = '#' + params.get('btn');
@@ -388,77 +352,57 @@
        rootStyles.setProperty('--brand-color', style.bg);
     }
 
-    // Enlaces
+    // Enlaces adaptables a los parámetros actuales
     const currentParams = window.location.search; 
     document.getElementById('menuLink').href = `carta.html${currentParams}`;
     document.getElementById('reviewLink').href = `restaurante_2.html${currentParams}`;
-    document.getElementById('shareLink').href = `compartir_2.html${currentParams}`;
 
+    // Mostrar el body tras cargar colores
     document.body.style.opacity = "1";
   }
 
-  /* --- 4. SISTEMA UI (IDIOMA AUTO + TEMA FIXED) --- */
-  
+  /* --- 3. SISTEMA UI (IDIOMA + TEMA) --- */
   function detectAndSetLanguage() {
-      // 1. Mirar si ya eligió idioma antes
       let lang = localStorage.getItem('userLang');
-      
-      // 2. Si no, detectar idioma del navegador
       if (!lang) {
-          lang = navigator.language.slice(0, 2); // 'es', 'en', 'fr'...
-          // Si el idioma detectado no está en nuestro dic, usar 'es' por defecto
+          lang = navigator.language.slice(0, 2); 
           if (!translations[lang]) lang = 'es';
-          
-          // Guardarlo para la sesión
-          localStorage.setItem('userLang', lang);
       }
-      
-      // 3. Aplicar al selector
+      localStorage.setItem('userLang', lang);
       const selector = document.getElementById("lang-select");
       if(selector) selector.value = lang;
-
       return lang;
   }
 
   function syncLanguage() {
-    let lang = localStorage.getItem('userLang') || 'es';
+    let lang = document.getElementById("lang-select").value;
     
     document.querySelectorAll('[data-lang]').forEach(el => {
       if (translations[lang] && translations[lang][el.dataset.lang]) {
           el.textContent = translations[lang][el.dataset.lang];
       }
     });
-    
-    // Actualizar texto shake dinámicamente según estado
-    const txtSpan = document.getElementById('shakeText');
-    if(document.getElementById('shakeTrigger').classList.contains('active')) {
-       txtSpan.innerText = translations[lang] ? translations[lang].shake_ready : "¡AGITA!";
-    } else {
-       txtSpan.innerText = translations[lang] ? translations[lang].shake_wait : "Zona Kids";
-    }
   }
 
-  // --- MODIFICADO: Modo claro por defecto ---
   function syncTheme() {
-    // 1. Intentamos obtener la preferencia guardada por el usuario
-    let theme = localStorage.getItem('theme');
-    
-    // 2. Si NO existe preferencia guardada, forzamos 'light' (ignorando sistema)
+    let theme = params.get('theme');
+
     if (!theme) {
-        theme = 'light';
+        theme = localStorage.getItem('theme') || 'light';
     }
 
-    // 3. Aplicamos el tema (recuperado o 'light' por defecto)
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('theme', theme);
   }
 
   document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const newTheme = current === 'dark' ? 'light' : 'dark';
-    // Aquí SÍ guardamos la preferencia explícita del usuario
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    document.getElementById('themeBtn').innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
     localStorage.setItem('theme', newTheme);
-    syncTheme();
   });
 
   document.getElementById('lang-select').addEventListener('change', (e) => {
@@ -467,10 +411,10 @@
   });
 
   window.addEventListener('pageshow', () => {
-    detectAndSetLanguage(); // AUTO DETECCIÓN DE IDIOMA
-    syncTheme();            // TEMA (Claro por defecto)
+    detectAndSetLanguage(); 
+    syncTheme();            
     syncLanguage();
-    applyDemoLogic();
+    applyDemoLogic(); // Aplicar variables URL
   });
 </script>
 </body>
