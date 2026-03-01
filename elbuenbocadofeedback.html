@@ -266,11 +266,13 @@ form.addEventListener('submit', async (e) => {
   btn.innerText = t.sending;
 
   // Creamos el objeto con los datos para tu base de datos
-  const nuevaResena = {
-      valoracion: parseInt(ratingInput.value),
-      comentario: comment,
-      restaurant_slug: "el-buen-bocado" // <-- Etiqueta vital para saber a quién va
-  };
+  // ENVÍO A SUPABASE ACTUALIZADO
+const nuevaResena = {
+    valoracion: parseInt(ratingInput.value),
+    comentario: comment,
+    restaurant_slug: "el-buen-bocado",
+    origen: "Privada",
+};
 
   // Insertamos en Supabase
   const { error } = await miSupabase.from('resenas').insert([nuevaResena]);

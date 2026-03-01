@@ -97,16 +97,45 @@ body {
   position: sticky; top: 68px; z-index: 790; background: var(--bg-body);
   padding: 10px 0; border-bottom: 1px solid transparent; transition: background 0.3s ease;
 }
-.allergy-wrapper { padding: 0 20px 10px 20px; }
+
+/* --- NUEVO: ESTILOS PARA LA SECCIÓN DE ALERGIAS --- */
+.allergy-controls {
+  padding: 0 20px 10px 20px;
+  display: flex;
+  gap: 10px;
+}
 
 .allergy-select {
-  width: 100%; appearance: none; -webkit-appearance: none;
+  flex: 1;
+  appearance: none; -webkit-appearance: none;
   background: var(--bg-card); border: 1px solid var(--border); 
   color: var(--text-main); font-size: 0.9rem; font-weight: 500;
   padding: 12px 16px; border-radius: 12px; cursor: pointer; outline: none;
   box-shadow: var(--shadow-card);
-  text-align: center; 
+  text-align: left; 
   background-image: none !important;
+}
+
+.btn-toggle-allergies {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-sec);
+  border-radius: 12px;
+  padding: 0 15px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-toggle-allergies.active {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
 }
 
 .filters-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
@@ -126,19 +155,30 @@ body {
   box-shadow: var(--shadow-card); align-items: start; border: 1px solid var(--border);
 }
 
-/* ESTILO PLATO AGOTADO EN LA CARTA PÚBLICA */
 .dish-card.sold-out {
   opacity: 0.6;
   background: rgba(0,0,0,0.02);
 }
 
 .dish-info { display: flex; flex-direction: column; gap: 5px; }
-.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
 .dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
 .dish-price { font-weight: 700; font-size: 1rem; color: var(--brand-color); margin-top: 5px; }
 
 .badge-sold-out {
   font-size: 0.65rem; background: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.badge-allergy {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(160, 113, 94, 0.1); 
+  color: var(--brand-color);
+  padding: 3px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(160, 113, 94, 0.2);
 }
 
 .action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
@@ -258,13 +298,16 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 </header>
 
 <div class="controls-container">
-  <div class="allergy-wrapper">
+  <div class="allergy-controls">
     <select id="allergyFilter" class="allergy-select" onchange="render()">
-      <option value="" id="opt-all">🌱 Filtrar Alergias</option>
-      <option value="gf" id="opt-gf">🌾 Sin Gluten</option>
-      <option value="lf" id="opt-lf">🥛 Sin Lactosa</option>
-      <option value="v" id="opt-v">🥦 Vegano</option>
+      <option value="" id="opt-all">Todo (no tengo alergias) </option>
+      <option value="gf" id="opt-gf">Solo Sin Gluten</option>
+      <option value="lf" id="opt-lf">Solo Sin Lactosa</option>
     </select>
+    
+    <button id="btnToggleAllergies" class="btn-toggle-allergies" onclick="toggleAllergyMode()">
+      Ver alérgenos
+    </button>
   </div>
 
   <div class="filters-scroll">
@@ -322,27 +365,42 @@ const uiDict = {
   es: { 
     pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
     btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
-    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", all: "🌱 Filtrar Alergias", gf: "🌾 Sin Gluten", lf: "🥛 Sin Lactosa", v: "🥦 Vegano", soldout: "Agotado"
+    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", 
+    all: "Ver todo (no tengo alergias alimenticias)", 
+    gf: "Solo Sin Gluten", lf: "Solo Sin Lactosa", soldout: "Agotado",
+    showTags: "Ver alérgenos", hideTags: "Ocultar alérgenos"
   },
   en: { 
     pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
     btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?",
-    add: "Add", place: "Notes (e.g. no ice, well done...)", all: "🌱 Filter Allergies", gf: "🌾 Gluten Free", lf: "🥛 Dairy Free", v: "🥦 Vegan", soldout: "Sold out"
+    add: "Add", place: "Notes (e.g. no ice, well done...)", 
+    all: "View all (no food allergies)", 
+    gf: "Gluten Free Only", lf: "Dairy Free Only", soldout: "Sold out",
+    showTags: "View allergens", hideTags: "Hide allergens"
   },
   de: { 
     pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
     btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
-    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", all: "🌱 Allergien filtern", gf: "🌾 Glutenfrei", lf: "🥛 Laktosefrei", v: "🥦 Vegan", soldout: "Ausverkauft"
+    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", 
+    all: "Alle anzeigen (keine Lebensmittelallergien)", 
+    gf: "Nur Glutenfrei", lf: "Nur Laktosefrei", soldout: "Ausverkauft",
+    showTags: "Allergene anzeigen", hideTags: "Allergene ausblenden"
   },
   fr: { 
     pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
     btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
-    add: "Ajouter", place: "Notes (ex. sans glace...)", all: "🌱 Filtrer Allergies", gf: "🌾 Sans Gluten", lf: "🥛 Sans Lactose", v: "🥦 Végan", soldout: "Épuisé"
+    add: "Ajouter", place: "Notes (ex. sans glace...)", 
+    all: "Voir tout (pas d’allergies alimentaires)", 
+    gf: "Seulement Sans Gluten", lf: "Seulement Sans Lactose", soldout: "Épuisé",
+    showTags: "Voir les allergènes", hideTags: "Masquer les allergènes"
   },
   it: { 
     pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
     btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
-    add: "Aggiungi", place: "Note (es. senza ghiaccio...)", all: "🌱 Filtra Allergie", gf: "🌾 Senza Glutine", lf: "🥛 Senza Lattosio", v: "🥦 Vegano", soldout: "Esaurito"
+    add: "Aggiungi", place: "Note (es. senza ghiaccio...)", 
+    all: "Vedi tutto (nessuna allergia alimentare)", 
+    gf: "Solo Senza Glutine", lf: "Solo Senza Lattosio", soldout: "Esaurito",
+    showTags: "Vedi allergeni", hideTags: "Nascondi allergeni"
   }
 };
 
@@ -351,6 +409,7 @@ let cart = {};
 let activeCategory = 'bebidas'; 
 let lang = 'es';
 let currentMenu = [];
+let showAllergyTags = false; // NUEVO ESTADO PARA LAS ETIQUETAS
 
 /* --- INIT --- */
 function init() {
@@ -384,11 +443,29 @@ function init() {
   loadMenuFromDB();
 }
 
+/* --- NUEVA FUNCION: TOGGLE ALERGIAS --- */
+function toggleAllergyMode() {
+  showAllergyTags = !showAllergyTags;
+  
+  const btn = document.getElementById('btnToggleAllergies');
+  const t = uiDict[lang] || uiDict['es'];
+  
+  if (showAllergyTags) {
+    btn.classList.add('active');
+    btn.innerText = t.hideTags;
+  } else {
+    btn.classList.remove('active');
+    btn.innerText = t.showTags;
+  }
+  
+  render(); // Volvemos a dibujar la carta
+}
+
+
 /* --- SUPABASE --- */
 async function loadMenuFromDB() {
   const slugValido = "el-buen-bocado"; 
 
-  // ELIMINADO EL FILTRO DE DISPONIBLE PARA QUE DESCARGUE TODOS LOS PLATOS
   const { data, error } = await miSupabase
     .from('platos')
     .select('*')
@@ -410,7 +487,7 @@ async function loadMenuFromDB() {
       price: Number(p.precio) || 0,
       name: p.nombre || { es: "Sin nombre" },
       desc: p.descripcion || { es: "" },
-      disponible: p.disponible !== false // Extraemos si está disponible
+      disponible: p.disponible !== false 
     }));
   }
 
@@ -443,9 +520,23 @@ function render() {
     const pName = (p.name && p.name[lang]) ? p.name[lang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
     const pDesc = (p.desc && p.desc[lang]) ? p.desc[lang] : (p.desc && p.desc['es'] ? p.desc['es'] : "");
 
-    // Si está agotado, le ponemos la etiqueta y quitamos los botones. Si no, botones normales.
     const badgeHTML = p.disponible ? '' : `<span class="badge-sold-out">${soldOutText}</span>`;
     const cardClass = p.disponible ? 'dish-card' : 'dish-card sold-out';
+
+    // --- NUEVA LÓGICA DE ETIQUETAS: Solo se muestran si el botón está activo o hay un filtro puesto ---
+    let allergyIconsHTML = '';
+    if ((showAllergyTags || allergyFilter) && p.tags && p.tags.length > 0) {
+      const allergyDict = { 
+          'gf': '<span class="badge-allergy">🌾 Sin Gluten</span>', 
+          'lf': '<span class="badge-allergy">🥛 Sin Lactosa</span>' 
+      };
+      
+      p.tags.forEach(tag => {
+          if(allergyDict[tag]) {
+              allergyIconsHTML += allergyDict[tag];
+          }
+      });
+    }
 
     let controlHTML = '';
     if(p.disponible) {
@@ -457,7 +548,7 @@ function render() {
     container.innerHTML += `
       <div class="${cardClass}">
         <div class="dish-info">
-          <div class="dish-name">${pName} ${badgeHTML}</div>
+          <div class="dish-name">${pName} ${allergyIconsHTML} ${badgeHTML}</div>
           <div class="dish-desc">${pDesc}</div>
           <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
@@ -643,7 +734,10 @@ function translateUI() {
   document.getElementById('opt-all').innerText = t.all;
   document.getElementById('opt-gf').innerText = t.gf;
   document.getElementById('opt-lf').innerText = t.lf;
-  document.getElementById('opt-v').innerText = t.v;
+  
+  // Traducir el botón de toggle según su estado
+  const btnToggle = document.getElementById('btnToggleAllergies');
+  btnToggle.innerText = showAllergyTags ? t.hideTags : t.showTags;
   
   const waiterSpan = document.getElementById('btnWaiterText');
   if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
