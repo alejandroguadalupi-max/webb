@@ -3,8 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, viewport-fit=cover" />
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#fffbf2" id="metaThemeColor" />
 <title>Carta - El Buen Bocado</title>
 
@@ -279,6 +277,7 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
       <option value="" id="opt-all">Todo (sin filtros)</option>
       <option value="gf" id="opt-gf">Solo Sin Gluten</option>
       <option value="lf" id="opt-lf">Solo Sin Lactosa</option>
+      <option value="nuts" id="opt-nuts">Solo Sin Frutos Secos</option>
     </select>
   </div>
 
@@ -340,35 +339,35 @@ const uiDict = {
     btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
     add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", 
     all: "Todo (sin filtros)", 
-    gf: "Solo Sin Gluten", lf: "Solo Sin Lactosa", soldout: "Agotado"
+    gf: "Solo Sin Gluten", lf: "Solo Sin Lactosa", nuts: "Solo Sin Frutos Secos", soldout: "Agotado"
   },
   en: { 
     pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
     btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?",
     add: "Add", place: "Notes (e.g. no ice, well done...)", 
     all: "View all (no filters)", 
-    gf: "Gluten Free Only", lf: "Dairy Free Only", soldout: "Sold out"
+    gf: "Gluten Free Only", lf: "Dairy Free Only", nuts: "Nut Free Only", soldout: "Sold out"
   },
   de: { 
     pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
     btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
     add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", 
     all: "Alle anzeigen (keine Filter)", 
-    gf: "Nur Glutenfrei", lf: "Nur Laktosefrei", soldout: "Ausverkauft"
+    gf: "Nur Glutenfrei", lf: "Nur Laktosefrei", nuts: "Nur ohne Nüsse", soldout: "Ausverkauft"
   },
   fr: { 
     pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
     btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
     add: "Ajouter", place: "Notes (ex. sans glace...)", 
     all: "Voir tout (sans filtres)", 
-    gf: "Seulement Sans Gluten", lf: "Seulement Sans Lactose", soldout: "Épuisé"
+    gf: "Seulement Sans Gluten", lf: "Seulement Sans Lactose", nuts: "Seulement Sans Fruits à Coque", soldout: "Épuisé"
   },
   it: { 
     pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
     btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
     add: "Aggiungi", place: "Note (es. senza ghiaccio...)", 
     all: "Vedi tutto (nessun filtro)", 
-    gf: "Solo Senza Glutine", lf: "Solo Senza Lattosio", soldout: "Esaurito"
+    gf: "Solo Senza Glutine", lf: "Solo Senza Lattosio", nuts: "Solo Senza Frutta a Guscio", soldout: "Esaurito"
   }
 };
 
@@ -457,11 +456,9 @@ function render() {
     if(item.cat !== activeCategory) return false;
     
     // 2. FILTRO INVERSO DE ALERGIAS
-    // Si elige "Solo Sin Gluten" (gf), y el plato CONTIENE 'gluten', lo ocultamos.
     if(allergyFilter === 'gf' && item.tags && item.tags.includes('gluten')) return false;
-    
-    // Si elige "Solo Sin Lactosa" (lf), y el plato CONTIENE 'lactosa', lo ocultamos.
     if(allergyFilter === 'lf' && item.tags && item.tags.includes('lactosa')) return false;
+    if(allergyFilter === 'nuts' && item.tags && item.tags.includes('frutos_secos')) return false;
     
     return true; 
   });
@@ -479,11 +476,10 @@ function render() {
     const badgeHTML = p.disponible ? '' : `<span class="badge-sold-out">${soldOutText}</span>`;
     const cardClass = p.disponible ? 'dish-card' : 'dish-card sold-out';
 
-    // --- EMOJIS SIMPLES Y LIMPIOS (Siempre visibles junto al nombre) ---
+    // --- EMOJIS SIMPLES Y LIMPIOS ---
     let allergyIconsHTML = '';
     if (p.tags && p.tags.length > 0) {
       const allergyDict = { 'gluten': '🍞', 'lactosa': '🥛', 'frutos_secos': '🥜' };
-      // Mapea y filtra los que existan, luego los une.
       const icons = p.tags.map(tag => allergyDict[tag]).filter(Boolean).join(' ');
       
       if (icons) {
@@ -687,6 +683,7 @@ function translateUI() {
   document.getElementById('opt-all').innerText = t.all;
   document.getElementById('opt-gf').innerText = t.gf;
   document.getElementById('opt-lf').innerText = t.lf;
+  document.getElementById('opt-nuts').innerText = t.nuts;
   
   const waiterSpan = document.getElementById('btnWaiterText');
   if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
