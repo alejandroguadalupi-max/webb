@@ -136,20 +136,31 @@ body {
 }
 
 .dish-info { display: flex; flex-direction: column; gap: 5px; }
-.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;}
-.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.9; }
+
+/* CORRECCIÓN: Título fluido para que baje de línea natural sin romper elementos internos */
+.dish-name { 
+  font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); margin-bottom: 4px; 
+}
+
+/* CORRECCIÓN: Descripción sin límite de líneas */
+.dish-desc { 
+  font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; opacity: 0.9; 
+}
+
 .dish-price { font-weight: 700; font-size: 1rem; color: var(--brand-color); margin-top: 5px; }
 
 .badge-sold-out {
   font-size: 0.65rem; background: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  display: inline-block; vertical-align: middle; margin-left: 6px;
 }
 
-/* --- EMOJIS LIMPIOS --- */
+/* CORRECCIÓN: Emojis agrupados con white-space: nowrap para que no se partan */
 .allergy-emojis {
   font-size: 1.1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin-left: 6px;
 }
 
 .action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
@@ -330,7 +341,7 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 
     <div class="btn-action-wrapper">
       <button class="btn-waiter" id="btnShowWaiter" style="display:none;" onclick="enterWaiterMode()">
-        <span id="btnWaiterText">🗣️ Mostrar al Camarero</span>
+        <span id="btnWaiterText">🗣️ Mostrar pedido al camarero en español</span>
       </button>
       
       <button onclick="clearCart()" class="clear-btn" id="clearTxt">Borrar todo</button>
@@ -346,11 +357,11 @@ const SUPABASE_URL = "https://xfylujdfpmajnbmuiebv.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmeWx1amRmcG1ham5ibXVpZWJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3OTczMTEsImV4cCI6MjA4NzM3MzMxMX0.S6NLD1pyObNpg_sRD60Od8q7MmNWMMLnwq8YLVEhtew"; 
 const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* --- TRADUCCIONES UI COMPLETAS --- */
+/* --- TRADUCCIONES UI COMPLETAS CORREGIDAS --- */
 const uiDict = {
   es: { 
     pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
-    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar al Camarero", confirm:"¿Borrar todo?",
+    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar pedido al camarero", confirm:"¿Borrar todo?",
     add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", 
     all: "Todo (sin filtros)", 
     gf: "Ocultar platos con gluten", lf: "Ocultar platos con lactosa", nuts: "Ocultar platos con frutos secos", soldout: "Agotado",
@@ -358,7 +369,7 @@ const uiDict = {
   },
   en: { 
     pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
-    btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show Waiter (ES)", confirm:"Clear everything?",
+    btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show order to waiter in Spanish", confirm:"Clear everything?",
     add: "Add", place: "Notes (e.g. no ice, well done...)", 
     all: "View all (no filters)", 
     gf: "Hide dishes with gluten", lf: "Hide dishes with dairy", nuts: "Hide dishes with nuts", soldout: "Sold out",
@@ -366,7 +377,7 @@ const uiDict = {
   },
   de: { 
     pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
-    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Kellner zeigen (ES)", confirm:"Alles löschen?",
+    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Bestellung dem Kellner auf Spanisch zeigen", confirm:"Alles löschen?",
     add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", 
     all: "Alle anzeigen (keine Filter)", 
     gf: "Gerichte mit Gluten ausblenden", lf: "Gerichte mit Laktose ausblenden", nuts: "Gerichte mit Nüssen ausblenden", soldout: "Ausverkauft",
@@ -374,7 +385,7 @@ const uiDict = {
   },
   fr: { 
     pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
-    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer au Serveur (ES)", confirm:"Tout effacer?",
+    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer la commande au serveur en espagnol", confirm:"Tout effacer?",
     add: "Ajouter", place: "Notes (ex. sans glace...)", 
     all: "Voir tout (sans filtres)", 
     gf: "Masquer les plats avec gluten", lf: "Masquer les plats avec lactose", nuts: "Masquer les plats avec fruits à coque", soldout: "Épuisé",
@@ -382,7 +393,7 @@ const uiDict = {
   },
   it: { 
     pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
-    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra al Cameriere (ES)", confirm:"Cancellare tutto?",
+    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra l'ordine al cameriere in spagnolo", confirm:"Cancellare tutto?",
     add: "Aggiungi", place: "Note (es. senza ghiaccio...)", 
     all: "Vedi tutto (nessun filtro)", 
     gf: "Nascondi i piatti con glutine", lf: "Nascondi i piatti con lattosio", nuts: "Nascondi i piatti con frutta a guscio", soldout: "Esaurito",
@@ -703,7 +714,7 @@ function translateUI() {
   document.getElementById('opt-gf').innerText = t.gf;
   document.getElementById('opt-lf').innerText = t.lf;
   document.getElementById('opt-nuts').innerText = t.nuts;
-  document.getElementById('disclaimerText').innerText = t.disclaimer; // Actualiza el mensaje de aviso
+  document.getElementById('disclaimerText').innerText = t.disclaimer; 
   
   const waiterSpan = document.getElementById('btnWaiterText');
   if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
@@ -719,7 +730,7 @@ themeBtn.addEventListener('click', () => {
   
   const metaTheme = document.getElementById('metaThemeColor');
   if(next === 'dark') metaTheme.setAttribute('content', '#1e1b1a');
-  else metaTheme.setAttribute('content', '#fffbf2'); // Aseguramos que vuelva al color claro
+  else metaTheme.setAttribute('content', '#fffbf2'); 
 });
 
 init();
