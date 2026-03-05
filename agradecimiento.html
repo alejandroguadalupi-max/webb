@@ -26,14 +26,20 @@
 }
 
 [data-theme="dark"] {
-  --bg-body: #0f172a;
-  --bg-card: #1e293b;
+  /* Fondo negro puro (ideal para pantallas OLED) */
+  --bg-body: #000000; 
   
-  --text-main: #f8fafc;
-  --text-sec: #94a3b8;
-  --border: #334155;
+  /* Tarjeta en un gris muy oscuro para que resalte sobre el fondo */
+  --bg-card: #121212; 
   
-  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.4);
+  /* Textos en blanco y gris neutro (sin rastro de azul) */
+  --text-main: #ffffff;
+  --text-sec: #a3a3a3; 
+  
+  /* Borde sutil para separar la tarjeta */
+  --border: #262626; 
+  
+  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.6);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
