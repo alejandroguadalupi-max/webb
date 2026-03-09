@@ -401,11 +401,13 @@ const uiDict = {
   }
 };
 
+
 /* --- ESTADO --- */
 let cart = {};
 let activeCategory = 'bebidas'; 
 let lang = 'es';
 let currentMenu = [];
+let isFetching = true; // <--- NUEVA VARIABLE: Indica si estamos descargando por primera vez
 
 /* --- INIT --- */
 function init() {
@@ -416,7 +418,7 @@ function init() {
   
   const metaTheme = document.getElementById('metaThemeColor');
   if(savedTheme === 'dark') metaTheme.setAttribute('content', '#1e1b1a');
-  else metaTheme.setAttribute('content', '#fffbf2'); // Aseguramos color crema en light
+  else metaTheme.setAttribute('content', '#fffbf2'); 
 
   document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '🌙' : '☀️';
   
@@ -433,13 +435,31 @@ function init() {
   loadCart();
   translateUI();
   
+  // 1. Cargar el menú guardado en el móvil (Carga Instantánea)
+  loadMenuFromCache();
+  
+  // 2. Pintar la pantalla de inmediato con lo que tengamos
   filter('bebidas'); 
   updateFloat();
 
+  // 3. Buscar datos nuevos en Supabase en segundo plano
   loadMenuFromDB();
 }
 
-/* --- SUPABASE --- */
+/* --- MEMORIA CACHÉ --- */
+function loadMenuFromCache() {
+  try {
+    const cachedMenu = localStorage.getItem('menu_cache_elbuenbocado');
+    if (cachedMenu) {
+      currentMenu = JSON.parse(cachedMenu);
+      isFetching = false; // Si hay caché, ya tenemos platos, no hace falta esqueleto
+    }
+  } catch(e) {
+    console.log("No hay caché previo");
+  }
+}
+
+/* --- SUPABASE (Carga en Segundo Plano) --- */
 async function loadMenuFromDB() {
   const slugValido = "el-buen-bocado"; 
 
@@ -449,14 +469,15 @@ async function loadMenuFromDB() {
     .eq('slug', slugValido)
     .order('orden', { ascending: true }); 
 
+  isFetching = false; // Ya terminamos de contactar con la base de datos
+
   if (error) {
     console.error("Error en Supabase:", error.message);
+    render(); // Forzamos pintar la pantalla (se mostrará vacía si falló)
     return;
   }
 
-  if (!data || data.length === 0) {
-    currentMenu = [];
-  } else {
+  if (data && data.length > 0) {
     currentMenu = data.map(p => ({
       id: p.id,
       cat: p.categoria || 'bebidas',
@@ -466,30 +487,52 @@ async function loadMenuFromDB() {
       desc: p.descripcion || { es: "" },
       disponible: p.disponible !== false 
     }));
+    
+    localStorage.setItem('menu_cache_elbuenbocado', JSON.stringify(currentMenu));
+    render();
   }
-
-  render();
 }
 
 /* --- RENDERIZADO DEL MENU --- */
 function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
-  const allergyFilter = document.getElementById('allergyFilter').value;
   
+  // 1. PANTALLA DE CARGA (SKELETON) - Solo si es primera visita y está descargando
+  if (isFetching && currentMenu.length === 0) {
+    container.innerHTML = `
+      <div class="dish-card" style="pointer-events:none;">
+        <div class="dish-info" style="gap:8px;">
+          <div style="height:16px; width:70%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.6"></div>
+          <div style="height:12px; width:90%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.4"></div>
+          <div style="height:12px; width:50%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.4"></div>
+          <div style="height:16px; width:25%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; margin-top:5px; opacity:0.8"></div>
+        </div>
+        <div style="width:70px; height:35px; background:var(--border); border-radius:8px; animation: pulse 1.5s infinite; opacity:0.5"></div>
+      </div>
+      <div class="dish-card" style="pointer-events:none;">
+        <div class="dish-info" style="gap:8px;">
+          <div style="height:16px; width:50%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.6"></div>
+          <div style="height:12px; width:80%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.4"></div>
+          <div style="height:16px; width:25%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; margin-top:5px; opacity:0.8"></div>
+        </div>
+        <div style="width:70px; height:35px; background:var(--border); border-radius:8px; animation: pulse 1.5s infinite; opacity:0.5"></div>
+      </div>
+    `;
+    return; // Paramos aquí hasta que Supabase devuelva los datos de verdad
+  }
+
+  // 2. RENDERIZADO NORMAL (Cuando ya hay datos)
+  const allergyFilter = document.getElementById('allergyFilter').value;
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
   const soldOutText = t.soldout || "Agotado";
 
   const items = currentMenu.filter(item => {
-    // 1. Filtrar por categoría
     if(item.cat !== activeCategory) return false;
-    
-    // 2. FILTRO INVERSO DE ALERGIAS
     if(allergyFilter === 'gf' && item.tags && item.tags.includes('gluten')) return false;
     if(allergyFilter === 'lf' && item.tags && item.tags.includes('lactosa')) return false;
     if(allergyFilter === 'nuts' && item.tags && item.tags.includes('frutos_secos')) return false;
-    
     return true; 
   });
 
@@ -499,19 +542,15 @@ function render() {
 
   items.forEach(p => {
     const qty = cart[p.id] || 0;
-    
     const pName = (p.name && p.name[lang]) ? p.name[lang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
     const pDesc = (p.desc && p.desc[lang]) ? p.desc[lang] : (p.desc && p.desc['es'] ? p.desc['es'] : "");
-
     const badgeHTML = p.disponible ? '' : `<span class="badge-sold-out">${soldOutText}</span>`;
     const cardClass = p.disponible ? 'dish-card' : 'dish-card sold-out';
 
-    // --- EMOJIS SIMPLES Y LIMPIOS ---
     let allergyIconsHTML = '';
     if (p.tags && p.tags.length > 0) {
       const allergyDict = { 'gluten': '🍞', 'lactosa': '🥛', 'frutos_secos': '🥜' };
       const icons = p.tags.map(tag => allergyDict[tag]).filter(Boolean).join(' ');
-      
       if (icons) {
         allergyIconsHTML = `<span class="allergy-emojis">${icons}</span>`;
       }
@@ -629,7 +668,6 @@ function renderList() {
   });
 }
 
-/* --- MODO CAMARERO --- */
 async function enterWaiterMode() {
   document.body.classList.add('waiter-active');
   document.getElementById('orderSheet').classList.add('waiter-mode');
@@ -688,9 +726,9 @@ function exitWaiterMode() {
   if(userCloseBtn) userCloseBtn.style.display = 'block';
   
   document.getElementById('modalTitle').style.display = 'block';
-  
+
   if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';
-  
+
   renderList();
 }
 
