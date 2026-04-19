@@ -275,7 +275,7 @@
 <main class="app-container">
   
   <div class="header-section">
-    <img src = "img/perfil.png" id = "imgperfil"></src>
+    <img src="img/perfil.png" id="imgperfil" alt="Logotipo El Buen Bocado">
   </div>
 
   <div class="menu-grid">
@@ -353,9 +353,12 @@
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
     localStorage.setItem('theme', theme);
     
-    const img = document.getElementbyId('imgperfil');
-    img.src = theme == 'dark' ? 'img/perfil2.png' : 'img/perfil.png';
-}
+    // CORREGIDO: getElementById (la 'B' debe ser mayúscula)
+    const img = document.getElementById('imgperfil');
+    if(img) {
+      img.src = theme === 'dark' ? 'img/perfil2.png' : 'img/perfil.png';
+    }
+  }
 
 
   document.getElementById('themeBtn').addEventListener('click', () => {
@@ -365,8 +368,11 @@
     document.documentElement.setAttribute('data-theme', newTheme);
     document.getElementById('themeBtn').innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
     localStorage.setItem('theme', newTheme);
+    
     const img = document.getElementById('imgperfil');
-    img.src = newTheme === 'dark' ? 'img/perfil2.png' : 'img/perfil.png';
+    if(img) {
+      img.src = newTheme === 'dark' ? 'img/perfil2.png' : 'img/perfil.png';
+    }
   });
 
   document.getElementById('lang-select').addEventListener('change', (e) => {
