@@ -128,6 +128,7 @@ body {
   background: var(--bg-card); border-radius: 16px; padding: 16px;
   display: grid; grid-template-columns: 1fr auto; gap: 15px;
   box-shadow: var(--shadow-card); align-items: start; border: 1px solid var(--border);
+  position: relative;
 }
 
 .dish-card.sold-out {
@@ -135,18 +136,36 @@ body {
   background: rgba(0,0,0,0.02);
 }
 
-.dish-info { display: flex; flex-direction: column; gap: 5px; }
+/* --- ESTILOS DE ETIQUETAS Y FONDOS DE PLATOS --- */
+.dish-card.badge-top { border-left: 4px solid #a0715e; background: linear-gradient(90deg, rgba(160, 113, 94, 0.08) 0%, var(--bg-card) 40%); }
+.dish-card.badge-nuevo { border-left: 4px solid #3e2b26; background: linear-gradient(90deg, rgba(62, 43, 38, 0.06) 0%, var(--bg-card) 40%); }
+.dish-card.badge-premium { border-left: 4px solid #d4af37; background: linear-gradient(90deg, rgba(212, 175, 55, 0.08) 0%, var(--bg-card) 40%); }
+.dish-card.badge-recomendado { border-left: 4px solid #4caf50; background: linear-gradient(90deg, rgba(76, 175, 80, 0.08) 0%, var(--bg-card) 40%); }
 
-/* CORRECCIÓN: Título fluido para que baje de línea natural sin romper elementos internos */
-.dish-name { 
-  font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); margin-bottom: 4px; 
+[data-theme="dark"] .dish-card.badge-nuevo { border-left-color: #8d6e63; background: linear-gradient(90deg, rgba(141, 110, 99, 0.12) 0%, var(--bg-card) 40%); }
+[data-theme="dark"] .dish-card.badge-top { background: linear-gradient(90deg, rgba(160, 113, 94, 0.15) 0%, var(--bg-card) 40%); }
+[data-theme="dark"] .dish-card.badge-premium { background: linear-gradient(90deg, rgba(212, 175, 55, 0.12) 0%, var(--bg-card) 40%); }
+[data-theme="dark"] .dish-card.badge-recomendado { background: linear-gradient(90deg, rgba(76, 175, 80, 0.12) 0%, var(--bg-card) 40%); }
+
+.dish-badge-label {
+  font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+  display: inline-block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+  width: max-content;
 }
 
-/* CORRECCIÓN: Descripción sin límite de líneas */
-.dish-desc { 
-  font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; opacity: 0.9; 
-}
+.label-top { background: rgba(160, 113, 94, 0.15); color: #a0715e; border: 1px solid rgba(160, 113, 94, 0.3); }
+.label-nuevo { background: rgba(62, 43, 38, 0.1); color: #3e2b26; border: 1px solid rgba(62, 43, 38, 0.2); }
+.label-premium { background: rgba(212, 175, 55, 0.15); color: #b8860b; border: 1px solid rgba(212, 175, 55, 0.3); }
+.label-recomendado { background: rgba(76, 175, 80, 0.15); color: #2e7d32; border: 1px solid rgba(76, 175, 80, 0.3); }
 
+[data-theme="dark"] .label-top { background: rgba(160, 113, 94, 0.2); color: #d7b5a6; border-color: rgba(160, 113, 94, 0.4); }
+[data-theme="dark"] .label-nuevo { background: rgba(141, 110, 99, 0.2); color: #d7ccc8; border-color: rgba(141, 110, 99, 0.4); }
+[data-theme="dark"] .label-premium { background: rgba(212, 175, 55, 0.2); color: #e6c200; border-color: rgba(212, 175, 55, 0.4); }
+[data-theme="dark"] .label-recomendado { background: rgba(76, 175, 80, 0.2); color: #81c784; border-color: rgba(76, 175, 80, 0.4); }
+
+.dish-info { display: flex; flex-direction: column; gap: 3px; }
+.dish-name { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--text-main); margin-bottom: 2px; }
+.dish-desc { font-size: 0.85rem; color: var(--text-sec); line-height: 1.4; opacity: 0.9; margin-top: 2px; }
 .dish-price { font-weight: 700; font-size: 1rem; color: var(--brand-color); margin-top: 5px; }
 
 .badge-sold-out {
@@ -154,14 +173,7 @@ body {
   display: inline-block; vertical-align: middle; margin-left: 6px;
 }
 
-/* CORRECCIÓN: Emojis agrupados con white-space: nowrap para que no se partan */
-.allergy-emojis {
-  font-size: 1.1rem;
-  display: inline-block;
-  white-space: nowrap;
-  vertical-align: middle;
-  margin-left: 6px;
-}
+.allergy-emojis { font-size: 1.1rem; display: inline-block; white-space: nowrap; vertical-align: middle; margin-left: 6px; }
 
 .action-area { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; min-width: 90px; }
 .btn-add-simple {
@@ -179,16 +191,9 @@ body {
 .qty-selector button.plus { color: var(--brand-color); }
 .qty-selector span { font-weight: 600; font-size: 0.95rem; }
 
-/* --- MINIATURA DEL PLATO (DEBAJO DEL BOTÓN) --- */
 .dish-thumbnail {
-  width: 85px;
-  height: 85px;
-  border-radius: 12px;
-  object-fit: cover;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-  margin-top: 12px; /* Da espacio entre el botón y la foto */
+  width: 85px; height: 85px; border-radius: 12px; object-fit: cover;
+  cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s; margin-top: 12px;
 }
 .dish-thumbnail:active { transform: scale(0.95); }
 
@@ -248,18 +253,10 @@ body {
 .sheet-title { margin: 0; font-size: 1.3rem; font-weight: 700; color: var(--brand-color); }
 .close-small { cursor:pointer; padding:5px; font-size:1.5rem; color: var(--text-main); }
 
-/* MENSAJE AVISO ORGANIZACIÓN */
 .disclaimer-msg {
-  font-size: 0.85rem;
-  color: var(--text-main);
-  background: rgba(160, 113, 94, 0.1);
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  line-height: 1.4;
-  text-align: left;
-  border: 1px dashed var(--brand-color);
-  opacity: 0.9;
+  font-size: 0.85rem; color: var(--text-main); background: rgba(160, 113, 94, 0.1);
+  padding: 12px; border-radius: 10px; margin-bottom: 15px; line-height: 1.4; text-align: left;
+  border: 1px dashed var(--brand-color); opacity: 0.9;
 }
 
 .order-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
@@ -276,8 +273,7 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 .btn-waiter {
   width: 100%; padding: 18px; border-radius: 16px; 
   background: var(--text-main); color: var(--bg-card); border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; 
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   transform-origin: center; animation: pulse 2s infinite;
 }
 @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.02);} 100% {transform: scale(1);} }
@@ -285,31 +281,14 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 .clear-btn { background: transparent; border: none; color: var(--text-sec); text-decoration: underline; cursor: pointer; align-self: center; font-size: 0.9rem; margin-top: 5px;}
 
 /* --- MODO CAMARERO (PANTALLA COMPLETA) --- */
-.sheet.waiter-mode { 
-  height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 60px; 
-  background: #fff; color: #000;
-}
-.sheet.waiter-mode .disclaimer-msg { display: none; } /* Ocultar aviso en modo camarero */
-.sheet.waiter-mode .order-item { 
-  padding: 25px 5px; background: transparent; border-bottom: 2px solid #eee; border-radius: 0; 
-}
-.sheet.waiter-mode .order-name { 
-  font-size: 1.8rem; font-weight: 800; line-height: 1.1; color: #000;
-}
-.sheet.waiter-mode .qty-display { 
-  font-size: 2.2rem; font-weight: 900; color: var(--brand-color); margin-right: 25px; 
-}
+.sheet.waiter-mode { height: 100% !important; max-height: 100vh; border-radius: 0; z-index: 3000; padding-top: 60px; background: #fff; color: #000; }
+.sheet.waiter-mode .disclaimer-msg { display: none; }
+.sheet.waiter-mode .order-item { padding: 25px 5px; background: transparent; border-bottom: 2px solid #eee; border-radius: 0; }
+.sheet.waiter-mode .order-name { font-size: 1.8rem; font-weight: 800; line-height: 1.1; color: #000; }
+.sheet.waiter-mode .qty-display { font-size: 2.2rem; font-weight: 900; color: var(--brand-color); margin-right: 25px; }
 
-.waiter-note-box {
-  background: #FFF8E1; border: 3px solid #FFD54F; color: #000;
-  padding: 20px; margin: 20px 0; border-radius: 16px; font-size: 1.4rem;
-  line-height: 1.4; font-weight: 500;
-}
-
-.waiter-note-label { 
-  font-weight: 900; display: block; margin-bottom: 8px; 
-  text-transform: uppercase; font-size: 0.9rem; color: #FFA000; letter-spacing: 1px;
-}
+.waiter-note-box { background: #FFF8E1; border: 3px solid #FFD54F; color: #000; padding: 20px; margin: 20px 0; border-radius: 16px; font-size: 1.4rem; line-height: 1.4; font-weight: 500; }
+.waiter-note-label { font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase; font-size: 0.9rem; color: #FFA000; letter-spacing: 1px; }
 
 #closeWaiterBtn {
   position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: var(--brand-color); color: #fff;
@@ -331,7 +310,6 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 </header>
 
 <div class="controls-container">
-  
   <div class="allergy-wrapper">
     <select id="allergyFilter" class="allergy-select" onchange="render()">
       <option value="" id="opt-all">Todo (sin filtros)</option>
@@ -340,14 +318,12 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
       <option value="nuts" id="opt-nuts">Ocultar platos con frutos secos</option>
     </select>
   </div>
-
   <div class="filters-scroll">
     <button class="filter-pill active" onclick="filter('bebidas')" id="f-drk">Bebidas</button>
     <button class="filter-pill" onclick="filter('entrantes')" id="f-ent">Entrantes</button>
     <button class="filter-pill" onclick="filter('principales')" id="f-main">Principales</button>
     <button class="filter-pill" onclick="filter('postres')" id="f-des">Postres</button>
   </div>
-
 </div>
 
 <div class="menu-grid" id="menuContainer"></div>
@@ -359,27 +335,20 @@ textarea.notes:focus { border-color: var(--brand-color); background: var(--bg-ca
 
 <div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
   <button id="closeWaiterBtn" onclick="exitWaiterMode()">✕</button>
-
   <div class="sheet" id="orderSheet">
     <div class="sheet-header">
       <h3 class="sheet-title" id="modalTitle">Tu Pedido</h3>
     </div>
-    
     <div id="disclaimerText" class="disclaimer-msg"></div>
-    
     <div class="order-list" id="orderList"></div>
-
     <div id="notesArea">
       <textarea class="notes" id="notesField" oninput="saveNotes()"></textarea>
     </div>
-    
     <div id="waiterNotesDisplay" style="display:none;"></div>
-
     <div class="btn-action-wrapper">
       <button class="btn-waiter" id="btnShowWaiter" style="display:none;" onclick="enterWaiterMode()">
         <span id="btnWaiterText">🗣️ Mostrar pedido al camarero en español</span>
       </button>
-      
       <button onclick="clearCart()" class="clear-btn" id="clearTxt">Borrar todo</button>
     </div>
   </div>
@@ -400,60 +369,23 @@ const miSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* --- TRADUCCIONES UI COMPLETAS CORREGIDAS --- */
 const uiDict = {
-  es: { 
-    pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", 
-    btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar pedido al camarero", confirm:"¿Borrar todo?",
-    add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", 
-    all: "Todo (sin filtros)", 
-    gf: "Ocultar platos con gluten", lf: "Ocultar platos con lactosa", nuts: "Ocultar platos con frutos secos", soldout: "Agotado",
-    disclaimer: "📝 Esta lista es solo para que te organices mejor y no liarte con los platos. El pedido no se envía por el móvil, tendrás que decírselo al camarero."
-  },
-  en: { 
-    pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", 
-    btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show order to waiter in Spanish", confirm:"Clear everything?",
-    add: "Add", place: "Notes (e.g. no ice, well done...)", 
-    all: "View all (no filters)", 
-    gf: "Hide dishes with gluten", lf: "Hide dishes with dairy", nuts: "Hide dishes with nuts", soldout: "Sold out",
-    disclaimer: "📝 This list is just to help you organize your order. It is not sent automatically. Once you are ready, you can tap 'Show Waiter' to translate it and show your phone to the staff."
-  },
-  de: { 
-    pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", 
-    btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Bestellung dem Kellner auf Spanisch zeigen", confirm:"Alles löschen?",
-    add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", 
-    all: "Alle anzeigen (keine Filter)", 
-    gf: "Gerichte mit Gluten ausblenden", lf: "Gerichte mit Laktose ausblenden", nuts: "Gerichte mit Nüssen ausblenden", soldout: "Ausverkauft",
-    disclaimer: "📝 Diese Liste dient nur dazu, Ihre Bestellung zu organisieren. Sie wird nicht automatisch gesendet. Wenn Sie bereit sind, tippen Sie auf 'Kellner zeigen', um sie zu übersetzen und dem Personal zu zeigen."
-  },
-  fr: { 
-    pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", 
-    btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer la commande au serveur en espagnol", confirm:"Tout effacer?",
-    add: "Ajouter", place: "Notes (ex. sans glace...)", 
-    all: "Voir tout (sans filtres)", 
-    gf: "Masquer les plats avec gluten", lf: "Masquer les plats avec lactose", nuts: "Masquer les plats avec fruits à coque", soldout: "Épuisé",
-    disclaimer: "📝 Cette liste sert uniquement à organiser votre commande. Elle n'est pas envoyée automatiquement. Cliquez sur 'Montrer au Serveur' pour la traduire et montrer l'écran au personnel."
-  },
-  it: { 
-    pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", 
-    btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra l'ordine al cameriere in spagnolo", confirm:"Cancellare tutto?",
-    add: "Aggiungi", place: "Note (es. senza ghiaccio...)", 
-    all: "Vedi tutto (nessun filtro)", 
-    gf: "Nascondi i piatti con glutine", lf: "Nascondi i piatti con lattosio", nuts: "Nascondi i piatti con frutta a guscio", soldout: "Esaurito",
-    disclaimer: "📝 Questa lista serve solo per organizzare l'ordine. Non viene inviato dal cellulare. Quando sei pronto, premi 'Mostra al Cameriere' per tradurre e mostrare lo schermo al personale."
-  }
+  es: { pageTitle: "CARTA", ent:"Entrantes", main:"Principales", des:"Postres", drk:"Bebidas", btn:"Ver Pedido", title:"Tu Pedido", clear:"Borrar todo", trans:"Mostrar pedido al camarero", confirm:"¿Borrar todo?", add: "Añadir", place: "Notas (ej. sin hielo, muy hecho...)", all: "Todo (sin filtros)", gf: "Ocultar platos con gluten", lf: "Ocultar platos con lactosa", nuts: "Ocultar platos con frutos secos", soldout: "Agotado", disclaimer: "📝 Esta lista es solo para que te organices mejor y no liarte con los platos. El pedido no se envía por el móvil, tendrás que decírselo al camarero." },
+  en: { pageTitle: "MENU", ent:"Starters", main:"Mains", des:"Desserts", drk:"Drinks", btn:"View Order", title:"Your Order", clear:"Clear all", trans:"Show order to waiter in Spanish", confirm:"Clear everything?", add: "Add", place: "Notes (e.g. no ice, well done...)", all: "View all (no filters)", gf: "Hide dishes with gluten", lf: "Hide dishes with dairy", nuts: "Hide dishes with nuts", soldout: "Sold out", disclaimer: "📝 This list is just to help you organize your order. It is not sent automatically. Once you are ready, you can tap 'Show Waiter' to translate it and show your phone to the staff." },
+  de: { pageTitle: "SPEISEKARTE", ent:"Vorspeisen", main:"Hauptgerichte", des:"Dessert", drk:"Getränke", btn:"Bestellung", title:"Deine Bestellung", clear:"Löschen", trans:"Bestellung dem Kellner auf Spanisch zeigen", confirm:"Alles löschen?", add: "Hinzufügen", place: "Notizen (z.B. kein Eis...)", all: "Alle anzeigen (keine Filter)", gf: "Gerichte mit Gluten ausblenden", lf: "Gerichte mit Laktose ausblenden", nuts: "Gerichte mit Nüssen ausblenden", soldout: "Ausverkauft", disclaimer: "📝 Diese Liste dient nur dazu, Ihre Bestellung zu organisieren. Sie wird nicht automatisch gesendet. Wenn Sie bereit sind, tippen Sie auf 'Kellner zeigen', um sie zu übersetzen und dem Personal zu zeigen." },
+  fr: { pageTitle: "CARTE", ent:"Entrées", main:"Plats", des:"Desserts", drk:"Boissons", btn:"Voir Commande", title:"Votre Commande", clear:"Tout effacer", trans:"Montrer la commande au serveur en espagnol", confirm:"Tout effacer?", add: "Ajouter", place: "Notes (ex. sans glace...)", all: "Voir tout (sans filtres)", gf: "Masquer les plats avec gluten", lf: "Masquer les plats avec lactose", nuts: "Masquer les plats avec fruits à coque", soldout: "Épuisé", disclaimer: "📝 Cette liste sert uniquement à organiser votre commande. Elle n'est pas envoyée automatiquement. Cliquez sur 'Montrer au Serveur' pour la traduire et montrer l'écran au personnel." },
+  it: { pageTitle: "MENU", ent:"Antipasti", main:"Piatti Principali", des:"Dolci", drk:"Bevande", btn:"Vedi Ordine", title:"Il Tuo Ordine", clear:"Cancella tutto", trans:"Mostra l'ordine al cameriere in spagnolo", confirm:"Cancellare tutto?", add: "Aggiungi", place: "Note (es. senza ghiaccio...)", all: "Vedi tutto (nessun filtro)", gf: "Nascondi i piatti con glutine", lf: "Nascondi i piatti con lattosio", nuts: "Nascondi i piatti con frutta a guscio", soldout: "Esaurito", disclaimer: "📝 Questa lista serve solo per organizzare l'ordine. Non viene inviato dal cellulare. Quando sei pronto, premi 'Mostra al Cameriere' per tradurre e mostrare lo schermo al personale." }
 };
-
 
 /* --- ESTADO --- */
 let cart = {};
 let activeCategory = 'bebidas'; 
 let lang = 'es';
 let currentMenu = [];
-let isFetching = true; // <--- NUEVA VARIABLE: Indica si estamos descargando por primera vez
+let isFetching = true;
 
 /* --- INIT --- */
 function init() {
   const params = new URLSearchParams(window.location.search);
-  
   let savedTheme = params.get('theme') || localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   
@@ -475,15 +407,9 @@ function init() {
 
   loadCart();
   translateUI();
-  
-  // 1. Cargar el menú guardado en el móvil (Carga Instantánea)
   loadMenuFromCache();
-  
-  // 2. Pintar la pantalla de inmediato con lo que tengamos
   filter('bebidas'); 
   updateFloat();
-
-  // 3. Buscar datos nuevos en Supabase en segundo plano
   loadMenuFromDB();
 }
 
@@ -491,48 +417,29 @@ function init() {
 function loadMenuFromCache() {
   try {
     const cachedMenu = localStorage.getItem('menu_cache_elbuenbocado');
-    if (cachedMenu) {
-      currentMenu = JSON.parse(cachedMenu);
-      isFetching = false; // Si hay caché, ya tenemos platos, no hace falta esqueleto
-    }
-  } catch(e) {
-    console.log("No hay caché previo");
-  }
+    if (cachedMenu) { currentMenu = JSON.parse(cachedMenu); isFetching = false; }
+  } catch(e) { console.log("No hay caché previo"); }
 }
 
 /* --- SUPABASE (Carga en Segundo Plano) --- */
 async function loadMenuFromDB() {
-
   const slugValido = "el-buen-bocado"; 
-
-  const { data, error } = await miSupabase
-    .from('platos')
-    .select('*')
-    .eq('slug', slugValido)
-    .order('orden', { ascending: true }); 
-
-  isFetching = false; // Ya terminamos de contactar con la base de datos
+  const { data, error } = await miSupabase.from('platos').select('*').eq('slug', slugValido).order('orden', { ascending: true }); 
+  isFetching = false; 
 
   if (error) {
     console.error("Error en Supabase:", error.message);
-    render(); // Forzamos pintar la pantalla (se mostrará vacía si falló)
+    render(); 
     return;
   }
 
   if (data && data.length > 0) {
     currentMenu = data.map(p => ({
       badges: p.badges || [],
-      id: p.id,
-      cat: p.categoria || 'bebidas',
-      tags: p.tags || [],
-      price: Number(p.precio) || 0,
-      name: p.nombre || { es: "Sin nombre" },
-      desc: p.descripcion || { es: "" },
-      disponible: p.disponible !== false,
-      imagen: p.imagen || null // <--- AQUÍ LEEMOS LA FOTO DE SUPABASE
+      id: p.id, cat: p.categoria || 'bebidas', tags: p.tags || [],
+      price: Number(p.precio) || 0, name: p.nombre || { es: "Sin nombre" },
+      desc: p.descripcion || { es: "" }, disponible: p.disponible !== false, imagen: p.imagen || null
     }));
-    
-    // GUARDA EN CACHÉ Y PINTA LA PANTALLA
     localStorage.setItem('menu_cache_elbuenbocado', JSON.stringify(currentMenu));
     render();
   }
@@ -543,7 +450,6 @@ function render() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
   
-  // 1. PANTALLA DE CARGA (SKELETON) - Solo si es primera visita y está descargando
   if (isFetching && currentMenu.length === 0) {
     container.innerHTML = `
       <div class="dish-card" style="pointer-events:none;">
@@ -554,48 +460,35 @@ function render() {
           <div style="height:16px; width:25%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; margin-top:5px; opacity:0.8"></div>
         </div>
         <div style="width:70px; height:35px; background:var(--border); border-radius:8px; animation: pulse 1.5s infinite; opacity:0.5"></div>
-      </div>
-      <div class="dish-card" style="pointer-events:none;">
-        <div class="dish-info" style="gap:8px;">
-          <div style="height:16px; width:50%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.6"></div>
-          <div style="height:12px; width:80%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; opacity:0.4"></div>
-          <div style="height:16px; width:25%; background:var(--border); border-radius:6px; animation: pulse 1.5s infinite; margin-top:5px; opacity:0.8"></div>
-        </div>
-        <div style="width:70px; height:35px; background:var(--border); border-radius:8px; animation: pulse 1.5s infinite; opacity:0.5"></div>
-      </div>
-    `;
-    return; // Paramos aquí hasta que Supabase devuelva los datos de verdad
+      </div>`;
+    return; 
   }
 
-  // 2. RENDERIZADO NORMAL (Cuando ya hay datos)
   const allergyFilter = document.getElementById('allergyFilter').value;
   const t = uiDict[lang] || uiDict['es'];
   const addBtnText = t.add || "Añadir";
   const soldOutText = t.soldout || "Agotado";
 
   let items = currentMenu.filter(item => {
-  if(item.cat !== activeCategory) return false;
+    if(item.cat !== activeCategory) return false;
+    const allergyFilter = document.getElementById('allergyFilter').value;
+    if(allergyFilter === 'gf' && item.tags?.includes('gluten')) return false;
+    if(allergyFilter === 'lf' && item.tags?.includes('lactosa')) return false;
+    if(allergyFilter === 'nuts' && item.tags?.includes('frutos_secos')) return false;
+    return true;
+  });
 
-  const allergyFilter = document.getElementById('allergyFilter').value;
-
-  if(allergyFilter === 'gf' && item.tags?.includes('gluten')) return false;
-  if(allergyFilter === 'lf' && item.tags?.includes('lactosa')) return false;
-  if(allergyFilter === 'nuts' && item.tags?.includes('frutos_secos')) return false;
-
-  return true;
-});
   items.sort((a, b) => {
-  const score = (item) => {
-    let s = 0;
-    if (item.badges?.includes('top')) s += 100;
-    if (item.badges?.includes('premium')) s += 40;
-    if (item.badges?.includes('recomendado')) s += 30;
-    if (item.badges?.includes('nuevo')) s += 20;
-    return s;
-  };
-  return score(b) - score(a);
-});
- 
+    const score = (item) => {
+      let s = 0;
+      if (item.badges?.includes('premium')) s += 100;
+      if (item.badges?.includes('top')) s += 50;
+      if (item.badges?.includes('recomendado')) s += 30;
+      if (item.badges?.includes('nuevo')) s += 20;
+      return s;
+    };
+    return score(b) - score(a);
+  });
 
   if (items.length === 0) {
      container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec); opacity:0.7">No hay platos que cumplan tu selección en esta categoría.</div>`;
@@ -606,66 +499,34 @@ function render() {
     const pName = (p.name && p.name[lang]) ? p.name[lang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
     const pDesc = (p.desc && p.desc[lang]) ? p.desc[lang] : (p.desc && p.desc['es'] ? p.desc['es'] : "");
     const badgeHTML = p.disponible ? '' : `<span class="badge-sold-out">${soldOutText}</span>`;
-    const cardClass = p.disponible ? 'dish-card' : 'dish-card sold-out';
-
+    
     let allergyIconsHTML = '';
-    let badgeHTMLExtra = '';
+    let badgeLabelHTML = '';
+    let extraCardClass = '';
 
-if (p.badges) {
-  if (p.badges.includes('top')) {
-    badgeHTMLExtra += `<span style="
-      background:#a0715e;
-      color:white;
-      font-size:0.65rem;
-      padding:3px 8px;
-      border-radius:6px;
-      font-weight:800;
-      margin-left:6px;
-    ">🔥 TOP</span>`;
-  }
+    // Asignamos una única clase prioritaria para no solapar gradientes ni bordes
+    if (p.badges && p.badges.length > 0) {
+      if (p.badges.includes('premium')) {
+        extraCardClass = 'badge-premium';
+        badgeLabelHTML = `<span class="dish-badge-label label-premium">💎 PREMIUM</span>`;
+      } else if (p.badges.includes('top')) {
+        extraCardClass = 'badge-top';
+        badgeLabelHTML = `<span class="dish-badge-label label-top">🔥 TOP VENTAS</span>`;
+      } else if (p.badges.includes('recomendado')) {
+        extraCardClass = 'badge-recomendado';
+        badgeLabelHTML = `<span class="dish-badge-label label-recomendado">👨‍🍳 RECOMENDADO</span>`;
+      } else if (p.badges.includes('nuevo')) {
+        extraCardClass = 'badge-nuevo';
+        badgeLabelHTML = `<span class="dish-badge-label label-nuevo">🆕 NUEVO</span>`;
+      }
+    }
 
-  if (p.badges.includes('nuevo')) {
-    badgeHTMLExtra += `<span style="
-      background:#3e2b26;
-      color:white;
-      font-size:0.65rem;
-      padding:3px 8px;
-      border-radius:6px;
-      font-weight:800;
-      margin-left:6px;
-    ">🆕 NUEVO</span>`;
-  }
+    const cardClass = p.disponible ? `dish-card ${extraCardClass}` : `dish-card sold-out ${extraCardClass}`;
 
-  if (p.badges.includes('premium')) {
-    badgeHTMLExtra += `<span style="
-      background:#d4af37;
-      color:black;
-      font-size:0.65rem;
-      padding:3px 8px;
-      border-radius:6px;
-      font-weight:800;
-      margin-left:6px;
-    ">💎 PREMIUM</span>`;
-  }
-
-  if (p.badges.includes('recomendado')) {
-    badgeHTMLExtra += `<span style="
-      background:#4caf50;
-      color:white;
-      font-size:0.65rem;
-      padding:3px 8px;
-      border-radius:6px;
-      font-weight:800;
-      margin-left:6px;
-    ">👨‍🍳 RECOMENDADO</span>`;
-  }
-}
     if (p.tags && p.tags.length > 0) {
       const allergyDict = { 'gluten': '🍞', 'lactosa': '🥛', 'frutos_secos': '🥜' };
       const icons = p.tags.map(tag => allergyDict[tag]).filter(Boolean).join(' ');
-      if (icons) {
-        allergyIconsHTML = `<span class="allergy-emojis">${icons}</span>`;
-      }
+      if (icons) { allergyIconsHTML = `<span class="allergy-emojis">${icons}</span>`; }
     }
 
     let controlHTML = '';
@@ -675,24 +536,17 @@ if (p.badges) {
           : `<div class="qty-selector"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div>`;
     }
 
-    // --- NUEVO: Construimos la miniatura de la imagen si existe ---
     let imgHTML = '';
     if (p.imagen) {
-  const isTop = p.badges?.includes('top');
+      const isTop = p.badges?.includes('top') || p.badges?.includes('premium');
+      imgHTML = `<img src="${p.imagen}" class="dish-thumbnail" style="${isTop ? 'width:110px;height:110px;' : ''}" onclick="openImage('${p.imagen}')">`;
+    }
 
-  imgHTML = `<img src="${p.imagen}" 
-    class="dish-thumbnail" 
-    style="${isTop ? 'width:110px;height:110px;' : ''}"
-    onclick="openImage('${p.imagen}')">`;
-}
-
-    // AHORA INSERTAMOS LA IMAGEN DENTRO DEL ACTION-AREA, DEBAJO DEL BOTON
     container.innerHTML += `
       <div class="${cardClass}">
         <div class="dish-info">
-          <div class="dish-name">
-  ${pName} ${badgeHTMLExtra} ${allergyIconsHTML} ${badgeHTML}
-</div>
+          ${badgeLabelHTML}
+          <div class="dish-name">${pName} ${allergyIconsHTML} ${badgeHTML}</div>
           <div class="dish-desc">${pDesc}</div>
           <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
@@ -718,21 +572,8 @@ function updateFilterUI() {
 }
 
 /* --- FUNCIONES DEL CARRITO --- */
-function add(id) { 
-  cart[id] = (cart[id] || 0) + 1; 
-  saveCart(); render(); updateFloat(); 
-  if(document.querySelector('.overlay.open')) renderList(); 
-}
-
-function remove(id) { 
-  if(cart[id]) { 
-    cart[id]--; 
-    if(cart[id] <= 0) delete cart[id]; 
-  } 
-  saveCart(); render(); updateFloat(); 
-  if(document.querySelector('.overlay.open')) renderList(); 
-}
-
+function add(id) { cart[id] = (cart[id] || 0) + 1; saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
+function remove(id) { if(cart[id]) { cart[id]--; if(cart[id] <= 0) delete cart[id]; } saveCart(); render(); updateFloat(); if(document.querySelector('.overlay.open')) renderList(); }
 function updateFloat() {
   const count = Object.values(cart).reduce((a,b)=>a+b,0);
   document.getElementById('countBadge').innerText = count;
@@ -743,20 +584,14 @@ function updateFloat() {
 function openSheet() { 
   document.getElementById('overlay').classList.add('open'); 
   const waiterBtn = document.getElementById('btnShowWaiter');
-  if (lang !== 'es') waiterBtn.style.display = 'flex';
-  else waiterBtn.style.display = 'none';
+  if (lang !== 'es') waiterBtn.style.display = 'flex'; else waiterBtn.style.display = 'none';
   renderList();
 }
 
-function closeSheet() { 
-  exitWaiterMode();
-  document.getElementById('overlay').classList.remove('open'); 
-}
+function closeSheet() { exitWaiterMode(); document.getElementById('overlay').classList.remove('open'); }
 
 function renderList() {
-  const list = document.getElementById('orderList');
-  list.innerHTML = '';
-  
+  const list = document.getElementById('orderList'); list.innerHTML = '';
   const isWaiter = document.body.classList.contains('waiter-active');
   const displayLang = isWaiter ? 'es' : lang;
 
@@ -767,97 +602,49 @@ function renderList() {
   }
 
   let items = Object.keys(cart).map(id => currentMenu.find(i => i.id == id)).filter(x=>x);
-  
-  items.sort((a, b) => {
-     const order = { 'bebidas': 1, 'entrantes': 2, 'principales': 3, 'postres': 4 };
-     return (order[a.cat] || 99) - (order[b.cat] || 99);
-  });
+  items.sort((a, b) => { const order = { 'bebidas': 1, 'entrantes': 2, 'principales': 3, 'postres': 4 }; return (order[a.cat] || 99) - (order[b.cat] || 99); });
 
   items.forEach(p => {
     const qty = cart[p.id];
     const pName = (p.name && p.name[displayLang]) ? p.name[displayLang] : (p.name && p.name['es'] ? p.name['es'] : "Plato");
     
     if(isWaiter) {
-      list.innerHTML += `
-        <div class="order-item">
-          <div style="display:flex; align-items:flex-start">
-             <span class="qty-display">${qty}x</span>
-             <span class="order-name">${pName}</span>
-          </div>
-        </div>`;
+      list.innerHTML += `<div class="order-item"><div style="display:flex; align-items:flex-start"><span class="qty-display">${qty}x</span><span class="order-name">${pName}</span></div></div>`;
     } else {
-      list.innerHTML += `
-        <div class="order-item">
-          <span class="order-name" style="flex:1">${pName}</span>
-          <div class="qty-selector" style="width:100px;">
-            <button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button>
-          </div>
-        </div>`;
+      list.innerHTML += `<div class="order-item"><span class="order-name" style="flex:1">${pName}</span><div class="qty-selector" style="width:100px;"><button onclick="remove(${p.id})">-</button><span>${qty}</span><button class="plus" onclick="add(${p.id})">+</button></div></div>`;
     }
   });
 }
 
 async function enterWaiterMode() {
-  document.body.classList.add('waiter-active');
-  document.getElementById('orderSheet').classList.add('waiter-mode');
-  
-  document.getElementById('btnShowWaiter').style.display = 'none';
-  document.getElementById('notesArea').style.display = 'none';
-  document.getElementById('clearTxt').style.display = 'none';
-  
-  const userCloseBtn = document.getElementById('userCloseBtn');
-  if(userCloseBtn) userCloseBtn.style.display = 'none'; 
-  
-  document.getElementById('modalTitle').style.display = 'none';
-  document.getElementById('closeWaiterBtn').style.display = 'flex'; 
+  document.body.classList.add('waiter-active'); document.getElementById('orderSheet').classList.add('waiter-mode');
+  document.getElementById('btnShowWaiter').style.display = 'none'; document.getElementById('notesArea').style.display = 'none'; document.getElementById('clearTxt').style.display = 'none';
+  const userCloseBtn = document.getElementById('userCloseBtn'); if(userCloseBtn) userCloseBtn.style.display = 'none'; 
+  document.getElementById('modalTitle').style.display = 'none'; document.getElementById('closeWaiterBtn').style.display = 'flex'; 
   
   const notes = document.getElementById('notesField').value;
   const waiterNotesDisplay = document.getElementById('waiterNotesDisplay');
   
   if (notes && notes.trim() !== "") {
-    waiterNotesDisplay.style.display = 'block';
-    waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">Traducido comentario... ⏳</div>`;
-    
+    waiterNotesDisplay.style.display = 'block'; waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">Traducido comentario... ⏳</div>`;
     try {
         const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(notes)}&langpair=${lang}|es`);
         const data = await res.json();
         let translatedText = notes;
-        if (data.responseData && data.responseData.translatedText) {
-            translatedText = data.responseData.translatedText;
-        }
-        waiterNotesDisplay.innerHTML = `
-          <div class="waiter-note-box">
-            <span class="waiter-note-label">📝 NOTA DEL CLIENTE:</span>
-            "${translatedText}"
-          </div>
-        `;
-    } catch (err) {
-        waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">"${notes}"</div>`;
-    }
-  } else {
-    waiterNotesDisplay.style.display = 'none';
-  }
-  
+        if (data.responseData && data.responseData.translatedText) { translatedText = data.responseData.translatedText; }
+        waiterNotesDisplay.innerHTML = `<div class="waiter-note-box"><span class="waiter-note-label">📝 NOTA DEL CLIENTE:</span>"${translatedText}"</div>`;
+    } catch (err) { waiterNotesDisplay.innerHTML = `<div class="waiter-note-box">"${notes}"</div>`; }
+  } else { waiterNotesDisplay.style.display = 'none'; }
   renderList(); 
 }
 
 function exitWaiterMode() {
-  document.body.classList.remove('waiter-active');
-  document.getElementById('orderSheet').classList.remove('waiter-mode');
-  
-  document.getElementById('closeWaiterBtn').style.display = 'none';
-  document.getElementById('waiterNotesDisplay').style.display = 'none';
-  
-  document.getElementById('notesArea').style.display = 'block';
-  document.getElementById('clearTxt').style.display = 'block';
-  
-  const userCloseBtn = document.getElementById('userCloseBtn');
-  if(userCloseBtn) userCloseBtn.style.display = 'block';
-  
+  document.body.classList.remove('waiter-active'); document.getElementById('orderSheet').classList.remove('waiter-mode');
+  document.getElementById('closeWaiterBtn').style.display = 'none'; document.getElementById('waiterNotesDisplay').style.display = 'none';
+  document.getElementById('notesArea').style.display = 'block'; document.getElementById('clearTxt').style.display = 'block';
+  const userCloseBtn = document.getElementById('userCloseBtn'); if(userCloseBtn) userCloseBtn.style.display = 'block';
   document.getElementById('modalTitle').style.display = 'block';
-
   if(lang !== 'es') document.getElementById('btnShowWaiter').style.display = 'flex';
-
   renderList();
 }
 
@@ -869,22 +656,14 @@ function clearCart() { cart={}; saveCart(); render(); updateFloat(); closeSheet(
 function translateUI() {
   const t = uiDict[lang] || uiDict['es'];
   document.getElementById('brandNameDisplay').innerText = t.pageTitle;
-  document.getElementById('f-ent').innerText = t.ent;
-  document.getElementById('f-main').innerText = t.main;
-  document.getElementById('f-des').innerText = t.des;
-  document.getElementById('f-drk').innerText = t.drk;
-  document.getElementById('btnText').innerText = t.btn;
-  document.getElementById('modalTitle').innerText = t.title;
-  document.getElementById('clearTxt').innerText = t.clear;
-  document.getElementById('notesField').placeholder = t.place;
-  document.getElementById('opt-all').innerText = t.all;
-  document.getElementById('opt-gf').innerText = t.gf;
-  document.getElementById('opt-lf').innerText = t.lf;
-  document.getElementById('opt-nuts').innerText = t.nuts;
+  document.getElementById('f-ent').innerText = t.ent; document.getElementById('f-main').innerText = t.main;
+  document.getElementById('f-des').innerText = t.des; document.getElementById('f-drk').innerText = t.drk;
+  document.getElementById('btnText').innerText = t.btn; document.getElementById('modalTitle').innerText = t.title;
+  document.getElementById('clearTxt').innerText = t.clear; document.getElementById('notesField').placeholder = t.place;
+  document.getElementById('opt-all').innerText = t.all; document.getElementById('opt-gf').innerText = t.gf;
+  document.getElementById('opt-lf').innerText = t.lf; document.getElementById('opt-nuts').innerText = t.nuts;
   document.getElementById('disclaimerText').innerText = t.disclaimer; 
-  
-  const waiterSpan = document.getElementById('btnWaiterText');
-  if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
+  const waiterSpan = document.getElementById('btnWaiterText'); if(waiterSpan) waiterSpan.innerText = "🗣️ " + t.trans;
 }
 
 const themeBtn = document.getElementById('themeBtn');
@@ -894,21 +673,14 @@ themeBtn.addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', next);
   themeBtn.innerHTML = next === 'dark' ? '🌙' : '☀️';
   localStorage.setItem('theme', next);
-  
   const metaTheme = document.getElementById('metaThemeColor');
   if(next === 'dark') metaTheme.setAttribute('content', '#1e1b1a');
   else metaTheme.setAttribute('content', '#fffbf2'); 
 });
 
 /* --- FUNCIONES DEL VISOR DE IMÁGENES --- */
-function openImage(url) {
-  document.getElementById('fullSizeImage').src = url;
-  document.getElementById('imageModal').classList.add('open');
-}
-
-function closeImage() {
-  document.getElementById('imageModal').classList.remove('open');
-}
+function openImage(url) { document.getElementById('fullSizeImage').src = url; document.getElementById('imageModal').classList.add('open'); }
+function closeImage() { document.getElementById('imageModal').classList.remove('open'); }
 
 init();
 </script>
