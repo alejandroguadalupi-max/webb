@@ -99,7 +99,7 @@
   }
 
   .welcome-text {
-    font-size: 1.1em;
+    font-size: 1.5em;
     font-weight: 500;
     color: var(--text-sec);
     margin-top: 5px;
@@ -254,6 +254,10 @@
     transform: scale(1.1); 
   }
 
+  #imgperfil {
+    width: 300px;
+  }
+
   @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -266,9 +270,8 @@
 <main class="app-container">
   
   <div class="header-section">
-    <div class="logo-icon">🍽️</div> 
-    <h1 class="brand-name">El Buen Bocado</h1>
-    <p class="welcome-text" data-lang="welcome">¡Bienvenid@!</p>
+    <img src = "img/perfil.png" id = "imgperfil"></src>
+    <h2 class="welcome-text" data-lang="welcome">¡Bienvenid@!</h2>
   </div>
 
   <div class="menu-grid">
