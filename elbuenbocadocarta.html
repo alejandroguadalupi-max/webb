@@ -521,6 +521,7 @@ async function loadMenuFromDB() {
 
   if (data && data.length > 0) {
     currentMenu = data.map(p => ({
+      badges: p.badges || [],
       id: p.id,
       cat: p.categoria || 'bebidas',
       tags: p.tags || [],
@@ -572,13 +573,29 @@ function render() {
   const addBtnText = t.add || "Añadir";
   const soldOutText = t.soldout || "Agotado";
 
-  const items = currentMenu.filter(item => {
-    if(item.cat !== activeCategory) return false;
-    if(allergyFilter === 'gf' && item.tags && item.tags.includes('gluten')) return false;
-    if(allergyFilter === 'lf' && item.tags && item.tags.includes('lactosa')) return false;
-    if(allergyFilter === 'nuts' && item.tags && item.tags.includes('frutos_secos')) return false;
-    return true; 
-  });
+  let items = currentMenu.filter(item => {
+  if(item.cat !== activeCategory) return false;
+
+  const allergyFilter = document.getElementById('allergyFilter').value;
+
+  if(allergyFilter === 'gf' && item.tags?.includes('gluten')) return false;
+  if(allergyFilter === 'lf' && item.tags?.includes('lactosa')) return false;
+  if(allergyFilter === 'nuts' && item.tags?.includes('frutos_secos')) return false;
+
+  return true;
+});
+  items.sort((a, b) => {
+  const score = (item) => {
+    let s = 0;
+    if (item.badges?.includes('top')) s += 100;
+    if (item.badges?.includes('premium')) s += 40;
+    if (item.badges?.includes('recomendado')) s += 30;
+    if (item.badges?.includes('nuevo')) s += 20;
+    return s;
+  };
+  return score(b) - score(a);
+});
+ 
 
   if (items.length === 0) {
      container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-sec); opacity:0.7">No hay platos que cumplan tu selección en esta categoría.</div>`;
@@ -592,6 +609,57 @@ function render() {
     const cardClass = p.disponible ? 'dish-card' : 'dish-card sold-out';
 
     let allergyIconsHTML = '';
+    let badgeHTMLExtra = '';
+
+if (p.badges) {
+  if (p.badges.includes('top')) {
+    badgeHTMLExtra += `<span style="
+      background:#a0715e;
+      color:white;
+      font-size:0.65rem;
+      padding:3px 8px;
+      border-radius:6px;
+      font-weight:800;
+      margin-left:6px;
+    ">🔥 TOP</span>`;
+  }
+
+  if (p.badges.includes('nuevo')) {
+    badgeHTMLExtra += `<span style="
+      background:#3e2b26;
+      color:white;
+      font-size:0.65rem;
+      padding:3px 8px;
+      border-radius:6px;
+      font-weight:800;
+      margin-left:6px;
+    ">🆕 NUEVO</span>`;
+  }
+
+  if (p.badges.includes('premium')) {
+    badgeHTMLExtra += `<span style="
+      background:#d4af37;
+      color:black;
+      font-size:0.65rem;
+      padding:3px 8px;
+      border-radius:6px;
+      font-weight:800;
+      margin-left:6px;
+    ">💎 PREMIUM</span>`;
+  }
+
+  if (p.badges.includes('recomendado')) {
+    badgeHTMLExtra += `<span style="
+      background:#4caf50;
+      color:white;
+      font-size:0.65rem;
+      padding:3px 8px;
+      border-radius:6px;
+      font-weight:800;
+      margin-left:6px;
+    ">👨‍🍳 RECOMENDADO</span>`;
+  }
+}
     if (p.tags && p.tags.length > 0) {
       const allergyDict = { 'gluten': '🍞', 'lactosa': '🥛', 'frutos_secos': '🥜' };
       const icons = p.tags.map(tag => allergyDict[tag]).filter(Boolean).join(' ');
@@ -610,14 +678,21 @@ function render() {
     // --- NUEVO: Construimos la miniatura de la imagen si existe ---
     let imgHTML = '';
     if (p.imagen) {
-        imgHTML = `<img src="${p.imagen}" class="dish-thumbnail" onclick="openImage('${p.imagen}')" alt="Foto de ${pName}">`;
-    }
+  const isTop = p.badges?.includes('top');
+
+  imgHTML = `<img src="${p.imagen}" 
+    class="dish-thumbnail" 
+    style="${isTop ? 'width:110px;height:110px;' : ''}"
+    onclick="openImage('${p.imagen}')">`;
+}
 
     // AHORA INSERTAMOS LA IMAGEN DENTRO DEL ACTION-AREA, DEBAJO DEL BOTON
     container.innerHTML += `
       <div class="${cardClass}">
         <div class="dish-info">
-          <div class="dish-name">${pName} ${allergyIconsHTML} ${badgeHTML}</div>
+          <div class="dish-name">
+  ${pName} ${badgeHTMLExtra} ${allergyIconsHTML} ${badgeHTML}
+</div>
           <div class="dish-desc">${pDesc}</div>
           <div class="dish-price">${p.price.toFixed(2)}€</div>
         </div>
