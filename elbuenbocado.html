@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  
   <style>
   :root {
     /* --- COLORES DEFINITIVOS EL BUEN BOCADO --- */
@@ -39,7 +43,7 @@
   body {
     margin: 0;
     padding: 0;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background: var(--bg-body);
     color: var(--text-main);
     transition: background 0.4s ease;
@@ -348,7 +352,11 @@
     document.documentElement.setAttribute('data-theme', theme);
     document.getElementById('themeBtn').innerHTML = theme === 'dark' ? '🌙' : '☀️';
     localStorage.setItem('theme', theme);
-  }
+    
+    const img = document.getElementbyId('imgperfil');
+    img.src = theme == 'dark' ? 'img/perfil2.png' : 'img/perfil.png';
+}
+
 
   document.getElementById('themeBtn').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
@@ -357,6 +365,8 @@
     document.documentElement.setAttribute('data-theme', newTheme);
     document.getElementById('themeBtn').innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
     localStorage.setItem('theme', newTheme);
+    const img = document.getElementById('imgperfil');
+    img.src = newTheme === 'dark' ? 'img/perfil2.png' : 'img/perfil.png';
   });
 
   document.getElementById('lang-select').addEventListener('change', (e) => {
