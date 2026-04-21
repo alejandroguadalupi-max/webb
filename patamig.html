@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PataMig</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        
+        body {
+            background-image: url("img/fondo.png");
+        }
+
+        body.dark {
+            background-image:url("img/fondonegro.png");
+        }
+        .todo {
+            height: 100vh;  /*ocupa toda la pantalla */
+            display: flex;
+            flex-direction: column;  /* todo en columna*/
+            align-items: center;   /*centro horizontal*/
+            justify-content: center;   /*centro vertical*/
+            color: white;
+        }
+
+        #logo {
+            width: 20%;
+            border-radius: 0.75rem;
+        }
+
+        #bienvenido {
+            color: rgb(233, 148, 30);
+            font-size: 30px;
+        }
+
+
+        #btn-ver-carta, #btn-valorar-experiencia {
+            text-align: center;
+            text-decoration: None;
+            padding: 15px 25px;  /*espacio arriba y abajo e izq y der*/
+            color: white;
+            border-radius: 15px;
+            background-color: #7db659;
+            font-size: 1.25rem;
+            font-weight: bold;
+            width: 20rem;
+        }
+
+        #desplegable-idiomas {
+            font-size: 1.25rem;
+            border-radius: 0.8rem;
+            color: grey;
+            padding: 10px 15px;
+            appearance: none;
+            border: 3px solid orange;
+
+        }
+
+        #btn-modo {
+            position:fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            border-radius: 0.75rem;
+            padding: 5px 5px;
+            border-color: #7db659;
+
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <div class = "todo">
+        <img src = "img/PataMig.png" id = "logo" alt = "Logo restaurante">
+        <h3 id = "bienvenido">¡Bienvenido!</h3>
+
+        <a href = "pataMigcarta.html" id = "btn-ver-carta">Ver la carta</a>
+        <br>
+        <a href = "pataMigvalorarExperiencia.html" id = "btn-valorar-experiencia">Valorar experiencia</a>
+        
+        <br><br>
+        <select id = "desplegable-idiomas">
+            <option value = "es">Español</option>
+            <option value = "en">English</option>
+            <option value = "fr">Français</option>
+            <option value = "de">Deutsch</option>
+            <option value = "it">Italiano</option>
+        </select>
+
+    </div>
+
+    
+
+    <button id = "btn-modo">☀️</button>
+
+</body>
+
+<script>
+    const btnModo = document.getElementById("btn-modo");
+    let estado = "sol";
+
+
+    btnModo.addEventListener("click", () => {
+        if (estado == "sol") {
+            btnModo.textContent = "🌙";
+            document.body.style.backgroundImage = "url('img/fondonegro.png')";
+            document.querySelector("#bienvenido").style.color = "white";
+            document.querySelector("#btn-modo").style.border = "3px solid grey";
+            estado = "luna";
+        } else {
+            btnModo.textContent = "☀️";
+            document.body.style.backgroundImage = "url('img/fondo.png')";
+            document.querySelector("#bienvenido").style.color = "orange";
+            document.querySelector("#btn-modo").style.border = "3px solid black";
+            estado = "sol";
+
+        }
+    });
+
+</script>
+
+<script>
+    const textos = {
+        es: {
+            bienvenido : "¡Bienvenido!";
+        },
+        en: {
+
+        },
+        fr: {
+
+        },
+        de: {
+
+        },
+        it: {
+
+        }
+    }
+</script>
+
+
+</html>
