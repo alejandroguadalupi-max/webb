@@ -59,7 +59,6 @@
             padding: 10px 15px;
             appearance: none;
             border: 3px solid orange;
-
         }
 
         #btn-modo {
@@ -70,9 +69,20 @@
             border-radius: 0.75rem;
             padding: 5px 5px;
             border-color: #7db659;
-
         }
 
+        #siguenos-redes {
+            color: orange;
+            font-family: Oswald;
+        }
+
+        #instagram {
+            width: 3rem;
+        }
+
+        #tiktok {
+            width: 3rem;
+        }
 
     </style>
 
@@ -94,10 +104,14 @@
             <option value = "de">Deutsch</option>
             <option value = "it">Italiano</option>
         </select>
+        <h3 id = "siguenos-redes">Síguenos en redes sociales</h3>
+        
+        <div id = "iconos-redes">
+            <img src = "img/instagram.png" id = "instagram">
+            <img src = "img/tiktok.png" id = "tiktok">
+        </div>
 
     </div>
-
-    
 
     <button id = "btn-modo">☀️</button>
 
@@ -114,12 +128,14 @@
             document.body.style.backgroundImage = "url('img/fondonegro.png')";
             document.querySelector("#bienvenido").style.color = "white";
             document.querySelector("#btn-modo").style.border = "3px solid grey";
+            document.querySelector("#siguenos-redes").style.color = "white";
             estado = "luna";
         } else {
             btnModo.textContent = "☀️";
             document.body.style.backgroundImage = "url('img/fondo.png')";
             document.querySelector("#bienvenido").style.color = "orange";
             document.querySelector("#btn-modo").style.border = "3px solid black";
+            document.querySelector("#siguenos-redes").style.color = "black";
             estado = "sol";
 
         }
