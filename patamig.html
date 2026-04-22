@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PataMig</title>
+    <meta name="theme-color" content="#ffffff" id="theme-meta">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,6 +125,7 @@ body {
 
 <script>
     const btnModo = document.getElementById("btn-modo");
+    const themeMeta = document.getElementById("theme-meta");
     let estado = "sol";
 
 
@@ -134,6 +136,8 @@ body {
             document.querySelector("#bienvenido").style.color = "white";
             document.querySelector("#btn-modo").style.border = "3px solid grey";
             document.querySelector("#siguenos-redes").style.color = "white";
+            document.documentElement.style.backgroundColor = "#111111"; // Fondo del html en oscuro
+            if (themeMeta) themeMeta.setAttribute("content", "#111111");
             estado = "luna";
         } else {
             btnModo.textContent = "☀️";
@@ -141,6 +145,8 @@ body {
             document.querySelector("#bienvenido").style.color = "orange";
             document.querySelector("#btn-modo").style.border = "3px solid black";
             document.querySelector("#siguenos-redes").style.color = "black";
+            document.documentElement.style.backgroundColor = "#ffffff"; // Fondo del html en blanco
+            if (themeMeta) themeMeta.setAttribute("content", "#ffffff"); // Barra del navegador blanca
             estado = "sol";
 
         }
