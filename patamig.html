@@ -18,17 +18,26 @@
         body {
             min-height: 100vh;
             min-height: 100dvh;
+            margin: 0;
+
             display: flex;
             flex-direction: column;  /* todo en columna*/
             align-items: center;   /*centro horizontal*/
-            justify-content: center;   /*centro vertical*/
+
+            justify-content: flex-start; 
+
             color: white;
-            min-height: 100dvh;
+
             background-image: url("img/fondo.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: scroll;
+
+            background-attachment: fixed;
+        }
+
+        html {
+            height: 100%;
         }
 
         #logo {
