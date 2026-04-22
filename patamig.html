@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PataMig</title>
-    <meta name="theme-color" content="#ffffff" id="theme-meta">
+    <meta name="theme-color" content="#eee9d1" id="theme-meta">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,30 +12,24 @@
     <style>
         
         html {
-    margin: 0;
-    padding: 0;
-    /* Un color de fondo oscuro evita que se vea blanco si el usuario 
-       hace el efecto "rebote" (overscroll) al llegar al límite en el móvil */
-    background-color: #1c1c1c; 
-}
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
-body {
-    margin: 0;
-    padding: 0; /* Buena práctica para evitar márgenes ocultos */
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #eee9d1;
-    
-    /* Configuración del fondo */
-    background-color: white;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+        body {
+            min-height: 100dvh;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+            background-color: #eee9d1;
+            color: #eee9d1;
+
+            transition: background-color 0.3s, color 0.3s;
+        }
 
 
         #logo {
@@ -125,32 +119,40 @@ body {
 
 <script>
     const btnModo = document.getElementById("btn-modo");
-    const themeMeta = document.getElementById("theme-meta");
-    let estado = "sol";
+const themeMeta = document.getElementById("theme-meta");
 
+let oscuro = false;
 
-    btnModo.addEventListener("click", () => {
-        if (estado == "sol") {
-            btnModo.textContent = "🌙";
-            document.body.style.backgroundImage = "url('img/fondillo.jpeg')";
-            document.querySelector("#bienvenido").style.color = "white";
-            document.querySelector("#btn-modo").style.border = "3px solid grey";
-            document.querySelector("#siguenos-redes").style.color = "white";
-            document.documentElement.style.backgroundColor = "#1c1c1c"; // Fondo del html en oscuro
-            if (themeMeta) themeMeta.setAttribute("content", "#1c1c1c");
-            estado = "luna";
-        } else {
-            btnModo.textContent = "☀️";
-            document.body.style.backgroundImage = "url('img/fondo.png')";
-            document.querySelector("#bienvenido").style.color = "orange";
-            document.querySelector("#btn-modo").style.border = "3px solid black";
-            document.querySelector("#siguenos-redes").style.color = "black";
-            document.documentElement.style.backgroundColor = "#eee9d1"; // Fondo del html en blanco
-            if (themeMeta) themeMeta.setAttribute("content", "#eee9d1"); // Barra del navegador blanca
-            estado = "sol";
+btnModo.addEventListener("click", () => {
+    oscuro = !oscuro;
 
-        }
-    });
+    if (oscuro) {
+        // 🌙 MODO OSCURO
+        document.body.style.backgroundColor = "#1c1c1c";
+        document.body.style.color = "white";
+
+        document.querySelector("#bienvenido").style.color = "white";
+        document.querySelector("#siguenos-redes").style.color = "white";
+
+        btnModo.textContent = "🌙";
+
+        // 🔥 barra navegador
+        themeMeta.setAttribute("content", "#1c1c1c");
+
+    } else {
+        // ☀️ MODO CLARO
+        document.body.style.backgroundColor = "#eee9d1";
+        document.body.style.color = "black";
+
+        document.querySelector("#bienvenido").style.color = "orange";
+        document.querySelector("#siguenos-redes").style.color = "orange";
+
+        btnModo.textContent = "☀️";
+
+        // 🔥 barra navegador
+        themeMeta.setAttribute("content", "#eee9d1");
+    }
+});
 
 </script>
 
