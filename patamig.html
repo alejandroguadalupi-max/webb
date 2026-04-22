@@ -16,23 +16,6 @@
         }
 
         body {
-            min-height: 100dvh;
-            background-image: url("img/fondo.png");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
-        }
-
-        @media (max-width: 768px) {
-    body {
-        background-size: cover;
-        background-position: center;
-        background-attachment: scroll;
-    }
-}
-
-        .todo {
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
@@ -40,6 +23,12 @@
             align-items: center;   /*centro horizontal*/
             justify-content: center;   /*centro vertical*/
             color: white;
+            min-height: 100dvh;
+            background-image: url("img/fondo.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
         }
 
         #logo {
@@ -101,7 +90,6 @@
 
 </head>
 <body>
-    <div class = "todo">
         <img src = "img/PataMig.png" id = "logo" alt = "Logo restaurante">
         <h3 id = "bienvenido">¡Bienvenido!</h3>
 
@@ -123,8 +111,6 @@
             <img src = "img/instagram.png" id = "instagram">
             <img src = "img/tiktok.png" id = "tiktok">
         </div>
-
-    </div>
 
     <button id = "btn-modo">☀️</button>
 
