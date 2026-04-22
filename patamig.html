@@ -16,7 +16,7 @@
     padding: 0;
     /* Un color de fondo oscuro evita que se vea blanco si el usuario 
        hace el efecto "rebote" (overscroll) al llegar al límite en el móvil */
-    background-color: #111; 
+    background-color: #1c1c1c; 
 }
 
 body {
@@ -28,10 +28,10 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #eee9d1;
     
     /* Configuración del fondo */
-    background-image: url("img/fondo.png");
+    background-color: white;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -136,8 +136,8 @@ body {
             document.querySelector("#bienvenido").style.color = "white";
             document.querySelector("#btn-modo").style.border = "3px solid grey";
             document.querySelector("#siguenos-redes").style.color = "white";
-            document.documentElement.style.backgroundColor = "#111111"; // Fondo del html en oscuro
-            if (themeMeta) themeMeta.setAttribute("content", "#111111");
+            document.documentElement.style.backgroundColor = "#1c1c1c"; // Fondo del html en oscuro
+            if (themeMeta) themeMeta.setAttribute("content", "#1c1c1c");
             estado = "luna";
         } else {
             btnModo.textContent = "☀️";
@@ -145,8 +145,8 @@ body {
             document.querySelector("#bienvenido").style.color = "orange";
             document.querySelector("#btn-modo").style.border = "3px solid black";
             document.querySelector("#siguenos-redes").style.color = "black";
-            document.documentElement.style.backgroundColor = "#ffffff"; // Fondo del html en blanco
-            if (themeMeta) themeMeta.setAttribute("content", "#ffffff"); // Barra del navegador blanca
+            document.documentElement.style.backgroundColor = "#eee9d1"; // Fondo del html en blanco
+            if (themeMeta) themeMeta.setAttribute("content", "#eee9d1"); // Barra del navegador blanca
             estado = "sol";
 
         }
