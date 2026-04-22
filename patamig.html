@@ -10,18 +10,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         
-        body {
+        html, body {
             height: 100%;
             margin: 0;
+        }
+
+        body {
+            min-height: 100dvh;
             background-image: url("img/fondo.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-attachment: scroll;
         }
 
+        @media (max-width: 768px) {
+    body {
+        background-size: cover;
+        background-position: center;
+        background-attachment: scroll;
+    }
+}
+
         .todo {
-            height: 100vh;  /*ocupa toda la pantalla */
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;  /* todo en columna*/
             align-items: center;   /*centro horizontal*/
@@ -56,7 +69,7 @@
             font-size: 1.25rem;
             border-radius: 1.5rem;
             color: grey;
-            padding: 10px 15px;
+            padding: 6px 10px;
             appearance: none;
             border: 3px solid orange;
         }
